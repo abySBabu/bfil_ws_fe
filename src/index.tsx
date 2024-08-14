@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import './web.css';
 import { appTheme } from './common';
 import Login from './components/LoginPage/Login';
+import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -13,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <Router><Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/home" element={<Home />} />
       </Routes></Router>
     </ThemeProvider>
   </React.StrictMode>

@@ -3,7 +3,7 @@ import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Grid, T
 
 export default function Dashboard() {
     return (<Box sx={{ height: '90vh' }}>
-        {/* <Dialog open={true}>
+        <Dialog open={false}>
             <DialogTitle>Add a new Supply Side Intervention</DialogTitle>
 
             <DialogContent sx={{ my: 1 }}><Grid container spacing={2}>
@@ -18,7 +18,7 @@ export default function Dashboard() {
                 <Button>Cancel</Button>
                 <Button>Add</Button>
             </DialogActions>
-        </Dialog> */}
+        </Dialog>
 
         <Grid container sx={{ display: 'flex' }}>
             <Grid item xs={8}>
