@@ -108,7 +108,7 @@ const Login: React.FC = () => {
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, backgroundColor: '#224a59' }}
-                                    href="/dashboard"
+                                    href="/home"
                                 >
                                     Sign In
                                 </Button>
