@@ -1,0 +1,51 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+ :root {
+    --box-bgcolor-default: #fff;
+    --box-bgcolor-brand: #fcf2e7;
+    --box-bradius: 15px;
+    --box-padding: 15px;
+    --box-margin: 10px 0px;
+    --box-shadow: 0px 0px 3px;
+    --box-border-active: 1px solid gray;
+    --box-border-hover: 1px solid #b5651d;
+    --box-backdrop: blur(15px);
+    --button-bgcolor-active-brand: #a5644e;
+    --button-bgcolor-active-positive: #48BF53;
+    --button-bgcolor-active-negative: #A70000;
+    --button-bgcolor-hover-brand: #c9762b;
+    --button-bgcolor-hover-positive: #91F086;
+    --button-bgcolor-hover-negative: #A0153E;
+    --button-bgcolor-disabled: #d3d3d3;
+    --button-bradius-rounded: 10px;
+    --button-bradius-pill: 20px;
+    --table-bgcolor-head: #b5651d;
+    --table-bgcolor-body-default: #fff;
+    --table-bgcolor-body-hover: #fcf2e7;
+    --table-height: 64px;
+    --table-width: 256px;
+    --text-color-default: #fff;
+    --text-color-hover: #000;
+    --text-color-disabled: #333;
+    --text-color-special: #b5651d;
+    --text-styles-default: none;
+    --text-styles-bold: bold;
+    --text-styles-ul: underline;
+    --text-styles-pointer: pointer;
+    --text-font: Calibri;
+    --length-0: 0px;
+    --length-1: 5px;
+    --length-2: 10px;
+    --length-3: 15px;
+    --length-4: 20px;
+    --layout-flex: flex;
+    --layout-xflex: row;
+    --layout-yflex: column;
+    --layout-block: block;
+    --align-start: start;
+    --align-end: end;
+    --align-center: center;
+    --align-spaced: space-between;
+  }
