@@ -12,7 +12,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <ThemeProvider theme={appTheme}>
       <Router><Routes>
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes></Router>
     </ThemeProvider>
   </React.StrictMode>

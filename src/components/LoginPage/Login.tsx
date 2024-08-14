@@ -4,7 +4,8 @@ import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avata
 import { login } from '../../Services/loginService';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { sd } from '../../index';
+import { useNavigate } from 'react-router-dom';
+
 
 interface ILoginFormInput {
     userName: string;
@@ -13,6 +14,8 @@ interface ILoginFormInput {
 const defaultTheme = createTheme();
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
+
     const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormInput>();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async (value) => {
@@ -23,6 +26,7 @@ const Login: React.FC = () => {
             };
 
             const response = await login(data);
+            navigate('/dashboard');
             console.log('Login Success:', response);
 
         } catch (error) {
