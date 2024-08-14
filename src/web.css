@@ -35,6 +35,8 @@
   --button-bgcolor-disabled: #d3d3d3;
   --button-bradius-rounded: 15px;
   --button-bradius-pill: 20px;
+  --header-bgcolor: #aca2e7;
+  --header-padding: 10px;
   --textfield-border-def: 1px solid gray;
   --textfield-border-sel: 1px solid #b5651d;
   --textfield-size: fullwidth;
