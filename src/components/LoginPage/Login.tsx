@@ -66,9 +66,7 @@ const Login: React.FC = () => {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box
-
-                        >
+                        <Box>
                             {/* <Typography component="h1" variant="h5">
                                 Sign in
                             </Typography> */}

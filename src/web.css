@@ -26,10 +26,10 @@
   --box-border-active: 1px solid gray;
   --box-border-hover: 1px solid #b5651d;
   --box-backdrop: blur(15px);
-  --button-bgcolor-active-brand: #a5644e;
+  --button-bgcolor-active-brand: #224a59;
   --button-bgcolor-active-positive: #48BF53;
   --button-bgcolor-active-negative: #A70000;
-  --button-bgcolor-hover-brand: #c9762b;
+  --button-bgcolor-hover-brand: #3a6a7a;
   --button-bgcolor-hover-positive: #91F086;
   --button-bgcolor-hover-negative: #A0153E;
   --button-bgcolor-disabled: #d3d3d3;

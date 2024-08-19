@@ -1,15 +1,13 @@
 import React from 'react';
-import {
-    Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, Toolbar, AppBar
-} from '@mui/material';
-import { Menu, PersonRounded } from '@mui/icons-material/';
+import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, Fab } from '@mui/material';
+import { Menu, PersonRounded, Add } from '@mui/icons-material/';
 import { sd } from '../common';
 
 export default function Home() {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
 
-    const sections = ['Dashboard', 'Intervention Approval', 'User Management', 'Role Management'];
+    const sections = ['Dashboard', 'Tasks', 'Intervention Approval', 'User Management', 'Role Management'];
 
     return (<Box sx={{ flexGrow: 1 }}>
         <AppBar component={'header'} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--header-bgcolor'), p: sd('--header-padding') }}>
@@ -18,11 +16,11 @@ export default function Home() {
                 <Typography variant="h6" sx={{ ml: 1 }}>{sections[dIndex]}</Typography>
             </div>
             <Typography variant='h5'>BFIL - WS</Typography>
-            <PersonRounded />
+            <PersonRounded sx={{ border: '1px solid white' }} />
         </AppBar>
         <Drawer open={open} onClose={() => setopen(false)}>
             <Box sx={{ width: 250 }} role="presentation" onClick={() => setopen(false)}>
-                <Typography variant='h6' sx={{ textAlign: 'center', my: '10px' }}>BFIL - Watershed</Typography>
+                <Typography variant='h6' sx={{ textAlign: 'center', my: '10px' }}>BFIL - WS</Typography>
                 <Divider />
                 <List>
                     {sections.map((text, index) => (
@@ -37,7 +35,7 @@ export default function Home() {
         </Drawer>
 
         <Box component={'body'}>
-
+            <Fab sx={{ bgcolor: '#224a59', '&:hover': { bgcolor: '20%lighter' } }}><Add sx={{ color: 'white' }} /></Fab>
         </Box>
     </Box>)
 }

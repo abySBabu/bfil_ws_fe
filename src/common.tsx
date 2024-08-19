@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, lighten, Theme } from '@mui/material/styles';
 
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
@@ -13,6 +13,16 @@ export const appTheme = createTheme({
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
                     '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                }
+            }
+        },
+        MuiFab: {
+            styleOverrides: {
+                root: {
+                    position: 'fixed', bottom: '32px', right: '32px',
+                    color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
+                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: lighten(sd('--button-bgcolor-active-brand'), 0.2) /* sd('--button-bgcolor-hover-brand') */ },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -36,17 +46,17 @@ export const appTheme = createTheme({
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    borderBottom:'1px solid black'
+                    borderBottom: '1px solid black'
                 }
             }
         },
         MuiDialogActions: {
             styleOverrides: {
                 root: {
-                    borderTop:'1px solid black'
+                    borderTop: '1px solid black'
                 }
             }
-        },        
+        },
         MuiTextField: {
             styleOverrides: {
                 root: {
