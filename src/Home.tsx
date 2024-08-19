@@ -3,6 +3,7 @@ import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typ
 import { Menu, PersonRounded, Add } from '@mui/icons-material/';
 import { sd } from './common';
 import { CrpModal } from './components/CRP/CrpModal';
+import CrpList from './components/CRP/CrpList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
@@ -11,7 +12,7 @@ export const Home: React.FC = () => {
 
     const sections = ['Dashboard', 'Tasks', 'Intervention Approval', 'User Management', 'Role Management'];
 
-    return (<Box sx={{ flexGrow: 1 }}>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <AppBar component={'header'} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--header-bgcolor'), p: sd('--header-padding') }}>
             <div style={{ display: sd('--layout-flex'), alignItems: sd('--align-center') }}>
                 <Menu onClick={() => setopen(true)} />
@@ -36,8 +37,9 @@ export const Home: React.FC = () => {
             </Box>
         </Drawer>
 
-        <Box component={'body'}>
+        <Box component={'body'} sx={{ paddingTop: '48px' }}>
             <CrpModal mdl={mdl} />
+            <CrpList />
             <Fab onClick={() => setmdl(!mdl)}><Add sx={{ color: 'white' }} /></Fab>
         </Box>
     </Box>)

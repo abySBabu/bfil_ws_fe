@@ -3,17 +3,21 @@ import { Card, CardHeader, CardContent, CardActions, Modal, Button, Grid, TextFi
 export const CrpModal: React.FC<{ mdl: boolean }> = ({ mdl }) => {
     return (<Modal open={mdl}><Card>
         <CardHeader title="Add a new Intervention" />
+        <TextField select label='Intervention Side' sx={{ width: '50%' }}>
+            <MenuItem value='supply'>Supply</MenuItem>
+            <MenuItem value='demand'>Demand</MenuItem>
+        </TextField>
 
         <CardContent sx={{ my: 2 }}><Grid container spacing={2}>
-            <Grid item xs={12}><TextField select label='Intervention side' sx={{ width: '40%' }}>
-                <MenuItem value='supply'>Supply</MenuItem>
-                <MenuItem value='demand'>Demand</MenuItem>
-            </TextField></Grid>
-            <Grid item xs={4}><TextField label='Type' /></Grid>
-            <Grid item xs={4}><TextField label='District' /></Grid>
-            <Grid item xs={4}><TextField label='Taluk' /></Grid>
-            <Grid item xs={4}><TextField label='Watershed' /></Grid>
-            <Grid item xs={4}><TextField label='Village' /></Grid>
+            <Grid item xs={4}><TextField select label='Type' /></Grid>
+            <Grid item xs={4}><TextField select label='District' /></Grid>
+            <Grid item xs={4}><TextField select label='Taluk' /></Grid>
+            <Grid item xs={4}><TextField select label='Watershed' /></Grid>
+            <Grid item xs={4}><TextField select label='Village' /></Grid>
+            <Grid item xs={4}/>
+            <Grid item xs={4}><TextField label="Farmer's name" /></Grid>
+            <Grid item xs={4}><TextField label="Farmer's Aadhar" /></Grid>
+            <Grid item xs={4}><TextField label="Farmer's number" /></Grid>
         </Grid></CardContent>
 
         <CardActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: '4px' }}>

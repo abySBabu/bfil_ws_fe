@@ -20,7 +20,7 @@ export const appTheme = createTheme({
         MuiFab: {
             styleOverrides: {
                 root: {
-                    position: 'fixed', bottom: '32px', right: '32px',
+                    position: 'fixed', bottom: sd('--button-corner'), right: sd('--button-corner'),
                     color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
                     '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
@@ -39,22 +39,7 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     position: 'absolute', top: sd('--modal-position-top'), left: sd('--modal-position-left'),
-                    transform: sd('--modal-position-transform'), backdropFilter: sd('--modal-backdrop'), 
-                    zIndex: sd('--modal-zindex')
-                }
-            }
-        },
-        MuiDialogTitle: {
-            styleOverrides: {
-                root: {
-                    borderBottom: '1px solid black'
-                }
-            }
-        },
-        MuiDialogActions: {
-            styleOverrides: {
-                root: {
-                    borderTop: '1px solid black'
+                    transform: sd('--modal-position-transform'), backdropFilter: sd('--modal-backdrop')
                 }
             }
         },
@@ -66,6 +51,9 @@ export const appTheme = createTheme({
                         '&.Mui-focused fieldset': { borderColor: sd('--text-color-special'), },
                     }
                 }
+            },
+            defaultProps: {
+                fullWidth: true
             }
         },
         MuiLink: {

@@ -34,11 +34,12 @@
   --button-bgcolor-disabled: #d3d3d3;
   --button-bradius-rounded: 15px;
   --button-bradius-pill: 20px;
+  --button-corner: 32px;
   --header-bgcolor: #aca2e7;
   --header-padding: 10px;
   --textfield-border-def: 1px solid gray;
   --textfield-border-sel: 1px solid #b5651d;
-  --textfield-size: fullwidth;
+  --textfield-size: fullWidth;
   --modal-position-pos: absolute;
   --modal-position-top: 50%;
   --modal-position-left: 50%;
