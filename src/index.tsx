@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import './web.css';
 import { appTheme } from './common';
 import Login from './components/LoginPage/Login';
-import Home from './components/Home';
+import {Home} from './Home';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

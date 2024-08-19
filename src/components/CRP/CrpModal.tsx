@@ -1,10 +1,8 @@
-import React from "react";
-import { Card, CardHeader, CardContent, CardActions, Modal, Button, Grid, TextField, MenuItem } from "@mui/material";
-
+import { Card, CardHeader, CardContent, CardActions, Modal, Button, Grid, TextField, MenuItem, Typography } from "@mui/material";
 
 export const CrpModal: React.FC<{ mdl: boolean }> = ({ mdl }) => {
     return (<Modal open={mdl}><Card>
-        <CardHeader title="Add a new Supply Side Intervention" />
+        <CardHeader title="Add a new Intervention" />
 
         <CardContent sx={{ my: 2 }}><Grid container spacing={2}>
             <Grid item xs={12}><TextField select label='Intervention side' sx={{ width: '40%' }}>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, Fab } from '@mui/material';
 import { Menu, PersonRounded, Add } from '@mui/icons-material/';
-import { sd } from '../common';
-import { CrpModal } from './CRP/CrpModal';
+import { sd } from './common';
+import { CrpModal } from './components/CRP/CrpModal';
 
-export default function Home() {
+export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
     const [mdl, setmdl] = React.useState(false);
