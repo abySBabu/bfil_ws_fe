@@ -1,4 +1,4 @@
-import { createTheme, lighten, Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
@@ -22,7 +22,7 @@ export const appTheme = createTheme({
                 root: {
                     position: 'fixed', bottom: '32px', right: '32px',
                     color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: lighten(sd('--button-bgcolor-active-brand'), 0.2) /* sd('--button-bgcolor-hover-brand') */ },
+                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -30,16 +30,17 @@ export const appTheme = createTheme({
         MuiCard: {
             styleOverrides: {
                 root: {
-                    padding: sd('--box-padding'), margin: sd('--box-margin'), borderRadius: sd('--box-bradius'),
+                    padding: sd('--box-padding'), borderRadius: sd('--box-bradius'),
                     backgroundColor: sd('--box-bgcolor-default')
                 }
             }
         },
-        MuiDialog: {
+        MuiModal: {
             styleOverrides: {
                 root: {
-                    padding: sd('--box-padding'), margin: sd('--box-margin'), borderRadius: sd('--box-bradius'),
-                    backgroundColor: sd('--box-bgcolor-default')
+                    position: 'absolute', top: sd('--modal-position-top'), left: sd('--modal-position-left'),
+                    transform: sd('--modal-position-transform'), backdropFilter: sd('--modal-backdrop'), 
+                    zIndex: sd('--modal-zindex')
                 }
             }
         },

@@ -2,10 +2,12 @@ import React from 'react';
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, Fab } from '@mui/material';
 import { Menu, PersonRounded, Add } from '@mui/icons-material/';
 import { sd } from '../common';
+import { CrpModal } from './CRP/CrpModal';
 
 export default function Home() {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
+    const [mdl, setmdl] = React.useState(false);
 
     const sections = ['Dashboard', 'Tasks', 'Intervention Approval', 'User Management', 'Role Management'];
 
@@ -35,7 +37,8 @@ export default function Home() {
         </Drawer>
 
         <Box component={'body'}>
-            <Fab sx={{ bgcolor: '#224a59', '&:hover': { bgcolor: '20%lighter' } }}><Add sx={{ color: 'white' }} /></Fab>
+            <CrpModal mdl={mdl} />
+            <Fab onClick={() => setmdl(!mdl)}><Add sx={{ color: 'white' }} /></Fab>
         </Box>
     </Box>)
 }

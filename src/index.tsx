@@ -6,7 +6,6 @@ import './web.css';
 import { appTheme } from './common';
 import Login from './components/LoginPage/Login';
 import Home from './components/Home';
-import Dashboard from './components/Dashboard';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

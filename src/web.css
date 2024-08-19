@@ -25,7 +25,6 @@
   --box-margin: 10px;
   --box-border-active: 1px solid gray;
   --box-border-hover: 1px solid #b5651d;
-  --box-backdrop: blur(15px);
   --button-bgcolor-active-brand: #224a59;
   --button-bgcolor-active-positive: #48BF53;
   --button-bgcolor-active-negative: #A70000;
@@ -43,8 +42,9 @@
   --modal-position-pos: absolute;
   --modal-position-top: 50%;
   --modal-position-left: 50%;
-  --modal-position-transform: translate(-50%, 0);
+  --modal-position-transform: translate(-50%, -50%);
   --modal-zindex: 1000;
+  --modal-backdrop: blur(15px);
   --table-bgcolor-head: #b5651d;
   --table-bgcolor-body-default: #fff;
   --table-bgcolor-body-hover: #fcf2e7;
