@@ -1,10 +1,8 @@
 import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel,
-    TableFooter, Paper, IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid,
-    TextField, MenuItem, Divider
+    TableFooter, Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
 } from "@mui/material";
-import { Add } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import { sd } from '../../common';
 
@@ -99,7 +97,7 @@ const headCells: readonly HeadCell[] = [
         id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Tasks',
+        label: 'Assigned Tasks',
     },
     {
         id: 'calories',
@@ -173,7 +171,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-export const TasksAdmin: React.FC = () => {
+export const TasksCrp: React.FC = () => {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -216,6 +214,7 @@ export const TasksAdmin: React.FC = () => {
             );
         }
         setSelected(newSelected);
+        setaddM(true);
     }
 
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -232,7 +231,7 @@ export const TasksAdmin: React.FC = () => {
     );
 
     return (<Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }} elevation={4}><TableContainer><Table>
+        <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table sx={{ minWidth: 750 }} /* size='medium' */>
             <EnhancedTableHead
                 numSelected={selected.length}
                 order={order}
@@ -241,11 +240,11 @@ export const TasksAdmin: React.FC = () => {
                 onRequestSort={handleRequestSort}
                 rowCount={rows.length}
             />
-
             <TableBody>
                 {visibleRows.map((row, index) => {
                     const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
+
                     return (
                         <TableRow
                             hover
@@ -282,9 +281,7 @@ export const TasksAdmin: React.FC = () => {
                     </TableRow>
                 )}
             </TableBody>
-
-            <TableFooter sx={{ display: 'flex', alignItems: 'center', gap: '12px', px: '8px' }}>
-                <IconButton title="Add new task" onClick={() => setaddM(true)}><Add /></IconButton>
+            <TableFooter sx={{ display: 'flex', alignItems: 'center' }}>
                 <TablePagination
                     count={rows.length}
                     rowsPerPage={rPP}
@@ -297,30 +294,27 @@ export const TasksAdmin: React.FC = () => {
         </Table></TableContainer></Paper>
 
         <Dialog open={addM} onClose={() => setaddM(false)}>
-            <DialogTitle>Add a new Intervention</DialogTitle>
+            <DialogTitle>Task name</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ p: 2 }}>
-                <Grid item xs={6}><TextField select label='Intervention Side'>
-                    <MenuItem value='supply'>Supply</MenuItem>
-                    <MenuItem value='demand'>Demand</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={6}><TextField select label='Type' /></Grid>
+            <DialogContent sx={{ my: 3 }}><Grid container spacing={2}>
+                <Grid item xs={6}><TextField disabled label='Intervention Side' /></Grid>
+                <Grid item xs={6}><TextField disabled label='Type' /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField select label='District' /></Grid>
-                <Grid item xs={4}><TextField select label='Taluk' /></Grid>
-                <Grid item xs={4}><TextField select label='Panchayat' /></Grid>
-                <Grid item xs={4}><TextField select label='Watershed' /></Grid>
-                <Grid item xs={4}><TextField select label='Village' /></Grid>
+                <Grid item xs={4}><TextField disabled label='District' /></Grid>
+                <Grid item xs={4}><TextField disabled label='Taluk' /></Grid>
+                <Grid item xs={4}><TextField disabled label='Panchayat' /></Grid>
+                <Grid item xs={4}><TextField disabled label='Watershed' /></Grid>
+                <Grid item xs={4}><TextField disabled label='Village' /></Grid>
                 <Grid item xs={4} />
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label="Farmer's name" /></Grid>
-                <Grid item xs={4}><TextField label="Farmer's Aadhar" /></Grid>
-                <Grid item xs={4}><TextField label="Farmer's number" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Farmer's name" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Farmer's Aadhar" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Farmer's number" /></Grid>
             </Grid></DialogContent>
 
-            <DialogActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: '4px' }}>
-                <Button onClick={() => setaddM(false)}>Cancel</Button>
-                <Button>Add</Button>
+            <DialogActions>
+                <Button onClick={() => setaddM(false)}>Close</Button>
+                <Button>Update</Button>
             </DialogActions>
         </Dialog>
     </Box>)

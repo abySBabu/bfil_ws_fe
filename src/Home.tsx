@@ -3,7 +3,7 @@ import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typ
 import { Menu, PersonRounded } from '@mui/icons-material/';
 import { btnSx, sd } from './common';
 import { TasksAdmin } from './components/Tasks/TasksAdmin';
-import  UserList  from './components/UserPage/UserList';
+import UserList from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
@@ -36,8 +36,8 @@ export const Home: React.FC = () => {
         </Drawer>
 
         <Box sx={{ mt: '64px' }}>
-            {dIndex === 0 ? <TasksAdmin /> : null}
-            {dIndex === 3 ? <UserList /> : null}
+            {dIndex === 0 && <TasksAdmin />}
+            {dIndex === 3 && <UserList />}
         </Box>
     </Box>)
 }

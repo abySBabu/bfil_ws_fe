@@ -159,6 +159,9 @@ export const appTheme = createTheme({
                     '& .MuiOutlinedInput-root': {
                         '& fieldset': { borderColor: sd('--text-color-disabled') },
                         '&.Mui-focused fieldset': { borderColor: sd('--text-color-special'), },
+                    },
+                    '& .MuiInputLabel-root': {
+                        '&.Mui-focused': { color: sd('--text-color-special') }
                     }
                 }
             },

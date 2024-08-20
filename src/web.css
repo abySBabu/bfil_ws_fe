@@ -71,6 +71,14 @@
   --length-2: 10px;
   --length-3: 15px;
   --length-4: 20px;
+  --muilength-16: 2;
+  --muilength-24: 3;
+  --muilength-32: 4;
+  --muilength-40: 5;
+  --muilength-48: 6;
+  --muilength-64: 8;
+  --muilength-00: 0;
+  --muilength-08: 1;
   --layout-flex: flex;
   --layout-xflex: row;
   --layout-yflex: column;
