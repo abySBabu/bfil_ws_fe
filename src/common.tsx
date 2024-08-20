@@ -17,6 +17,15 @@ export const appTheme = createTheme({
                 }
             }
         },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    height: '24px', width: '24px', borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
+                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                }
+            }
+        },
         MuiFab: {
             styleOverrides: {
                 root: {

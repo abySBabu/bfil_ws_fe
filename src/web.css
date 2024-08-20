@@ -35,8 +35,6 @@
   --button-bradius-rounded: 15px;
   --button-bradius-pill: 20px;
   --button-corner: 32px;
-  --header-bgcolor: #aca2e7;
-  --header-padding: 10px;
   --textfield-border-def: 1px solid gray;
   --textfield-border-sel: 1px solid #b5651d;
   --textfield-size: fullWidth;
@@ -46,6 +44,10 @@
   --modal-position-transform: translate(-50%, -50%);
   --modal-zindex: 1000;
   --modal-backdrop: blur(15px);
+  --page-header-bgcolor: #aca2e7;
+  --page-header-padding: 10px;
+  --page-body-grow: 1;
+  --page-body-padding: 10px;
   --table-bgcolor-head: #b5651d;
   --table-bgcolor-body-default: #fff;
   --table-bgcolor-body-hover: #fcf2e7;
