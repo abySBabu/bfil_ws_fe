@@ -5,7 +5,7 @@ export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 export const sd = (css: string) => (getComputedStyle(document.documentElement).getPropertyValue(css).trim())
 
 export const appTheme = createTheme({
-    palette: { primary: { main: sd('--text-color-hover') } },
+    //palette: { primary: { main: sd('--text-color-hover') } },
     typography: { fontFamily: sd('--text-font') },
     components: {
         MuiButton: {
@@ -44,11 +44,10 @@ export const appTheme = createTheme({
                 }
             }
         },
-        MuiModal: {
+        MuiDialog: {
             styleOverrides: {
                 root: {
-                    position: 'absolute', top: sd('--modal-position-top'), left: sd('--modal-position-left'),
-                    transform: sd('--modal-position-transform'), backdropFilter: sd('--modal-backdrop')
+                    backdropFilter: sd('--modal-backdrop')
                 }
             }
         },

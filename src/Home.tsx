@@ -13,7 +13,7 @@ export const Home: React.FC = () => {
     const sections = ['Dashboard', 'Tasks', 'Intervention Approval', 'User Management', 'Role Management'];
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <AppBar component={'header'} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--header-bgcolor'), p: sd('--header-padding') }}>
+        <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--header-bgcolor'), p: sd('--header-padding'), minHeight: '40px' }}>
             <div style={{ display: sd('--layout-flex'), alignItems: sd('--align-center') }}>
                 <Menu onClick={() => setopen(true)} />
                 <Typography variant="h6" sx={{ ml: 1 }}>{sections[dIndex]}</Typography>
@@ -22,7 +22,7 @@ export const Home: React.FC = () => {
             <PersonRounded sx={{ border: '1px solid white' }} />
         </AppBar>
         <Drawer open={open} onClose={() => setopen(false)}>
-            <Box sx={{ width: 250 }} role="presentation" onClick={() => setopen(false)}>
+            <Box sx={{ width: '200px' }} onClick={() => setopen(false)}>
                 <Typography variant='h6' sx={{ textAlign: 'center', my: '10px' }}>BFIL - WS</Typography>
                 <Divider />
                 <List>
@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
             </Box>
         </Drawer>
 
-        <Box component={'body'} sx={{ paddingTop: '48px' }}>
+        <Box sx={{ mt: '48px' }}>
             <CrpModal mdl={mdl} />
             <CrpList />
             <Fab onClick={() => setmdl(!mdl)}><Add sx={{ color: 'white' }} /></Fab>
