@@ -1,5 +1,9 @@
 import React from 'react';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, TableFooter, Paper, IconButton } from '@mui/material';
+import {
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel,
+    TableFooter, Paper, IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid,
+    TextField, MenuItem
+} from "@mui/material";
 import { Add } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import { sd } from '../../common';
@@ -169,12 +173,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-export default function CrpList() {
+export const TasksAdmin: React.FC = () => {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
+    const [addM, setaddM] = React.useState(false);
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -278,7 +283,7 @@ export default function CrpList() {
                 )}
             </TableBody>
             <TableFooter sx={{ display: 'flex', alignItems: 'center', gap: '12px', px: '8px' }}>
-                <IconButton ><Add /></IconButton>
+                <IconButton title="Add new task" onClick={() => setaddM(true)}><Add /></IconButton>
                 <TablePagination
                     count={rows.length}
                     rowsPerPage={rPP}
@@ -289,5 +294,30 @@ export default function CrpList() {
                 />
             </TableFooter>
         </Table></TableContainer></Paper>
+
+        <Dialog open={addM} onClose={() => setaddM(false)}>
+            <DialogTitle>Add a new Intervention</DialogTitle>
+
+            <DialogContent sx={{ my: 2 }}><Grid container spacing={2}>
+                <Grid item xs={6}><TextField select label='Intervention Side'>
+                    <MenuItem value='supply'>Supply</MenuItem>
+                    <MenuItem value='demand'>Demand</MenuItem>
+                </TextField></Grid>
+                <Grid item xs={6}><TextField select label='Type' /></Grid>
+                <Grid item xs={4}><TextField select label='District' /></Grid>
+                <Grid item xs={4}><TextField select label='Taluk' /></Grid>
+                <Grid item xs={4}><TextField select label='Watershed' /></Grid>
+                <Grid item xs={4}><TextField select label='Village' /></Grid>
+                <Grid item xs={8} />
+                <Grid item xs={4}><TextField label="Farmer's name" /></Grid>
+                <Grid item xs={4}><TextField label="Farmer's Aadhar" /></Grid>
+                <Grid item xs={4}><TextField label="Farmer's number" /></Grid>
+            </Grid></DialogContent>
+
+            <DialogActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: '4px' }}>
+                <Button onClick={() => setaddM(false)}>Cancel</Button>
+                <Button>Add</Button>
+            </DialogActions>
+        </Dialog>
     </Box>)
 }

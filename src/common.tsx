@@ -4,23 +4,19 @@ export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
 export const sd = (css: string) => (getComputedStyle(document.documentElement).getPropertyValue(css).trim())
 
+export const btnSx = {
+    borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
+    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+}
+
 export const appTheme = createTheme({
-    //palette: { primary: { main: sd('--text-color-hover') } },
     typography: { fontFamily: sd('--text-font') },
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
-                }
-            }
-        },
-        MuiIconButton: {
-            styleOverrides: {
-                root: {
-                    height: '24px', width: '24px', borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
                     '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
@@ -48,6 +44,28 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     backdropFilter: sd('--modal-backdrop')
+                }
+            }
+        },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '15px',
+                    padding: '10px'
+                }
+            }
+        },
+        MuiDialogContent: {
+            styleOverrides: {
+                root: {
+                    padding: '10px'
+                }
+            }
+        },
+        MuiDialogActions: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '15px', padding: '10px'
                 }
             }
         },
