@@ -26,7 +26,7 @@ const Login: React.FC = () => {
             };
 
             const response = await login(data);
-            navigate('/dashboard');
+            navigate('/home');
             console.log('Login Success:', response);
 
         } catch (error) {
@@ -106,7 +106,6 @@ const Login: React.FC = () => {
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, backgroundColor: '#224a59' }}
-                                    href="/home"
                                 >
                                     Sign In
                                 </Button>

@@ -10,7 +10,7 @@ export async function login(data: any) {
     console.log("login", configuration)
     try {
         const response = await axios(configuration);
-        return response.data;
+        console.log('response data',response.data);
         sessionStorage.setItem("token", response.data.jwtBearer);
         sessionStorage.setItem("refToken", response.data.jwtRefresh);
         // sessionStorage.setItem("userId", response.data.user.userId);
@@ -20,6 +20,7 @@ export async function login(data: any) {
         sessionStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
         sessionStorage.setItem("totalUser", response.data.totalUser);
         sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
+        return response.data;
         // sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
         // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);
         // sessionStorage.setItem("companyName", response.data.user.userCompanyList[0].companyName);

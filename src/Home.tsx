@@ -2,7 +2,8 @@ import React from 'react';
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, IconButton } from '@mui/material';
 import { Menu, PersonRounded } from '@mui/icons-material/';
 import { btnSx, sd } from './common';
-import {TasksAdmin} from './components/Tasks/TasksAdmin';
+import { TasksAdmin } from './components/Tasks/TasksAdmin';
+import  UserList  from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
@@ -35,7 +36,8 @@ export const Home: React.FC = () => {
         </Drawer>
 
         <Box sx={{ mt: '64px' }}>
-            <TasksAdmin />
+            {dIndex === 0 ? <TasksAdmin /> : null}
+            {dIndex === 3 ? <UserList /> : null}
         </Box>
     </Box>)
 }

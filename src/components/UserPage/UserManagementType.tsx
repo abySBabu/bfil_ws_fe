@@ -35,4 +35,82 @@ export type allUserType = {
         feature: any | null;
         taskType: any | null;
     }[];
+};
+
+export const selectOptions = {
+    userTypeOptions: [
+        {
+            id: 1,
+            value: "Sales",
+        },
+        {
+            id: 2,
+            value: "Service",
+        },
+        {
+            id: 3,
+            value: "Both",
+        },
+        {
+            id: 4,
+            value: "Supporter",
+        },
+        {
+            id: 5,
+            value: "Routes,Service",
+        }
+    ],
+    loginTypeOptions: [
+        {
+            id: 1,
+            value: "Mobile",
+        },
+        {
+            id: 2,
+            value: "Web",
+        },
+        {
+            id: 3,
+            value: "Both",
+        }
+    ],
+    locationNeededOptions: [
+        {
+            id: 1,
+            value: "Yes",
+        },
+        {
+            id: 2,
+            value: "No",
+        }
+    ],
+    blockedUserOptions: [
+        {
+            id: 1,
+            value: "N",
+            dispalyValue: "--"
+        },
+        {
+            id: 2,
+            value: "Y",
+            dispalyValue: "Blocked"
+        }
+    ],
+    loginStatusOptions: [
+        {
+            id: 0,
+            value: "Sign In",
+            dispalyValue: "Sign In"
+        },
+        {
+            id: 1,
+            value: "Sign Out",
+            dispalyValue: "Sign Out"
+        }
+        // {
+        //     id: 3,
+        //     value: "",
+        //     dispalyValue: "Null"
+        // }
+    ]
 }

@@ -1,146 +1,168 @@
-import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel } from '@mui/material';
-import { login } from '../../Services/loginService';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useTheme, createTheme } from '@mui/material/styles';
+import {
+    Box, Container, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
+    TableRow, Paper, Card, FormControl, Snackbar, Alert, List, ListItemButton, ListItemIcon, Checkbox, ListItemText,
+    InputLabel, Dialog, DialogTitle, DialogContent, Button, Grid, useMediaQuery, TextField,
+} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import { usersList } from '../../Services/userService';
+import { TPA } from '../../common';
+import { allUserType, selectOptions } from "../UserPage/UserManagementType";
+import UserAddEdit from "./UserAddEdit";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 
-interface ILoginFormInput {
-    userName: string;
-    employeeCode:string,
-    designation:string,
-    skillSet:string,
-    role:string,
-    userType:string,
-    email:string,
-    mobileNo:string,
-    password: string;
-    manager:string,
-    loginType:string,
-        
-}
-const defaultTheme = createTheme();
+export default function UserList() {
+    const blockedUserOptions = selectOptions.blockedUserOptions;
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [page, setPage] = React.useState(0);
+    const [userData, setuserData] = useState<allUserType[]>([]);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [tableDialog, setTableDialog] = useState(false);
+    const [edittableDialog, setEditTableDialog] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
-const UserManagement: React.FC = () => {
-    const navigate = useNavigate();
+    const handleRowClick = async (row: any) => {
+        setSelectedRow(row);
+        setTableDialog(true);
+        console.log('Selected row:', row);
+    };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormInput>();
+    const formatDate = (timestamp: string | number | Date) => {
+        const date = new Date(timestamp);
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
 
-    const onSubmit: SubmitHandler<ILoginFormInput> = async (value) => {
+    const fetchUserData = async () => {
         try {
-            let data = {
-                userName: value.userName,
-                password: value.password,
-            };
-
-            const response = await login(data);
-            navigate('/home');
-            console.log('Login Success:', response);
-
+            let resp = await usersList();
+            console.log("getuserData -", resp)
+            setuserData(resp);
         } catch (error) {
-            console.error('Login Error:', error);
+
+            console.log(error)
         }
     };
 
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
-                <Grid
-                    item
-                    xs={false}
-                    md={8}
-                    sx={{
-                        backgroundImage: 'url(/images/loginBg.jpg)',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'left',
-                    }}
-                />
-                <Grid item xs={12} md={4} component={Paper} elevation={6} square>
-                    <Box
-                        sx={{
-                            my: 8,
-                            mx: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: '#224a59' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign in
-                        </Typography>
-                        <Box
+    useEffect(() => {
+        fetchUserData();
+    }, []);
 
-                        >
-                            {/* <Typography component="h1" variant="h5">
-                                Sign in
-                            </Typography> */}
-                            <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id="userName"
-                                    label="UserName"
-                                    autoComplete="userName"
-                                    autoFocus
-                                    {...register('userName', {
-                                        required: 'UserName is required'
-                                    })}
-                                    error={!!errors.userName}
-                                    helperText={errors.userName ? errors.userName.message : ''}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    {...register('password', {
-                                        required: 'Password is required',
-                                        minLength: {
-                                            value: 4,
-                                            message: 'Password must be at least 4 characters',
-                                        },
-                                    })}
-                                    error={!!errors.password}
-                                    helperText={errors.password ? errors.password.message : ''}
-                                />
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 2, backgroundColor: '#224a59' }}
-                                >
-                                    Sign In
-                                </Button>
+    function hideAddModal() {
+        setShowAddModal(false)
+        fetchUserData();
+    }
 
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#" variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Link href="#" variant="body2">
-                                            {"Don't have an account? Sign Up"}
-                                        </Link>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Grid>
-            </Grid>
-        </ThemeProvider>
-    );
-};
+    const filteredData = userData.filter(user => {
+        const matchesSearchQuery = Object.values(user).some(value => {
+            if (typeof value === 'string') {
+                return value.toLowerCase().includes(searchQuery.toLowerCase());
+            }
+            return false;
+        });
 
-export default UserManagement;
+        const roleMatchesSearchQuery = user.userRoleList.some(role =>
+            role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return matchesSearchQuery || roleMatchesSearchQuery;
+    });
+
+    return (<Box>
+        {showAddModal ? <UserAddEdit show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
+        <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
+                <FormControl sx={{ width: '130px' }}>
+                    <TextField
+                        label="Search"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        variant="outlined"
+                        size="small"
+                    />
+                </FormControl>
+                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    Add User
+                </Button>
+            </Box >
+        </Box>
+
+        {filteredData.length > 0 ? <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer><Table>
+                <TableHead>
+                    <TableRow sx={{ alignItems: 'center' }}>
+                        <TableCell >Name</TableCell>
+                        <TableCell >Mobile Number</TableCell>
+                        <TableCell >Role</TableCell>
+                        <TableCell >Manager Name</TableCell>
+                        <TableCell >User Type</TableCell>
+                        <TableCell >Block User</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {(rowsPerPage > 0
+                        ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        : filteredData
+                    ).map((row, id) => (
+                        <TableRow key={id} onClick={() => handleRowClick(row)}>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {row.userName}
+                            </TableCell>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {row.mobileNumber}
+                            </TableCell>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {row.userRoleList[0].roleName}
+                            </TableCell>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {row.managerName}
+                            </TableCell>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {row.userType}
+                            </TableCell>
+                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                                {(() => {
+                                    const option = blockedUserOptions.find(option => option.value === row.userBlockedFlag);
+                                    if (option && option.dispalyValue === "Blocked") {
+                                        const formattedDate = row.updatedTimestamp ? formatDate(row.updatedTimestamp) : '';
+                                        return (
+                                            <>
+                                                {option.dispalyValue}
+                                                <br />
+                                                {formattedDate}
+                                            </>
+                                        );
+                                    } else if (option) {
+                                        return option.dispalyValue;
+                                    }
+                                    return '';
+                                })()}
+                            </TableCell>
+
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                            count={filteredData.length}
+                            page={page} rowsPerPage={rowsPerPage}
+                            sx={{ '.MuiTablePagination-displayedRows': { display: 'none' } }}
+                            onPageChange={(e, p) => { setPage(p) }} rowsPerPageOptions={[]}
+                            ActionsComponent={TPA}
+                        />
+                    </TableRow>
+                </TableFooter>
+            </Table></TableContainer></Paper> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+
+    </Box>)
+}
