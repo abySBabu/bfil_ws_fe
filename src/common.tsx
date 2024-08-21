@@ -86,23 +86,24 @@ export const appTheme = createTheme({
         MuiTableHead: {
             styleOverrides: {
                 root: {
-                    position: 'sticky', top: 0, zIndex: 100, borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-hover-brand') }
+
+                    position: 'sticky', top: 0, zIndex: 100, backgroundColor: sd('--button-bgcolor-active-brand'),
+                    '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
                 }
             }
         },
-        MuiTableCell: {
+        /* MuiTableCell: {
             styleOverrides: {
                 root: {
                     color: sd('--text-color-default'), textTransform: 'none',
                 }
             }
-        },
-        MuiTableRow: {
+        }, */
+        MuiTableBody: {
             styleOverrides: {
                 root: {
-                    textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: '#f0f5f5' },
+                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
+                    '& .MuiTableRow-root:hover': { backgroundColor: '#f0f5f5' },
                 }
             }
         },
