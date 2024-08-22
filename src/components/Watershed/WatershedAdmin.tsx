@@ -11,7 +11,7 @@ export const WatershedAdmin: React.FC = () => {
     const [addM, setaddM] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
-    const tHeads: string[] = ['Watershed', 'Description', 'Location'];
+    const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
 
     return (<Box sx={{ width: '100%' }}>
         <Fab onClick={() => setaddM(true)}><Add /></Fab>
@@ -27,7 +27,8 @@ export const WatershedAdmin: React.FC = () => {
                 <TableRow onClick={() => setselected(true)}>
                     <TableCell>Ganga</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>District, Taluk, Panchayat</TableCell>
+                    <TableCell>State, District, Taluk, Panchayat</TableCell>
+                    <TableCell>Villages</TableCell>
                 </TableRow>
             </TableBody>
 

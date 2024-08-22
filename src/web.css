@@ -36,9 +36,9 @@
   --button-bradius-pill: 20px;
   --button-corner: 32px;
   --textfield-border-sel: 1px solid #b5651d;
-  --textfield-border-dis: 1px solid #d3d3d3;
+  --textfield-border-dis: 1px solid #666;
   --textfield-label-sel: #b5651d;
-  --textfield-label-dis: #d3d3d3;
+  --textfield-label-dis: #666;
   --modal-position-pos: absolute;
   --modal-position-top: 50%;
   --modal-position-left: 50%;

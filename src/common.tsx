@@ -7,11 +7,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 export const setTimeoutsecs = 1000;
 export const setAutoHideDurationTimeoutsecs = 3000;
-
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
-
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
-
 export const sdLen = (css: string) => `${parseInt(sd(css)) * 8}px`
 
 export const btnSx = {
@@ -160,7 +157,7 @@ export const appTheme = createTheme({
                     },
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
-                        '&.Mui-disabled': { color: '--textfield-label-dis' }
+                        '&.Mui-disabled': { color: sd('--textfield-label-dis') }
                     }
                 }
             },
