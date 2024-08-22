@@ -3,12 +3,13 @@ import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typ
 import { Menu, PersonRounded } from '@mui/icons-material/';
 import { btnSx, sd } from './common';
 import { TasksAdmin } from './components/Tasks/TasksAdmin';
+import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
 import UserList from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
-    const sections = ['Dashboard', 'Tasks', 'Intervention Approval', 'User Management', 'Role Management'];
+    const sections = ['Supply Tasks', 'Watershed', 'Interventions', 'Users', 'Roles'];
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--page-header-bgcolor'), p: sd('--page-header-padding'), minHeight: '40px' }}>
@@ -37,6 +38,7 @@ export const Home: React.FC = () => {
 
         <Box sx={{ mt: '64px' }}>
             {dIndex === 0 && <TasksAdmin />}
+            {dIndex === 1 && <WatershedAdmin />}
             {dIndex === 3 && <UserList />}
         </Box>
     </Box>)

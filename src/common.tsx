@@ -8,6 +8,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
 export const sd = (css: string) => (getComputedStyle(document.documentElement).getPropertyValue(css).trim());
+
 export const btnSx = {
     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
     '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
@@ -86,19 +87,11 @@ export const appTheme = createTheme({
         MuiTableHead: {
             styleOverrides: {
                 root: {
-
                     position: 'sticky', top: 0, zIndex: 100, backgroundColor: sd('--button-bgcolor-active-brand'),
                     '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
                 }
             }
         },
-        /* MuiTableCell: {
-            styleOverrides: {
-                root: {
-                    color: sd('--text-color-default'), textTransform: 'none',
-                }
-            }
-        }, */
         MuiTableBody: {
             styleOverrides: {
                 root: {
