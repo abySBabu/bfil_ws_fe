@@ -6,7 +6,7 @@ import {
 import { sd, TPA } from '../../common';
 
 export const TasksAdmin: React.FC = () => {
-    const [selected, setSelected] = React.useState(false);
+    const [selected, setselected] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
     const tHeads: string[] = ['Watershed Location', 'Farmer', 'Intervention', 'Land Type', 'Total Units', 'Water Conserved', 'Funds Spent', 'Funds Source'];
@@ -20,7 +20,7 @@ export const TasksAdmin: React.FC = () => {
             </TableHead>
 
             <TableBody>
-                <TableRow onClick={() => setSelected(true)}>
+                <TableRow onClick={() => setselected(true)}>
                     <TableCell>District, Taluk, Panchayat, Watershed, Village, Survey number</TableCell>
                     <TableCell>
                         Name
@@ -48,7 +48,7 @@ export const TasksAdmin: React.FC = () => {
             </TableRow></TableFooter>
         </Table></TableContainer></Paper>
 
-        <Dialog open={selected} onClose={() => setSelected(false)}>
+        <Dialog open={selected} onClose={() => setselected(false)}>
             <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
@@ -67,7 +67,7 @@ export const TasksAdmin: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => setSelected(false)}>Close</Button>
+                <Button onClick={() => setselected(false)}>Close</Button>
                 <Button>Edit</Button>
             </DialogActions>
         </Dialog>

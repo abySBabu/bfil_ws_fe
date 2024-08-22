@@ -7,7 +7,9 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
-export const sd = (css: string) => (getComputedStyle(document.documentElement).getPropertyValue(css).trim());
+export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
+
+export const sdLen = (css: string) => `${parseInt(sd(css)) * 8}px`
 
 export const btnSx = {
     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, IconButton } from '@mui/material';
 import { Menu, PersonRounded } from '@mui/icons-material/';
-import { btnSx, sd } from './common';
+import { btnSx, sd, sdLen } from './common';
 import { TasksAdmin } from './components/Tasks/TasksAdmin';
 import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
 import UserList from './components/UserPage/UserList';
@@ -9,10 +9,10 @@ import UserList from './components/UserPage/UserList';
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
-    const sections = ['Tasks', 'Watershed', 'Interventions', 'Users', 'Roles'];
+    const sections = ['Tasks', 'Watersheds', 'Interventions', 'Users', 'Roles'];
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--page-header-bgcolor'), p: sd('--page-header-padding'), minHeight: '40px' }}>
+        <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--page-header-bgcolor'), p: sd('--page-header-padding'), minHeight: sdLen('--muilength-40') }}>
             <div style={{ display: sd('--layout-flex'), alignItems: sd('--align-center') }}>
                 <Menu onClick={() => setopen(true)} />
                 <Typography variant="h6" sx={{ ml: 1 }}>{sections[dIndex]}</Typography>
@@ -36,7 +36,7 @@ export const Home: React.FC = () => {
             </Box>
         </Drawer>
 
-        <Box sx={{ mt: '64px' }}>
+        <Box sx={{ mt: sdLen('--muilength-64') }}>
             {dIndex === 0 && <TasksAdmin />}
             {dIndex === 1 && <WatershedAdmin />}
             {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
