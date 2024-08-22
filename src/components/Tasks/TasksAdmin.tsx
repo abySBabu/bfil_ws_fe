@@ -3,7 +3,7 @@ import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
 } from "@mui/material";
-import { sd } from '../../common';
+import { sd, TPA } from '../../common';
 
 export const TasksAdmin: React.FC = () => {
     const [selected, setSelected] = React.useState(false);
@@ -43,7 +43,7 @@ export const TasksAdmin: React.FC = () => {
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
                     rowsPerPageOptions={[]}
-                    labelDisplayedRows={({ count, page }) => `Page ${page + 1} of ${Math.ceil(count / rPP)}`}
+                    ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
         </Table></TableContainer></Paper>

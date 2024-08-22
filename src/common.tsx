@@ -51,8 +51,8 @@ export const TPA = (props: any) => {
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
-            <Typography sx={{ mx: 2 }}>
-                {page + 1}
+            <Typography sx={{ mx: '4px' }}>
+                {page + 1} / {Math.ceil(count / rowsPerPage)}
             </Typography>
             <IconButton
                 onClick={handleNextButtonClick}
