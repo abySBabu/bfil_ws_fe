@@ -9,28 +9,27 @@ export const WatershedAdmin: React.FC = () => {
     const [selected, setSelected] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
-    const tHeads: string[] = ['No.', 'Watershed', 'Description', 'Location'];
+    const tHeads: string[] = ['Watershed', 'Description', 'Location'];
 
     return (<Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
             <TableHead>
                 <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
-                    {tHeads.map((i, t) => (<TableCell key={i}>{t}</TableCell>))}
+                    {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
                 </TableRow>
             </TableHead>
 
             <TableBody>
                 <TableRow onClick={() => setSelected(true)}>
-                    <TableCell>No</TableCell>
-                    <TableCell>Watershed</TableCell>
+                    <TableCell>Ganga</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>Location</TableCell>
+                    <TableCell>District, Taluk, Panchayat</TableCell>
                 </TableRow>
             </TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={-1}
+                    count={1}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
@@ -41,27 +40,19 @@ export const WatershedAdmin: React.FC = () => {
         </Table></TableContainer></Paper>
 
         <Dialog open={selected} onClose={() => setSelected(false)}>
-            <DialogTitle>Watershed name</DialogTitle>
+            <DialogTitle>Survey no - Intervention</DialogTitle>
 
-            <DialogContent sx={{ my: 3 }}><Grid container spacing={2}>
-                <Grid item xs={6}><TextField disabled label='Intervention Side' /></Grid>
-                <Grid item xs={6}><TextField disabled label='Type' /></Grid>
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={12}><TextField disabled label='Watershed' value="Ganga" /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled label='District' /></Grid>
-                <Grid item xs={4}><TextField disabled label='Taluk' /></Grid>
-                <Grid item xs={4}><TextField disabled label='Panchayat' /></Grid>
-                <Grid item xs={4}><TextField disabled label='Watershed' /></Grid>
-                <Grid item xs={4}><TextField disabled label='Village' /></Grid>
-                <Grid item xs={4} />
+                <Grid item xs={12}><TextField disabled label='Description' value="Description" /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled label="Farmer's name" /></Grid>
-                <Grid item xs={4}><TextField disabled label="Farmer's Aadhar" /></Grid>
-                <Grid item xs={4}><TextField disabled label="Farmer's number" /></Grid>
+                <Grid item xs={12}><TextField disabled label="Location" value="District, Taluk, Panchayat, Watershed, Village, Survey number" /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
                 <Button onClick={() => setSelected(false)}>Close</Button>
-                <Button>Update</Button>
+                <Button>Edit</Button>
             </DialogActions>
         </Dialog>
     </Box>)

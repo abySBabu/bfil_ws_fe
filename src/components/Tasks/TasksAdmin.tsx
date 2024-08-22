@@ -49,21 +49,19 @@ export const TasksAdmin: React.FC = () => {
         </Table></TableContainer></Paper>
 
         <Dialog open={selected} onClose={() => setSelected(false)}>
-            <DialogTitle>Survey no - Intervention</DialogTitle>
+            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
 
-            <DialogContent sx={{ my: 2 }}><Grid container spacing={2}>
-                <Grid item xs={6}><TextField disabled label='Intervention Side' /></Grid>
-                <Grid item xs={6}><TextField disabled label='Type' /></Grid>
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={6}><TextField disabled label='Intervention Side' value="Supply" /></Grid>
+                <Grid item xs={6}><TextField disabled label='Intervention Type (Task)' value="Earthen bunding" /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled label='Watershed Location' value="District, Taluk, Panchayat, Watershed, Village, Survey number" /></Grid>
+                <Grid item xs={12}><TextField disabled label='Watershed Location' value="District, Taluk, Panchayat, Watershed, Village, Survey number" /></Grid>
                 <Grid item xs={4}><TextField disabled label='Farmer' value="Name, Aadhar, Mobile" /></Grid>
-                <Grid item xs={4}><TextField disabled label='Intervention (Task)' value="Earthen bunding" /></Grid>
                 <Grid item xs={4}><TextField disabled label='Land Type' value="Wet land" /></Grid>
                 <Grid item xs={4}><TextField disabled label='Total Units' value="200 sqft" /></Grid>
                 <Grid item xs={4}><TextField disabled label="Water Conserved" value="40000 litres" /></Grid>
                 <Grid item xs={4}><TextField disabled label="Funds spent" value="2,00,000" /></Grid>
                 <Grid item xs={4}><TextField disabled label="Funds source" value="BFIL" /></Grid>
-                <Grid item xs={4} />
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={12}><TextField disabled label="Image" value="Image with geo-tag" multiline rows={4} /></Grid>
             </Grid></DialogContent>

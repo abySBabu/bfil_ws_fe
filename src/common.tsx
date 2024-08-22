@@ -155,7 +155,8 @@ export const appTheme = createTheme({
                         '&.Mui-focused fieldset': { borderColor: sd('--text-color-special'), },
                     },
                     '& .MuiInputLabel-root': {
-                        '&.Mui-focused': { color: sd('--text-color-special') }
+                        '&.Mui-focused': { color: sd('--text-color-special') },
+                        '&.Mui-disabled': { color: '#666' }
                     }
                 }
             },
