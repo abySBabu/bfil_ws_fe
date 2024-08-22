@@ -9,7 +9,7 @@ import UserList from './components/UserPage/UserList';
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const [open, setopen] = React.useState(false);
-    const sections = ['Supply Tasks', 'Watershed', 'Interventions', 'Users', 'Roles'];
+    const sections = ['Tasks', 'Watershed', 'Interventions', 'Users', 'Roles'];
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--page-header-bgcolor'), p: sd('--page-header-padding'), minHeight: '40px' }}>
@@ -39,7 +39,9 @@ export const Home: React.FC = () => {
         <Box sx={{ mt: '64px' }}>
             {dIndex === 0 && <TasksAdmin />}
             {dIndex === 1 && <WatershedAdmin />}
+            {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
             {dIndex === 3 && <UserList />}
+            {dIndex === 4 && <Box sx={{ flexGrow: 1 }} />}
         </Box>
     </Box>)
 }
