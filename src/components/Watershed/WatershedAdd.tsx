@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Fab
-} from "@mui/material";
+import { DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Fab } from "@mui/material";
 import { Add } from '@mui/icons-material';
 import { addWS } from '../../Services/wsService';
 

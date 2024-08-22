@@ -1,12 +1,13 @@
 import axios from "axios";
-import { serverPath } from '../common';
+import { serverPath } from "../common";
 
 export async function addWS(data: any) {
     const configs = {
-        url: "192.168.1.42:8080/bfil/wsmaster/addwatershed",
+        url: serverPath.bfil + "wsmaster/addwatershed",
         method: 'post',
-        data: data
+        data: data,
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
-    try { const response = await axios(configs); return response.data; }
+    try { console.log(serverPath.bfil + "wsmaster/addwatershed"); const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
