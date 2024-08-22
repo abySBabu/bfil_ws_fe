@@ -3,19 +3,16 @@ import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Fab
 } from "@mui/material";
-import { Add } from '@mui/icons-material';
 import { sd } from '../../common';
+import { WatershedAdd } from './WatershedAdd';
 
 export const WatershedAdmin: React.FC = () => {
     const [selected, setselected] = React.useState(false);
-    const [addM, setaddM] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
     const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
 
     return (<Box sx={{ width: '100%' }}>
-        <Fab onClick={() => setaddM(true)}><Add /></Fab>
-
         <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
             <TableHead>
                 <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
@@ -61,24 +58,6 @@ export const WatershedAdmin: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        <Dialog open={addM} onClose={() => setaddM(false)}>
-            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
-
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Watershed' /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' /></Grid>
-                <Grid item xs={4}><TextField label='District' /></Grid>
-                <Grid item xs={4}><TextField label='Taluk' /></Grid>
-                <Grid item xs={4}><TextField label="Panchayat" /></Grid>
-                <Grid item xs={4}><TextField label="Villages" /></Grid>
-                <Grid item xs={4} />
-            </Grid></DialogContent>
-
-            <DialogActions>
-                <Button onClick={() => setaddM(false)}>Close</Button>
-                <Button>Edit</Button>
-            </DialogActions>
-        </Dialog>
+        <WatershedAdd />
     </Box>)
 }
