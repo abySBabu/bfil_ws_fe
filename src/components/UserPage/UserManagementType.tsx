@@ -114,3 +114,24 @@ export const selectOptions = {
         // }
     ]
 }
+
+export type allRoles = {
+    roleId: number;
+    roleName: string;
+    roleDescription: string;
+    permissionName: string | null;
+    companyId: number;
+    createdByUserId: number;
+    updatedByUserId: number;
+    permissionList: {
+        permissionId: number;
+        permissionName: string;
+        applicationId: number;
+        permissionDescription: string | null;
+        createdByUserId: number | null;
+        updatedByUserId: number | null;
+        createdTimestamp: string | null;
+        updatedTimestamp: string | null;
+        rolePermissionSet: any[];
+    }[] | null;
+}

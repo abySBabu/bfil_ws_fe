@@ -5,6 +5,9 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
+export const setTimeoutsecs = 1000;
+export const setAutoHideDurationTimeoutsecs = 3000;
+
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/" }
 
 export const sd = (css: string) => (getComputedStyle(document.documentElement).getPropertyValue(css).trim());
