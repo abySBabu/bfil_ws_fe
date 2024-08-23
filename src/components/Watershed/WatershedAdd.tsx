@@ -18,7 +18,7 @@ export const WatershedAdd: React.FC = () => {
     const [addM, setaddM] = React.useState(false);
     const [addObj, setaddObj] = React.useState(wsObj);
 
-    const stateCh = (e: any) => {
+    const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
             ...addObj,
             name_of_the_state: e.target.value,
@@ -29,7 +29,7 @@ export const WatershedAdd: React.FC = () => {
         })
     }
 
-    const districtCh = (e: any) => {
+    const districtCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
             ...addObj,
             name_of_the_district: e.target.value,
@@ -39,7 +39,7 @@ export const WatershedAdd: React.FC = () => {
         })
     }
 
-    const talukCh = (e: any) => {
+    const talukCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
             ...addObj,
             name_of_the_taluka: e.target.value,
@@ -48,7 +48,7 @@ export const WatershedAdd: React.FC = () => {
         })
     }
 
-    const panchayatCh = (e: any) => {
+    const panchayatCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
             ...addObj,
             name_of_the_grampanchayat: e.target.value,
