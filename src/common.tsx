@@ -89,7 +89,7 @@ export const appTheme = createTheme({
         MuiTableHead: {
             styleOverrides: {
                 root: {
-                    position: 'sticky', top: 0, zIndex: 100, backgroundColor: sd('--button-bgcolor-active-brand'),
+                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
                     '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
                 }
             }
@@ -98,7 +98,8 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
-                    '& .MuiTableRow-root:hover': { backgroundColor: '#f0f5f5' },
+                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
+                    '& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover') },
                 }
             }
         },

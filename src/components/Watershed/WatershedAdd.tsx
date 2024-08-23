@@ -74,7 +74,7 @@ export const WatershedAdd: React.FC = () => {
                 <Grid item xs={12}><TextField label='Watershed' value={addObj.ws_name} onChange={(e) => setaddObj({ ...addObj, ws_name: e.target.value })} /></Grid>
                 <Grid item xs={12}><TextField label='Description' value={addObj.ws_description} onChange={(e) => setaddObj({ ...addObj, ws_description: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' value={addObj.name_of_the_state} onChange={(e) => stateCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='State' disabled value={addObj.name_of_the_state} onChange={(e) => stateCh(e)} /></Grid>
                 <Grid item xs={4}><TextField label='District' value={addObj.name_of_the_district} onChange={(e) => districtCh(e)} /></Grid>
                 <Grid item xs={4}><TextField label='Taluka' value={addObj.name_of_the_taluka} onChange={(e) => talukCh(e)} /></Grid>
                 <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.name_of_the_grampanchayat} onChange={(e) => panchayatCh(e)} /></Grid>

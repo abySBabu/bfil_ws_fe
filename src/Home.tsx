@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, Typography, AppBar, IconButton } from '@mui/material';
+import { Box, Container, List, Divider, ListItem, ListItemButton, ListItemText, Typography, Toolbar, IconButton } from '@mui/material';
 import { Menu, PersonRounded } from '@mui/icons-material/';
 import { btnSx, sd, sdLen } from './common';
 import { TasksAdmin } from './components/Tasks/TasksAdmin';
@@ -8,40 +8,33 @@ import UserList from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
-    const [open, setopen] = React.useState(false);
     const sections = ['Tasks', 'Watersheds', 'Interventions', 'Users', 'Roles'];
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <AppBar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), bgcolor: sd('--page-header-bgcolor'), p: sd('--page-header-padding'), minHeight: sdLen('--muilength-40') }}>
-            <div style={{ display: sd('--layout-flex'), alignItems: sd('--align-center') }}>
-                <Menu onClick={() => setopen(true)} />
-                <Typography variant="h6" sx={{ ml: 1 }}>{sections[dIndex]}</Typography>
-            </div>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '97vh', border: '1px solid black', borderRadius: '15px' }}>
+        <Toolbar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), p: sd('--page-header-padding'), height: '10%' }}>
+            <Typography variant='h5'>BFIL - WS</Typography>
             <Typography variant='h5'>BFIL - WS</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
-        </AppBar>
-        <Drawer open={open} onClose={() => setopen(false)}>
-            <Box sx={{ width: '240px' }} onClick={() => setopen(false)}>
-                <Typography variant='h6' sx={{ textAlign: 'center', my: '10px' }}>BFIL - WS</Typography>
-                <Divider />
-                <List>
-                    {sections.map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton onClick={() => setdIndex(index)}>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
-        </Drawer>
+        </Toolbar>
 
-        <Box sx={{ mt: sdLen('--muilength-64') }}>
-            {dIndex === 0 && <TasksAdmin />}
-            {dIndex === 1 && <WatershedAdmin />}
-            {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
-            {dIndex === 3 && <UserList />}
-            {dIndex === 4 && <Box sx={{ flexGrow: 1 }} />}
-        </Box>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '16px', height: '90%' }}>
+            <Box sx={{ width: '10%' }}><List>
+                {sections.map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton onClick={() => setdIndex(index)}>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List></Box>
+
+            <Container sx={{ width: '90%' }}>
+                {dIndex === 0 && <TasksAdmin />}
+                {dIndex === 1 && <WatershedAdmin />}
+                {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
+                {dIndex === 3 && <UserList />}
+                {dIndex === 4 && <Box sx={{ flexGrow: 1 }} />}
+            </Container>
+        </div>
     </Box>)
 }

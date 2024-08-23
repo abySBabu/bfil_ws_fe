@@ -35,6 +35,8 @@
   --button-bradius-rounded: 15px;
   --button-bradius-pill: 20px;
   --button-corner: 32px;
+  --drawer-padding: 10px;
+  --drawer-bgcolor: #8d272b;
   --textfield-border-sel: 1px solid #b5651d;
   --textfield-border-dis: 1px solid #666;
   --textfield-label-sel: #b5651d;
@@ -50,9 +52,9 @@
   --page-header-padding: 10px;
   --page-body-grow: 1;
   --page-body-padding: 10px;
-  --table-bgcolor-head: #b5651d;
+  --table-bgcolor-head: #e46f20;
   --table-bgcolor-body-default: #fff;
-  --table-bgcolor-body-hover: #fcf2e7;
+  --table-bgcolor-body-hover: #f7b38d;
   --table-height: 64px;
   --table-width: 256px;
   --text-color-default: #fff;
