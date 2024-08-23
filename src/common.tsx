@@ -165,6 +165,17 @@ export const appTheme = createTheme({
                 fullWidth: true
             }
         },
+        MuiAlert: {
+            styleOverrides: {
+                root: {
+                    color: sd('--alert-text-color'), fontSize: sd('--alert-text-size'),
+                    backgroundColor: sd('--alert-bgcolor-brand'), borderRadius: sd('--alert-bradius'),
+                    padding: sd('--alert-padding'), position: 'absolute', top: sd('--alert-position-top'),
+                    left: sd('--alert-position-left'), transform: sd('--alert-position-transform'),
+                    zIndex: sd('--alert-zindex')
+                }
+            }
+        },
         MuiLink: {
             styleOverrides: {
                 root: {
