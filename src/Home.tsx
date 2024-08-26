@@ -5,10 +5,11 @@ import { btnSx, sd } from './common';
 import { TasksAdmin } from './components/Tasks/TasksAdmin';
 import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
 import UserList from './components/UserPage/UserList';
+import { Dashboard } from './components/Dashboard/Dashboard';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
-    const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity (Intervention/Task)'];
+    const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
 
     return (<Box sx={{
         display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', m: `-${sd('--page-body-padding')}`, p: sd('--page-body-padding'),
@@ -30,7 +31,7 @@ export const Home: React.FC = () => {
             </List></Box>
 
             <Box sx={{ p: sd('--page-body-padding'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-right') }}>
-                {dIndex === 0 && <Box sx={{ flexGrow: 1 }} />}
+                {dIndex === 0 && <Dashboard />}
                 {dIndex === 1 && <WatershedAdmin />}
                 {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
                 {dIndex === 3 && <UserList />}
