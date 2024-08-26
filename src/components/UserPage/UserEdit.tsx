@@ -4,7 +4,6 @@ import {
     TextField, Button, Snackbar, Alert, Box, Grid, MenuItem, Dialog, DialogActions,
     DialogContent, DialogTitle, Container, CircularProgress
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 
@@ -13,7 +12,6 @@ interface UserFormInput {
     userName: string;
     employeeCode: string;
     designation: string;
-    skillSet: string;
     role: string;
     userType: string;
     email: string;
@@ -21,7 +19,6 @@ interface UserFormInput {
     password: string;
     manager: string;
     loginType: string;
-    isLiveLocationNeeded: string;
 }
 
 interface UserTypeOption {
@@ -37,18 +34,15 @@ type userTypeProps = {
     userList: allUserType[];
 }
 export default function UserForm(props: userTypeProps) {
-    const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
-    const locationNeededOptions = selectOptions.locationNeededOptions;
     const [modalShow, setModalShow] = useState(props.show);
     const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
     const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
     const [managerList, setManagerList] = useState<allUserType[]>([]);
     const loginTypeOptions = selectOptions.loginTypeOptions;
-    let companyID: any;
     let userId: any;
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<UserFormInput>(
@@ -93,7 +87,7 @@ export default function UserForm(props: userTypeProps) {
         fetchData();
 
         // Set form values if editing
-        if (props.action === 'Edit' && props.userDetails) {
+        if (props.userDetails) {
             setTimeout(() => {
                 setValue('userName', props.userDetails?.userName || '');
                 setValue('employeeCode', props.userDetails?.userCode || '');
@@ -102,9 +96,9 @@ export default function UserForm(props: userTypeProps) {
                 setValue('userType', props.userDetails?.userType || '');
                 setValue('email', props.userDetails?.userEmailId || '');
                 setValue('mobileNo', props.userDetails?.mobileNumber || '');
-                setValue('password', props.userDetails?.userPassword || ''); 
+                setValue('password', props.userDetails?.userPassword || '');
                 setValue('manager', props.userDetails?.managerName || '');
-                const defaultLoginType = loginTypeOptions.find(option => option.id === props.userDetails?.loginType)?.value || ''; 
+                const defaultLoginType = loginTypeOptions.find(option => option.id === props.userDetails?.loginType)?.value || '';
                 setValue('loginType', defaultLoginType);
             }, 0);
         }
@@ -132,7 +126,7 @@ export default function UserForm(props: userTypeProps) {
                 userCompanyList: currentUser?.userCompanyList || [],
                 managerName: value.manager,
                 mobileNumber: value.mobileNo,
-                createdByUserId: userId,
+                updatedByUserId: userId,
                 userType: userTypeTemp,
                 loginType: loginTypeTemp
             }
@@ -173,7 +167,7 @@ export default function UserForm(props: userTypeProps) {
     return (
         <Container>
             <Dialog open={modalShow}>
-                <DialogTitle>{props.action === 'Edit' ? 'Edit User' : 'Add User'}</DialogTitle>
+                <DialogTitle>Edit User</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={4}>
@@ -312,7 +306,7 @@ export default function UserForm(props: userTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
                     <Button onClick={handleSubmit(addUser)} color="primary">
-                        {loading ? <CircularProgress size={24} /> : props.action === 'Edit' ? 'Update User' : 'Create User'}
+                    Update User {loading ? <CircularProgress size={24} /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -73,6 +73,26 @@ export async function updateUserDetails(data: any, userId: any) {
     }
 }
 
+export async function blockUser(data: any) {
+    const configs = {
+        url: serverPath.authserver + 'user-service/blockUser',
+        method: 'post',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        data: data
+    };
+
+    try {
+        const response = await axios(configs);
+        console.log("blockUser---", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+    }
+}
+
 
 export async function addOrUpdateUserDetails(data: any) {
     const configs = {

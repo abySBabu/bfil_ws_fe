@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel } from '@mui/material';
+import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel, Snackbar, Alert, CircularProgress } from '@mui/material';
 import { login } from '../../Services/loginService';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -15,10 +15,15 @@ const defaultTheme = createTheme();
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const [message, setMessage] = useState('');
+    const [severityColor, setSeverityColor] = useState<any>(undefined);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormInput>();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async (value) => {
+        setLoading(true);
         try {
             let data = {
                 userName: value.userName,
@@ -26,11 +31,28 @@ const Login: React.FC = () => {
             };
 
             const response = await login(data);
-            navigate('/home');
             console.log('Login Success:', response);
+            if (response) {
+                setSeverityColor("success");
+                setMessage("Login successfully");
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                    navigate('/home');
+                }, 3000);
+            }
 
-        } catch (error) {
-            console.error('Login Error:', error);
+        } catch (error: any) {
+            if (error?.response?.data?.message) {
+                setSeverityColor("error");
+                setMessage(error.response.data.message);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                }, 3000);
+            }
         }
     };
 
@@ -107,7 +129,7 @@ const Login: React.FC = () => {
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2, backgroundColor: '#224a59' }}
                                 >
-                                    Sign In
+                                    Sign In {loading ? <CircularProgress size={24} /> : null}
                                 </Button>
 
                                 <Grid container>
@@ -127,6 +149,11 @@ const Login: React.FC = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+                <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
+                    {message}
+                </Alert>
+            </Snackbar>
         </ThemeProvider>
     );
 };
