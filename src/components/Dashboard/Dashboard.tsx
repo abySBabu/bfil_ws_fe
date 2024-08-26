@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 
 export const Dashboard: React.FC = () => {
-    const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Goverment Amount Leveraged']
+    const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Government Amount Leveraged']
     return (<Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
         {keys.map((k) => (<Card sx={{ display: 'flex', height: '160px', width: '24%' }} raised>
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
