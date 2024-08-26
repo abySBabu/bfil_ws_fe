@@ -4,12 +4,12 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { darken } from '@mui/material/styles';
 
 export const setTimeoutsecs = 1000;
 export const setAutoHideDurationTimeoutsecs = 3000;
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "http://192.168.1.42:8080/bfil/" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
-export const sdLen = (css: string) => `${parseInt(sd(css)) * 8}px`
 
 export const btnSx = {
     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
@@ -86,6 +86,16 @@ export const appTheme = createTheme({
                 }
             }
         },
+        MuiFab: {
+            styleOverrides: {
+                root: {
+                    position: 'fixed', bottom: sd('--button-corner'), right: sd('--button-corner'),
+                    color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
+                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                }
+            }
+        },
         MuiTableHead: {
             styleOverrides: {
                 root: {
@@ -103,17 +113,7 @@ export const appTheme = createTheme({
                 }
             }
         },
-        MuiFab: {
-            styleOverrides: {
-                root: {
-                    position: 'fixed', bottom: sd('--button-corner'), right: sd('--button-corner'),
-                    color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
-                }
-            }
-        },
-        MuiCard: {
+        MuiPaper: {
             styleOverrides: {
                 root: {
                     padding: sd('--box-padding'), borderRadius: sd('--box-bradius'),
@@ -177,6 +177,13 @@ export const appTheme = createTheme({
                 }
             }
         },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: '#fff'
+                }
+            }
+        },
         MuiLink: {
             styleOverrides: {
                 root: {
@@ -186,6 +193,16 @@ export const appTheme = createTheme({
                 }
             },
             defaultProps: { underline: 'hover' }
+        },
+        MuiListItem: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        backgroundColor: darken('rgba(0, 0, 0, 0.1)', 0.25),
+                        '&:hover': { backgroundColor: darken('rgba(0, 0, 0, 0.1)', 0.5) }
+                    }
+                }
+            }
         }
     }
 })
