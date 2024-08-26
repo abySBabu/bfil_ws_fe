@@ -169,6 +169,13 @@ export const appTheme = createTheme({
                 }
             }
         },
+        /* MuiTypography: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none'
+                }
+            }
+        }, */
         MuiLink: {
             styleOverrides: {
                 root: {
