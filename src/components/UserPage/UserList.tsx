@@ -4,19 +4,21 @@ import { useTheme, createTheme } from '@mui/material/styles';
 import {
     Box, Container, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
     TableRow, Paper, Card, FormControl, Snackbar, Alert, List, ListItemButton, ListItemIcon, Checkbox, ListItemText,
-    InputLabel, Dialog, DialogTitle, DialogContent, Button, Grid, useMediaQuery, TextField,
+    InputLabel, Dialog, DialogTitle, DialogContent, Button, Grid, useMediaQuery, TextField, Tooltip
 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { usersList } from '../../Services/userService';
 import { TPA } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
-import UserAddEdit from "./UserAddEdit";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-
+import EditIcon from '@mui/icons-material/Edit';
+import UserEdit from './UserEdit';
+import UserAdd from './UserAdd';
 
 export default function UserList() {
     const blockedUserOptions = selectOptions.blockedUserOptions;
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [userData, setuserData] = useState<allUserType[]>([]);
@@ -24,7 +26,7 @@ export default function UserList() {
     const [searchQuery, setSearchQuery] = useState('');
     const [tableDialog, setTableDialog] = useState(false);
     const [edittableDialog, setEditTableDialog] = useState(false);
-    const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedRow, setSelectedRow] = useState<allUserType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -33,6 +35,7 @@ export default function UserList() {
         setTableDialog(true);
         console.log('Selected row:', row);
     };
+
 
     const formatDate = (timestamp: string | number | Date) => {
         const date = new Date(timestamp);
@@ -62,6 +65,12 @@ export default function UserList() {
         fetchUserData();
     }
 
+    function hideEditModal() {
+        setShowEditModal(false)
+        fetchUserData();
+    };
+
+
     const filteredData = userData.filter(user => {
         const matchesSearchQuery = Object.values(user).some(value => {
             if (typeof value === 'string') {
@@ -78,7 +87,8 @@ export default function UserList() {
     });
 
     return (<Box>
-        {showAddModal ? <UserAddEdit show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
+        {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
+        {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={userData} /> : null}
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
                 <FormControl sx={{ width: '130px' }}>
@@ -106,6 +116,7 @@ export default function UserList() {
                         <TableCell >Manager Name</TableCell>
                         <TableCell >User Type</TableCell>
                         <TableCell >Block User</TableCell>
+                        <TableCell >Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -146,6 +157,11 @@ export default function UserList() {
                                     }
                                     return '';
                                 })()}
+                            </TableCell>
+                            <TableCell>
+                                <Tooltip title="Edit">
+                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                </Tooltip>
                             </TableCell>
 
                         </TableRow>

@@ -53,12 +53,33 @@ export async function createUser(data: any) {
     }
 }
 
+export async function updateUserDetails(data: any, userId: any) {
+    const configs = {
+        url: serverPath.authserver + 'user-service/users/' + userId,
+        method: 'put',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        data: data
+    };
+
+    try {
+        const response = await axios(configs);
+        console.log("createUser---", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+    }
+}
+
+
 export async function addOrUpdateUserDetails(data: any) {
     const configs = {
         url: serverPath.authserver + 'userDetails-service/addOrUpdateUserDetails',
         method: 'post',
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         data: data
     };

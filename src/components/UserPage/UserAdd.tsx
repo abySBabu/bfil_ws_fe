@@ -3,8 +3,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
-import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
-import { getRolesByCompany, createUser, addOrUpdateUserDetails } from '../../Services/userService';
+import { allUserType, allRoles, selectOptions } from "./UserManagementType";
+import { getRolesByCompany, createUser } from '../../Services/userService';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
