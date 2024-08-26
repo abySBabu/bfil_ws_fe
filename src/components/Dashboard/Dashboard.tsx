@@ -3,8 +3,8 @@ import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 
 export const Dashboard: React.FC = () => {
     const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Goverment Amount Leveraged']
-    return (<Box sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }}>
-        {keys.map((k) => (<Card sx={{ display: 'flex', height: '20%', width: '24%', bgcolor: 'gray' }} raised>
+    return (<Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+        {keys.map((k) => (<Card sx={{ display: 'flex', height: '160px', width: '24%' }} raised>
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <CardContent>
                     <Typography variant='h6'>{k}</Typography>
@@ -12,7 +12,7 @@ export const Dashboard: React.FC = () => {
                 </CardContent>
                 <CardMedia
                     component="img"
-                    sx={{ width: 160 }}
+                    sx={{ width: 80 }}
                     image="/static/images/cards/live-from-space.jpg"
                     alt="Live from space album cover"
                 />
