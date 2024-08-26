@@ -169,13 +169,6 @@ export const appTheme = createTheme({
                 }
             }
         },
-        MuiTypography: {
-            styleOverrides: {
-                root: {
-                    color: '#fff'
-                }
-            }
-        },
         MuiLink: {
             styleOverrides: {
                 root: {

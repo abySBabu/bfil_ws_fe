@@ -35,8 +35,7 @@
   --button-bradius-rounded: 15px;
   --button-bradius-pill: 20px;
   --button-corner: 32px;
-  --drawer-padding: 10px;
-  --drawer-bgcolor: #8d272b;
+  --drawer-bgcolor: #67a03f;
   --textfield-border-sel: 1px solid #b5651d;
   --textfield-border-dis: 1px solid #666;
   --textfield-label-sel: #b5651d;
@@ -48,14 +47,13 @@
   --modal-padding: 10px;
   --modal-zindex: 1000;
   --modal-backdrop: blur(15px);
-  --page-header-bgcolor: #4f4392;
-  --page-header-padding: 10px;
-  --page-body-padding: 10px;
+  --page-header-bgcolor: #8d272b;
+  --page-header-padding: 8px;
+  --page-body-bgcolor: #fff;
+  --page-body-padding: 0;
   --table-bgcolor-head: #e46f20;
   --table-bgcolor-body-default: #fff;
   --table-bgcolor-body-hover: #f7b38d;
-  --table-height: 64px;
-  --table-width: 256px;
   --text-color-default: #fff;
   --text-color-hover: #000;
   --text-color-disabled: #333;

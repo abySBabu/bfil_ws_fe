@@ -7,11 +7,12 @@ import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
 import UserList from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
+    const pageBg = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     const [dIndex, setdIndex] = React.useState(0);
     const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity (Intervention/Task)'];
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '97vh', m: '-8px', p: '8px', gap: '8px', background: 'linear-gradient(to bottom, #8d272b 30%, white 30%)' }}>
-        <Toolbar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding'), bgcolor: '#8d272b', borderRadius: '10px' }}>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '97vh', m: '-8px', p: '8px', gap: '8px', background: pageBg }}>
+        <Toolbar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding') }}>
             <Typography variant='h6'>BFIL - WS</Typography>
             <Typography variant='h5'>Logo</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
