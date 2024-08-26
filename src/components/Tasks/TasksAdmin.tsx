@@ -12,7 +12,7 @@ export const TasksAdmin: React.FC = () => {
     const tHeads: string[] = ['Watershed Location', 'Farmer', 'Intervention', 'Land Type', 'Total Units', 'Water Conserved', 'Funds Spent', 'Funds Source'];
 
     return (<Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
+        <Table>
             <TableHead>
                 <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
                     {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
@@ -46,7 +46,7 @@ export const TasksAdmin: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer></Paper>
+        </Table>
 
         <Dialog open={selected} onClose={() => setselected(false)}>
             <DialogTitle>Survey 57. Earthen bunding</DialogTitle>

@@ -8,31 +8,32 @@ import UserList from './components/UserPage/UserList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
-    const sections = ['Watershed Activities', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management'];
+    const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity (Intervention/Task)'];
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '97vh', borderRadius: '10px', gap: '8px' }}>
-        <Toolbar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), p: sd('--page-header-padding'), height: '10%', bgcolor: '#8d272b', borderRadius: '15px' }}>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '97vh', m: '-8px', p: '8px', gap: '8px', background: 'linear-gradient(to bottom, #8d272b 30%, white 30%)' }}>
+        <Toolbar sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding'), bgcolor: '#8d272b', borderRadius: '10px' }}>
             <Typography variant='h6'>BFIL - WS</Typography>
             <Typography variant='h5'>Logo</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
         </Toolbar>
 
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '8px', height: '90%' }}>
-            <Paper sx={{ width: '10%', backgroundColor: '#67a03f', p: 0 }} elevation={4}><List>
+        <Paper sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1, borderRadius: '15px', p: 0 }}>
+            <Box sx={{ width: '10%', backgroundColor: '#67a03f', borderRadius: '15px 0 0 15px' }}><List>
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                         <ListItemText primary={text} />
                     </ListItemButton>
                 </ListItem>))}
-            </List></Paper>
+            </List></Box>
 
-            <Paper sx={{ width: '90%', p: '12px' }} elevation={2}>
-                {dIndex === 0 && <TasksAdmin />}
+            <Box sx={{ p: '12px', flexGrow: 1, borderRadius: '0 15px 15px 0' }}>
+                {dIndex === 0 && <Box sx={{ flexGrow: 1 }} />}
                 {dIndex === 1 && <WatershedAdmin />}
                 {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
                 {dIndex === 3 && <UserList />}
                 {dIndex === 4 && <Box sx={{ flexGrow: 1 }} />}
-            </Paper>
-        </div>
+                {dIndex === 5 && <TasksAdmin />}
+            </Box>
+        </Paper>
     </Box>)
 }

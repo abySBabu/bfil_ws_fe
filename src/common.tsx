@@ -113,14 +113,6 @@ export const appTheme = createTheme({
                 }
             }
         },
-        MuiPaper: {
-            styleOverrides: {
-                root: {
-                    padding: sd('--box-padding'), borderRadius: sd('--box-bradius'),
-                    backgroundColor: sd('--box-bgcolor-default')
-                }
-            }
-        },
         MuiDialog: {
             styleOverrides: {
                 root: {
@@ -198,8 +190,8 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
-                        backgroundColor: darken('rgba(0, 0, 0, 0.1)', 0.25),
-                        '&:hover': { backgroundColor: darken('rgba(0, 0, 0, 0.1)', 0.5) }
+                        backgroundColor: darken('rgba(0, 0, 0, 1)', 0.8),
+                        '&:hover': { backgroundColor: darken('rgba(0, 0, 0, 1)', 1) }
                     }
                 }
             }
