@@ -47,10 +47,14 @@
   --modal-padding: 10px;
   --modal-zindex: 1000;
   --modal-backdrop: blur(15px);
+  --page-header-txtcolor: #fff;
   --page-header-bgcolor: #8d272b;
   --page-header-padding: 8px;
   --page-body-bgcolor: #fff;
   --page-body-padding: 8px;
+  --page-nav-txtcolor: #fff;
+  --page-nav-bgcolor: #67a03f;
+  --page-nav-padding: 0;
   --page-bradius-def: 15px;
   --page-bradius-top: 15px 15px 0 0;
   --page-bradius-right: 0 15px 15px 0;
