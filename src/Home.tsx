@@ -12,12 +12,13 @@ export const Home: React.FC = () => {
     const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
 
     return (<Box sx={{
-        display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', m: `-${sd('--page-body-padding')}`, p: sd('--page-body-padding'),
+        display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', p: sd('--page-body-padding'),
         gap: sd('--page-body-padding'), background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     }}>
         <Toolbar sx={{ color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding') }}>
-            <Typography variant='h6'>BFIL - WS</Typography>
-            <Typography variant='h5'>Logo</Typography>
+            <img src="./Karnataka_Gov.png" alt="Karnataka_Gov" />
+            <Typography variant='h6'>IndusInd Bank</Typography>
+            <Typography variant='h6'>BFIL</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
         </Toolbar>
 
@@ -33,10 +34,10 @@ export const Home: React.FC = () => {
             <Box sx={{ p: sd('--page-body-padding'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-right') }}>
                 {dIndex === 0 && <Dashboard />}
                 {dIndex === 1 && <WatershedAdmin />}
-                {dIndex === 2 && <Box sx={{ flexGrow: 1 }} />}
                 {dIndex === 3 && <UserList />}
-                {dIndex === 4 && <Box sx={{ flexGrow: 1 }} />}
                 {dIndex === 5 && <TasksAdmin />}
+                {(dIndex === 2 || dIndex === 4)
+                    && <Box sx={{ flexGrow: 1 }} />}
             </Box>
         </Paper>
     </Box>)
