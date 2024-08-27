@@ -19,7 +19,7 @@ export const Home: React.FC = () => {
             color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
             justifyContent: sd('--align-spaced'), height: '5%', p: sd('--page-header-padding')
         }}>
-            <img src="./Assets/ktgov.png" alt="KarnatakaGovernment" />
+            <img src="/images/ktgov.png" alt="KarnatakaGovernment" height='75px' />
             <Typography variant='h6'>IndusInd Bank</Typography>
             <Typography variant='h6'>BFIL</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
