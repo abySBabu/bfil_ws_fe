@@ -13,7 +13,7 @@ export const Home: React.FC = () => {
 
     return (<Box sx={{
         display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', p: sd('--page-body-padding'),
-        gap: sd('--page-body-padding'), background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
+        gap: sd('--page-body-padding'), //background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     }}>
         <Toolbar sx={{
             color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
@@ -25,7 +25,7 @@ export const Home: React.FC = () => {
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
         </Toolbar>
 
-        <Paper sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
+        <Paper elevation={8} sx={{ bgcolor: '#F5F5F5', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
             <Box sx={{ color: sd('--page-nav-txtcolor'), width: '10%', backgroundColor: sd('--page-nav-bgcolor'), borderRadius: sd('--page-bradius-left') }}><List>
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>

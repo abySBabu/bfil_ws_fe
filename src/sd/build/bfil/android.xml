@@ -22,10 +22,10 @@
   <string name="card_txtcolor">#8d272b</string>
   <string name="card_bgcolor">#fff</string>
   <string name="card_bradius">15px</string>
-  <string name="button_bgcolor_active_brand">#224a59</string>
+  <string name="button_bgcolor_active_brand">#3a3a8b</string>
   <string name="button_bgcolor_active_positive">#48BF53</string>
   <string name="button_bgcolor_active_negative">#A70000</string>
-  <string name="button_bgcolor_hover_brand">#3a6a7a</string>
+  <string name="button_bgcolor_hover_brand">#3b77b9</string>
   <string name="button_bgcolor_hover_positive">#91F086</string>
   <string name="button_bgcolor_hover_negative">#A0153E</string>
   <string name="button_bgcolor_disabled">#d3d3d3</string>
@@ -56,9 +56,9 @@
   <string name="page_bradius_right">0 15px 15px 0</string>
   <string name="page_bradius_bot">0 0 15px 15px</string>
   <string name="page_bradius_left">15px 0 0 15px</string>
-  <string name="table_bgcolor_head">#e46f20</string>
+  <string name="table_bgcolor_head">#3a3a8b</string>
   <string name="table_bgcolor_body_default">#fff</string>
-  <string name="table_bgcolor_body_hover">#f7b38d</string>
+  <string name="table_bgcolor_body_hover">#3b77b9</string>
   <string name="text_color_default">#fff</string>
   <string name="text_color_hover">#000</string>
   <string name="text_color_disabled">#333</string>

@@ -21,10 +21,10 @@
   --card-txtcolor: #8d272b;
   --card-bgcolor: #fff;
   --card-bradius: 15px;
-  --button-bgcolor-active-brand: #224a59;
+  --button-bgcolor-active-brand: #3a3a8b;
   --button-bgcolor-active-positive: #48BF53;
   --button-bgcolor-active-negative: #A70000;
-  --button-bgcolor-hover-brand: #3a6a7a;
+  --button-bgcolor-hover-brand: #3b77b9;
   --button-bgcolor-hover-positive: #91F086;
   --button-bgcolor-hover-negative: #A0153E;
   --button-bgcolor-disabled: #d3d3d3;
@@ -56,9 +56,9 @@
   --page-bradius-right: 0 15px 15px 0;
   --page-bradius-bot: 0 0 15px 15px;
   --page-bradius-left: 15px 0 0 15px;
-  --table-bgcolor-head: #e46f20;
+  --table-bgcolor-head: #3a3a8b;
   --table-bgcolor-body-default: #fff;
-  --table-bgcolor-body-hover: #f7b38d;
+  --table-bgcolor-body-hover: #3b77b9;
   --text-color-default: #fff;
   --text-color-hover: #000;
   --text-color-disabled: #333;

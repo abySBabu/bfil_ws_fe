@@ -43,4 +43,9 @@ function sdCon(brand, platform) {
 maroon: #8d272b
 saffron: #e46f20 #f7b38d
 green: #67a03f
+blue1 - #3ea6e5
+blue2 - #3b77b9
+blue3 - #3a3a8b
+Porange - #f58e1d
+Pgreen - #96c22f
 */
