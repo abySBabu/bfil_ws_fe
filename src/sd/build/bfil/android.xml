@@ -19,13 +19,9 @@
   <string name="alert_position_left">50%</string>
   <string name="alert_position_transform">translate(-50%, 0)</string>
   <string name="alert_zindex">1500</string>
-  <string name="box_bgcolor_default">#fff</string>
-  <string name="box_bgcolor_brand">#fcf2e7</string>
-  <string name="box_bradius">10px</string>
-  <string name="box_padding">15px</string>
-  <string name="box_margin">10px</string>
-  <string name="box_border_active">1px solid gray</string>
-  <string name="box_border_hover">1px solid #b5651d</string>
+  <string name="card_txtcolor">#8d272b</string>
+  <string name="card_bgcolor">#fff</string>
+  <string name="card_bradius">15px</string>
   <string name="button_bgcolor_active_brand">#224a59</string>
   <string name="button_bgcolor_active_positive">#48BF53</string>
   <string name="button_bgcolor_active_negative">#A70000</string>

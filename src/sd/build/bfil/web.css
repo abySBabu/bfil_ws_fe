@@ -18,13 +18,9 @@
   --alert-position-left: 50%;
   --alert-position-transform: translate(-50%, 0);
   --alert-zindex: 1500;
-  --box-bgcolor-default: #fff;
-  --box-bgcolor-brand: #fcf2e7;
-  --box-bradius: 10px;
-  --box-padding: 15px;
-  --box-margin: 10px;
-  --box-border-active: 1px solid gray;
-  --box-border-hover: 1px solid #b5651d;
+  --card-txtcolor: #8d272b;
+  --card-bgcolor: #fff;
+  --card-bradius: 15px;
   --button-bgcolor-active-brand: #224a59;
   --button-bgcolor-active-positive: #48BF53;
   --button-bgcolor-active-negative: #A70000;
