@@ -1,0 +1,10 @@
+{
+    "text":{
+        "styles":{
+            "default":{"$value":"none"},
+            "bold":{"$value":"bold"},
+            "ul":{"$value":"underline"},
+            "pointer":{"$value":"pointer"}            
+        }
+    }
+}

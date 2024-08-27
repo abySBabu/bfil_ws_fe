@@ -1,0 +1,13 @@
+{
+    "table":{
+        "bgcolor":{
+            "head":{"$value":"{text.color.special}"},
+            "body":{
+                "default":{"$value":"{text.color.default}"},
+                "hover":{"$value":"{box.bgcolor.brand}"}
+            }
+        },
+        "height":{"$value": "64px"},
+        "width":{"$value": "256px"}
+    }
+}

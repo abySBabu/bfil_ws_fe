@@ -1,0 +1,7 @@
+{
+    "textfield":{
+        "borderDef":{"$value":"1px solid gray"},
+        "borderSel":{"$value":"1px solid {text.color.special}"},
+        "size":{"$value":"fullwidth"}
+    }
+}

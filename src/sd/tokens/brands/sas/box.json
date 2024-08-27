@@ -1,0 +1,16 @@
+{
+    "box":{
+        "bgcolor":{
+            "default":{"$value":"{text.color.default}"},
+            "brand":{"$value":"#fcf2e7"}
+        },
+        "bradius":{"$value":"{length.3}"},
+        "padding":{"$value":"{length.3}"},
+        "margin":{"$value":"{length.2} {numeric.0}"},
+        "shadow":{"$value":"0px 0px 3px"},
+        "border":{
+            "active":{"$value":"1px solid gray"},
+            "hover":{"$value":"1px solid {text.color.special}"}
+        }
+    }
+}

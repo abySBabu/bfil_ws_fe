@@ -1,0 +1,27 @@
+{
+    "alert":{
+        "text":{
+            "color":{"$value":"#fff"},
+            "size":{"$value":"16px"}
+        },
+        "bgcolor":{
+            "brand":{"$value":"#fcf2e7"},
+            "success":{"$value":"#00c600"},
+            "failure":{"$value":"#c60000"}
+        },
+        "bradius":{"$value":"{length.3}"},
+        "padding":{"$value":"{length.3}"},
+        "border":{
+            "brand":{"$value":"1px solid {text.color.special}"},
+            "success":{"$value":"1px solid #999"},
+            "failure":{"$value":"1px solid #000"}
+        },
+        "position":{
+            "pos":{"$value":"absolute"},
+            "top":{"$value":"15"},
+            "left":{"$value":"50%"},
+            "transform":{"$value":"translate(-50%, 0)"}
+        },
+        "zindex":{"$value":"1500"}
+    }
+}

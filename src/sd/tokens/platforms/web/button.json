@@ -1,0 +1,5 @@
+{
+    "button":{
+        "corner": {"$value":"32px"}
+    }
+}

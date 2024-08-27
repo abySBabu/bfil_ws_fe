@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import './web.css';
+import './sd/build/bfil/web.css'
 import { appTheme } from './common';
 import Login from './components/LoginPage/Login';
 import { Home } from './Home';

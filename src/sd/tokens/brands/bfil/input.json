@@ -1,0 +1,8 @@
+{
+    "textfield":{
+        "borderSel":{"$value":"1px solid {text.color.special}"},
+        "borderDis":{"$value":"1px solid #666"},
+        "labelSel":{"$value":"{text.color.special}"},
+        "labelDis":{"$value":"#666"}
+    }
+}

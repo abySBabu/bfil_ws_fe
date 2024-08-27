@@ -1,0 +1,11 @@
+{
+    "table":{
+        "bgcolor":{
+            "head":{"$value":"#e46f20"},
+            "body":{
+                "default":{"$value":"#fff"},
+                "hover":{"$value":"#f7b38d"}
+            }
+        }
+    }
+}

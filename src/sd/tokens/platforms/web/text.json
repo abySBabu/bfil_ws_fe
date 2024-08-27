@@ -1,0 +1,11 @@
+{
+    "text":{
+        "font": {"$value":"Roboto"},
+        "size":{
+            "heading":{"$value":"48px"},
+            "subheading":{"$value":"32px"},
+            "body1":{"$value":"16px"},
+            "body2":{"$value":"8px"}
+        }
+    }
+}

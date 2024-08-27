@@ -1,0 +1,10 @@
+{
+    "text":{
+        "color":{
+            "default":{"$value":"#fff"},
+            "hover":{"$value":"#000"},
+            "disabled":{"$value":"#333"},
+            "special":{"$value":"#b5651d"}
+        }
+    }
+}
