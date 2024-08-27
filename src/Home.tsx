@@ -16,7 +16,7 @@ export const Home: React.FC = () => {
         gap: sd('--page-body-padding'), background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     }}>
         <Toolbar sx={{ color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding') }}>
-            <img src="./Karnataka_Gov.png" alt="Karnataka_Gov" />
+            <img src="./Assets/ktgov.png" alt="KarnatakaGovernment" />
             <Typography variant='h6'>IndusInd Bank</Typography>
             <Typography variant='h6'>BFIL</Typography>
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
