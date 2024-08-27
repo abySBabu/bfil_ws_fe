@@ -15,7 +15,10 @@ export const Home: React.FC = () => {
         display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', p: sd('--page-body-padding'),
         gap: sd('--page-body-padding'), background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     }}>
-        <Toolbar sx={{ color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), height: '10%', p: sd('--page-header-padding') }}>
+        <Toolbar sx={{
+            color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
+            justifyContent: sd('--align-spaced'), height: '5%', p: sd('--page-header-padding')
+        }}>
             <img src="./Assets/ktgov.png" alt="KarnatakaGovernment" />
             <Typography variant='h6'>IndusInd Bank</Typography>
             <Typography variant='h6'>BFIL</Typography>
