@@ -57,13 +57,13 @@ export const Dashboard: React.FC = () => {
             </Card>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '200px', mt: '8px', overflow: 'auto' }}>
             <Grid container spacing={2} sx={{ width: '50%' }}>
                 <Grid item xs={12}><Typography variant='h5' fontWeight='bold'>Supply Side</Typography></Grid>
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Bunding</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Bunding</Typography>
                             <Typography variant='body2'>2000 cubic metres</Typography>
                         </CardContent>
                     </Card>
@@ -71,7 +71,15 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Pebble Bund</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Waste weirs</Typography>
+                            <Typography variant='body2'>36</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Pebble/Boulder bund</Typography>
                             <Typography variant='body2'>350 cubic metres</Typography>
                         </CardContent>
                     </Card>
@@ -79,16 +87,64 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Activity</Typography>
-                            <Typography variant='body2'>Act Data</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Farm Ponds</Typography>
+                            <Typography variant='body2'>7</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Farm Ponds</Typography>
-                            <Typography variant='body2'>7</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Check dams</Typography>
+                            <Typography variant='body2'>12</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Nala treatment</Typography>
+                            <Typography variant='body2'>4000 cubic metres</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Kalyani renovation</Typography>
+                            <Typography variant='body2'>9</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Afforestation</Typography>
+                            <Typography variant='body2'>234</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Open Well Renovation</Typography>
+                            <Typography variant='body2'>16</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Recharge Structures</Typography>
+                            <Typography variant='body2'>9</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={4}>
+                    <Card sx={actCard}>
+                        <CardContent>
+                            <Typography variant='body1' fontWeight='bold'>Other</Typography>
+                            <Typography variant='body2'>#</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -99,7 +155,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Drip/Sprinkler</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Drip/Sprinkler</Typography>
                             <Typography variant='body2'>200 hectares</Typography>
                         </CardContent>
                     </Card>
@@ -107,7 +163,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Soil health cards</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Soil health cards</Typography>
                             <Typography variant='body2'>60</Typography>
                         </CardContent>
                     </Card>
@@ -115,7 +171,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Members capacitated</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Members capacitated</Typography>
                             <Typography variant='body2'>20</Typography>
                         </CardContent>
                     </Card>
@@ -123,7 +179,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={4}>
                     <Card sx={actCard}>
                         <CardContent>
-                            <Typography variant='h6'>Sustainable</Typography>
+                            <Typography variant='body1' fontWeight='bold'>Sustainable</Typography>
                             <Typography variant='body2'>43</Typography>
                         </CardContent>
                     </Card>

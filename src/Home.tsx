@@ -16,17 +16,17 @@ export const Home: React.FC = () => {
         gap: sd('--page-body-padding'), //background: `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
     }}>
         <Toolbar sx={{
-            color: sd('--page-header-txtcolor'), display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
+            color: 'black', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
             justifyContent: sd('--align-spaced'), height: '5%', p: sd('--page-header-padding')
         }}>
-            <img src="/images/ktgov.png" alt="KarnatakaGovernment" height='75px' />
-            <Typography variant='h6'>IndusInd Bank</Typography>
-            <Typography variant='h6'>BFIL</Typography>
+            <img src="/images/bfil.jpg" alt="BFIL" height='100%' />
+            <img src="/images/iib.jpg" alt="IndusInd" height='100%' />
+            <img src="/images/ktgov.png" alt="KarnatakaGovernment" height='100%' />
             <IconButton sx={btnSx}><PersonRounded /></IconButton>
         </Toolbar>
 
         <Paper elevation={8} sx={{ bgcolor: '#F5F5F5', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
-            <Box sx={{ color: sd('--page-nav-txtcolor'), width: '10%', backgroundColor: sd('--page-nav-bgcolor'), borderRadius: sd('--page-bradius-left') }}><List>
+            <Box sx={{ color: sd('--page-nav-txtcolor'), width: '10%', backgroundColor: '#3ea6e5', borderRadius: sd('--page-bradius-left') }}><List>
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                         <ListItemText primary={text} />
