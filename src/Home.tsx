@@ -6,6 +6,7 @@ import { TasksAdmin } from './components/Tasks/TasksAdmin';
 import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
 import UserList from './components/UserPage/UserList';
 import { Dashboard } from './components/Dashboard/Dashboard';
+import RoleList from './components/RolePage/RoleList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
@@ -38,6 +39,7 @@ export const Home: React.FC = () => {
                 {dIndex === 0 && <Dashboard />}
                 {dIndex === 1 && <WatershedAdmin />}
                 {dIndex === 3 && <UserList />}
+		{dIndex === 4 && <RoleList/>}
                 {dIndex === 5 && <TasksAdmin />}
                 {(dIndex === 2 || dIndex === 4)
                     && <Box sx={{ flexGrow: 1 }} />}
