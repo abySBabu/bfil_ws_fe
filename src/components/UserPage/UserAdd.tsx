@@ -12,16 +12,12 @@ interface UserFormInput {
     userName: string;
     employeeCode: string,
     designation: string,
-    skillSet: string,
     role: string,
-    userType: string,
     email: string,
     mobileNo: string,
     password: string;
     manager: string,
     loginType: string,
-    isLiveLocationNeeded: string,
-
 }
 
 interface UserTypeOption {
@@ -111,8 +107,6 @@ export default function (props: userTypeProps) {
     const addUser: SubmitHandler<UserFormInput> = async (value) => {
         setLoading(true);
         try {
-            // let userTypeTemp = userTypeOptions.find(option => option.value === userType)?.id;
-            let userTypeTemp = value.userType;
             let loginTypeTemp = loginTypeOptions.find(option => option.value === value.loginType)?.id;
             let roleListTemp = rolesListFromService.filter(option => option.roleName === value.role);
             let tempList: allUserType[] = props.userList;
@@ -128,7 +122,6 @@ export default function (props: userTypeProps) {
                 managerName: value.manager,
                 mobileNumber: value.mobileNo,
                 createdByUserId: userId,
-                userType: userTypeTemp,
                 loginType: loginTypeTemp
             }
             console.log("adduser.........", userCreatDataOne)
@@ -233,21 +226,6 @@ export default function (props: userTypeProps) {
                                 helperText={errors.role ? errors.role.message : ''}
                             >
                                 {rolesListFromService.map((option, index) => (<MenuItem key={index} value={option.roleName}>{option.roleName}</MenuItem>))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                select
-                                margin="normal"
-                                fullWidth
-                                id="userType"
-                                label="User Type"
-                                {...register('userType', {
-                                })}
-                                error={!!errors.userType}
-                                helperText={errors.userType ? errors.userType.message : ''}
-                            >
-                                {userTypeOptions.map((option, index) => (<MenuItem key={index} value={option.value}>{option.value}</MenuItem>))}
                             </TextField>
                         </Grid>
                         <Grid item xs={4}>

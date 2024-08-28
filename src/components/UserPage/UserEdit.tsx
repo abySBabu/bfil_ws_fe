@@ -13,7 +13,6 @@ interface UserFormInput {
     employeeCode: string;
     designation: string;
     role: string;
-    userType: string;
     email: string;
     mobileNo: string;
     password: string;
@@ -52,7 +51,6 @@ export default function UserForm(props: userTypeProps) {
                 employeeCode: '',
                 designation: '',
                 role: '',
-                userType: '',
                 email: '',
                 mobileNo: '',
                 manager: '',
@@ -93,7 +91,6 @@ export default function UserForm(props: userTypeProps) {
                 setValue('employeeCode', props.userDetails?.userCode || '');
                 setValue('designation', props.userDetails?.userDesignation || '');
                 setValue('role', props.userDetails?.userRoleList?.[0]?.roleName || '');
-                setValue('userType', props.userDetails?.userType || '');
                 setValue('email', props.userDetails?.userEmailId || '');
                 setValue('mobileNo', props.userDetails?.mobileNumber || '');
                 setValue('password', props.userDetails?.userPassword || '');
@@ -112,7 +109,6 @@ export default function UserForm(props: userTypeProps) {
     const addUser: SubmitHandler<UserFormInput> = async (value) => {
         setLoading(true);
         try {
-            let userTypeTemp = value.userType;
             let loginTypeTemp = loginTypeOptions.find(option => option.value === value.loginType)?.id;
             let roleListTemp = rolesListFromService.filter(option => option.roleName === value.role);
             let currentUser = props.userList.find(user => (user.userId).toString() === sessionStorage.getItem("userId"));
@@ -127,7 +123,6 @@ export default function UserForm(props: userTypeProps) {
                 managerName: value.manager,
                 mobileNumber: value.mobileNo,
                 updatedByUserId: userId,
-                userType: userTypeTemp,
                 loginType: loginTypeTemp
             }
 
@@ -227,6 +222,34 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.designation?.message}
                             />
                         </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                InputLabelProps={{ shrink: true }}
+                                disabled
+                                id="email"
+                                label="Email"
+                                {...register('email', { required: 'Email is required' })}
+                                error={!!errors.email}
+                                helperText={errors.email?.message}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                disabled
+                                InputLabelProps={{ shrink: true }}
+                                id="mobileNo"
+                                label="Mobile Number"
+                                {...register('mobileNo', { required: 'Mobile Number is required' })}
+                                error={!!errors.mobileNo}
+                                helperText={errors.mobileNo?.message}
+                            />
+                        </Grid>
                         <Grid item xs={4}>
                             <TextField
                                 select
@@ -247,52 +270,6 @@ export default function UserForm(props: userTypeProps) {
                                     <MenuItem key={index} value={option.roleName}>{option.roleName}</MenuItem>
                                 ))}
                             </TextField>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                select
-                                margin="normal"
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                value={watch('userType')}
-                                id="userType"
-                                label="User Type"
-                                {...register('userType', {})}
-                                error={!!errors.userType}
-                                helperText={errors.userType?.message}
-                            >
-                                {userTypeOptions.map((option, index) => (
-                                    <MenuItem key={index} value={option.value}>{option.value}</MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                disabled
-                                id="email"
-                                label="Email"
-                                {...register('email', { required: 'Email is required' })}
-                                error={!!errors.email}
-                                helperText={errors.email?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                disabled
-                                InputLabelProps={{ shrink: true }}
-                                id="mobileNo"
-                                label="Mobile Number"
-                                {...register('mobileNo', { required: 'Mobile Number is required' })}
-                                error={!!errors.mobileNo}
-                                helperText={errors.mobileNo?.message}
-                            />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
