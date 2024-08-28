@@ -54,7 +54,7 @@ export default function (props: userTypeProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let resp = await getRolesByCompany();
+                let resp = await getRolesByCompany(companyID);
                 if (resp) {
                     setRolesListFromService(resp);
                 }

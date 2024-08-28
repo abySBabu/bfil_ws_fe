@@ -35,6 +35,8 @@ export default function UserList() {
     const [selectedRow, setSelectedRow] = useState<allUserType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+
 
     const handleRowClick = async (row: any) => {
         setSelectedRow(row);
@@ -53,7 +55,7 @@ export default function UserList() {
 
     const fetchUserData = async () => {
         try {
-            let resp = await usersList();
+            let resp = await usersList(companyId);
             console.log("getuserData -", resp)
             setuserData(resp);
         } catch (error) {
@@ -139,7 +141,6 @@ export default function UserList() {
                         <TableCell >Mobile Number</TableCell>
                         <TableCell >Role</TableCell>
                         <TableCell >Manager Name</TableCell>
-                        <TableCell >User Type</TableCell>
                         <TableCell >Block User</TableCell>
                         <TableCell >Action</TableCell>
                     </TableRow>
@@ -161,9 +162,6 @@ export default function UserList() {
                             </TableCell>
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
                                 {row.managerName}
-                            </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
-                                {row.userType}
                             </TableCell>
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
                                 {(() => {

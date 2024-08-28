@@ -1,10 +1,8 @@
 import axios from "axios";
 import { serverPath } from '../common';
 
-const companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
-
-export async function usersList() {
+export async function usersList(companyId: any) {
     const configuration = {
         url: serverPath.authserver + 'user-service/getUserByCompanyId/' + companyId,
         method: 'get',
@@ -16,7 +14,7 @@ export async function usersList() {
     catch (error) { throw error }
 }
 
-export async function getRolesByCompany() {
+export async function getRolesByCompany(companyId: any) {
     const configuration = {
         url: serverPath.authserver + 'role-service/getRolesByCompany/' + companyId,
         method: 'get',

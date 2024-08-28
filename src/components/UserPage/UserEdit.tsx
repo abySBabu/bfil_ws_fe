@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
+let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
 
 interface UserFormInput {
@@ -62,7 +63,7 @@ export default function UserForm(props: userTypeProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await getRolesByCompany();
+                const resp = await getRolesByCompany(companyId);
                 if (resp) setRolesListFromService(resp);
 
                 const managerListTemp = props.userList.filter(user => user.userBlockedFlag === "N")

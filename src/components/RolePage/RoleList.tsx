@@ -31,7 +31,7 @@ export default function RoleList() {
     const [selectedRow, setSelectedRow] = useState<rolesByCompanyId>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    let CompanyId = sessionStorage.getItem('companyId');
+    let CompanyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
     const handleRowClick = async (row: any) => {
         setSelectedRow(row);
