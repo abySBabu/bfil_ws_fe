@@ -6,7 +6,7 @@
             "padding": {"$value": "{muilength.1}"}
         },
         "body":{
-            "bgcolor": {"$value": "#f5f5f5"},
+            "bgcolor": {"$value": "#e5e5e5"},
             "padding": {"$value": "{muilength.1}"}
         },
         "nav":{

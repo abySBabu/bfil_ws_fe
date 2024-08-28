@@ -46,7 +46,7 @@
   <string name="page_header_txtcolor">#000</string>
   <string name="page_header_bgcolor">#fff</string>
   <string name="page_header_padding">8px</string>
-  <string name="page_body_bgcolor">#f5f5f5</string>
+  <string name="page_body_bgcolor">#e5e5e5</string>
   <string name="page_body_padding">8px</string>
   <string name="page_nav_txtcolor">#fff</string>
   <string name="page_nav_bgcolor">#3ea6e5</string>

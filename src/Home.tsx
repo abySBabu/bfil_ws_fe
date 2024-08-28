@@ -11,31 +11,31 @@ import RoleList from './components/RolePage/RoleList';
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
-    const PageGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
-    const PaperGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 19%, ${sd('--page-body-bgcolor')} 19%)`
+    //const PageGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
+    //const PaperGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 19%, ${sd('--page-body-bgcolor')} 19%)`
 
     return (<Box sx={{
-        display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), height: '97vh', p: sd('--page-body-padding'),
-        gap: sd('--page-body-padding'), background: PageGrad
+        display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'),
+        height: '97vh', p: sd('--page-body-padding'), gap: sd('--page-body-padding')
     }}>
         <Toolbar sx={{
             color: 'black', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
-            justifyContent: sd('--align-spaced'), height: '5%', p: sd('--page-header-padding')
+            justifyContent: sd('--align-spaced'), p: sd('--page-header-padding')
         }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                 <img src="/images/bfil.jpg" alt="BFIL" height='100%' />
-                <img src="/images/iib.jpg" alt="IndusInd" height='100%' />
+                <img src="/images/iib.jpg" alt="IndusInd" height='80%' />
             </Box>
-            <Typography variant='h5' fontWeight='bold' sx={{ color: '#8d272b' }}>Pragat Watershed</Typography>
+            <Typography variant='h4' fontWeight='bold' sx={{ color: '#8d272b' }}>Pragat Watershed</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                 <img src="/images/myrada.png" alt="Myrada" height='100%' />
-                <img src="/images/pragat.png" alt="Pragat" height='100%' />
+                <img src="/images/pragat.png" alt="Pragat" height='80%' />
                 <IconButton sx={{ ...btnSx, height: '40px' }}><PersonRounded /></IconButton>
             </Box>
         </Toolbar>
 
         <Paper elevation={8} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
-            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '8%', borderRadius: sd('--page-bradius-left') }}><List>
+            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '200px', borderRadius: sd('--page-bradius-left') }}><List>
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                         <ListItemText primary={text} />
@@ -43,7 +43,7 @@ export const Home: React.FC = () => {
                 </ListItem>))}
             </List></Box>
 
-            <Box sx={{ p: sd('--page-body-padding'), background: PaperGrad, flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-right') }}>
+            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-right') }}>
                 {dIndex === 0 && <Dashboard />}
                 {dIndex === 1 && <WatershedAdmin />}
                 {dIndex === 2 && <Box />}
@@ -52,5 +52,7 @@ export const Home: React.FC = () => {
                 {dIndex === 5 && <TasksAdmin />}
             </Box>
         </Paper>
+
+        <Typography component='footer' sx={{ fontWeight: 'bold', textAlign: 'center' }}>Copyright - 2021. Bharat Financial Inclusion Limited, All Rights Reserved.</Typography>
     </Box>)
 }
