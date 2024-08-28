@@ -168,13 +168,17 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 id="userName"
                                 label="Name"
-                                autoComplete="userName"
                                 autoFocus
                                 {...register('userName', {
-                                    required: 'UserName is required'
+                                    required: 'Name is required',
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Name must only contain alphanumeric characters'
+                                    }
                                 })}
                                 error={!!errors.userName}
                                 helperText={errors.userName ? errors.userName.message : ''}
@@ -183,12 +187,16 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 id="employeeCode"
                                 label="Employee Code"
-                                autoComplete="employeeCode"
                                 {...register('employeeCode', {
-                                    required: 'Employee Code is required'
+                                    required: 'Employee Code is required',
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Employee Code must only contain alphanumeric characters'
+                                    }
                                 })}
                                 error={!!errors.employeeCode}
                                 helperText={errors.employeeCode ? errors.employeeCode.message : ''}
@@ -200,9 +208,11 @@ export default function (props: userTypeProps) {
                                 fullWidth
                                 id="designation"
                                 label="Designation"
-                                autoComplete="designation"
                                 {...register('designation', {
-                                    required: 'Designation is required'
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Designation must only contain alphanumeric characters'
+                                    }
                                 })}
                                 error={!!errors.designation}
                                 helperText={errors.designation ? errors.designation.message : ''}
@@ -211,11 +221,11 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 select
+                                required
                                 margin="normal"
                                 fullWidth
                                 id="role"
                                 label="Role"
-                                autoComplete="role"
                                 {...register('role', {
                                     required: 'Role Set is required'
                                 })}
@@ -232,9 +242,7 @@ export default function (props: userTypeProps) {
                                 fullWidth
                                 id="userType"
                                 label="User Type"
-                                autoComplete="userType"
                                 {...register('userType', {
-                                    required: 'User Type is required'
                                 })}
                                 error={!!errors.userType}
                                 helperText={errors.userType ? errors.userType.message : ''}
@@ -245,12 +253,17 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 id="email"
                                 label="Email"
-                                autoComplete="email"
                                 {...register('email', {
-                                    required: 'Email is required'
+                                    required: 'Email is required',
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: 'Email is invalid'
+                                    }
+
                                 })}
                                 error={!!errors.email}
                                 helperText={errors.email ? errors.email.message : ''}
@@ -259,12 +272,16 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 id="mobileNo"
                                 label="Mobile Number"
-                                autoComplete="mobileNo"
                                 {...register('mobileNo', {
-                                    required: 'Mobile Number is required'
+                                    required: 'Mobile Number is required',
+                                    pattern: {
+                                        value: /^[0-9]{10}$/,
+                                        message: 'Mobile Number is invalid'
+                                    }
                                 })}
                                 error={!!errors.mobileNo}
                                 helperText={errors.mobileNo ? errors.mobileNo.message : ''}
@@ -273,11 +290,11 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 label="Password"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
                                 {...register('password', {
                                     required: 'Password is required',
                                     minLength: {
@@ -296,9 +313,7 @@ export default function (props: userTypeProps) {
                                 fullWidth
                                 id="manager"
                                 label="Manager"
-                                autoComplete="manager"
                                 {...register('manager', {
-                                    required: 'Manager is required'
                                 })}
                                 error={!!errors.manager}
                                 helperText={errors.manager ? errors.manager.message : ''}
@@ -309,11 +324,11 @@ export default function (props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 select
+                                required
                                 margin="normal"
                                 fullWidth
                                 id="loginType"
                                 label="Login Type"
-                                autoComplete="loginType"
                                 {...register('loginType', {
                                     required: 'Login Type is required'
                                 })}
