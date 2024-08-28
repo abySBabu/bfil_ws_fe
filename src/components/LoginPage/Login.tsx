@@ -101,7 +101,11 @@ const Login: React.FC = () => {
                                     autoComplete="userName"
                                     autoFocus
                                     {...register('userName', {
-                                        required: 'UserName is required'
+                                        required: 'UserName is required',
+                                        pattern: {
+                                            value: /^[A-Za-z0-9]+$/,
+                                            message: 'UserName must only contain alphanumeric characters'
+                                        }
                                     })}
                                     error={!!errors.userName}
                                     helperText={errors.userName ? errors.userName.message : ''}
