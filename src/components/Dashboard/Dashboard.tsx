@@ -22,14 +22,23 @@ export const Dashboard: React.FC = () => {
                 {keys.map((k, i) => (
                     <Card sx={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '160px', width: '25%',
-                        /* borderRadius: sd('--card-bradius'), */ color: sd('--card-txtcolor'), bgcolor: sd('--card-bgcolor')
+                        position: 'relative', color: sd('--card-txtcolor'), bgcolor: sd('--card-bgcolor')
                     }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                             <Typography sx={{ fontSize: '125%' }}>{k}</Typography>
                             <Typography variant='h4'><b>{data[i]}</b></Typography>
-                            <BarChartIcon onClick={() => setgMod(!gMod)} sx={{ cursor: 'pointer' }} />
                         </CardContent>
                         <CardMedia component={icos[i]} sx={{ fontSize: '250%', mt: '12px', mr: '12px', color: iclr[i] }} />
+                        <BarChartIcon
+                            onClick={() => setgMod(!gMod)}
+                            sx={{
+                                cursor: 'pointer',
+                                position: 'absolute', // Position absolutely within the CardContent
+                                bottom: 0, // Align to the bottom of CardContent
+                                right: 0, // Align to the right of CardContent
+                                margin: '12px' // Add some margin to keep it away from the edges
+                            }}
+                        />
                     </Card>
                 ))}
             </Box>
@@ -38,7 +47,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1 }}>Supply Side</Typography></Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Bunding</Typography>
                             <Typography variant='body2'>2000 cubic metres</Typography>
                         </CardContent>
@@ -46,7 +55,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Waste weirs</Typography>
                             <Typography variant='body2'>36</Typography>
                         </CardContent>
@@ -54,7 +63,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Pebble/Boulder bund</Typography>
                             <Typography variant='body2'>350 cubic metres</Typography>
                         </CardContent>
@@ -62,7 +71,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Farm Ponds</Typography>
                             <Typography variant='body2'>7</Typography>
                         </CardContent>
@@ -70,7 +79,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Check dams</Typography>
                             <Typography variant='body2'>12</Typography>
                         </CardContent>
@@ -78,7 +87,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Nala treatment</Typography>
                             <Typography variant='body2'>4000 cubic metres</Typography>
                         </CardContent>
@@ -86,7 +95,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Kalyani renovation</Typography>
                             <Typography variant='body2'>9</Typography>
                         </CardContent>
@@ -94,7 +103,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Afforestation</Typography>
                             <Typography variant='body2'>234</Typography>
                         </CardContent>
@@ -102,7 +111,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Open Well Renovation</Typography>
                             <Typography variant='body2'>16</Typography>
                         </CardContent>
@@ -110,7 +119,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Recharge Structures</Typography>
                             <Typography variant='body2'>9</Typography>
                         </CardContent>
@@ -118,7 +127,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Other</Typography>
                             <Typography variant='body2'>#</Typography>
                         </CardContent>
@@ -130,7 +139,7 @@ export const Dashboard: React.FC = () => {
                 <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1 }}>Demand Side</Typography></Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Drip/Sprinkler</Typography>
                             <Typography variant='body2'>200 hectares</Typography>
                         </CardContent>
@@ -138,7 +147,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Soil health cards</Typography>
                             <Typography variant='body2'>60</Typography>
                         </CardContent>
@@ -146,7 +155,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Members capacitated</Typography>
                             <Typography variant='body2'>20</Typography>
                         </CardContent>
@@ -154,7 +163,7 @@ export const Dashboard: React.FC = () => {
                 </Grid>
                 <Grid item xs={2}>
                     <Card sx={actCard}>
-                        <CardContent>
+                        <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Sustainable</Typography>
                             <Typography variant='body2'>43</Typography>
                         </CardContent>
@@ -172,17 +181,17 @@ export const Dashboard: React.FC = () => {
         }}>
             <Card sx={{ outline: 'none', gap: '8px', p: 1 }}>
                 <Typography variant='h6'>Key impact indicator</Typography>
-                {/* <LineChart
+                <LineChart
                     xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
                     series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
                     height={200}
                     width={600}
-                /> */}
+                />
                 <BarChart
                     xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
                     series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
                     width={500}
-                    height={300}
+                    height={200}
                 />
                 <PieChart
                     series={[

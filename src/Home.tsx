@@ -53,6 +53,6 @@ export const Home: React.FC = () => {
             </Box>
         </Paper>
 
-        <Typography component='footer' sx={{ fontWeight: 'bold', textAlign: 'center' }}>Copyright - 2021. Bharat Financial Inclusion Limited, All Rights Reserved.</Typography>
+        <Typography component='footer' sx={{ textAlign: 'center', color: '#8d272b' }}>Copyright - 2021. Bharat Financial Inclusion Limited, All Rights Reserved.</Typography>
     </Box>)
 }
