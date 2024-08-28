@@ -173,12 +173,19 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 id="userName"
                                 label="Name"
-                                autoComplete="userName"
                                 autoFocus
-                                {...register('userName', { required: 'UserName is required' })}
+                                InputLabelProps={{ shrink: true }}
+                                {...register('userName', {
+                                    required: 'Name is required',
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Name must only contain alphanumeric characters'
+                                    }
+                                })}
                                 error={!!errors.userName}
                                 helperText={errors.userName?.message}
                             />
@@ -186,12 +193,19 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 disabled
                                 id="employeeCode"
+                                InputLabelProps={{ shrink: true }}
                                 label="Employee Code"
-                                autoComplete="employeeCode"
-                                {...register('employeeCode', { required: 'Employee Code is required' })}
+                                {...register('employeeCode', {
+                                    required: 'Employee Code is required',
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Employee Code must only contain alphanumeric characters'
+                                    }
+                                })}
                                 error={!!errors.employeeCode}
                                 helperText={errors.employeeCode?.message}
                             />
@@ -202,7 +216,13 @@ export default function UserForm(props: userTypeProps) {
                                 fullWidth
                                 id="designation"
                                 label="Designation"
-                                {...register('designation', { required: 'Designation is required' })}
+                                InputLabelProps={{ shrink: true }}
+                                {...register('designation', {
+                                    pattern: {
+                                        value: /^[A-Za-z0-9]+$/,
+                                        message: 'Designation must only contain alphanumeric characters'
+                                    }
+                                })}
                                 error={!!errors.designation}
                                 helperText={errors.designation?.message}
                             />
@@ -210,10 +230,12 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 select
+                                required
                                 margin="normal"
                                 fullWidth
                                 id="role"
                                 label="Role"
+                                InputLabelProps={{ shrink: true }}
                                 value={watch('role')}
                                 {...register('role', {
                                     required: 'Role is required'
@@ -231,10 +253,11 @@ export default function UserForm(props: userTypeProps) {
                                 select
                                 margin="normal"
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                                 value={watch('userType')}
                                 id="userType"
                                 label="User Type"
-                                {...register('userType', { required: 'User Type is required' })}
+                                {...register('userType', {})}
                                 error={!!errors.userType}
                                 helperText={errors.userType?.message}
                             >
@@ -246,7 +269,9 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                                 disabled
                                 id="email"
                                 label="Email"
@@ -258,8 +283,10 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 margin="normal"
+                                required
                                 fullWidth
                                 disabled
+                                InputLabelProps={{ shrink: true }}
                                 id="mobileNo"
                                 label="Mobile Number"
                                 {...register('mobileNo', { required: 'Mobile Number is required' })}
@@ -272,10 +299,11 @@ export default function UserForm(props: userTypeProps) {
                                 select
                                 margin="normal"
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                                 value={watch('manager')}
                                 id="manager"
                                 label="Manager"
-                                {...register('manager', { required: 'Manager is required' })}
+                                {...register('manager', {})}
                                 error={!!errors.manager}
                                 helperText={errors.manager?.message}
                             >
@@ -287,8 +315,10 @@ export default function UserForm(props: userTypeProps) {
                         <Grid item xs={4}>
                             <TextField
                                 select
+                                required
                                 margin="normal"
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                                 id="loginType"
                                 value={watch('loginType')}
                                 label="Login Type"
@@ -306,7 +336,7 @@ export default function UserForm(props: userTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
                     <Button onClick={handleSubmit(addUser)} color="primary">
-                    Update User {loading ? <CircularProgress size={24} /> : null}
+                        Update User {loading ? <CircularProgress size={24} /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>
