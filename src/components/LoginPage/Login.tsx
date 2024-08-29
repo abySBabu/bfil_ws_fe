@@ -11,7 +11,6 @@ interface ILoginFormInput {
     userName: string;
     password: string;
 }
-const defaultTheme = createTheme();
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -57,9 +56,8 @@ const Login: React.FC = () => {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <>
             <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
                 <Grid
                     item
                     xs={false}
@@ -158,7 +156,7 @@ const Login: React.FC = () => {
                     {message}
                 </Alert>
             </Snackbar>
-        </ThemeProvider>
+        </>
     );
 };
 
