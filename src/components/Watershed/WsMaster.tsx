@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import { Add } from '@mui/icons-material';
 import { sd } from '../../common';
-import { addWS } from '../../Services/wsService';
+import { listWS, addWS, editWS } from '../../Services/wsService';
 
 
 const wsObj = {
@@ -27,6 +27,15 @@ export const WsMaster: React.FC = () => {
     const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
     const [addObj, setaddObj] = React.useState(wsObj);
     const [addM, setaddM] = React.useState(false);
+
+    /* React.useEffect(() => {
+        const fetchData = async () => {
+            const resp = await listWS();
+            if (resp) {
+                console.log('Success')
+            }
+        }; fetchData();
+    }, []) */
 
     const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
@@ -68,11 +77,22 @@ export const WsMaster: React.FC = () => {
 
     const WSadd = async () => {
         try {
-            const resp = await addWS(addObj)
+            const defObj = {
+                wsName: "Watershed Name",
+                wsDescription: "fhdfdfhd",
+                stateId: 1,
+                districtId: 2,
+                talukId: 3,
+                grampanchayatId: 4,
+                villageId: 5,
+                mapLink: 6
+            }
+            const resp = await addWS(defObj)
             if (resp) { console.log('Add success') }
         }
         catch (error) { console.log(error) }
     }
+
     return (<Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
             <TableHead>

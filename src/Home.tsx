@@ -33,9 +33,10 @@ export const Home: React.FC = () => {
         </Toolbar>
 
         <Paper elevation={8} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
-            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left') }}><List>
+            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left') }}><List sx={{ mt: 1 }} >
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
-                    <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                    <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}
+                        sx={{ '&.Mui-selected': { backgroundColor: sd('--button-bgcolor-hover-brand'), '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') } } }}>
                         <ListItemText primary={text} />
                     </ListItemButton>
                 </ListItem>))}
