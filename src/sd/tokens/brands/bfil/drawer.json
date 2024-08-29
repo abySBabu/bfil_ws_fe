@@ -1,6 +1,5 @@
 {
     "drawer":{
-        "width":{"&value":"160px"},
         "bgcolor":{"$value":"#67a03f"}
     }
 }

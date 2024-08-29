@@ -4,7 +4,8 @@
             "default":{"$value":"#fff"},
             "hover":{"$value":"#000"},
             "disabled":{"$value":"#333"},
-            "special":{"$value":"#b5651d"}
+            "special":{"$value":"#8d272b"},
+            "link":{"$value":"#3ea6e5"}
         }
     }
 }

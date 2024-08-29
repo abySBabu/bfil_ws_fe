@@ -3,20 +3,12 @@
  */
 
 :root {
-  --alert-text-color: #000;
-  --alert-text-size: 16px;
-  --alert-bgcolor-brand: #fcf2e7;
-  --alert-bgcolor-success: #00c600;
-  --alert-bgcolor-failure: #c60000;
-  --alert-bradius: 15px;
-  --alert-padding: 15px;
-  --alert-border-brand: 1px solid #b5651d;
+  --alert-txtcolor: #000;
+  --alert-bgcolor: #fcf2e7;
+  --alert-border-brand: 1px solid #8d272b;
   --alert-border-success: 1px solid #999;
   --alert-border-failure: 1px solid #000;
-  --alert-position-pos: absolute;
-  --alert-position-top: 15;
-  --alert-position-left: 50%;
-  --alert-position-transform: translate(-50%, 0);
+  --alert-bradius: 15px;
   --alert-zindex: 1500;
   --card-txtcolor: #8d272b;
   --card-bgcolor: #fff;
@@ -24,7 +16,7 @@
   --button-bgcolor-active-brand: #3a3a8b;
   --button-bgcolor-active-positive: #48BF53;
   --button-bgcolor-active-negative: #A70000;
-  --button-bgcolor-hover-brand: #3b77b9;
+  --button-bgcolor-hover-brand: #3ea6e5;
   --button-bgcolor-hover-positive: #91F086;
   --button-bgcolor-hover-negative: #A0153E;
   --button-bgcolor-disabled: #d3d3d3;
@@ -46,10 +38,10 @@
   --page-header-txtcolor: #000;
   --page-header-bgcolor: #fff;
   --page-header-padding: 8px;
-  --page-body-bgcolor: #f5f5f5;
+  --page-body-bgcolor: #e5e5e5;
   --page-body-padding: 8px;
   --page-nav-txtcolor: #fff;
-  --page-nav-bgcolor: #3ea6e5;
+  --page-nav-bgcolor: #3b77b9;
   --page-nav-padding: 0;
   --page-bradius-def: 15px;
   --page-bradius-top: 15px 15px 0 0;
@@ -58,11 +50,12 @@
   --page-bradius-left: 15px 0 0 15px;
   --table-bgcolor-head: #3a3a8b;
   --table-bgcolor-body-default: #fff;
-  --table-bgcolor-body-hover: #3b77b9;
+  --table-bgcolor-body-hover: #3ea6e5;
   --text-color-default: #fff;
   --text-color-hover: #000;
   --text-color-disabled: #333;
-  --text-color-special: #b5651d;
+  --text-color-special: #8d272b;
+  --text-color-link: #3ea6e5;
   --text-styles-default: none;
   --text-styles-bold: bold;
   --text-styles-ul: underline;

@@ -6,12 +6,12 @@
             "padding": {"$value": "{muilength.1}"}
         },
         "body":{
-            "bgcolor": {"$value": "#f5f5f5"},
+            "bgcolor": {"$value": "#e5e5e5"},
             "padding": {"$value": "{muilength.1}"}
         },
         "nav":{
             "txtcolor": {"$value": "#fff"},
-            "bgcolor": {"$value": "#3ea6e5"},
+            "bgcolor": {"$value": "#3b77b9"},
             "padding": {"$value": "0"}
         },
         "bradius":{

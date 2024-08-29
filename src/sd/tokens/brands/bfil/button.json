@@ -4,7 +4,7 @@
             "activeBrand":{"$value":"#3a3a8b"},
             "activePositive":{"$value":"#48BF53"},
             "activeNegative":{"$value":"#A70000"},
-            "hoverBrand":{"$value":"#3b77b9"},
+            "hoverBrand":{"$value":"#3ea6e5"},
             "hoverPositive":{"$value":"#91F086"},
             "hoverNegative":{"$value":"#A0153E"},
             "disabled":{"$value":"#d3d3d3"}
