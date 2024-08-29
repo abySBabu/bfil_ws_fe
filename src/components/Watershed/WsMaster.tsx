@@ -1,10 +1,12 @@
 import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
+    Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Fab
 } from "@mui/material";
+import { Add } from '@mui/icons-material';
 import { sd } from '../../common';
-import { WatershedAdd } from './WatershedAdd';
+import { addWS } from '../../Services/wsService';
+
 
 const wsObj = {
     ws_name: "",
@@ -18,12 +20,13 @@ const wsObj = {
     users: ""
 }
 
-export const WatershedAdmin: React.FC = () => {
+export const WsMaster: React.FC = () => {
     const [selected, setselected] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
     const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
     const [addObj, setaddObj] = React.useState(wsObj);
+    const [addM, setaddM] = React.useState(false);
 
     const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setaddObj({
@@ -63,6 +66,13 @@ export const WatershedAdmin: React.FC = () => {
         })
     }
 
+    const WSadd = async () => {
+        try {
+            const resp = await addWS(addObj)
+            if (resp) { console.log('Add success') }
+        }
+        catch (error) { console.log(error) }
+    }
     return (<Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
             <TableHead>
@@ -113,6 +123,27 @@ export const WatershedAdmin: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        <WatershedAdd />
+        <Fab onClick={() => setaddM(true)}><Add /></Fab>
+
+        <Dialog open={addM} onClose={() => setaddM(false)}>
+            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={12}><TextField label='Watershed' value={addObj.ws_name} onChange={(e) => setaddObj({ ...addObj, ws_name: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField label='Description' value={addObj.ws_description} onChange={(e) => setaddObj({ ...addObj, ws_description: e.target.value })} /></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={4}><TextField label='State' disabled value={addObj.name_of_the_state} onChange={(e) => stateCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='District' value={addObj.name_of_the_district} onChange={(e) => districtCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='Taluka' value={addObj.name_of_the_taluka} onChange={(e) => talukCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.name_of_the_grampanchayat} onChange={(e) => panchayatCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Village" value={addObj.name_of_the_village} onChange={(e) => setaddObj({ ...addObj, name_of_the_village: e.target.value })} /></Grid>
+                <Grid item xs={4} />
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => setaddM(false)}>Close</Button>
+                <Button onClick={WSadd}>Add</Button>
+            </DialogActions>
+        </Dialog>
     </Box>)
 }

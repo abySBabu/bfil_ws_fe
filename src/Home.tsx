@@ -2,8 +2,8 @@ import React from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, IconButton } from '@mui/material';
 import { PersonRounded } from '@mui/icons-material/';
 import { btnSx, sd } from './common';
-import { TasksAdmin } from './components/Tasks/TasksAdmin';
-import { WatershedAdmin } from './components/Watershed/WatershedAdmin';
+import { WsActivity } from './components/Watershed/WsActivity';
+import { WsMaster } from './components/Watershed/WsMaster';
 import UserList from './components/UserPage/UserList';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
@@ -35,7 +35,7 @@ export const Home: React.FC = () => {
         </Toolbar>
 
         <Paper elevation={8} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-def'), p: sd('--numeric-0') }}>
-            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '200px', borderRadius: sd('--page-bradius-left') }}><List>
+            <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left') }}><List>
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                         <ListItemText primary={text} />
@@ -43,13 +43,13 @@ export const Home: React.FC = () => {
                 </ListItem>))}
             </List></Box>
 
-            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), flexGrow: sd('--numeric-1'), borderRadius: sd('--page-bradius-right') }}>
+            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right') }}>
                 {dIndex === 0 && <Dashboard />}
-                {dIndex === 1 && <WatershedAdmin />}
+                {dIndex === 1 && <WsMaster />}
                 {dIndex === 2 && <Box />}
                 {dIndex === 3 && <UserList />}
                 {dIndex === 4 && <RoleList />}
-                {dIndex === 5 && <TasksAdmin />}
+                {dIndex === 5 && <WsActivity />}
             </Box>
         </Paper>
 

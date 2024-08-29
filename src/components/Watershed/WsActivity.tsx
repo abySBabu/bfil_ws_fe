@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
+    Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
+    DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
 } from "@mui/material";
 import { sd, TPA } from '../../common';
 
-export const TasksAdmin: React.FC = () => {
+export const WsActivity: React.FC = () => {
     const [selected, setselected] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;

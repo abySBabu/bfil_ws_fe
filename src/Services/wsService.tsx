@@ -3,7 +3,7 @@ import { serverPath } from "../common";
 
 export async function addWS(data: any) {
     const configs = {
-        url: serverPath.bfil + "wsmaster/addwatershed",
+        url: serverPath.bfil + "ws/wsmaster/addwatershed",
         method: 'post',
         data: data,
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }

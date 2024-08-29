@@ -31,13 +31,7 @@ export const Dashboard: React.FC = () => {
                         <CardMedia component={icos[i]} sx={{ fontSize: '250%', mt: '12px', mr: '12px', color: iclr[i] }} />
                         <BarChartIcon
                             onClick={() => setgMod(!gMod)}
-                            sx={{
-                                cursor: 'pointer',
-                                position: 'absolute', // Position absolutely within the CardContent
-                                bottom: 0, // Align to the bottom of CardContent
-                                right: 0, // Align to the right of CardContent
-                                margin: '12px' // Add some margin to keep it away from the edges
-                            }}
+                            sx={{ cursor: 'pointer', position: 'absolute', bottom: 0, right: 0, margin: '12px' }}
                         />
                     </Card>
                 ))}
