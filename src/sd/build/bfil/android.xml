@@ -4,20 +4,12 @@
   Do not edit directly, this file was auto-generated.
 -->
 <resources>
-  <string name="alert_text_color">#000</string>
-  <string name="alert_text_size">16px</string>
-  <string name="alert_bgcolor_brand">#fcf2e7</string>
-  <string name="alert_bgcolor_success">#00c600</string>
-  <string name="alert_bgcolor_failure">#c60000</string>
-  <string name="alert_bradius">15px</string>
-  <string name="alert_padding">15px</string>
-  <string name="alert_border_brand">1px solid #b5651d</string>
+  <string name="alert_txtcolor">#000</string>
+  <string name="alert_bgcolor">#fcf2e7</string>
+  <string name="alert_border_brand">1px solid #8d272b</string>
   <string name="alert_border_success">1px solid #999</string>
   <string name="alert_border_failure">1px solid #000</string>
-  <string name="alert_position_pos">absolute</string>
-  <string name="alert_position_top">15</string>
-  <string name="alert_position_left">50%</string>
-  <string name="alert_position_transform">translate(-50%, 0)</string>
+  <string name="alert_bradius">15px</string>
   <string name="alert_zindex">1500</string>
   <string name="card_txtcolor">#8d272b</string>
   <string name="card_bgcolor">#fff</string>
@@ -25,7 +17,7 @@
   <string name="button_bgcolor_active_brand">#3a3a8b</string>
   <string name="button_bgcolor_active_positive">#48BF53</string>
   <string name="button_bgcolor_active_negative">#A70000</string>
-  <string name="button_bgcolor_hover_brand">#3b77b9</string>
+  <string name="button_bgcolor_hover_brand">#3ea6e5</string>
   <string name="button_bgcolor_hover_positive">#91F086</string>
   <string name="button_bgcolor_hover_negative">#A0153E</string>
   <string name="button_bgcolor_disabled">#d3d3d3</string>
@@ -49,7 +41,7 @@
   <string name="page_body_bgcolor">#e5e5e5</string>
   <string name="page_body_padding">8px</string>
   <string name="page_nav_txtcolor">#fff</string>
-  <string name="page_nav_bgcolor">#3ea6e5</string>
+  <string name="page_nav_bgcolor">#3b77b9</string>
   <string name="page_nav_padding">0</string>
   <string name="page_bradius_def">15px</string>
   <string name="page_bradius_top">15px 15px 0 0</string>
@@ -58,11 +50,12 @@
   <string name="page_bradius_left">15px 0 0 15px</string>
   <string name="table_bgcolor_head">#3a3a8b</string>
   <string name="table_bgcolor_body_default">#fff</string>
-  <string name="table_bgcolor_body_hover">#3b77b9</string>
+  <string name="table_bgcolor_body_hover">#3ea6e5</string>
   <string name="text_color_default">#fff</string>
   <string name="text_color_hover">#000</string>
   <string name="text_color_disabled">#333</string>
-  <string name="text_color_special">#b5651d</string>
+  <string name="text_color_special">#8d272b</string>
+  <string name="text_color_link">#3ea6e5</string>
   <string name="text_styles_default">none</string>
   <string name="text_styles_bold">bold</string>
   <string name="text_styles_ul">underline</string>

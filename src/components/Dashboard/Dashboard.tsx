@@ -7,14 +7,14 @@ import { CropSquare, Water, Agriculture, CurrencyRupee } from '@mui/icons-materi
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 
-const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--card-txtcolor'), bgcolor: sd('--card-bgcolor') }
+const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 export const Dashboard: React.FC = () => {
     const [gMod, setgMod] = React.useState(false);
     const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Government Amount Leveraged']
     const icos = [CropSquare, Water, Agriculture, CurrencyRupee]
     const data = ['4000 sqft', '20000 litres', '45 farmers', '₹ 40,00,000']
-    const iclr = ['#96c22f', '#3b77b9', '#f58e1d', '#c9c9c9']
+    const iclr = ['#96c22f', '#3b77b9', '#f58e1d', '#bfab55'] //d9c56e
 
     return (<>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%', overflow: 'auto' }}>
@@ -22,7 +22,7 @@ export const Dashboard: React.FC = () => {
                 {keys.map((k, i) => (
                     <Card sx={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '160px', width: '25%',
-                        position: 'relative', color: sd('--card-txtcolor'), bgcolor: sd('--card-bgcolor')
+                        position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor')
                     }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                             <Typography sx={{ fontSize: '125%' }}>{k}</Typography>

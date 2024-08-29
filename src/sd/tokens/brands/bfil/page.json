@@ -11,7 +11,7 @@
         },
         "nav":{
             "txtcolor": {"$value": "#fff"},
-            "bgcolor": {"$value": "#3ea6e5"},
+            "bgcolor": {"$value": "#3b77b9"},
             "padding": {"$value": "0"}
         },
         "bradius":{

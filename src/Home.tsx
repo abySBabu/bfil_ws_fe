@@ -11,8 +11,6 @@ import RoleList from './components/RolePage/RoleList';
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
-    //const PageGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 30%, ${sd('--page-body-bgcolor')} 30%)`
-    //const PaperGrad = `linear-gradient(to bottom, ${sd('--page-header-bgcolor')} 19%, ${sd('--page-body-bgcolor')} 19%)`
 
     return (<Box sx={{
         display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'),

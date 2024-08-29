@@ -5,6 +5,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { darken } from '@mui/material/styles';
+import { BorderTop } from '@mui/icons-material';
 
 export const setTimeoutsecs = 1000;
 export const setAutoHideDurationTimeoutsecs = 3000;
@@ -158,17 +159,7 @@ export const appTheme = createTheme({
                 fullWidth: true
             }
         },
-        MuiAlert: {
-            styleOverrides: {
-                root: {
-                    color: sd('--alert-text-color'), fontSize: sd('--alert-text-size'),
-                    backgroundColor: sd('--alert-bgcolor-brand'), borderRadius: sd('--alert-bradius'),
-                    padding: sd('--alert-padding'), position: 'absolute', top: sd('--alert-position-top'),
-                    left: sd('--alert-position-left'), transform: sd('--alert-position-transform'),
-                    zIndex: sd('--alert-zindex')
-                }
-            }
-        },
+
         MuiTypography: {
             styleOverrides: {
                 root: {
@@ -176,22 +167,34 @@ export const appTheme = createTheme({
                 }
             }
         },
+        MuiSnackbar: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '15px',
+                }
+            },
+            defaultProps: {
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'center',
+                }
+            }
+        },
         MuiLink: {
             styleOverrides: {
                 root: {
-                    color: sd('--text-color-special'),
+                    color: sd('--text-color-link'),
                     cursor: sd('--text-styles-pointer'),
                     '&:hover': { color: sd('--text-color-hover') }
                 }
             },
             defaultProps: { underline: 'hover' }
         },
-        MuiListItem: {
+        MuiListItemButton: {
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
-                        backgroundColor: darken('rgba(0, 0, 0, 1)', 0.8),
-                        '&:hover': { backgroundColor: darken('rgba(0, 0, 0, 1)', 1) }
+                        backgroundColor: sd('--button-bgcolor-hover-brand')
                     }
                 }
             }

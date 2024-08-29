@@ -4,7 +4,7 @@
             "head":{"$value":"#3a3a8b"},
             "body":{
                 "default":{"$value":"#fff"},
-                "hover":{"$value":"#3b77b9"}
+                "hover":{"$value":"#3ea6e5"}
             }
         }
     }
