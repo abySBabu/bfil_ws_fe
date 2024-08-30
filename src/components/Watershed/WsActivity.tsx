@@ -3,15 +3,21 @@ import {
     Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
 } from "@mui/material";
+import { Add } from '@mui/icons-material';
 import { sd, TPA } from '../../common';
 
 export const WsActivity: React.FC = () => {
     const [selected, setselected] = React.useState(false);
     const [page, setPage] = React.useState(0);
+    const [addM, setaddM] = React.useState(false);
     const rPP = 10;
-    const tHeads: string[] = ['Watershed Location', 'Farmer', 'Intervention', 'Land Type', 'Total Units', 'Water Conserved', 'Funds Spent', 'Funds Source'];
+    const tHeads: string[] = ['Watershed', 'Farmer', 'Activity', 'Land Type', 'Total Units', 'Water Conserved', 'Funds Spent', 'Funds Source'];
 
     return (<Box sx={{ width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', p: 1 }}>
+            <Button onClick={() => setaddM(true)} startIcon={<Add />}>Add Activity</Button>
+        </Box>
+
         <Table>
             <TableHead>
                 <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
@@ -47,6 +53,30 @@ export const WsActivity: React.FC = () => {
                 />
             </TableRow></TableFooter>
         </Table>
+
+        <Dialog open={addM} onClose={() => setaddM(false)}>
+            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={6}><TextField disabled label='Intervention Side' value="Supply" /></Grid>
+                <Grid item xs={6}><TextField disabled label='Intervention Type (Task)' value="Earthen bunding" /></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={12}><TextField disabled label='Watershed Location' value="District, Taluk, Panchayat, Watershed, Village, Survey number" /></Grid>
+                <Grid item xs={4}><TextField disabled label='Farmer' value="Name, Aadhar, Mobile" /></Grid>
+                <Grid item xs={4}><TextField disabled label='Land Type' value="Wet land" /></Grid>
+                <Grid item xs={4}><TextField disabled label='Total Units' value="200 sqft" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Water Conserved" value="40000 litres" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Funds spent" value="2,00,000" /></Grid>
+                <Grid item xs={4}><TextField disabled label="Funds source" value="BFIL" /></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={12}><TextField disabled label="Image" value="Image with geo-tag" multiline rows={4} /></Grid>
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => setaddM(false)}>Close</Button>
+                <Button>Edit</Button>
+            </DialogActions>
+        </Dialog>
 
         <Dialog open={selected} onClose={() => setselected(false)}>
             <DialogTitle>Survey 57. Earthen bunding</DialogTitle>

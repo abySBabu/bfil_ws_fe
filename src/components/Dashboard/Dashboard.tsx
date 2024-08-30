@@ -7,7 +7,7 @@ import { CropSquare, Water, Agriculture, CurrencyRupee } from '@mui/icons-materi
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 
-const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
+const actCard = { height: '80px', /* borderRadius: sd('--card-bradius'), */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 export const Dashboard: React.FC = () => {
     const [gMod, setgMod] = React.useState(false);

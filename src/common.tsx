@@ -108,8 +108,22 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
-                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default'), cursor: 'pointer' },
+                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
                     '& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover') },
+                }
+            }
+        },
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word'
+                }
+            }
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word'
                 }
             }
         },
