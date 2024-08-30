@@ -4,7 +4,7 @@ import {
     TextField, Button, Snackbar, Alert, Box, Grid, MenuItem, Dialog, DialogActions,
     DialogContent, DialogTitle, Container, CircularProgress
 } from '@mui/material';
-import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
+import { getRolesByCompany, updateUserDetails }  from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
@@ -44,6 +44,7 @@ export default function UserForm(props: userTypeProps) {
     const [managerList, setManagerList] = useState<allUserType[]>([]);
     const loginTypeOptions = selectOptions.loginTypeOptions;
     let userId: any;
+    const [isRolesLoading, setRolesLoading] = useState(true);
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<UserFormInput>(
         {
@@ -65,7 +66,7 @@ export default function UserForm(props: userTypeProps) {
             try {
                 const resp = await getRolesByCompany(companyId);
                 if (resp) setRolesListFromService(resp);
-
+                setRolesLoading(false);
                 const managerListTemp = props.userList.filter(user => user.userBlockedFlag === "N")
                     .sort((a, b) => a.userName.localeCompare(b.userName));
 

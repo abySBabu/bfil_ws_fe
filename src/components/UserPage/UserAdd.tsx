@@ -337,7 +337,7 @@ export default function (props: userTypeProps) {
         </Container>
     );
 };
-
+    
 type userTypeProps = {
     show: boolean;
     hide: () => void;

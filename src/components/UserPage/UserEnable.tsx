@@ -40,7 +40,7 @@ export default function UserDisable(props: userTypeProps) {
             let resp = await blockUser(blockParams);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("User Blocked successfully");
+                setMessage("User UnBlocked successfully");
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
