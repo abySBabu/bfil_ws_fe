@@ -3,20 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@arcgis/core": "^4.30.9",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "@mui/x-charts": "^7.14.0",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/axios": "^0.14.0",
+    "@types/jest": "^27.5.2",
     "@types/node": "^16.18.105",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.3",
-    "axios-mock-adapter": "^2.0.0",
-    "jest": "^27.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.2",
@@ -29,8 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "buildsd": "cd ./src/sd && node build.mjs && cd ../../ "
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
