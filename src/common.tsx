@@ -158,7 +158,16 @@ export const appTheme = createTheme({
                 fullWidth: true
             }
         },
-
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        backgroundColor: sd('--page-nav-bgcolor-sel'),
+                        '&:hover': { backgroundColor: sd('--page-nav-bgcolor-sel') }
+                    }
+                }
+            }
+        },
         MuiTypography: {
             styleOverrides: {
                 root: {

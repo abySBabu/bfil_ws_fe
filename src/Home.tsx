@@ -10,21 +10,15 @@ import RoleList from './components/RolePage/RoleList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
-    const sections = ['Dashboard', 'Watershed Master', 'Watershed Mapping', 'User Management', 'Role Management', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
+    const sections = ['Dashboard', 'User Management', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
 
-    return (<Box sx={{
-        display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'),
-        height: '97vh', p: sd('--page-body-padding'), gap: sd('--page-body-padding')
-    }}>
-        <Toolbar sx={{
-            color: 'black', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'),
-            justifyContent: sd('--align-spaced'), p: sd('--page-header-padding')
-        }}>
+    return (<Box sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-yflex'), bgcolor: sd('--page-header-bgcolor'), height: '97%', p: sd('--page-body-padding'), gap: sd('--page-body-padding') }}>
+        <Toolbar sx={{ color: 'black', display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), justifyContent: sd('--align-spaced'), p: sd('--page-header-padding') }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
-                <img src={`${process.env.PUBLIC_URL}/images/bfil.jpg`} alt="BFIL" height="100%" />
-                <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='80%' />
+                <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
+                <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='100%' />
             </Box>
-            <Typography variant='h4' fontWeight='bold' sx={{ color: '#8d272b' }}>Pragat Watershed</Typography>
+            <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                 <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
                 <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
@@ -35,8 +29,7 @@ export const Home: React.FC = () => {
         <Paper elevation={8} sx={{ display: sd('--layout-flex'), flexDirection: sd('--layout-xflex'), flexGrow: 1, borderRadius: sd('--page-bradius-def'), p: 0 }}>
             <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left') }}><List sx={{ mt: 1 }} >
                 {sections.map((text, index) => (<ListItem key={text} disablePadding>
-                    <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}
-                        sx={{ '&.Mui-selected': { backgroundColor: sd('--button-bgcolor-hover-brand'), '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') } } }}>
+                    <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                         <ListItemText primary={text} />
                     </ListItemButton>
                 </ListItem>))}
@@ -44,14 +37,13 @@ export const Home: React.FC = () => {
 
             <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right') }}>
                 {dIndex === 0 && <Dashboard />}
-                {dIndex === 1 && <WsMaster />}
-                {dIndex === 2 && <Box />}
-                {dIndex === 3 && <UserList />}
-                {dIndex === 4 && <RoleList />}
-                {dIndex === 5 && <WsActivity />}
+                {dIndex === 1 && <UserList />}
+                {dIndex === 2 && <RoleList />}
+                {dIndex === 3 && <WsMaster />}
+                {dIndex === 6 && <WsActivity />}
             </Box>
         </Paper>
 
-        <Typography component='footer' sx={{ textAlign: 'center', color: '#8d272b' }}>Copyright - 2021. Bharat Financial Inclusion Limited, All Rights Reserved.</Typography>
+        <Typography component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor') }}>Copyright - 2021. Bharat Financial Inclusion Limited, All Rights Reserved.</Typography>
     </Box>)
 }

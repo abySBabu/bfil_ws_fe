@@ -2,7 +2,7 @@
     "page": {
         "header": {
             "txtcolor": {"$value": "#000"},
-            "bgcolor": {"$value": "#fff"},
+            "bgcolor": {"$value": "#8d272b"},
             "padding": {"$value": "8px"}
         },
         "body":{
@@ -11,7 +11,8 @@
         },
         "nav":{
             "txtcolor": {"$value": "#fff"},
-            "bgcolor": {"$value": "#3b77b9"},
+            "bgcolor": {"$value": "#a43a3f"},
+            "bgcolorSel": {"$value": "#cc802a"},
             "padding": {"$value": "0"}
         },
         "bradius":{
@@ -22,7 +23,7 @@
             "left": {"$value": "15px 0 0 15px"}
         },
         "foot":{
-            "txtcolor": {"$value": "#8d272b"}
+            "txtcolor": {"$value": "#fff"}
         }
     }
 }
