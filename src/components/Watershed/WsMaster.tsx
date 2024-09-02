@@ -21,12 +21,37 @@ const wsObj = {
 }
 
 export const WsMaster: React.FC = () => {
-    const [selected, setselected] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const rPP = 10;
     const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
+    const wsList: typeof wsObj[] = [
+        {
+            ws_name: "WS1",
+            ws_description: "D1",
+            name_of_the_state: "Karnataka",
+            name_of_the_district: "",
+            name_of_the_taluka: "",
+            name_of_the_grampanchayat: "",
+            name_of_the_village: "V1",
+            map_link: "",
+            users: ""
+        },
+        {
+            ws_name: "WS2",
+            ws_description: "D2",
+            name_of_the_state: "Karnataka",
+            name_of_the_district: "",
+            name_of_the_taluka: "",
+            name_of_the_grampanchayat: "",
+            name_of_the_village: "V@",
+            map_link: "",
+            users: ""
+        }
+
+    ]
     const [addObj, setaddObj] = React.useState(wsObj);
     const [addM, setaddM] = React.useState(false);
+    const [selected, setselected] = React.useState(false);
 
     /* React.useEffect(() => {
         const fetchData = async () => {
@@ -101,14 +126,14 @@ export const WsMaster: React.FC = () => {
                 </TableRow>
             </TableHead>
 
-            <TableBody>
-                <TableRow onClick={() => setselected(true)}>
-                    <TableCell>Ganga</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>State, District, Taluk, Panchayat</TableCell>
-                    <TableCell>Villages</TableCell>
+            <TableBody>{wsList.map((w, i) => (
+                <TableRow key={i} onClick={() => setselected(true)}>
+                    <TableCell>{w.ws_name}</TableCell>
+                    <TableCell>{w.ws_description}</TableCell>
+                    <TableCell>{w.name_of_the_state}</TableCell>
+                    <TableCell>{w.name_of_the_village}</TableCell>
                 </TableRow>
-            </TableBody>
+            ))}</TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination

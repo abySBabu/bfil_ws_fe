@@ -127,6 +127,10 @@ export const appTheme = createTheme({
                 root: {
                     backdropFilter: sd('--modal-backdrop')
                 }
+            },
+            defaultProps: {
+                maxWidth: 'lg',
+                fullWidth: true
             }
         },
         MuiDialogTitle: {
