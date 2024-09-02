@@ -1,12 +1,14 @@
 {
   "name": "bfil-ws",
   "version": "0.1.0",
+  "homepage": "/bfilreact",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "@mui/x-charts": "^7.15.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/axios": "^0.14.0",

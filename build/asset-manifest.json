@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/bfilreact/static/css/main.2a661838.css",
+    "main.js": "/bfilreact/static/js/main.020960cb.js",
+    "index.html": "/bfilreact/index.html",
+    "main.2a661838.css.map": "/bfilreact/static/css/main.2a661838.css.map",
+    "main.020960cb.js.map": "/bfilreact/static/js/main.020960cb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a661838.css",
+    "static/js/main.020960cb.js"
+  ]
+}
