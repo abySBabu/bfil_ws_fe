@@ -129,7 +129,7 @@ export const appTheme = createTheme({
                 }
             },
             defaultProps: {
-                maxWidth: 'lg',
+                maxWidth: 'md',
                 fullWidth: true
             }
         },

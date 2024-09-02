@@ -9,7 +9,7 @@ import { TPA } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
-import UserEdit from '../UserPage/UserEdit';
+import MapEdit from './MapEdit';
 import MapAdd from './MapAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonIcon from '@mui/icons-material/Person';
@@ -86,7 +86,7 @@ export default function MappingList() {
 
     return (<Box>
         {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' userList={mapData} /> : null}
-        {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={mapData} /> : null}
+        {showEditModal ? <MapEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={mapData} /> : null}
 
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
