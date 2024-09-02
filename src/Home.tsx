@@ -6,6 +6,7 @@ import { WsMaster } from './components/Watershed/WsMaster';
 import UserList from './components/UserPage/UserList';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
+import MappingList from './components/WatersheMapping/MappingList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
@@ -39,6 +40,7 @@ export const Home: React.FC = () => {
                 {dIndex === 1 && <UserList />}
                 {dIndex === 2 && <RoleList />}
                 {dIndex === 3 && <WsMaster />}
+                {dIndex === 4 && <MappingList />}
                 {dIndex === 6 && <WsActivity />}
             </Box>
         </Paper>
