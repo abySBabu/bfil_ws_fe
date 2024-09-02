@@ -35,7 +35,7 @@ export const Home: React.FC = () => {
                 </ListItem>))}
             </List></Box>
 
-            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right') }}>
+            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
                 {dIndex === 0 && <Dashboard />}
                 {dIndex === 1 && <UserList />}
                 {dIndex === 2 && <RoleList />}
