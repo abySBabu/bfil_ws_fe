@@ -9,16 +9,16 @@ import Login from './components/LoginPage/Login';
 import { Home } from './Home';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-<React.StrictMode>
-<Router basename='/bfilreact'>
-<ThemeProvider theme={appTheme}><Box sx={{ m: '-8px' }}>
-<Routes>
-<Route path="/" element={<Login />} />
-<Route path="/home" element={<Home />} />
-</Routes>
-</Box></ThemeProvider>
-</Router >
-</React.StrictMode>
+    <React.StrictMode>
+        <Router basename='/bfilreact'>
+            <ThemeProvider theme={appTheme}><Box sx={{ m: '-8px' }}>
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/home" element={<Home />} />
+                </Routes>
+            </Box></ThemeProvider>
+        </Router >
+    </React.StrictMode>
 )
 
 const fontLink = document.createElement('link');

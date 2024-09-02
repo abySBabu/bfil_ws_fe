@@ -1,10 +1,10 @@
 {
     "button":{
         "bgcolor":{
-            "activeBrand":{"$value":"#3a3a8b"},
+            "activeBrand":{"$value":"#bb4d53"},
             "activePositive":{"$value":"#48BF53"},
             "activeNegative":{"$value":"#A70000"},
-            "hoverBrand":{"$value":"#3ea6e5"},
+            "hoverBrand":{"$value":"#cc802a"},
             "hoverPositive":{"$value":"#91F086"},
             "hoverNegative":{"$value":"#A0153E"},
             "disabled":{"$value":"#d3d3d3"}

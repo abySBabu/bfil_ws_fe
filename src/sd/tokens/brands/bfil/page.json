@@ -1,7 +1,7 @@
 {
     "page": {
         "header": {
-            "txtcolor": {"$value": "#000"},
+            "txtcolor": {"$value": "#fff"},
             "bgcolor": {"$value": "#8d272b"},
             "padding": {"$value": "8px"}
         },
@@ -11,7 +11,7 @@
         },
         "nav":{
             "txtcolor": {"$value": "#fff"},
-            "bgcolor": {"$value": "#a43a3f"},
+            "bgcolor": {"$value": "#bb4d53"},
             "bgcolorSel": {"$value": "#cc802a"},
             "padding": {"$value": "0"}
         },
