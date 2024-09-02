@@ -21,13 +21,13 @@ export const Home: React.FC = () => {
             justifyContent: sd('--align-spaced'), p: sd('--page-header-padding')
         }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
-                <img src="/images/bfil.jpg" alt="BFIL" height='100%' />
-                <img src="/images/iib.jpg" alt="IndusInd" height='80%' />
+                <img src={`${process.env.PUBLIC_URL}/images/bfil.jpg`} alt="BFIL" height="100%" />
+                <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='80%' />
             </Box>
             <Typography variant='h4' fontWeight='bold' sx={{ color: '#8d272b' }}>Pragat Watershed</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
-                <img src="/images/myrada.png" alt="Myrada" height='100%' />
-                <img src="/images/pragat.png" alt="Pragat" height='80%' />
+                <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
+                <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
                 <IconButton sx={{ ...btnSx, height: '40px' }}><PersonRounded /></IconButton>
             </Box>
         </Toolbar>
