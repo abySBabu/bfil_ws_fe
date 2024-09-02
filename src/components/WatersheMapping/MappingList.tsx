@@ -10,7 +10,7 @@ import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import UserEdit from '../UserPage/UserEdit';
-import UserAdd from '../UserPage/UserAdd';
+import MapAdd from './MapAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -85,7 +85,7 @@ export default function MappingList() {
     });
 
     return (<Box>
-        {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={mapData} /> : null}
+        {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' userList={mapData} /> : null}
         {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={mapData} /> : null}
 
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
