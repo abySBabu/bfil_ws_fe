@@ -3,11 +3,11 @@
         "header": {
             "txtcolor": {"$value": "#000"},
             "bgcolor": {"$value": "#fff"},
-            "padding": {"$value": "{muilength.1}"}
+            "padding": {"$value": "8px"}
         },
         "body":{
             "bgcolor": {"$value": "#e5e5e5"},
-            "padding": {"$value": "{muilength.1}"}
+            "padding": {"$value": "8px"}
         },
         "nav":{
             "txtcolor": {"$value": "#fff"},
@@ -20,6 +20,9 @@
             "right": {"$value": "0 15px 15px 0"},
             "bot": {"$value": "0 0 15px 15px"},
             "left": {"$value": "15px 0 0 15px"}
+        },
+        "foot":{
+            "txtcolor": {"$value": "#8d272b"}
         }
     }
 }

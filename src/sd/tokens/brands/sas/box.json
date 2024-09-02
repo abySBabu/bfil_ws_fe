@@ -1,16 +1,16 @@
 {
     "box":{
         "bgcolor":{
-            "default":{"$value":"{text.color.default}"},
+            "default":{"$value":"#fff"},
             "brand":{"$value":"#fcf2e7"}
         },
-        "bradius":{"$value":"{length.3}"},
-        "padding":{"$value":"{length.3}"},
-        "margin":{"$value":"{length.2} {numeric.0}"},
+        "bradius":{"$value":"16px"},
+        "padding":{"$value":"16px"},
+        "margin":{"$value":"8px 0px"},
         "shadow":{"$value":"0px 0px 3px"},
         "border":{
             "active":{"$value":"1px solid gray"},
-            "hover":{"$value":"1px solid {text.color.special}"}
+            "hover":{"$value":"1px solid #b5651d"}
         }
     }
 }

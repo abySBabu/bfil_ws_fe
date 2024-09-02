@@ -9,10 +9,10 @@
             "success":{"$value":"#00c600"},
             "failure":{"$value":"#c60000"}
         },
-        "bradius":{"$value":"{length.3}"},
-        "padding":{"$value":"{length.3}"},
+        "bradius":{"$value":"16px"},
+        "padding":{"$value":"16px"},
         "border":{
-            "brand":{"$value":"1px solid {text.color.special}"},
+            "brand":{"$value":"1px solid #b5651d"},
             "success":{"$value":"1px solid #999"},
             "failure":{"$value":"1px solid #000"}
         },
