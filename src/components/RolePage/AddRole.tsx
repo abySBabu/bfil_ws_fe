@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import {
     Checkbox, Container, Grid, Typography, Button, Snackbar, Alert, Dialog, DialogActions,
-    DialogContent, DialogTitle, CircularProgress
+    DialogContent, DialogTitle, CircularProgress, TextField, Box, Card
 } from '@mui/material';
 import { permissionByAppID } from './RoleManagement';
 import { permissionByAppId } from '../../Services/roleService';
@@ -10,9 +11,12 @@ type userTypeProps = {
     show: boolean;
     hide: () => void;
 }
+interface RoleFormInput {
+    roleName: string;
+    roleDesc: string,
+    permList: [],
+}
 export default function AddRole(props: userTypeProps) {
-    const [roleName, setRoleName] = useState('');
-    const [roleDescription, setRoleDescription] = useState('');
     const [selectedPermissions, setSelectedPermissions] = useState<permissionByAppID[]>([]);
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
@@ -25,6 +29,13 @@ export default function AddRole(props: userTypeProps) {
         setModalShow(false);
         props.hide();
     };
+
+
+    const { register, handleSubmit, formState: { errors } } = useForm<RoleFormInput>();
+
+    const addRole: SubmitHandler<RoleFormInput> = async (value) => {
+        setLoading(true);
+    }
 
     useEffect(() => {
         setModalShow(props.show)
@@ -56,44 +67,84 @@ export default function AddRole(props: userTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>Add User</DialogTitle>
+                <DialogTitle>Add Role</DialogTitle>
                 <DialogContent>
-                    <Container>
-                        <Grid container spacing={2} alignItems="center">
-                            {/* Header Row */}
-                            <Grid item xs={6}></Grid>
-                            <Grid item xs={3}>
-                                <Typography variant="subtitle1">View</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Typography variant="subtitle1">Edit</Typography>
-                            </Grid>
-                            {/* User Management Row */}
-                            <Grid item xs={6}>
-                                <Typography variant="h6">User Management</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Checkbox />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Checkbox />
-                            </Grid>
-                            {/* Role Management Row */}
-                            <Grid item xs={6}>
-                                <Typography variant="h6">Role Management</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Checkbox />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Checkbox />
-                            </Grid>
+                    <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="roleName"
+                                label="Role Name"
+                                autoFocus
+                                {...register('roleName', {
+                                    required: 'Role Name is required',
+                                    pattern: {
+                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        message: 'Role Name must only contain alphanumeric characters'
+                                    }
+                                })}
+                                error={!!errors.roleName}
+                                helperText={errors.roleName ? errors.roleName.message : ''}
+                            />
                         </Grid>
-                    </Container>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="roleDesc"
+                                label="Role Description"
+                                autoFocus
+                                {...register('roleDesc', {
+                                    required: 'Role Description is required',
+                                    pattern: {
+                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        message: 'Role Description must only contain alphanumeric characters'
+                                    }
+                                })}
+                                error={!!errors.roleDesc}
+                                helperText={errors.roleDesc ? errors.roleDesc.message : ''}
+                            />
+                        </Grid>
+                        <Container sx={{marginTop:'3%'}}>
+                                <Box component={Grid} container spacing={2} alignItems="center">
+                                    {/* Header Row */}
+                                    <Grid item xs={6}></Grid>
+                                    <Grid item xs={3}>
+                                        <Typography variant="subtitle1">View</Typography>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Typography variant="subtitle1">Edit</Typography>
+                                    </Grid>
+                                    {/* User Management Row */}
+                                    <Grid item xs={6}>
+                                        <Typography variant="h6">User Management</Typography>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox />
+                                    </Grid>
+                                    {/* Role Management Row */}
+                                    <Grid item xs={6}>
+                                        <Typography variant="h6">Role Management</Typography>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Checkbox />
+                                    </Grid>
+                                </Box>
+                        </Container>
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button>Add Role</Button>
+                    <Button onClick={handleSubmit(addRole)}>Add</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
