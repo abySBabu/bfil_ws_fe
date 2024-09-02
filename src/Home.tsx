@@ -10,7 +10,7 @@ import MappingList from './components/WatersheMapping/MappingList';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
-    const sections = ['Dashboard', 'User Management', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Workflow Status', 'Work Plan'];
+    const sections = ['Dashboard', 'User Management', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
@@ -40,7 +40,7 @@ export const Home: React.FC = () => {
                 {dIndex === 1 && <UserList />}
                 {dIndex === 2 && <RoleList />}
                 {dIndex === 3 && <WsMaster />}
-                {dIndex === 4 && <MappingList />}
+                {dIndex === 5 && <MappingList />}
                 {dIndex === 6 && <WsActivity />}
             </Box>
         </Paper>
