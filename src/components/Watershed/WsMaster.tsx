@@ -7,7 +7,6 @@ import { Add } from '@mui/icons-material';
 import { sd } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 
-
 const wsObj = {
     ws_name: "",
     ws_description: "",

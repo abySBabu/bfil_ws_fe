@@ -181,7 +181,7 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiOutlinedInput-root': {
-                        height: '50px',
+                        height: '48px',
                         '& input': { height: '100%', padding: '0 12px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
                         '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
