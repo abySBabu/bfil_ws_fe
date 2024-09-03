@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { Box, IconButton, useTheme, Typography } from '@mui/material';
+import { Box, IconButton, Typography, Select, MenuItem, useTheme } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -19,7 +19,7 @@ export const btnSx = {
 
 export const TPA = (props: any) => {
     const theme = useTheme();
-    const { count, page, rowsPerPage, onPageChange } = props;
+    const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props;
 
     const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         onPageChange(event, 0);
@@ -70,6 +70,15 @@ export const TPA = (props: any) => {
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>
+            <Select
+                value={rowsPerPage}
+                onChange={onRowsPerPageChange}
+                sx={{ ml: 2, minWidth: '80px', color: '#fff' }}
+            >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+            </Select>
         </Box>
     );
 }
@@ -82,6 +91,15 @@ export const appTheme = createTheme({
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
                     '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                }
+            }
+        },
+        MuiAvatar: {
+            styleOverrides: {
+                root: {
+                    borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff', textTransform: 'none',
+                    '&:hover': { /* color: sd('--text-color-hover'), */ backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -113,17 +131,31 @@ export const appTheme = createTheme({
                 }
             }
         },
+        MuiTableFooter: {
+            styleOverrides: {
+                root: {
+                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
+                    '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
+                }
+            }
+        },
         MuiDialog: {
             styleOverrides: {
                 root: {
                     backdropFilter: sd('--modal-backdrop')
                 }
+            },
+            defaultProps: {
+                maxWidth: 'md',
+                fullWidth: true
             }
         },
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    padding: sd('--modal-padding')
+                    padding: sd('--modal-padding'),
+                    color: sd('--text-color-default'),
+                    backgroundColor: sd('--text-color-special')
                 }
             }
         },
@@ -158,7 +190,16 @@ export const appTheme = createTheme({
                 fullWidth: true
             }
         },
-
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        backgroundColor: sd('--page-nav-bgcolor-sel'),
+                        '&:hover': { backgroundColor: sd('--page-nav-bgcolor-sel') }
+                    }
+                }
+            }
+        },
         MuiTypography: {
             styleOverrides: {
                 root: {

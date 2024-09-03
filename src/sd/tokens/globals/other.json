@@ -1,23 +1,15 @@
 {
     "length":{
         "0":{"$value":"0px"},
-        "1":{"$value":"5px"},
-        "2":{"$value":"10px"},
-        "3":{"$value":"15px"},
-        "4":{"$value":"20px"}
-    },
-    "muilength":{
+        "0.5":{"$value":"4px"},
         "1":{"$value":"8px"},
+        "1.5":{"$value":"12px"},
         "2":{"$value":"16px"},
+        "2.5":{"$value":"20px"},
         "3":{"$value":"24px"},
         "4":{"$value":"32px"},
         "5":{"$value":"40px"},
-        "6":{"$value":"48px"},
-        "8":{"$value":"64px"}
-    },
-    "numeric":{
-        "0":{"$value":"0"},
-        "1":{"$value":"1"}
+        "6":{"$value":"48px"}
     },
     "layout":{
         "flex":{"$value":"flex"},

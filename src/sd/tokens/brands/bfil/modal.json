@@ -6,8 +6,8 @@
             "left":{"$value":"50%"},
             "transform":{"$value":"translate(-50%, -50%)"}
         },
-        "padding":{"$value":"{length.2}"},
+        "padding":{"$value":"8px"},
         "zindex":{"$value":"1000"},
-        "backdrop":{"$value":"blur(15px)"}
+        "backdrop":{"$value":"blur(16px)"}
     }
 }
