@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { Box, IconButton, useTheme, Typography } from '@mui/material';
+import { Box, IconButton, Typography, Select, MenuItem, useTheme } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -17,9 +17,64 @@ export const btnSx = {
     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
 }
 
-export const TPA = (props: any) => {
+/* export const TPA = (props: any) => {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (<Box sx={{ flexShrink: 0, ml: 2.5, display: 'flex', alignItems: 'center' }}>
+        <IconButton
+            onClick={handleFirstPageButtonClick}
+            disabled={page === 0}
+            aria-label="first page"
+        >
+            {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        </IconButton>
+        <IconButton
+            onClick={handleBackButtonClick}
+            disabled={page === 0}
+            aria-label="previous page"
+        >
+            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        </IconButton>
+        <Typography sx={{ mx: '4px' }}>
+            {page + 1} / {Math.ceil(count / rowsPerPage)}
+        </Typography>
+        <IconButton
+            onClick={handleNextButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            aria-label="next page"
+        >
+            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        </IconButton>
+        <IconButton
+            onClick={handleLastPageButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            aria-label="last page"
+        >
+            {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        </IconButton>
+    </Box>)
+} */
+
+export const TPA = (props: any) => {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props;
 
     const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         onPageChange(event, 0);
@@ -70,9 +125,19 @@ export const TPA = (props: any) => {
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>
+            <Select
+                value={rowsPerPage}
+                onChange={onRowsPerPageChange}
+                sx={{ ml: 2, minWidth: '80px' }}
+            >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={25}>25</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+            </Select>
         </Box>
     );
-}
+};
 
 export const appTheme = createTheme({
     typography: { fontFamily: sd('--text-font') },
@@ -89,8 +154,8 @@ export const appTheme = createTheme({
         MuiAvatar: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff', textTransform: 'none',
+                    '&:hover': { /* color: sd('--text-color-hover'), */ backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -136,7 +201,9 @@ export const appTheme = createTheme({
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    padding: sd('--modal-padding')
+                    padding: sd('--modal-padding'),
+                    color: sd('--text-color-default'),
+                    backgroundColor: sd('--text-color-special')
                 }
             }
         },

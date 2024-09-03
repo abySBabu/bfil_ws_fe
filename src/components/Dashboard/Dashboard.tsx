@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Grid, Modal } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { CropSquare, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
@@ -164,27 +164,31 @@ export const Dashboard: React.FC = () => {
             height: '100%',
             width: '100%'
         }}>
-            <Card sx={{ outline: 'none', gap: '8px', p: 1 }}>
-                <Typography variant='h6' sx={{ color: sd('--text-color-special') }}>{gMod}</Typography>
-                <LineChart
-                    xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                    series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
-                    height={200}
-                    width={600}
-                />
-                <PieChart
-                    series={[
-                        {
-                            data: [
-                                { id: 0, value: 10, label: 'Bunding' },
-                                { id: 1, value: 15, label: 'Nala Treatment' },
-                                { id: 2, value: 20, label: 'Check Dam' },
-                            ]
-                        }
-                    ]}
-                    height={200}
-                    width={600}
-                />
+            <Card sx={{ outline: 'none' }}>
+                <CardHeader title={<Typography variant='h6' sx={{ color: '#fff' }}>{gMod}</Typography>}
+                    sx={{ bgcolor: sd('--text-color-special') }} />
+
+                <CardContent sx={{ gap: '8px', p: 1 }}>
+                    <LineChart
+                        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                        series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
+                        height={200}
+                        width={600}
+                    />
+                    <PieChart
+                        series={[
+                            {
+                                data: [
+                                    { id: 0, value: 10, label: 'Bunding' },
+                                    { id: 1, value: 15, label: 'Nala Treatment' },
+                                    { id: 2, value: 20, label: 'Check Dam' },
+                                ]
+                            }
+                        ]}
+                        height={200}
+                        width={600}
+                    />
+                </CardContent>
             </Card>
         </Modal>
     </>)
