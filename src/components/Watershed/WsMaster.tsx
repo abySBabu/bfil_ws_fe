@@ -167,7 +167,7 @@ export const WsMaster: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        <Fab onClick={() => setaddM(true)}><Add /></Fab>
+        <Fab onClick={listWS}><Add /></Fab>
 
         <Dialog open={addM} onClose={() => setaddM(false)}>
             <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
