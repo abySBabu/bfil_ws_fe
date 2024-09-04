@@ -163,13 +163,13 @@ export const appTheme = createTheme({
                 }
             }
         },
-        MuiDialogContent: {
-            styleOverrides: {
-                root: {
-                    padding: sd('--modal-padding')
-                }
-            }
-        },
+        // MuiDialogContent: {
+        //     styleOverrides: {
+        //         root: {
+        //             padding: sd('--modal-padding')
+        //         }
+        //     }
+        // },
         MuiDialogActions: {
             styleOverrides: {
                 root: {

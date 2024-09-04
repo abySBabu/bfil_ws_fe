@@ -35,3 +35,23 @@ export async function permissionByAppId(applicationId: any) {
         throw error;
     }
 }
+
+export async function addRolePermission(data: any) {
+    const configs = {
+        url: serverPath.authserver + 'role-service/roles',
+        method: 'post',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        data: data
+    };
+
+    try {
+        const response = await axios(configs);
+        console.log("addRolePermission ---- ", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+    }
+}
