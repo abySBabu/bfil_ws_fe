@@ -13,14 +13,12 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddRole from './AddRole';
+import EditRole from './EditRole';
 
 
 export default function RoleList() {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showEnableModal, setShowEnableModal] = useState(false);
-    const [showDisableModal, setShowDisableModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [roleData, setRoleData] = useState<rolesByCompanyId[]>([]);
@@ -51,8 +49,9 @@ export default function RoleList() {
     const fetchUserData = async () => {
         try {
             let resp = await getRolesByCompany(CompanyId);
-            console.log("getRoleData -", resp)
-            setRoleData(resp);
+            console.log("getRoleData -", resp);
+            let sorData=resp;
+            setRoleData(sorData.reverse());
         } catch (error) {
 
             console.log(error)
@@ -73,21 +72,6 @@ export default function RoleList() {
         fetchUserData();
     };
 
-    function hideDisableModal() {
-        setShowDisableModal(false)
-        fetchUserData();
-    }
-
-    function hideEnableModal() {
-        setShowEnableModal(false)
-        fetchUserData();
-    }
-
-    function hideDeleteModal() {
-        setShowDeleteModal(false)
-        fetchUserData();
-    }
-
 
     const filteredData = roleData.filter(user => {
         const matchesSearchQuery = Object.values(user).some(value => {
@@ -102,6 +86,7 @@ export default function RoleList() {
 
     return (<Box>
         {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
+        {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
                 <FormControl sx={{ width: '130px' }}>
