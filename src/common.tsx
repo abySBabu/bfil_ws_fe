@@ -142,11 +142,14 @@ export const appTheme = createTheme({
         MuiDialog: {
             styleOverrides: {
                 root: {
-                    backdropFilter: sd('--modal-backdrop')
+                    backdropFilter: sd('--modal-backdrop'),
+                },
+                paper: {
+                    borderRadius: '15px'
                 }
             },
             defaultProps: {
-                maxWidth: 'md',
+                maxWidth: 'lg',
                 fullWidth: true
             }
         },
@@ -155,7 +158,8 @@ export const appTheme = createTheme({
                 root: {
                     padding: sd('--modal-padding'),
                     color: sd('--text-color-default'),
-                    backgroundColor: sd('--text-color-special')
+                    backgroundColor: sd('--text-color-special'),
+                    borderRadius: '15px 15px 0 0'
                 }
             }
         },
@@ -177,8 +181,10 @@ export const appTheme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiOutlinedInput-root': {
+                        height: '48px',
+                        '& input': { height: '100%', padding: '0 12px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
-                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis'), },
+                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
                     },
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
@@ -190,6 +196,7 @@ export const appTheme = createTheme({
                 fullWidth: true
             }
         },
+
         MuiListItemButton: {
             styleOverrides: {
                 root: {
