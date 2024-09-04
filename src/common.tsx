@@ -7,7 +7,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 export const setTimeoutsecs = 1000;
 export const setAutoHideDurationTimeoutsecs = 3000;
-export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "http://192.168.1.3:8080/bfil/" }
+export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const tkn = { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
 
