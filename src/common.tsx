@@ -38,28 +38,19 @@ export const TPA = (props: any) => {
 
     return (<ThemeProvider theme={tpaTheme}>
         <Box sx={{ flexShrink: 0, ml: 2.5, display: 'flex', alignItems: 'center' }}>
-            <Select
-                value={rowsPerPage}
-                onChange={onRowsPerPageChange}
-                sx={{ ml: 2, minWidth: '80px', color: '#fff' }}
-            >
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
-            </Select>
             <IconButton
                 onClick={handleFirstPageButtonClick}
                 disabled={page === 0}
                 aria-label="first page"
             >
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                <FirstPageIcon />
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
                 disabled={page === 0}
                 aria-label="previous page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                <KeyboardArrowLeft />
             </IconButton>
             <Typography sx={{ mx: '4px' }}>
                 {page + 1} / {Math.ceil(count / rowsPerPage)}
@@ -69,14 +60,14 @@ export const TPA = (props: any) => {
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                <KeyboardArrowRight />
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                <LastPageIcon />
             </IconButton>
         </Box>
     </ThemeProvider>);

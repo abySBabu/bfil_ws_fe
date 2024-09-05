@@ -21,31 +21,9 @@ const defObj = {
 
 export const WsMaster: React.FC = () => {
     const [page, setPage] = React.useState(0);
-    const rPP = 10;
-    const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages', 'Actions'];
-    const wsList: typeof defObj[] = [
-        {
-            wsName: "WS1",
-            wsDescription: "D1",
-            stateId: "Karnataka",
-            districtId: "",
-            talukId: "",
-            grampanchayatId: "",
-            villageId: "V1",
-            mapLink: ""
-        },
-        {
-            wsName: "WS2",
-            wsDescription: "D2",
-            stateId: "Karnataka",
-            districtId: "",
-            talukId: "",
-            grampanchayatId: "",
-            villageId: "V@",
-            mapLink: ""
-        }
-
-    ]
+    const [rPP, setrPP] = React.useState(10);
+    const tHeads: string[] = ['Watershed', 'Description', 'Villages', 'Actions'];
+    const [wsList, setwsList] = React.useState<typeof defObj[]>([]);
     const [addObj, setaddObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
     const [selected, setselected] = React.useState(false);
@@ -54,7 +32,7 @@ export const WsMaster: React.FC = () => {
         const fetchData = async () => {
             try {
                 const resp = await listWS(); if (resp) {
-                    console.log('Success')
+                    setwsList(resp)
                 }
             }
             catch (error) { console.log(error) }
@@ -102,14 +80,14 @@ export const WsMaster: React.FC = () => {
     const WSadd = async () => {
         try {
             const defObj = {
-                wsName: "Watershed Name",
-                wsDescription: "fhdfdfhd",
+                wsName: "Watershed B",
+                wsDescription: "WS for villages 1, 3, and 4",
                 stateId: 1,
                 districtId: 2,
                 talukId: 3,
                 grampanchayatId: 4,
                 villageId: 5,
-                mapLink: 6
+                mapLink: "hvdihbidcbiunboan"
             }
             const resp = await addWS(defObj)
             if (resp) { console.log('Add success') }
@@ -134,7 +112,6 @@ export const WsMaster: React.FC = () => {
                 <TableRow key={i}>
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
-                    <TableCell>{w.stateId}</TableCell>
                     <TableCell>{w.villageId}</TableCell>
                     <TableCell><IconButton><Edit onClick={() => setselected(true)} /></IconButton></TableCell>
                 </TableRow>
@@ -142,11 +119,12 @@ export const WsMaster: React.FC = () => {
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={1}
+                    count={wsList.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[]}
+                    rowsPerPageOptions={[5, 10, 15]} //
+                    onRowsPerPageChange={(e) => setrPP(parseInt(e.target.value))} //
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
