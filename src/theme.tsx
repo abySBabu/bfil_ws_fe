@@ -13,6 +13,15 @@ export const bfilTheme = createTheme({
                 }
             }
         },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    color: sd('--button-bgcolor-active-brand'),
+                    '&:hover': { color: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--button-bgcolor-disabled') }
+                }
+            }
+        },
         MuiAvatar: {
             styleOverrides: {
                 root: {

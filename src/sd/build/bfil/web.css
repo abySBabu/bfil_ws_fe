@@ -21,9 +21,9 @@
   --button-bradius-rounded: 16px;
   --button-bradius-pill: 24px;
   --button-corner: 32px;
-  --textfield-border-sel: 1px solid #3b77b9;
+  --textfield-border-sel: 1px solid #cc802a;
   --textfield-border-dis: 1px solid #666;
-  --textfield-label-sel: #3b77b9;
+  --textfield-label-sel: #cc802a;
   --textfield-label-dis: #666;
   --modal-position-pos: absolute;
   --modal-position-top: 50%;

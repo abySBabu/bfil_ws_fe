@@ -79,7 +79,7 @@ export const WsActivity: React.FC = () => {
             </TableRow></TableFooter>
         </Table>
 
-        <Dialog open={Boolean(selected)}>
+        <Dialog open={Boolean(selected)} maxWidth='xl'>
             <DialogTitle>{
                 selected === 1 ?
                     "Earthen bunding"
@@ -140,7 +140,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField disabled={!edt} label='Total Units' value="200 sqft" /></Grid>
                 {selected === 1 && <>
                     <Grid item xs={3}><TextField select disabled={!edt} label='Land Type' value="Wet land">
-                        <MenuItem value='Wet land'>Wet land</MenuItem>
+                        <MenuItem value='Wet land'>Public</MenuItem>
                     </TextField></Grid>
 
                     <Grid item xs={3}><TextField disabled={!edt} label="Water Conserved (litres)" value="40000" /></Grid>
