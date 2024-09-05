@@ -1,8 +1,9 @@
-import { Box, IconButton, Typography, Select, MenuItem, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, Select, MenuItem, useTheme, ThemeProvider } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { tpaTheme } from './theme';
 
 export const setTimeoutsecs = 1000;
 export const setAutoHideDurationTimeoutsecs = 3000;
@@ -35,7 +36,7 @@ export const TPA = (props: any) => {
         onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
     };
 
-    return (
+    return (<ThemeProvider theme={tpaTheme}>
         <Box sx={{ flexShrink: 0, ml: 2.5, display: 'flex', alignItems: 'center' }}>
             <Select
                 value={rowsPerPage}
@@ -78,5 +79,5 @@ export const TPA = (props: any) => {
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>
         </Box>
-    );
+    </ThemeProvider>);
 }

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { Box, ThemeProvider } from '@mui/material';
 import './sd/build/bfil/web.css'
 import { bfilTheme } from './theme';
 import Login from './components/LoginPage/Login';

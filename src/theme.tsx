@@ -1,6 +1,20 @@
 import { createTheme } from '@mui/material/styles';
 import { sd } from './common';
 
+export const tpaTheme = createTheme({
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    color: '#fff',
+                    '&:hover': { color: sd('--button-bgcolor-hover-brand') },
+                    '&.Mui-disabled': { color: sd('--button-bgcolor-active-brand') }
+                }
+            }
+        }
+    }
+})
+
 export const bfilTheme = createTheme({
     typography: { fontFamily: sd('--text-font') },
     components: {
@@ -88,7 +102,7 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: {
-                maxWidth:"md",
+                maxWidth: "md",
                 fullWidth: true
             }
         },

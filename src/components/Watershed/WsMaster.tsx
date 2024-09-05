@@ -120,7 +120,7 @@ export const WsMaster: React.FC = () => {
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} />
-            <Button startIcon={<AddHome />}>Add WS</Button>
+            <Button startIcon={<AddHome />} onClick={WSadd}>Add WS</Button>
         </Box>
 
         <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
