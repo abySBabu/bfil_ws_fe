@@ -184,8 +184,6 @@ export default function AddRole(props: userTypeProps) {
         <Container>
             <Dialog
                 open={modalShow}
-                maxWidth="md"
-
             >
                 <DialogTitle>Add Role</DialogTitle>
                 <DialogContent>

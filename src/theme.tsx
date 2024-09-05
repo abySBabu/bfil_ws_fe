@@ -88,6 +88,7 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: {
+                maxWidth:"md",
                 fullWidth: true
             }
         },
