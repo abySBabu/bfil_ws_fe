@@ -139,8 +139,8 @@ export default function RoleList() {
                         <TablePagination
                             count={filteredData.length}
                             page={page} rowsPerPage={rowsPerPage}
-                            sx={{ '.MuiTablePagination-displayedRows': { display: 'none' } }}
-                            onPageChange={(e, p) => { setPage(p) }} rowsPerPageOptions={[]}
+                            onPageChange={(e, p) => { setPage(p) }} 
+                            rowsPerPageOptions={[]}
                             ActionsComponent={TPA}
                         />
                     </TableRow>
