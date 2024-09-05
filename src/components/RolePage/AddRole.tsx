@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { permissionByAppID } from './RoleManagement';
 import { permissionByAppId, addRolePermission } from '../../Services/roleService';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 
 type userTypeProps = {
     show: boolean;
@@ -114,22 +114,78 @@ export default function AddRole(props: userTypeProps) {
         fetchData();
     }, [props.show])
 
-    const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let updatedCheckedPermissions: permissionByAppID[];
+    // const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     let updatedCheckedPermissions: permissionByAppID[];
+
+    //     if (event.target.checked) {
+    //         updatedCheckedPermissions = [...checkedPermissions, perm];
+    //     } else {
+    //         updatedCheckedPermissions = checkedPermissions.filter(p => p !== perm);
+    //     }
+
+    //     setCheckedPermissions(updatedCheckedPermissions);
+    // };
+    const handleCheckboxChange = (perm: permissionByAppID, isEdit: boolean) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let updatedCheckedPermissions: permissionByAppID[] = [...checkedPermissions];
 
         if (event.target.checked) {
-            updatedCheckedPermissions = [...checkedPermissions, perm];
+            // Add the current permission
+            updatedCheckedPermissions.push(perm);
+
+            if (isEdit) {
+                // If the 'Edit' permission is checked, find and check the corresponding 'View' permission
+                const screen = selectedPermissions.find(screenData =>
+                    screenData.permission.some(p => p.permissionId === perm.permissionId)
+                );
+
+                if (screen) {
+                    const viewPerm = screen.permission.find(p =>
+                        p.permissionName.startsWith("VIEW") &&
+                        p.permissionName.includes(perm.permissionName.replace("EDIT", ""))
+                    );
+
+                    if (viewPerm && !updatedCheckedPermissions.includes(viewPerm)) {
+                        // Auto-select the corresponding 'View' permission if not already selected
+                        updatedCheckedPermissions.push(viewPerm);
+                    }
+                }
+            }
         } else {
-            updatedCheckedPermissions = checkedPermissions.filter(p => p !== perm);
+            // Remove the unchecked permission
+            updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== perm.permissionId);
+
+            if (isEdit) {
+                // Optionally remove the corresponding 'View' permission when 'Edit' is unchecked
+                const screen = selectedPermissions.find(screenData =>
+                    screenData.permission.some(p => p.permissionId === perm.permissionId)
+                );
+
+                if (screen) {
+                    const viewPerm = screen.permission.find(p =>
+                        p.permissionName.startsWith("VIEW") &&
+                        p.permissionName.includes(perm.permissionName.replace("EDIT", ""))
+                    );
+
+                    if (viewPerm) {
+                        // Remove the 'View' permission
+                        updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== viewPerm.permissionId);
+                    }
+                }
+            }
         }
 
         setCheckedPermissions(updatedCheckedPermissions);
     };
 
+
+
+
     return (
         <Container>
             <Dialog
                 open={modalShow}
+                maxWidth="md"
+
             >
                 <DialogTitle>Add Role</DialogTitle>
                 <DialogContent>
@@ -173,29 +229,32 @@ export default function AddRole(props: userTypeProps) {
                             />
                         </Grid>
                         <Card sx={{ marginTop: '3%', padding: '2%' }}>
-                            <Box component={Grid} container spacing={2} alignItems="center">
-                                <Grid item xs={6}></Grid>
-                                <Grid item xs={3}>
-                                    <Typography variant="subtitle1">View</Typography>
+                            <Box component={Grid} container spacing={1} sx={{
+                                border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                borderRadius: '4px'
+                            }}>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4}>
+                                    <Typography >View</Typography>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <Typography variant="subtitle1">Edit</Typography>
+                                <Grid item xs={4}>
+                                    <Typography >Edit</Typography>
                                 </Grid>
                                 {selectedPermissions.map((screendata, index) => (
 
                                     <React.Fragment key={index}>
-                                        <Grid item xs={6}>
-                                            <Typography variant="h6">{screendata.screenName}</Typography>
+                                        <Grid item xs={4}>
+                                            <Typography sx={{fontWeight:'bold'}} >{screendata.screenName}</Typography>
                                         </Grid>
                                         {screendata.permission
                                             .filter(perm => perm.permissionName.startsWith("VIEW"))
                                             .map((perm: permissionByAppID) => (
                                                 <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={3}>
+                                                    <Grid item xs={4}>
                                                         <Checkbox
-                                                            onChange={handleCheckboxChange(perm)}
+                                                            checked={checkedPermissions.includes(perm)}
+                                                            onChange={handleCheckboxChange(perm, false)}
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 </React.Fragment>
                                             ))}
@@ -204,11 +263,11 @@ export default function AddRole(props: userTypeProps) {
                                             .filter(perm => perm.permissionName.startsWith("EDIT"))
                                             .map((perm: permissionByAppID) => (
                                                 <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={3}>
+                                                    <Grid item xs={4}>
                                                         <Checkbox
-                                                            onChange={handleCheckboxChange(perm)}
+                                                            checked={checkedPermissions.includes(perm)}
+                                                            onChange={handleCheckboxChange(perm, true)}
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 </React.Fragment>
                                             ))}
@@ -216,12 +275,11 @@ export default function AddRole(props: userTypeProps) {
                                             .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
                                             .map((perm: permissionByAppID) => (
                                                 <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={3}>
+                                                    <Grid item xs={4}>
                                                         <Checkbox
-                                                            onChange={handleCheckboxChange(perm)}
+                                                            onChange={handleCheckboxChange(perm, false)}
                                                             disabled
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 </React.Fragment>
                                             ))}

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { permissionByAppID, rolesByCompanyId } from './RoleManagement'; // Ensure correct import
 import { permissionByAppId, addRolePermission, updateRolePermission } from '../../Services/roleService';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 
 type RoleTypeProps = {
     show: boolean;
@@ -69,7 +69,7 @@ export default function EditRole(props: RoleTypeProps) {
             }
             console.log("mappingData.........", mappingData)
 
-            let resp = await updateRolePermission(mappingData,roleDetails?.roleId);
+            let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
             if (resp) {
                 setSeverityColor("success");
                 setMessage("Role updated successfully");
@@ -135,24 +135,61 @@ export default function EditRole(props: RoleTypeProps) {
         fetchData();
     }, [show, roleDetails, reset]);
 
+    // const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     let updatedCheckedPermissions: permissionByAppID[];
+
+    //     if (event.target.checked) {
+    //         // Avoid duplicates
+    //         if (!checkedPermissions.find(p => p.permissionId === perm.permissionId)) {
+    //             updatedCheckedPermissions = [...checkedPermissions, perm];
+    //         } else {
+    //             updatedCheckedPermissions = checkedPermissions;
+    //         }
+    //     } else {
+    //         updatedCheckedPermissions = checkedPermissions.filter(p => p.permissionId !== perm.permissionId);
+    //     }
+
+    //     setCheckedPermissions(updatedCheckedPermissions);
+    // };
+
+    // Function to determine if a permission is checked
+
     const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let updatedCheckedPermissions: permissionByAppID[];
+        let updatedCheckedPermissions: permissionByAppID[] = checkedPermissions;
 
         if (event.target.checked) {
-            // Avoid duplicates
-            if (!checkedPermissions.find(p => p.permissionId === perm.permissionId)) {
-                updatedCheckedPermissions = [...checkedPermissions, perm];
-            } else {
-                updatedCheckedPermissions = checkedPermissions;
+            // Add the selected permission if not already in the list
+            if (!updatedCheckedPermissions.find(p => p.permissionId === perm.permissionId)) {
+                updatedCheckedPermissions = [...updatedCheckedPermissions, perm];
+            }
+
+            // Auto-select the corresponding VIEW permission if EDIT is checked
+            if (perm.permissionName.startsWith("EDIT")) {
+                const viewPermission = selectedPermissions
+                    .flatMap(screen => screen.permission)
+                    .find(p => p.permissionName === perm.permissionName.replace("EDIT", "VIEW"));
+                if (viewPermission && !updatedCheckedPermissions.find(p => p.permissionId === viewPermission.permissionId)) {
+                    updatedCheckedPermissions = [...updatedCheckedPermissions, viewPermission];
+                }
             }
         } else {
-            updatedCheckedPermissions = checkedPermissions.filter(p => p.permissionId !== perm.permissionId);
+            // Remove the unchecked permission
+            updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== perm.permissionId);
+
+            // If unchecking an "EDIT", remove the corresponding "VIEW" permission
+            if (perm.permissionName.startsWith("EDIT")) {
+                const viewPermission = selectedPermissions
+                    .flatMap(screen => screen.permission)
+                    .find(p => p.permissionName === perm.permissionName.replace("EDIT", "VIEW"));
+                if (viewPermission) {
+                    updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== viewPermission.permissionId);
+                }
+            }
         }
 
         setCheckedPermissions(updatedCheckedPermissions);
     };
 
-    // Function to determine if a permission is checked
     const isPermissionChecked = (perm: permissionByAppID) => {
         return checkedPermissions.some(p => p.permissionId === perm.permissionId);
     };
@@ -162,8 +199,6 @@ export default function EditRole(props: RoleTypeProps) {
             <Dialog
                 open={modalShow}
                 onClose={handleClose}
-                fullWidth
-                maxWidth="md"
             >
                 <DialogTitle>Edit Role</DialogTitle>
                 <DialogContent>
@@ -207,51 +242,51 @@ export default function EditRole(props: RoleTypeProps) {
                         </Grid>
                         <Grid item xs={12}>
                             <Card sx={{ marginTop: '3%', padding: '2%' }}>
-                                <Box component={Grid} container spacing={2} alignItems="center">
-                                    <Grid item xs={6}></Grid>
-                                    <Grid item xs={3}>
-                                        <Typography variant="subtitle1">View</Typography>
+                                <Box component={Grid} container spacing={1} sx={{
+                                    border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                    borderRadius: '4px'
+                                }}>
+                                    <Grid item xs={4}></Grid>
+                                    <Grid item xs={4}>
+                                        <Typography>View</Typography>
                                     </Grid>
-                                    <Grid item xs={3}>
-                                        <Typography variant="subtitle1">Edit</Typography>
+                                    <Grid item xs={4}>
+                                        <Typography >Edit</Typography>
                                     </Grid>
                                     {selectedPermissions.map((screendata, index) => (
                                         <React.Fragment key={index}>
-                                            <Grid item xs={6}>
-                                                <Typography variant="h6">{screendata.screenName}</Typography>
+                                            <Grid item xs={4}>
+                                                <Typography sx={{fontWeight:'bold'}}>{screendata.screenName}</Typography>
                                             </Grid>
                                             {screendata.permission
                                                 .filter(perm => perm.permissionName.startsWith("VIEW"))
                                                 .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={3} key={`view-${perm.permissionId}`}>
+                                                    <Grid item xs={4} key={`view-${perm.permissionId}`}>
                                                         <Checkbox
                                                             checked={isPermissionChecked(perm)}
                                                             onChange={handleCheckboxChange(perm)}
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 ))}
                                             {screendata.permission
                                                 .filter(perm => perm.permissionName.startsWith("EDIT"))
                                                 .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={3} key={`edit-${perm.permissionId}`}>
+                                                    <Grid item xs={4} key={`edit-${perm.permissionId}`}>
                                                         <Checkbox
                                                             checked={isPermissionChecked(perm)}
                                                             onChange={handleCheckboxChange(perm)}
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 ))}
                                             {screendata.permission
                                                 .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
                                                 .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={3} key={`other-${perm.permissionId}`}>
+                                                    <Grid item xs={4} key={`other-${perm.permissionId}`}>
                                                         <Checkbox
                                                             checked={isPermissionChecked(perm)}
                                                             onChange={handleCheckboxChange(perm)}
                                                             disabled
                                                         />
-                                                        {/* <Typography variant="body2">{perm.permissionName}</Typography> */}
                                                     </Grid>
                                                 ))}
                                         </React.Fragment>
