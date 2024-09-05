@@ -8,7 +8,7 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -17,7 +17,7 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff', textTransform: 'none',
-                    '&:hover': { /* color: sd('--text-color-hover'), */ backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -54,9 +54,10 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
+                    overflow: 'auto',
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
-                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default'), cursor: 'pointer' },
-                    '& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover') },
+                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
+                    //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },
                 }
             }
         },
@@ -78,7 +79,6 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: {
-                maxWidth: 'xl',
                 fullWidth: true
             }
         },
