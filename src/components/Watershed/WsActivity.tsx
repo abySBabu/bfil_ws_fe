@@ -102,24 +102,24 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField disabled label='Event Date' value="04.10.2024" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Target Group' value="Farmers" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled label='Habitations' value="Village A, Village C" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
                 <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
                 <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Total Participants' value="27" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Male Participants' value="16" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Female Participants' value="11" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Facilitator' value="Prabhakar" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Mobilizer' value="Nagraj" /></Grid>
                 <Grid item xs={6}><TextField disabled={!edt} label='Remarks' value="Remarks" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={2}>{ImgCard("wsact4.jpeg")}</Grid>
                 <Grid item xs={2}>{ImgCard("wsact5.jpg")}</Grid>
             </> : <>
@@ -157,7 +157,7 @@ export const WsActivity: React.FC = () => {
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
                 <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
                 <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
