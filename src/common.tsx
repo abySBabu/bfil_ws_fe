@@ -37,6 +37,15 @@ export const TPA = (props: any) => {
 
     return (
         <Box sx={{ flexShrink: 0, ml: 2.5, display: 'flex', alignItems: 'center' }}>
+            <Select
+                value={rowsPerPage}
+                onChange={onRowsPerPageChange}
+                sx={{ ml: 2, minWidth: '80px', color: '#fff' }}
+            >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+            </Select>
             <IconButton
                 onClick={handleFirstPageButtonClick}
                 disabled={page === 0}
@@ -68,15 +77,6 @@ export const TPA = (props: any) => {
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
             </IconButton>
-            <Select
-                value={rowsPerPage}
-                onChange={onRowsPerPageChange}
-                sx={{ ml: 2, minWidth: '80px', color: '#fff' }}
-            >
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
-            </Select>
         </Box>
     );
 }
