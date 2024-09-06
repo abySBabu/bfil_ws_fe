@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverPath } from "../common";
 
-export async function listWS() {
+export async function listWSMap() {
     const configs = {
         url: serverPath.bfil + "ws_mapping/getallwsmapping",
         method: 'get',

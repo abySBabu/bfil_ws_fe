@@ -1,132 +1,154 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import {
-    TextField, Button, Snackbar, Alert, Box, Grid, MenuItem, Dialog, DialogActions,
-    DialogContent, DialogTitle, Container, CircularProgress
-} from '@mui/material';
-import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
+import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
-let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
-
+import { mapDataType, wsData } from "./WatershedMappingMgmtType";
+import { addWS } from '../../Services/wsMappingService';
+import { listWS } from '../../Services/wsService';
+import { usersList } from '../../Services/userService'
+import CircularProgress from '@mui/material/CircularProgress';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 interface MapFormInput {
-    remarks: string;
-    ws_name: string;
-    userName: string;
+    ws_name: number,
+    user: number,
+    remarks: string
 }
-
-interface UserTypeOption {
-    id: number;
-    value: any; // Replace 'any' with the specific type of 'value' if known
-}
-
-type userTypeProps = {
-    show: boolean;
-    hide: () => void;
-    action: string;
-    userDetails?: allUserType;
-    userList: allUserType[];
-}
-export default function UserForm(props: userTypeProps) {
+export default function (props: mapTypeProps) {
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(props.show);
-    const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
-    const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
-    const [managerList, setManagerList] = useState<allUserType[]>([]);
-    const loginTypeOptions = selectOptions.loginTypeOptions;
+    const [wsList, setWsList] = useState<wsData[]>([]);
+    const [selectedWs, setSelectedWs] = useState<wsData | null>(null);
+    const [userList, setUserList] = useState<allUserType[]>([]);
+    let companyID: any;
     let userId: any;
+    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
+    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<MapFormInput>(
-        {
-            defaultValues: {
-                remarks: '',
-                ws_name: '',
-                userName: '',
-            }
-        });
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<MapFormInput>();
+
+
+    if (companyIdFromLocalStorage !== null) {
+        companyID = parseInt(companyIdFromLocalStorage);
+    }
+    if (userIdFromLocalStorage !== null) {
+        userId = parseInt(userIdFromLocalStorage);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await getRolesByCompany(companyId);
-                if (resp) setRolesListFromService(resp);
+                let resp = await listWS();
+                if (resp) {
+                    setWsList(resp);
+                }
+                let userResp = await usersList(companyId);
+                let temp: allUserType[] = userResp;
+                if (props.action === "Add") {
+                    let userListTemp = temp.filter(user => user.userBlockedFlag === "N")
+                    const sorteduserList = userListTemp.sort((a: { userName: string; }, b: { userName: string; }) => {
+                        if (a.userName < b.userName) return -1;
+                        if (a.userName > b.userName) return 1;
+                        return 0;
+                    });
 
-                const managerListTemp = props.userList.filter(user => user.userBlockedFlag === "N")
-                    .sort((a, b) => a.userName.localeCompare(b.userName));
+                    setUserList(sorteduserList);
 
-                setManagerList(managerListTemp);
+                }
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
         };
 
-        const setUserFeatureList = () => {
-            const featuresString = sessionStorage.getItem("features");
-            const features = featuresString ? featuresString.split(',') : [];
-            const featuresWithIdAndValue = features.map((feature, i) => ({ id: i, value: feature }));
-            setUserTypeOptions(featuresWithIdAndValue);
-        };
-
-        setUserFeatureList();
         fetchData();
-
-        if (props.userDetails) {
-            setTimeout(() => {
-                setValue('remarks', props.userDetails?.userName || '');
-                setValue('ws_name', props.userDetails?.userRoleList?.[0]?.roleName || '');
-                setValue('userName', props.userDetails?.managerName || '');
-            }, 0);
-        }
-    }, [props.userDetails, props.action, setValue]);
+    }, []);
 
     const handleClose = () => {
         setModalShow(false);
         props.hide();
     };
 
-    const addUser: SubmitHandler<MapFormInput> = async (value) => {
-        setLoading(true);  
+    const handleWatershedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedWsId = Number(event.target.value);
+        setValue('ws_name', selectedWsId);  // Set watershed id
+
+        // Find the selected watershed from the list and update the state
+        const selectedWsData = wsList.find(ws => ws.wsId === selectedWsId) || null;
+        setSelectedWs(selectedWsData);
+    };
+
+    const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedUserId = Number(event.target.value);
+        setValue('user', selectedUserId);  // Set user id
+    };
+
+    const addMap: SubmitHandler<MapFormInput> = async (value) => {
+        setLoading(true);
+        try {
+            let mapData = {
+                userId: value.user,
+                watershedId: value.ws_name,
+                createdUser: userId,
+                updatedUser: userId,
+                remarks: value.remarks,
+            }
+            console.log("mapData.........", mapData)
+
+            let resp = await addWS(mapData);
+            if (resp) {
+                setSeverityColor("success");
+                setMessage("WaterShed mapping created successfully");
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                    handleClose();
+                }, setTimeoutsecs);
+            }
+        } catch (error: any) {
+            if (error && error.response && error.response.data && error.response.data.message) {
+                setSeverityColor("error");
+                setMessage(error.response.data.message);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                }, setAutoHideDurationTimeoutsecs)
+            }
+        }
     }
-
-
-    const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue('ws_name', event.target.value);
-    };
-
-    const handleManagerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue('userName', event.target.value);
-    };
 
     return (
         <Container>
-            <Dialog open={modalShow}>
-                <DialogTitle>Edit User</DialogTitle>
+            <Dialog
+                open={modalShow}
+            >
+                <DialogTitle>Add Watershed Mapping</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                             <TextField
                                 select
                                 margin="normal"
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                value={watch('userName')}
-                                id="userName"
+                                id="user"
                                 label="User Name"
-                                {...register('userName', {
-                                    required: 'User Name is required'
+                                {...register('user', {
+                                    required: 'User Name Set is required'
                                 })}
-                                error={!!errors.userName}
-                                helperText={errors.userName?.message}
+                                error={!!errors.user}
+                                helperText={errors.user ? errors.user.message : ''}
+                                onChange={handleUserChange}
                             >
-                                {managerList.map((option, index) => (
-                                    <MenuItem key={index} value={option.userName}>{option.userName}</MenuItem>
-                                ))}
+                                {userList.map((option, index) => (<MenuItem key={index} value={option.userId}>{option.userName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                             <TextField
                                 select
                                 required
@@ -134,52 +156,70 @@ export default function UserForm(props: userTypeProps) {
                                 fullWidth
                                 id="ws_name"
                                 label="Watershed Name"
-                                InputLabelProps={{ shrink: true }}
-                                value={watch('ws_name')}
                                 {...register('ws_name', {
-                                    required: 'Watershed Name is required'
+                                    required: 'Watershed Name Set is required'
                                 })}
                                 error={!!errors.ws_name}
-                                helperText={errors.ws_name?.message}
+                                helperText={errors.ws_name ? errors.ws_name.message : ''}
+                                onChange={handleWatershedChange}
                             >
-                                {rolesListFromService.map((option, index) => (
-                                    <MenuItem key={index} value={option.roleName}>{option.roleName}</MenuItem>
-                                ))}
+                                {wsList.map((option, index) => (<MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12}>
+                            <Divider textAlign="left">Watershed Details</Divider>
+                        </Grid>
+                        <Grid item xs={4}><TextField label='Description' disabled value={selectedWs?.wsDescription} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='State' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='District' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='Taluka' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label="Grampanchayat" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label="Village" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="remarks"
                                 label="Remarks"
                                 autoFocus
-                                InputLabelProps={{ shrink: true }}
                                 {...register('remarks', {
                                     pattern: {
                                         value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
-                                        message: 'Name must only contain alphanumeric characters'
+                                        message: 'Remarks must only contain alphanumeric characters'
                                     }
                                 })}
                                 error={!!errors.remarks}
-                                helperText={errors.remarks?.message}
+                                helperText={errors.remarks ? errors.remarks.message : ''}
                             />
                         </Grid>
                     </Box>
+
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={handleSubmit(addUser)} color="primary">
-                        Update {loading ? <CircularProgress size={24} /> : null}
-                    </Button>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
-                <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
+                <Alert
+                    onClose={() => setOpenSnackbar(false)}
+                    severity={severityColor}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
                     {message}
                 </Alert>
             </Snackbar>
         </Container>
     );
+};
+
+type mapTypeProps = {
+    show: boolean;
+    hide: () => void;
+    action: string;
+    mapList: mapDataType[];
+    mapDetails: mapDataType;
+
 }

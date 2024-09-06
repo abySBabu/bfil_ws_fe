@@ -4,27 +4,28 @@ import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
 } from '@mui/material';
+import { listWSMap } from '../../Services/wsMappingService';
+import { listWS } from '../../Services/wsService';
 import { usersList } from '../../Services/userService';
 import { TPA } from '../../common';
-import { allUserType, selectOptions } from "../UserPage/UserManagementType";
+import { mapDataType, wsData } from "./WatershedMappingMgmtType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import MapEdit from './MapEdit';
 import MapAdd from './MapAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonIcon from '@mui/icons-material/Person';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { allUserType } from '../UserPage/UserManagementType';
 
 export default function MappingList() {
-    const blockedUserOptions = selectOptions.blockedUserOptions;
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [page, setPage] = React.useState(0);
-    const [mapData, setmapData] = useState<allUserType[]>([]);
+    const [mapData, setmapData] = useState<mapDataType[]>([]);
+    const [userList, setUserList] = useState<allUserType[]>([]);
+    const [wsList, setWsList] = useState<wsData[]>([]);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [searchQuery, setSearchQuery] = useState('');
     const [tableDialog, setTableDialog] = useState(false);
-    const [selectedRow, setSelectedRow] = useState<allUserType>();
+    const [selectedRow, setSelectedRow] = useState<mapDataType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
@@ -44,11 +45,14 @@ export default function MappingList() {
         return `${day}-${month}-${year}`;
     }
 
-    const fetchUserData = async () => {
+    const fetchMapData = async () => {
         try {
-            let resp = await usersList(companyId);
-            console.log("getuserData -", resp)
+            let resp = await listWSMap();
             setmapData(resp);
+            let userData = await usersList(companyId);
+            setUserList(userData);
+            let wsDatalist = await listWS();
+            setWsList(wsDatalist);
         } catch (error) {
 
             console.log(error)
@@ -56,17 +60,17 @@ export default function MappingList() {
     };
 
     useEffect(() => {
-        fetchUserData();
+        fetchMapData();
     }, []);
 
     function hideAddModal() {
         setShowAddModal(false)
-        fetchUserData();
+        fetchMapData();
     }
 
     function hideEditModal() {
         setShowEditModal(false)
-        fetchUserData();
+        fetchMapData();
     };
 
     const filteredData = mapData.filter(user => {
@@ -77,16 +81,24 @@ export default function MappingList() {
             return false;
         });
 
-        const roleMatchesSearchQuery = user.userRoleList.some(role =>
-            role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        return matchesSearchQuery || roleMatchesSearchQuery;
+        return matchesSearchQuery;
     });
 
+    function fetchUserData(userid: number) {
+        const user = userList.find(user => user.userId === userid);
+        return user ? user.userName : null;
+
+    };
+
+    function fetchWsData(wsId: number) {
+        const wsdatabyName = wsList.find(ws => ws.wsId === wsId);
+        return wsdatabyName ? wsdatabyName.wsName : null;
+
+    };
+
     return (<Box>
-        {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' userList={mapData} /> : null}
-        {showEditModal ? <MapEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={mapData} /> : null}
+        {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' mapList={mapData} /> : null}
+        {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
@@ -122,13 +134,13 @@ export default function MappingList() {
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
-                                {row.userName}
+                                {fetchWsData(row.watershedId)}
                             </TableCell>
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
-                                {row.mobileNumber}
+                                {fetchUserData(row.userId)}
                             </TableCell>
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
-                                {row.userRoleList[0].roleName}
+                                {row.remarks}
                             </TableCell>
                             <TableCell>
                                 <Tooltip title="Edit">

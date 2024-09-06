@@ -3,8 +3,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
+import { mapDataType, wsData } from "./WatershedMappingMgmtType";
 import { addWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
+import { usersList } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
@@ -13,38 +15,20 @@ interface MapFormInput {
     user: number,
     remarks: string
 }
-
-interface UserTypeOption {
-    id: number;
-    value: any; // You can replace 'any' with the specific type of 'value' if you know it
-}
-interface wsData {
-    wsId: number,
-    wsName: string,
-    wsDescription: string,
-    villageId: number,
-    mapLink: string
-}
-
-export default function (props: userTypeProps) {
-    const navigate = useNavigate();
+export default function (props: mapTypeProps) {
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
-    const locationNeededOptions = selectOptions.locationNeededOptions;
     const [modalShow, setModalShow] = useState(props.show);
     const [wsList, setWsList] = useState<wsData[]>([]);
     const [selectedWs, setSelectedWs] = useState<wsData | null>(null);
-    const featuresString = sessionStorage.getItem("features");
-    const features = featuresString ? featuresString.split(',') : [];
-    const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
     const [userList, setUserList] = useState<allUserType[]>([]);
-    const loginTypeOptions = selectOptions.loginTypeOptions;
     let companyID: any;
     let userId: any;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<MapFormInput>();
 
@@ -63,7 +47,8 @@ export default function (props: userTypeProps) {
                 if (resp) {
                     setWsList(resp);
                 }
-                let temp: allUserType[] = props.userList;
+                let userResp = await usersList(companyId);
+                let temp: allUserType[] = userResp;
                 if (props.action === "Add") {
                     let userListTemp = temp.filter(user => user.userBlockedFlag === "N")
                     const sorteduserList = userListTemp.sort((a: { userName: string; }, b: { userName: string; }) => {
@@ -79,26 +64,7 @@ export default function (props: userTypeProps) {
                 console.log(error)
             }
         };
-        const setUserFeatureList = () => {
-            const featuresWithIdAndValue = [];
-            for (let i = 0; i < features?.length; i++) {
-                const feature = {
-                    id: i,
-                    value: features[i]
-                };
-                featuresWithIdAndValue.push(feature);
-            }
-            if (featuresWithIdAndValue.length > 1) {
-                const featureTemp = {
-                    id: 3,
-                    value: featuresWithIdAndValue[0].value + "," + featuresWithIdAndValue[1].value
-                };
-                featuresWithIdAndValue.push(featureTemp);
-            }
-            setUserTypeOptions(featuresWithIdAndValue);
 
-        }
-        setUserFeatureList();
         fetchData();
     }, []);
 
@@ -249,10 +215,9 @@ export default function (props: userTypeProps) {
     );
 };
 
-type userTypeProps = {
+type mapTypeProps = {
     show: boolean;
     hide: () => void;
     action: string;
-    userDetails?: allUserType;
-    userList: allUserType[];
+    mapList: mapDataType[];
 }
