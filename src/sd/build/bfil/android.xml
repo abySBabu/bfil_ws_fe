@@ -21,9 +21,9 @@
   <string name="button_bgcolor_disabled">#d3d3d3</string>
   <string name="button_bradius_rounded">16px</string>
   <string name="button_bradius_pill">24px</string>
-  <string name="textfield_border_sel">1px solid #3b77b9</string>
+  <string name="textfield_border_sel">1px solid #cc802a</string>
   <string name="textfield_border_dis">1px solid #666</string>
-  <string name="textfield_label_sel">#3b77b9</string>
+  <string name="textfield_label_sel">#cc802a</string>
   <string name="textfield_label_dis">#666</string>
   <string name="modal_position_pos">absolute</string>
   <string name="modal_position_top">50%</string>

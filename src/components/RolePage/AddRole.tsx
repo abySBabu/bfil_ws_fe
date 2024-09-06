@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
     Checkbox, Container, Grid, Typography, Button, Snackbar, Alert, Dialog, DialogActions,
-    DialogContent, DialogTitle, CircularProgress, TextField, Box, Card
+    DialogContent, DialogTitle, CircularProgress, TextField, Box, Card, Divider
 } from '@mui/material';
 import { permissionByAppID } from './RoleManagement';
-import { permissionByAppId } from '../../Services/roleService';
+import { permissionByAppId, addRolePermission } from '../../Services/roleService';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 
 type userTypeProps = {
     show: boolean;
@@ -16,25 +17,70 @@ interface RoleFormInput {
     roleDesc: string,
     permList: [],
 }
+
+interface ScreenPermissionMapping {
+    screenName: string,
+    permission: permissionByAppID[]
+}
+interface Response {
+    [moduleName: string]: permissionByAppID[];
+}
 export default function AddRole(props: userTypeProps) {
-    const [selectedPermissions, setSelectedPermissions] = useState<permissionByAppID[]>([]);
+    const [selectedPermissions, setSelectedPermissions] = useState<ScreenPermissionMapping[]>([]);
+    const [checkedPermissions, setCheckedPermissions] = useState<permissionByAppID[]>([]);
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(props.show);
     let userId = sessionStorage.getItem("userId");
+    let companyID = sessionStorage.getItem("companyId");
+    let screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
 
     const handleClose = () => {
         setModalShow(false);
         props.hide();
     };
 
-
     const { register, handleSubmit, formState: { errors } } = useForm<RoleFormInput>();
 
     const addRole: SubmitHandler<RoleFormInput> = async (value) => {
+        console.log('value', value, checkedPermissions)
         setLoading(true);
+        try {
+            let mappingData = {
+                roleId: null,
+                companyId: companyID,
+                createdByUserId: userId,
+                updatedByUserId: userId,
+                permissionList: checkedPermissions,
+                roleDescription: value.roleDesc,
+                roleName: value.roleName
+            }
+            console.log("mappingData.........", mappingData)
+
+            let resp = await addRolePermission(mappingData);
+            if (resp) {
+                setSeverityColor("success");
+                setMessage("Role created successfully");
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                    handleClose();
+                }, setTimeoutsecs);
+            }
+        } catch (error: any) {
+            if (error && error.response && error.response.data && error.response.data.message) {
+                setSeverityColor("error");
+                setMessage(error.response.data.message);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                }, setAutoHideDurationTimeoutsecs)
+            }
+        }
     }
 
     useEffect(() => {
@@ -43,24 +89,96 @@ export default function AddRole(props: userTypeProps) {
             try {
                 let applicationID = sessionStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
-                let permissionList: permissionByAppID[] = resp;
-                if (resp) {
-                    // setPermissionsFromService(permissionList)
+                console.log('resp', resp);
+                let temporaryPermList: permissionByAppID[] = resp;
 
-                    const sortedpermissionList = permissionList.sort((a: { permissionName: string; }, b: { permissionName: string; }) => {
-                        if (a.permissionName < b.permissionName) return -1;
-                        if (a.permissionName > b.permissionName) return 1;
-                        return 0;
-                    });
-                    console.log('sortedperm', sortedpermissionList);
-                    setSelectedPermissions(sortedpermissionList)
+                if (resp) {
+                    let screenPermissionMappingList: ScreenPermissionMapping[] = [];
+                    for (let screenName of screenNameList) {
+
+                        let permissionList = temporaryPermList.filter(x => x.permissionName.includes(screenName) && (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT")));
+                        let screenPermissionMapping: ScreenPermissionMapping = {
+                            screenName: screenName,
+                            permission: permissionList
+                        };
+                        screenPermissionMappingList.push(screenPermissionMapping);
+
+                    }
+                    console.log("screenPermissionMappingList", screenPermissionMappingList)
+                    setSelectedPermissions(screenPermissionMappingList);
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         };
         fetchData();
     }, [props.show])
+
+    // const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     let updatedCheckedPermissions: permissionByAppID[];
+
+    //     if (event.target.checked) {
+    //         updatedCheckedPermissions = [...checkedPermissions, perm];
+    //     } else {
+    //         updatedCheckedPermissions = checkedPermissions.filter(p => p !== perm);
+    //     }
+
+    //     setCheckedPermissions(updatedCheckedPermissions);
+    // };
+    const handleCheckboxChange = (perm: permissionByAppID, isEdit: boolean) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let updatedCheckedPermissions: permissionByAppID[] = [...checkedPermissions];
+
+        if (event.target.checked) {
+            // Add the current permission
+            updatedCheckedPermissions.push(perm);
+
+            if (isEdit) {
+                // If the 'Edit' permission is checked, find and check the corresponding 'View' permission
+                const screen = selectedPermissions.find(screenData =>
+                    screenData.permission.some(p => p.permissionId === perm.permissionId)
+                );
+
+                if (screen) {
+                    const viewPerm = screen.permission.find(p =>
+                        p.permissionName.startsWith("VIEW") &&
+                        p.permissionName.includes(perm.permissionName.replace("EDIT", ""))
+                    );
+
+                    if (viewPerm && !updatedCheckedPermissions.includes(viewPerm)) {
+                        // Auto-select the corresponding 'View' permission if not already selected
+                        updatedCheckedPermissions.push(viewPerm);
+                    }
+                }
+            }
+        } else {
+            // Remove the unchecked permission
+            updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== perm.permissionId);
+
+            if (isEdit) {
+                // Optionally remove the corresponding 'View' permission when 'Edit' is unchecked
+                const screen = selectedPermissions.find(screenData =>
+                    screenData.permission.some(p => p.permissionId === perm.permissionId)
+                );
+
+                if (screen) {
+                    const viewPerm = screen.permission.find(p =>
+                        p.permissionName.startsWith("VIEW") &&
+                        p.permissionName.includes(perm.permissionName.replace("EDIT", ""))
+                    );
+
+                    if (viewPerm) {
+                        // Remove the 'View' permission
+                        updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== viewPerm.permissionId);
+                    }
+                }
+            }
+        }
+
+        setCheckedPermissions(updatedCheckedPermissions);
+    };
+
+
+
 
     return (
         <Container>
@@ -108,43 +226,69 @@ export default function AddRole(props: userTypeProps) {
                                 helperText={errors.roleDesc ? errors.roleDesc.message : ''}
                             />
                         </Grid>
-                        <Container sx={{marginTop:'3%'}}>
-                                <Box component={Grid} container spacing={2} alignItems="center">
-                                    {/* Header Row */}
-                                    <Grid item xs={6}></Grid>
-                                    <Grid item xs={3}>
-                                        <Typography variant="subtitle1">View</Typography>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Typography variant="subtitle1">Edit</Typography>
-                                    </Grid>
-                                    {/* User Management Row */}
-                                    <Grid item xs={6}>
-                                        <Typography variant="h6">User Management</Typography>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Checkbox />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Checkbox />
-                                    </Grid>
-                                    {/* Role Management Row */}
-                                    <Grid item xs={6}>
-                                        <Typography variant="h6">Role Management</Typography>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Checkbox />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Checkbox />
-                                    </Grid>
-                                </Box>
-                        </Container>
+                        <Card sx={{ marginTop: '3%', padding: '2%' }}>
+                            <Box component={Grid} container spacing={1} sx={{
+                                border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                borderRadius: '4px'
+                            }}>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4}>
+                                    <Typography >View</Typography>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Typography >Edit</Typography>
+                                </Grid>
+                                {selectedPermissions.map((screendata, index) => (
+
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={4}>
+                                            <Typography sx={{fontWeight:'bold'}} >{screendata.screenName}</Typography>
+                                        </Grid>
+                                        {screendata.permission
+                                            .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                            .map((perm: permissionByAppID) => (
+                                                <React.Fragment key={perm.permissionId}>
+                                                    <Grid item xs={4}>
+                                                        <Checkbox
+                                                            checked={checkedPermissions.includes(perm)}
+                                                            onChange={handleCheckboxChange(perm, false)}
+                                                        />
+                                                    </Grid>
+                                                </React.Fragment>
+                                            ))}
+                                        {/* Filter and map EDIT permissions */}
+                                        {screendata.permission
+                                            .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                            .map((perm: permissionByAppID) => (
+                                                <React.Fragment key={perm.permissionId}>
+                                                    <Grid item xs={4}>
+                                                        <Checkbox
+                                                            checked={checkedPermissions.includes(perm)}
+                                                            onChange={handleCheckboxChange(perm, true)}
+                                                        />
+                                                    </Grid>
+                                                </React.Fragment>
+                                            ))}
+                                        {screendata.permission
+                                            .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
+                                            .map((perm: permissionByAppID) => (
+                                                <React.Fragment key={perm.permissionId}>
+                                                    <Grid item xs={4}>
+                                                        <Checkbox
+                                                            onChange={handleCheckboxChange(perm, false)}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                </React.Fragment>
+                                            ))}
+                                    </React.Fragment>))}
+                            </Box>
+                        </Card>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit(addRole)}>Add</Button>
+                    <Button disabled={loading} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>

@@ -1,0 +1,38 @@
+import { test, expect, chromium, Page } from '@playwright/test';
+
+test('should click the edit icon in the table row', async () => {
+
+    test.setTimeout(800000);
+    const browser = await chromium.launch({
+        headless: false,
+        channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/login');
+    await page.fill('input#userName', '9677694777');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+
+    await page.waitForURL('http://localhost:3000/home', { timeout: 600000 });
+    await page.reload();  // this load is used to retrive some fields
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+    // Navigate to the page where the table is rendered
+    await page.goto('http://localhost:3000'); // Change to your app's URL
+
+    // Wait for the table to be visible
+    await page.waitForSelector('table');
+
+    // Select the edit icon in the first row and click it
+    const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
+    await editIcon.click();
+
+    // Verify that the edit modal or form is displayed
+    const editModal = await page.locator('#edit-modal'); 
+    await expect(editModal).toBeVisible();
+
+});
+

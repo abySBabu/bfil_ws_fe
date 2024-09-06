@@ -20,6 +20,11 @@ const actObj = {
     funds_src: ""
 }
 
+const ImgCard = (img: string) => (<Card sx={{ height: '100px', width: '100px', border: '1px solid black', }}>
+    <img src={`${process.env.PUBLIC_URL}/images/${img}`} alt={`${img}`}
+        style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
+</Card>)
+
 export const WsActivity: React.FC = () => {
     const [selected, setselected] = React.useState(0);
     const [edt, setedt] = React.useState(false);
@@ -45,14 +50,20 @@ export const WsActivity: React.FC = () => {
                 <TableRow onClick={() => { setselected(2); }}>
                     <TableCell>Watershed 2</TableCell>
                     <TableCell>Demand</TableCell>
-                    <TableCell>Drip/Sprinkler</TableCell>
-                    <TableCell>200 sqft</TableCell>
+                    <TableCell>Sustainable Practice</TableCell>
+                    <TableCell>Crop Rotation</TableCell>
                 </TableRow>
                 <TableRow onClick={() => { setselected(3); }}>
                     <TableCell>Watershed 1</TableCell>
                     <TableCell>Demand</TableCell>
                     <TableCell>Members Capacitated</TableCell>
-                    <TableCell>7</TableCell>
+                    <TableCell>27</TableCell>
+                </TableRow>
+                <TableRow onClick={() => { setselected(4); }}>
+                    <TableCell>Watershed 1</TableCell>
+                    <TableCell>Demand</TableCell>
+                    <TableCell>Drip/Sprinkler</TableCell>
+                    <TableCell>34 #</TableCell>
                 </TableRow>
             </TableBody>
 
@@ -68,19 +79,21 @@ export const WsActivity: React.FC = () => {
             </TableRow></TableFooter>
         </Table>
 
-        <Dialog open={Boolean(selected)}>
+        <Dialog open={Boolean(selected)} maxWidth='xl'>
             <DialogTitle>{
                 selected === 1 ?
                     "Earthen bunding"
                     : selected === 2 ?
                         "Sustainable Agriculture"
-                        :
-                        "Members capacitated"
+                        : selected === 3 ?
+                            "Members capacitated"
+                            :
+                            "Drip/Sprinkler "
             }</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>{selected === 3 ? <>
 
-                <Grid item xs={3}><TextField disabled label='Event Name' value="Watershed 1" /></Grid>
+                <Grid item xs={3}><TextField disabled label='Event Name' value="October Meeting" /></Grid>
                 <Grid item xs={3}><TextField select disabled={!edt} label='Event Type' value="Camp">
                     <MenuItem value='Group discussion'>Group discussion</MenuItem>
                     <MenuItem value='Training'>Training</MenuItem>
@@ -89,41 +102,29 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField disabled label='Event Date' value="04.10.2024" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Target Group' value="Farmers" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled label='Habitations' value="Village A, Village C" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
                 <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
                 <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
                 <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Total Participants' value="27" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Male Participants' value="16" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Female Participants' value="11" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
+                <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Facilitator' value="Prabhakar" /></Grid>
                 <Grid item xs={3}><TextField disabled={!edt} label='Mobilizer' value="Nagraj" /></Grid>
                 <Grid item xs={6}><TextField disabled={!edt} label='Remarks' value="Remarks" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
-                <Grid item xs={2}><Card sx={{
-                    height: '100px', width: '100px', p: 1,
-                    border: '1px solid black', display: 'flex',
-                    flexDirection: 'column', justifyContent: 'flex-end'
-                }}>
-                    <Typography>Img Event</Typography>
-                </Card></Grid>
-                <Grid item xs={2}><Card sx={{
-                    height: '100px', width: '100px', p: 1,
-                    border: '1px solid black', display: 'flex',
-                    flexDirection: 'column', justifyContent: 'flex-end'
-                }}>
-                    <Typography>Img Attendance</Typography>
-                </Card></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={2}>{ImgCard("wsact4.jpeg")}</Grid>
+                <Grid item xs={2}>{ImgCard("wsact5.jpg")}</Grid>
             </> : <>
                 <Grid item xs={3}><TextField disabled label='Intervention Type' value={selected === 1 ? "Supply" : "Demand"} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Activity' value={selected === 1 ? "Earthen bunding" : selected === 2 ? "Sustainable Agriculture Practice" : "Members Capacitated"} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Activity' value={selected === 1 ? "Earthen bunding" : selected === 2 ? "Sustainable Agriculture Practice" : "Drip/Sprinkler"} /></Grid>
                 {selected === 2 && <Grid item xs={3}><TextField disabled label='Sustainable Practice' value="Crop Rotation" /></Grid>}
 
                 <Grid item xs={12}><Divider component={Typography} textAlign='left'>Watershed Details</Divider></Grid>
@@ -139,7 +140,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField disabled={!edt} label='Total Units' value="200 sqft" /></Grid>
                 {selected === 1 && <>
                     <Grid item xs={3}><TextField select disabled={!edt} label='Land Type' value="Wet land">
-                        <MenuItem value='Wet land'>Wet land</MenuItem>
+                        <MenuItem value='Wet land'>Public</MenuItem>
                     </TextField></Grid>
 
                     <Grid item xs={3}><TextField disabled={!edt} label="Water Conserved (litres)" value="40000" /></Grid>
@@ -156,28 +157,10 @@ export const WsActivity: React.FC = () => {
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
 
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'></Divider></Grid>
-                <Grid item xs={2}><Card sx={{
-                    height: '100px', width: '100px', p: 1,
-                    border: '1px solid black', display: 'flex',
-                    flexDirection: 'column', justifyContent: 'flex-end'
-                }}>
-                    <Typography>Img 1</Typography>
-                </Card></Grid>
-                <Grid item xs={2}><Card sx={{
-                    height: '100px', width: '100px', p: 1,
-                    border: '1px solid black', display: 'flex',
-                    flexDirection: 'column', justifyContent: 'flex-end'
-                }}>
-                    <Typography>Img 2</Typography>
-                </Card></Grid>
-                <Grid item xs={2}><Card sx={{
-                    height: '100px', width: '100px', p: 1,
-                    border: '1px solid black', display: 'flex',
-                    flexDirection: 'column', justifyContent: 'flex-end'
-                }}>
-                    <Typography>Img 3</Typography>
-                </Card></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
+                <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
+                <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
             </>}</Grid></DialogContent>
 
             <DialogActions>{

@@ -169,7 +169,7 @@ export default function (props: userTypeProps) {
                                 {...register('userName', {
                                     required: 'Name is required',
                                     pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
                                         message: 'Name must only contain alphanumeric characters'
                                     }
                                 })}
@@ -187,7 +187,7 @@ export default function (props: userTypeProps) {
                                 {...register('employeeCode', {
                                     required: 'Employee Code is required',
                                     pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,                                        
                                         message: 'Employee Code must only contain alphanumeric characters'
                                     }
                                 })}
@@ -203,7 +203,7 @@ export default function (props: userTypeProps) {
                                 label="Designation"
                                 {...register('designation', {
                                     pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
                                         message: 'Designation must only contain alphanumeric characters'
                                     }
                                 })}
