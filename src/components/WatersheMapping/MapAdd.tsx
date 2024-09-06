@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
-import { getRolesByCompany, createUser } from '../../Services/userService';
+import { addWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
@@ -122,10 +121,40 @@ export default function (props: userTypeProps) {
         setValue('user', selectedUserId);  // Set user id
     };
 
-    const addUser: SubmitHandler<MapFormInput> = async (value) => {
-        console.log('value', value)
+    const addMap: SubmitHandler<MapFormInput> = async (value) => {
         setLoading(true);
+        try {
+            let mapData = {
+                userId: value.user,
+                watershedId: value.ws_name,
+                createdUser: userId,
+                updatedUser: userId,
+                remarks: value.remarks,
+            }
+            console.log("mapData.........", mapData)
 
+            let resp = await addWS(mapData);
+            if (resp) {
+                setSeverityColor("success");
+                setMessage("WaterShed mapping created successfully");
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                    handleClose();
+                }, setTimeoutsecs);
+            }
+        } catch (error: any) {
+            if (error && error.response && error.response.data && error.response.data.message) {
+                setSeverityColor("error");
+                setMessage(error.response.data.message);
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                    setLoading(false);
+                }, setAutoHideDurationTimeoutsecs)
+            }
+        }
     }
 
     return (
@@ -172,7 +201,7 @@ export default function (props: userTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                        <Divider textAlign="left">Watershed Details</Divider>
+                            <Divider textAlign="left">Watershed Details</Divider>
                         </Grid>
                         <Grid item xs={4}><TextField label='Description' disabled value={selectedWs?.wsDescription} InputLabelProps={{ shrink: true }} /></Grid>
                         <Grid item xs={4}><TextField label='State' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
@@ -203,7 +232,7 @@ export default function (props: userTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit(addUser)}>Add</Button>
+                    <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
