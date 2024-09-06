@@ -69,6 +69,7 @@ export const bfilTheme = createTheme({
         MuiTableHead: {
             styleOverrides: {
                 root: {
+                    position: 'sticky', top: 0, zIndex: 1,
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
                     '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
                 }
@@ -77,7 +78,7 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    overflow: 'auto',
+                    maxHeight: '640px', overflow: 'auto',
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
                     //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },
@@ -87,6 +88,7 @@ export const bfilTheme = createTheme({
         MuiTableFooter: {
             styleOverrides: {
                 root: {
+                    position: 'sticky', bottom: 0, zIndex: 1,
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
                     '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
                 }

@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography, Select, MenuItem, useTheme, ThemeProvider } from '@mui/material';
+import { Box, IconButton, Typography, ThemeProvider } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -17,7 +17,6 @@ export const btnSx = {
 }
 
 export const TPA = (props: any) => {
-    const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props;
 
     const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {

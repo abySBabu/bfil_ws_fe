@@ -1,17 +1,17 @@
 import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    Paper, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider,
-    IconButton
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { sd, TPA } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 
 const defObj = {
+    wsId: 0,
     wsName: "",
     wsDescription: "",
-    stateId: "Karnataka",
+    stateId: 1,
     districtId: "",
     talukId: "",
     grampanchayatId: "",
@@ -24,9 +24,9 @@ export const WsMaster: React.FC = () => {
     const [rPP, setrPP] = React.useState(10);
     const tHeads: string[] = ['Watershed', 'Description', 'Villages', 'Actions'];
     const [wsList, setwsList] = React.useState<typeof defObj[]>([]);
-    const [addObj, setaddObj] = React.useState(defObj);
+    const [wsObj, setwsObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
-    const [selected, setselected] = React.useState(false);
+    const [editM, seteditM] = React.useState(false);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -40,9 +40,9 @@ export const WsMaster: React.FC = () => {
     }, [])
 
     const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
-            stateId: e.target.value,
+        setwsObj({
+            ...wsObj,
+            stateId: parseInt(e.target.value),
             districtId: "",
             talukId: "",
             grampanchayatId: "",
@@ -51,8 +51,8 @@ export const WsMaster: React.FC = () => {
     }
 
     const districtCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
+        setwsObj({
+            ...wsObj,
             districtId: e.target.value,
             talukId: "",
             grampanchayatId: "",
@@ -61,8 +61,8 @@ export const WsMaster: React.FC = () => {
     }
 
     const talukCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
+        setwsObj({
+            ...wsObj,
             talukId: e.target.value,
             grampanchayatId: "",
             villageId: ""
@@ -70,8 +70,8 @@ export const WsMaster: React.FC = () => {
     }
 
     const panchayatCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
+        setwsObj({
+            ...wsObj,
             grampanchayatId: e.target.value,
             villageId: ""
         })
@@ -79,29 +79,29 @@ export const WsMaster: React.FC = () => {
 
     const WSadd = async () => {
         try {
-            const defObj = {
-                wsName: "Watershed B",
-                wsDescription: "WS for villages 1, 3, and 4",
-                stateId: 1,
-                districtId: 2,
-                talukId: 3,
-                grampanchayatId: 4,
-                villageId: 5,
-                mapLink: "hvdihbidcbiunboan"
-            }
-            const resp = await addWS(defObj)
+            const resp = await addWS(wsObj)
             if (resp) { console.log('Add success') }
         }
         catch (error) { console.log(error) }
+        setaddM(false);
+    }
+
+    const WSedit = async (id: number) => {
+        try {
+            const resp = await editWS(wsObj, id)
+            if (resp) { console.log('Add success') }
+        }
+        catch (error) { console.log(error) }
+        seteditM(false);
     }
 
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} />
-            <Button startIcon={<AddHome />} onClick={WSadd}>Add WS</Button>
+            <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>
         </Box>
 
-        <Paper sx={{ width: '100%', mb: 2 }}><TableContainer><Table>
+        <TableContainer sx={{ height: '80%', overflow: 'auto' }}><Table>
             <TableHead>
                 <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
                     {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
@@ -113,7 +113,7 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{w.villageId}</TableCell>
-                    <TableCell><IconButton><Edit onClick={() => setselected(true)} /></IconButton></TableCell>
+                    <TableCell><IconButton><Edit onClick={() => { setwsObj(w); seteditM(true); }} /></IconButton></TableCell>
                 </TableRow>
             ))}</TableBody>
 
@@ -123,51 +123,51 @@ export const WsMaster: React.FC = () => {
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[5, 10, 15]} //
-                    onRowsPerPageChange={(e) => setrPP(parseInt(e.target.value))} //
+                    rowsPerPageOptions={[5, 10, 15]}
+                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer></Paper>
+        </Table></TableContainer>
 
-        <Dialog open={selected} onClose={() => setselected(false)}>
-            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
-
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Watershed' value={addObj.wsName} onChange={(e) => setaddObj({ ...addObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={addObj.wsDescription} onChange={(e) => setaddObj({ ...addObj, wsDescription: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={addObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='District' value={addObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='Taluka' value={addObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Villages" value={addObj.villageId} onChange={(e) => setaddObj({ ...addObj, villageId: e.target.value })} /></Grid>
-            </Grid></DialogContent>
-
-            <DialogActions>
-                <Button onClick={() => setselected(false)}>Close</Button>
-                <Button>Add</Button>
-            </DialogActions>
-        </Dialog>
-
-        <Dialog open={addM} onClose={() => setaddM(false)}>
-            <DialogTitle>Survey 57. Earthen bunding</DialogTitle>
+        <Dialog open={addM}>
+            <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Watershed' value={addObj.wsName} onChange={(e) => setaddObj({ ...addObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={addObj.wsDescription} onChange={(e) => setaddObj({ ...addObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField label='Watershed' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={addObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='District' value={addObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='Taluka' value={addObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Village" value={addObj.villageId} onChange={(e) => setaddObj({ ...addObj, villageId: e.target.value })} /></Grid>
+                <Grid item xs={4}><TextField label='State' disabled value={wsObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='Taluka' value={wsObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })} /></Grid>
                 <Grid item xs={4} />
             </Grid></DialogContent>
 
             <DialogActions>
                 <Button onClick={() => setaddM(false)}>Close</Button>
                 <Button onClick={WSadd}>Add</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={editM}>
+            <DialogTitle>Edit {wsObj.wsName}</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={12}><TextField label='Watershed' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={4}><TextField label='State' disabled value={wsObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='Taluka' value={wsObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label="Villages" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })} /></Grid>
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => seteditM(false)}>Close</Button>
+                <Button onClick={() => WSedit(wsObj.wsId)}>Add</Button>
             </DialogActions>
         </Dialog>
     </>)
