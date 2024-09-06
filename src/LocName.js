@@ -1,3 +1,21 @@
+export const StateName = (id) => {
+    const list = JSON.parse(sessionStorage.getItem("StateList")) || null;
+    if (list) {
+        const obj = list.find(x => x.stateId === id);
+        return obj ? obj.stateName : id;
+    }
+    return id;
+}
+
+export const DistrictName = (id) => {
+    const list = JSON.parse(sessionStorage.getItem("DistrictList")) || null;
+    if (list) {
+        const obj = list.find(x => x.districtId === id);
+        return obj ? obj.districtName : id;
+    }
+    return id;
+}
+
 export const TalukName = (id) => {
     const list = JSON.parse(sessionStorage.getItem("TalukList")) || null;
     if (list) {
