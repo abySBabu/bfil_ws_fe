@@ -51,7 +51,7 @@ export async function listVillage() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function talukById(id: number) {
+export async function talukById(id: any) {
     const configs = {
         url: serverPath.bfil + `taluk/gettalukbydistrictid/${id}`,
         method: 'get',
@@ -61,7 +61,7 @@ export async function talukById(id: number) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function panchayatById(id: number) {
+export async function panchayatById(id: any) {
     const configs = {
         url: serverPath.bfil + `gram_panchayat/getpanchayatbyid/${id}`,
         method: 'get',
@@ -71,7 +71,7 @@ export async function panchayatById(id: number) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function VillageById(id: number) {
+export async function VillageById(id: any) {
     const configs = {
         url: serverPath.bfil + `village/getVillagesbyById/${id}`,
         method: 'get',
