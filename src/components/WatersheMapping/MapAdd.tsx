@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
 import { getRolesByCompany, createUser } from '../../Services/userService';
+import { listWS } from '../../Services/wsService';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 interface MapFormInput {
-    ws_name: string,
-    user: string,
+    ws_name: number,
+    user: number,
     remarks: string
 }
 
 interface UserTypeOption {
     id: number;
     value: any; // You can replace 'any' with the specific type of 'value' if you know it
+}
+interface wsData {
+    wsId: number,
+    wsName: string,
+    wsDescription: string,
+    villageId: number,
+    mapLink: string
 }
 
 export default function (props: userTypeProps) {
@@ -27,7 +35,8 @@ export default function (props: userTypeProps) {
     const [loading, setLoading] = useState(false);
     const locationNeededOptions = selectOptions.locationNeededOptions;
     const [modalShow, setModalShow] = useState(props.show);
-    const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
+    const [wsList, setWsList] = useState<wsData[]>([]);
+    const [selectedWs, setSelectedWs] = useState<wsData | null>(null);
     const featuresString = sessionStorage.getItem("features");
     const features = featuresString ? featuresString.split(',') : [];
     const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
@@ -37,6 +46,9 @@ export default function (props: userTypeProps) {
     let userId: any;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
+
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<MapFormInput>();
+
 
     if (companyIdFromLocalStorage !== null) {
         companyID = parseInt(companyIdFromLocalStorage);
@@ -48,9 +60,9 @@ export default function (props: userTypeProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let resp = await getRolesByCompany(companyID);
+                let resp = await listWS();
                 if (resp) {
-                    setRolesListFromService(resp);
+                    setWsList(resp);
                 }
                 let temp: allUserType[] = props.userList;
                 if (props.action === "Add") {
@@ -96,9 +108,22 @@ export default function (props: userTypeProps) {
         props.hide();
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<MapFormInput>();
+    const handleWatershedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedWsId = Number(event.target.value);
+        setValue('ws_name', selectedWsId);  // Set watershed id
+
+        // Find the selected watershed from the list and update the state
+        const selectedWsData = wsList.find(ws => ws.wsId === selectedWsId) || null;
+        setSelectedWs(selectedWsData);
+    };
+
+    const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedUserId = Number(event.target.value);
+        setValue('user', selectedUserId);  // Set user id
+    };
 
     const addUser: SubmitHandler<MapFormInput> = async (value) => {
+        console.log('value', value)
         setLoading(true);
 
     }
@@ -123,8 +148,9 @@ export default function (props: userTypeProps) {
                                 })}
                                 error={!!errors.user}
                                 helperText={errors.user ? errors.user.message : ''}
+                                onChange={handleUserChange}
                             >
-                                {userList.map((option, index) => (<MenuItem key={index} value={option.userName}>{option.userName}</MenuItem>))}
+                                {userList.map((option, index) => (<MenuItem key={index} value={option.userId}>{option.userName}</MenuItem>))}
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
@@ -140,14 +166,24 @@ export default function (props: userTypeProps) {
                                 })}
                                 error={!!errors.ws_name}
                                 helperText={errors.ws_name ? errors.ws_name.message : ''}
+                                onChange={handleWatershedChange}
                             >
-                                {rolesListFromService.map((option, index) => (<MenuItem key={index} value={option.roleName}>{option.roleName}</MenuItem>))}
+                                {wsList.map((option, index) => (<MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
+                        <Divider textAlign="left">Watershed Details</Divider>
+                        </Grid>
+                        <Grid item xs={4}><TextField label='Description' disabled value={selectedWs?.wsDescription} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='State' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='District' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label='Taluka' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label="Grampanchayat" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={4}><TextField label="Village" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="remarks"
                                 label="Remarks"
