@@ -8,7 +8,7 @@ export const tpaTheme = createTheme({
                 root: {
                     color: '#fff',
                     '&:hover': { color: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--button-bgcolor-active-brand') }
+                    '&.Mui-disabled': { color: '#000', opacity: 0.25 } //sd('--button-bgcolor-active-brand')
                 }
             }
         }
@@ -78,7 +78,7 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    maxHeight: '640px', overflow: 'auto',
+                    //maxHeight: '640px', overflow: 'auto',
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
                     //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },

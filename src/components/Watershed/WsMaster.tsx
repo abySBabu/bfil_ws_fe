@@ -1,17 +1,19 @@
 import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
+    MenuItem
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { sd, TPA } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
+import { listState, listDistrict, talukById, VillageById, panchayatById } from '../../Services/locationService';
 
 const defObj = {
     wsId: "",
     wsName: "",
     wsDescription: "",
-    stateId: "",
+    stateId: "1",
     districtId: "",
     talukId: "",
     grampanchayatId: "",
@@ -41,20 +43,15 @@ export const WsMaster: React.FC = () => {
             const resp1 = await listWS(); if (resp1) {
                 setwsList(resp1)
             }
+            const resp2 = await listState(); if (resp2) {
+                setstOps(resp2)
+            }
+            const resp3 = await listDistrict(); if (resp3) {
+                setdsOps(resp3)
+            }
         }
         catch (error) { console.log(error) }
     };
-
-    const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setwsObj({
-            ...wsObj,
-            stateId: e.target.value,
-            districtId: "",
-            talukId: "",
-            grampanchayatId: "",
-            villageId: ""
-        })
-    }
 
     const districtCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setwsObj({
@@ -107,7 +104,7 @@ export const WsMaster: React.FC = () => {
             <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>
         </Box>
 
-        <TableContainer sx={{ height: '80%', overflow: 'auto' }}><Table>
+        <TableContainer component={Paper} sx={{ height: '90%' }}><Table>
             <TableHead>
                 <TableRow>
                     {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
@@ -140,14 +137,16 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Watershed' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
                 <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={wsObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='Taluka' value={wsObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })} /></Grid>
+                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
+                    <MenuItem value={1}>Karnataka</MenuItem>
+                </TextField></Grid>
+                <Grid item xs={4}><TextField select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
+                <Grid item xs={4}><TextField select label='Taluka' value={wsObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
+                <Grid item xs={4}><TextField select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
+                <Grid item xs={4}><TextField select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })} /></Grid>
                 <Grid item xs={4} />
             </Grid></DialogContent>
 
@@ -164,7 +163,7 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={12}><TextField label='Watershed' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
                 <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={wsObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
+                <Grid item xs={4}><TextField label='State' disabled value={wsObj.stateId} /></Grid>
                 <Grid item xs={4}><TextField label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
                 <Grid item xs={4}><TextField label='Taluka' value={wsObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
                 <Grid item xs={4}><TextField label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
