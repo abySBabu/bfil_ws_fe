@@ -7,10 +7,39 @@ import UserList from './components/UserPage/UserList';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
 import MappingList from './components/WatersheMapping/MappingList';
+import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = React.useState(0);
     const sections = ['Dashboard', 'User Management', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
+
+    React.useEffect(() => {
+        const fetchLoc = async () => {
+            try {
+                const resp1 = await listState(); if (resp1) {
+                    console.log(resp1);
+                    sessionStorage.setItem("StateList", JSON.stringify(resp1))
+                }
+                const resp2 = await listDistrict(); if (resp2) {
+                    console.log(resp2);
+                    sessionStorage.setItem("DistrictList", JSON.stringify(resp2))
+                }
+                const resp3 = await listTaluk(); if (resp3) {
+                    console.log(resp3);
+                    sessionStorage.setItem("TalukList", JSON.stringify(resp3))
+                }
+                const resp4 = await listPanchayat(); if (resp4) {
+                    console.log(resp4);
+                    sessionStorage.setItem("PanList", JSON.stringify(resp4))
+                }
+                const resp5 = await listVillage(); if (resp5) {
+                    console.log(resp5);
+                    sessionStorage.setItem("VillageList", JSON.stringify(resp5))
+                }
+            }
+            catch (error) { console.log(error) }
+        }; fetchLoc();
+    }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>

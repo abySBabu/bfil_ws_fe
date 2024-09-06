@@ -43,7 +43,7 @@ export async function listPanchayat() {
 
 export async function listVillage() {
     const configs = {
-        url: serverPath.bfil + "village/getallVillages",
+        url: serverPath.bfil + "village/gatallVillages",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
