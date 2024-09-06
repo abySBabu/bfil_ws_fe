@@ -31,8 +31,8 @@ export const WsMaster: React.FC = () => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await listWS(); if (resp) {
-                    setwsList(resp)
+                const resp1 = await listWS(); if (resp1) {
+                    setwsList(resp1)
                 }
             }
             catch (error) { console.log(error) }
@@ -103,7 +103,7 @@ export const WsMaster: React.FC = () => {
 
         <TableContainer sx={{ height: '80%', overflow: 'auto' }}><Table>
             <TableHead>
-                <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
+                <TableRow>
                     {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
                 </TableRow>
             </TableHead>

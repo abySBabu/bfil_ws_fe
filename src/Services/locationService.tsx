@@ -21,7 +21,37 @@ export async function listDistrict() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function listTaluk(id: number) {
+export async function listTaluk() {
+    const configs = {
+        url: serverPath.bfil + "taluk/getallTaluk",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function listPanchayat() {
+    const configs = {
+        url: serverPath.bfil + "gram_panchayat/getAllPanchayat",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function listVillage() {
+    const configs = {
+        url: serverPath.bfil + "village/getallVillages",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function talukById(id: number) {
     const configs = {
         url: serverPath.bfil + `taluk/gettalukbydistrictid/${id}`,
         method: 'get',
@@ -31,7 +61,7 @@ export async function listTaluk(id: number) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function listPanchayat(id: number) {
+export async function panchayatById(id: number) {
     const configs = {
         url: serverPath.bfil + `gram_panchayat/getpanchayatbyid/${id}`,
         method: 'get',
@@ -41,9 +71,9 @@ export async function listPanchayat(id: number) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function listVillage(id: number) {
+export async function VillageById(id: number) {
     const configs = {
-        url: serverPath.bfil + `village/getVillagesbyId/${id}`,
+        url: serverPath.bfil + `village/getVillagesbyById/${id}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
