@@ -8,10 +8,10 @@ import { sd, TPA } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 
 const defObj = {
-    wsId: 0,
+    wsId: "",
     wsName: "",
     wsDescription: "",
-    stateId: 1,
+    stateId: "",
     districtId: "",
     talukId: "",
     grampanchayatId: "",
@@ -27,22 +27,28 @@ export const WsMaster: React.FC = () => {
     const [wsObj, setwsObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    //options lists
+    const [stOps, setstOps] = React.useState([]);
+    const [dsOps, setdsOps] = React.useState([]);
+    const [tlOps, settlOps] = React.useState([]);
+    const [panOps, setpanOps] = React.useState([]);
+    const [vilOps, setvilOps] = React.useState([]);
 
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const resp1 = await listWS(); if (resp1) {
-                    setwsList(resp1)
-                }
+    React.useEffect(() => { fetchData() }, [])
+
+    const fetchData = async () => {
+        try {
+            const resp1 = await listWS(); if (resp1) {
+                setwsList(resp1)
             }
-            catch (error) { console.log(error) }
-        }; fetchData();
-    }, [])
+        }
+        catch (error) { console.log(error) }
+    };
 
     const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setwsObj({
             ...wsObj,
-            stateId: parseInt(e.target.value),
+            stateId: e.target.value,
             districtId: "",
             talukId: "",
             grampanchayatId: "",
@@ -86,7 +92,7 @@ export const WsMaster: React.FC = () => {
         setaddM(false);
     }
 
-    const WSedit = async (id: number) => {
+    const WSedit = async (id: any) => {
         try {
             const resp = await editWS(wsObj, id)
             if (resp) { console.log('Add success') }
