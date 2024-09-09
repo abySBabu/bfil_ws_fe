@@ -5,10 +5,16 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { tpaTheme } from './theme';
 
-export const setTimeoutsecs = 1000;
+export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
 export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
+export const PerChk = (per: string): boolean => {
+    const permList = sessionStorage.getItem('permList');
+    const parsedPermList = permList ? JSON.parse(permList) : ['Null'];
+
+    return parsedPermList.map((p: string) => p.trim()).includes(per);
+};
 
 export const btnSx = {
     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',

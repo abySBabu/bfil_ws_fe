@@ -7,7 +7,7 @@ import {
 import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { usersList } from '../../Services/userService';
-import { TPA } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { mapDataType, wsData } from "./WatershedMappingMgmtType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -111,9 +111,10 @@ export default function MappingList() {
                         size="small"
                     />
                 </FormControl>
-                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add Mapping
-                </Button>
+                {PerChk('EDIT_Watershed Mapping') && (
+                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                        Add Mapping
+                    </Button>)}
             </Box >
         </Box>
 
@@ -124,7 +125,8 @@ export default function MappingList() {
                         <TableCell >Watershed Name</TableCell>
                         <TableCell >User Name</TableCell>
                         <TableCell >Remarks</TableCell>
-                        <TableCell >Action</TableCell>
+                        {PerChk('EDIT_Watershed Mapping') && (
+                            <TableCell >Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -142,11 +144,12 @@ export default function MappingList() {
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
                                 {row.remarks}
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title="Edit">
-                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
-                                </Tooltip>
-                            </TableCell>
+                            {PerChk('EDIT_Watershed Mapping') && (
+                                <TableCell>
+                                    <Tooltip title="Edit">
+                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                    </Tooltip>
+                                </TableCell>)}
 
                         </TableRow>
                     ))}

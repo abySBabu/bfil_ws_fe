@@ -5,13 +5,10 @@ import {
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
 } from '@mui/material';
 import { getRolesByCompany } from '../../Services/roleService';
-import { TPA } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { rolesByCompanyId } from "./RoleManagement";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonIcon from '@mui/icons-material/Person';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddRole from './AddRole';
 import EditRole from './EditRole';
 
@@ -50,7 +47,7 @@ export default function RoleList() {
         try {
             let resp = await getRolesByCompany(CompanyId);
             console.log("getRoleData -", resp);
-            let sorData=resp;
+            let sorData = resp;
             setRoleData(sorData.reverse());
         } catch (error) {
 
@@ -98,9 +95,10 @@ export default function RoleList() {
                         size="small"
                     />
                 </FormControl>
-                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add Role
-                </Button>
+                {PerChk('EDIT_Role Management') && (
+                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                        Add Role
+                    </Button>)}
             </Box >
         </Box>
 
@@ -110,7 +108,8 @@ export default function RoleList() {
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Role Name</TableCell>
                         <TableCell >Description</TableCell>
-                        <TableCell >Action</TableCell>
+                        {PerChk('EDIT_Role Management') && (
+                            <TableCell >Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -125,12 +124,12 @@ export default function RoleList() {
                             <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
                                 {row.roleDescription}
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title="Edit">
-                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
-                                </Tooltip>
-                            </TableCell>
-
+                            {PerChk('EDIT_Role Management') && (
+                                <TableCell>
+                                    <Tooltip title="Edit">
+                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                    </Tooltip>
+                                </TableCell>)}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -139,7 +138,7 @@ export default function RoleList() {
                         <TablePagination
                             count={filteredData.length}
                             page={page} rowsPerPage={rowsPerPage}
-                            onPageChange={(e, p) => { setPage(p) }} 
+                            onPageChange={(e, p) => { setPage(p) }}
                             rowsPerPageOptions={[]}
                             ActionsComponent={TPA}
                         />

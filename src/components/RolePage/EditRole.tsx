@@ -5,8 +5,10 @@ import {
     DialogContent, DialogTitle, CircularProgress, TextField, Box, Card
 } from '@mui/material';
 import { permissionByAppID, rolesByCompanyId } from './RoleManagement'; // Ensure correct import
-import { permissionByAppId, addRolePermission, updateRolePermission } from '../../Services/roleService';
+import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
+import { useNavigate } from 'react-router-dom';
+
 
 type RoleTypeProps = {
     show: boolean;
@@ -28,6 +30,7 @@ interface ScreenPermissionMapping {
 
 export default function EditRole(props: RoleTypeProps) {
     const { show, hide, roleDetails } = props;
+    const navigate = useNavigate();
 
     const [selectedPermissions, setSelectedPermissions] = useState<ScreenPermissionMapping[]>([]);
     const [checkedPermissions, setCheckedPermissions] = useState<permissionByAppID[]>([]);
@@ -55,7 +58,6 @@ export default function EditRole(props: RoleTypeProps) {
     });
 
     const editRole: SubmitHandler<RoleFormInput> = async (value) => {
-        console.log('value', value, checkedPermissions)
         setLoading(true);
         try {
             let mappingData = {
@@ -67,8 +69,6 @@ export default function EditRole(props: RoleTypeProps) {
                 roleDescription: value.roleDesc,
                 roleName: value.roleName
             }
-            console.log("mappingData.........", mappingData)
-
             let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
             if (resp) {
                 setSeverityColor("success");
@@ -78,8 +78,11 @@ export default function EditRole(props: RoleTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
+                    navigate('/');
                 }, setTimeoutsecs);
             }
+            // let getRoleresp = await getRolesByRole(roleDetails?.roleId);
+            // setPermissionList(getRoleresp.permissionList);
         } catch (error: any) {
             if (error && error.response && error.response.data && error.response.data.message) {
                 setSeverityColor("error");
@@ -92,6 +95,12 @@ export default function EditRole(props: RoleTypeProps) {
             }
         }
     }
+
+    // const setPermissionList = (permissionList: permissionByAppID[]) => {
+    //     const permissionNames = permissionList.map(permission => permission.permissionName);
+
+    //     sessionStorage.setItem("permList", JSON.stringify(permissionNames));
+    // };
 
     useEffect(() => {
         setModalShow(show);
@@ -195,113 +204,113 @@ export default function EditRole(props: RoleTypeProps) {
     };
 
     return (
-            <Container>
-                <Dialog
-                    open={modalShow}
-                    onClose={handleClose}
-                >
-                    <DialogTitle>Edit Role</DialogTitle>
-                    <DialogContent>
-                        <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                            <Grid item xs={6}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="roleName"
-                                    label="Role Name"
-                                    autoFocus
-                                    {...register('roleName', {
-                                        required: 'Role Name is required',
-                                        pattern: {
-                                            value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
-                                            message: 'Role Name must only contain alphanumeric characters'
-                                        }
-                                    })}
-                                    error={!!errors.roleName}
-                                    helperText={errors.roleName ? errors.roleName.message : ''}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="roleDesc"
-                                    label="Role Description"
-                                    {...register('roleDesc', {
-                                        required: 'Role Description is required',
-                                        pattern: {
-                                            value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
-                                            message: 'Role Description must only contain alphanumeric characters'
-                                        }
-                                    })}
-                                    error={!!errors.roleDesc}
-                                    helperText={errors.roleDesc ? errors.roleDesc.message : ''}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Card sx={{ marginTop: '3%', padding: '2%' }}>
-                                    <Box component={Grid} container spacing={1} sx={{
-                                        border: `2px solid ${sd('--button-bgcolor-disabled')}`,
-                                        borderRadius: '4px'
-                                    }}>
-                                        <Grid item xs={4}></Grid>
-                                        <Grid item xs={4}>
-                                            <Typography>View</Typography>
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Typography >Edit</Typography>
-                                        </Grid>
-                                        {selectedPermissions.map((screendata, index) => (
-                                            <React.Fragment key={index}>
-                                                <Grid item xs={4}>
-                                                    <Typography sx={{fontWeight:'bold'}}>{screendata.screenName}</Typography>
-                                                </Grid>
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("VIEW"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`view-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                            />
-                                                        </Grid>
-                                                    ))}
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`edit-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                            />
-                                                        </Grid>
-                                                    ))}
-                                                {screendata.permission
-                                                    .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`other-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                                disabled
-                                                            />
-                                                        </Grid>
-                                                    ))}
-                                            </React.Fragment>
-                                        ))}
-                                    </Box>
-                                </Card>
-                            </Grid>
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} disabled={loading}>Cancel</Button>
-                        <Button onClick={handleSubmit(editRole)} disabled={loading}>
-                            Edit {loading ? <CircularProgress size={24} /> : null}
-                        </Button>
-                    </DialogActions>
+        <Container>
+            <Dialog
+                open={modalShow}
+                onClose={handleClose}
+            >
+                <DialogTitle>Edit Role</DialogTitle>
+                <DialogContent>
+                    <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="roleName"
+                                label="Role Name"
+                                autoFocus
+                                {...register('roleName', {
+                                    required: 'Role Name is required',
+                                    pattern: {
+                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        message: 'Role Name must only contain alphanumeric characters'
+                                    }
+                                })}
+                                error={!!errors.roleName}
+                                helperText={errors.roleName ? errors.roleName.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="roleDesc"
+                                label="Role Description"
+                                {...register('roleDesc', {
+                                    required: 'Role Description is required',
+                                    pattern: {
+                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        message: 'Role Description must only contain alphanumeric characters'
+                                    }
+                                })}
+                                error={!!errors.roleDesc}
+                                helperText={errors.roleDesc ? errors.roleDesc.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Card sx={{ marginTop: '3%', padding: '2%' }}>
+                                <Box component={Grid} container spacing={1} sx={{
+                                    border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                    borderRadius: '4px'
+                                }}>
+                                    <Grid item xs={4}></Grid>
+                                    <Grid item xs={4}>
+                                        <Typography>View</Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography >Edit</Typography>
+                                    </Grid>
+                                    {selectedPermissions.map((screendata, index) => (
+                                        <React.Fragment key={index}>
+                                            <Grid item xs={4}>
+                                                <Typography sx={{ fontWeight: 'bold' }}>{screendata.screenName}</Typography>
+                                            </Grid>
+                                            {screendata.permission
+                                                .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                                .map((perm: permissionByAppID) => (
+                                                    <Grid item xs={4} key={`view-${perm.permissionId}`}>
+                                                        <Checkbox
+                                                            checked={isPermissionChecked(perm)}
+                                                            onChange={handleCheckboxChange(perm)}
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                            {screendata.permission
+                                                .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                                .map((perm: permissionByAppID) => (
+                                                    <Grid item xs={4} key={`edit-${perm.permissionId}`}>
+                                                        <Checkbox
+                                                            checked={isPermissionChecked(perm)}
+                                                            onChange={handleCheckboxChange(perm)}
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                            {screendata.permission
+                                                .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
+                                                .map((perm: permissionByAppID) => (
+                                                    <Grid item xs={4} key={`other-${perm.permissionId}`}>
+                                                        <Checkbox
+                                                            checked={isPermissionChecked(perm)}
+                                                            onChange={handleCheckboxChange(perm)}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                        </React.Fragment>
+                                    ))}
+                                </Box>
+                            </Card>
+                        </Grid>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleSubmit(editRole)} disabled={loading}>
+                        Edit {loading ? <CircularProgress size={24} /> : null}
+                    </Button>
+                </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
                 <Alert

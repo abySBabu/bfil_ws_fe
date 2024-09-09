@@ -5,7 +5,7 @@ import {
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
-import { TPA } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -127,9 +127,10 @@ export default function UserList() {
                         size="small"
                     />
                 </FormControl>
-                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add User
-                </Button>
+                {PerChk('EDIT_User Management') && (
+                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                        Add User
+                    </Button>)}
             </Box >
         </Box>
 
@@ -142,7 +143,8 @@ export default function UserList() {
                         <TableCell >Role</TableCell>
                         <TableCell >Manager Name</TableCell>
                         <TableCell >Block User</TableCell>
-                        <TableCell >Action</TableCell>
+                        {PerChk('EDIT_User Management') && (
+                            <TableCell >Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -181,23 +183,25 @@ export default function UserList() {
                                     return '';
                                 })()}
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title="Edit">
-                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
-                                </Tooltip>
-                                {row.userBlockedFlag === 'N' &&
-                                    <Tooltip title="Block User">
-                                        <PersonRemoveIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}></PersonRemoveIcon>
-                                    </Tooltip>}
-                                {row.userBlockedFlag === 'Y' &&
-                                    <Tooltip title="UnBlock User">
-                                        <PersonIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}></PersonIcon>
-                                    </Tooltip>}
-                                {row.userBlockedFlag === 'Y' &&
-                                    <Tooltip title="Delete User">
-                                        <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
-                                    </Tooltip>}
-                            </TableCell>
+                            {PerChk('EDIT_User Management') && (
+                                <TableCell>
+                                    <Tooltip title="Edit">
+                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                    </Tooltip>
+                                    {row.userBlockedFlag === 'N' &&
+                                        <Tooltip title="Block User">
+                                            <PersonRemoveIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}></PersonRemoveIcon>
+                                        </Tooltip>}
+                                    {row.userBlockedFlag === 'Y' &&
+                                        <Tooltip title="UnBlock User">
+                                            <PersonIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}></PersonIcon>
+                                        </Tooltip>}
+                                    {row.userBlockedFlag === 'Y' &&
+                                        <Tooltip title="Delete User">
+                                            <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
+                                        </Tooltip>}
+                                </TableCell>
+                            )}
 
                         </TableRow>
                     ))}
@@ -207,7 +211,7 @@ export default function UserList() {
                         <TablePagination
                             count={filteredData.length}
                             page={page} rowsPerPage={rowsPerPage}
-                            onPageChange={(e, p) => { setPage(p) }} 
+                            onPageChange={(e, p) => { setPage(p) }}
                             rowsPerPageOptions={[]}
                             ActionsComponent={TPA}
                         />

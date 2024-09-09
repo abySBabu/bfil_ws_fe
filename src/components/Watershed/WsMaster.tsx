@@ -5,7 +5,7 @@ import {
     MenuItem
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
-import { sd, TPA } from '../../common';
+import { sd, TPA, PerChk } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 import { listState, listDistrict, talukById, VillageById, panchayatById } from '../../Services/locationService';
 import { VillageName } from '../../LocName';
@@ -107,7 +107,8 @@ export const WsMaster: React.FC = () => {
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} />
-            <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>
+            {PerChk('EDIT_Watershed Master') && (
+                <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
         </Box>
 
         <TableContainer component={Paper} sx={{ height: '90%' }}><Table>
@@ -122,7 +123,8 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
-                    <TableCell><IconButton><Edit onClick={() => { setwsObj(w); seteditM(true); }} /></IconButton></TableCell>
+                    {PerChk('EDIT_Watershed Master') && (
+                        <TableCell><IconButton><Edit onClick={() => { setwsObj(w); seteditM(true); }} /></IconButton></TableCell>)}
                 </TableRow>
             ))}</TableBody>
 

@@ -21,6 +21,8 @@ export async function login(data: any) {
         sessionStorage.setItem("totalUser", response.data.totalUser);
         sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
         sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
+        sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
+
 
         return response.data;
         // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);
