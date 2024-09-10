@@ -25,7 +25,6 @@ const defObj = {
 export const WsMaster: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
-    const tHeads: string[] = ['Watershed', 'Description', 'Villages', 'Actions'];
     const [wsList, setwsList] = React.useState<typeof defObj[]>([]);
     const [wsObj, setwsObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
@@ -158,7 +157,10 @@ export const WsMaster: React.FC = () => {
         <TableContainer component={Paper}><Table>
             <TableHead>
                 <TableRow>
-                    {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
+                    <TableCell>Watershed</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Villages</TableCell>
+                    {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -167,8 +169,9 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
-                    {PerChk('EDIT_Watershed Master') && (
-                        <TableCell><IconButton onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton></TableCell>)}
+                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                        <IconButton onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                    </TableCell>}
                 </TableRow>
             ))}</TableBody>
 
