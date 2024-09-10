@@ -134,8 +134,8 @@ export default function UserList() {
             </Box >
         </Box>
 
-        {filteredData.length > 0 ? <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer><Table>
+        {filteredData.length > 0 ? 
+            <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Name</TableCell>
@@ -210,14 +210,16 @@ export default function UserList() {
                     <TableRow>
                         <TablePagination
                             count={filteredData.length}
-                            page={page} rowsPerPage={rowsPerPage}
-                            onPageChange={(e, p) => { setPage(p) }}
-                            rowsPerPageOptions={[]}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
                         />
                     </TableRow>
                 </TableFooter>
-            </Table></TableContainer></Paper> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+            </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
 
     </Box>)
 }

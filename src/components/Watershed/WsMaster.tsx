@@ -155,7 +155,7 @@ export const WsMaster: React.FC = () => {
                 <Button startIcon={<AddHome />} onClick={() => { /* setwsObj(defObj); setaddM(true); */ setalert("Alert test"); }}>Add WS</Button>)}
         </Box>
 
-        <TableContainer component={Paper} sx={{ height: '90%' }}><Table>
+        <TableContainer component={Paper}><Table>
             <TableHead>
                 <TableRow>
                     {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}

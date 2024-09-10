@@ -112,8 +112,8 @@ export default function RoleList() {
             </Box >
         </Box>
 
-        {filteredData.length > 0 ? <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer><Table>
+        {filteredData.length > 0 ?
+            <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Role Name</TableCell>
@@ -150,14 +150,16 @@ export default function RoleList() {
                     <TableRow>
                         <TablePagination
                             count={filteredData.length}
-                            page={page} rowsPerPage={rowsPerPage}
-                            onPageChange={(e, p) => { setPage(p) }}
-                            rowsPerPageOptions={[]}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
                         />
                     </TableRow>
                 </TableFooter>
-            </Table></TableContainer></Paper> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+            </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
 
     </Box>)
 }
