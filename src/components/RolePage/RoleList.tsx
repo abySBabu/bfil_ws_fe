@@ -11,6 +11,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import AddRole from './AddRole';
 import EditRole from './EditRole';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRole from './DeleteRole';
 
 
 export default function RoleList() {
@@ -23,6 +25,7 @@ export default function RoleList() {
     const [searchQuery, setSearchQuery] = useState('');
     const [tableDialog, setTableDialog] = useState(false);
     const [edittableDialog, setEditTableDialog] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<rolesByCompanyId>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -69,6 +72,12 @@ export default function RoleList() {
         fetchUserData();
     };
 
+    function hideDeleteModal() {
+        setShowDeleteModal(false)
+        fetchUserData();
+    };
+
+
 
     const filteredData = roleData.filter(user => {
         const matchesSearchQuery = Object.values(user).some(value => {
@@ -84,6 +93,7 @@ export default function RoleList() {
     return (<Box>
         {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
         {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
+        {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
                 <FormControl sx={{ width: '130px' }}>
@@ -128,6 +138,9 @@ export default function RoleList() {
                                 <TableCell>
                                     <Tooltip title="Edit">
                                         <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                    </Tooltip>
+                                    <Tooltip title="Delete">
+                                        <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
                                     </Tooltip>
                                 </TableCell>)}
                         </TableRow>
