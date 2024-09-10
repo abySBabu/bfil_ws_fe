@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, Avatar, Snackbar, Alert, Card } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common'; // Assuming PerChk is a permission-checking function
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -13,6 +13,7 @@ export const Home: React.FC = () => {
     const [dIndex, setdIndex] = useState<number | null>(null);
     const [message, setMessage] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
+    const [avatarAnchor, setavatarAnchor] = useState<any>(null);
 
     const sections = [
         { name: 'Dashboard', permission: 'VIEW_Dashboard', component: <Dashboard /> },
@@ -58,7 +59,7 @@ export const Home: React.FC = () => {
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar src="img" alt="Name" />
+                    <Avatar src="img" alt="Name" onClick={(event) => setavatarAnchor(event.currentTarget)} />
                 </Box>
             </Toolbar>
 
@@ -96,6 +97,10 @@ export const Home: React.FC = () => {
             <Typography component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%' }}>
                 Copyright - 2024. Pragat Watershed, All Rights Reserved.
             </Typography>
+
+            <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
+                <MenuItem onClick={() => { sessionStorage.clear(); localStorage.clear(); }} component={Link} href='/bfilreact'>Logout</MenuItem>
+            </Menu>
         </Box>
     );
 }
