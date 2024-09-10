@@ -73,7 +73,7 @@ export async function panchayatById(id: any) {
 
 export async function VillageById(id: any) {
     const configs = {
-        url: serverPath.bfil + `village/getVillagesbyById/${id}`,
+        url: serverPath.bfil + `village/getVillagesbyId/${id}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
