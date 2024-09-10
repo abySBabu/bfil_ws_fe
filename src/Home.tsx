@@ -99,7 +99,7 @@ export const Home: React.FC = () => {
             </Typography>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={() => { logout(); sessionStorage.clear(); localStorage.clear(); }} component={Link} href='/bfilreact'>Logout</MenuItem>
+                <MenuItem onClick={logout} component={Link} href='/bfilreact'>Logout</MenuItem>
             </Menu>
         </Box>
     );

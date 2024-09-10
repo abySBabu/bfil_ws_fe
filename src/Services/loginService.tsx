@@ -48,7 +48,13 @@ export async function logout() {
             address: "address",
             loginId: sessionStorage.getItem("userNumber") || ""
         }
-    };
-    try { const response = await axios(configuration); return response.data; }
+    };  
+    try {
+        const response = await axios(configuration); if (response) {
+            sessionStorage.clear();
+            localStorage.clear();
+            return response.data;
+        }
+    }
     catch (error) { throw (error) }
 }
