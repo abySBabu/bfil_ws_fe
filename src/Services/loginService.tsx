@@ -39,3 +39,16 @@ export async function login(data: any) {
     }
 
 };
+
+export async function logout() {
+    const configuration = {
+        url: serverPath.authserver + "user-profile-service/logout",
+        method: "post",
+        data: {
+            address: "address",
+            loginId: sessionStorage.getItem("userNumber") || ""
+        }
+    };
+    try { const response = await axios(configuration); return response.data; }
+    catch (error) { throw (error) }
+}

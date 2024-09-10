@@ -8,6 +8,7 @@ import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
 import MappingList from './components/WatersheMapping/MappingList';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
+import { logout } from './Services/loginService';
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = useState<number | null>(null);
@@ -98,7 +99,7 @@ export const Home: React.FC = () => {
             </Typography>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={() => { sessionStorage.clear(); localStorage.clear(); }} component={Link} href='/bfilreact'>Logout</MenuItem>
+                <MenuItem onClick={() => { logout(); sessionStorage.clear(); localStorage.clear(); }} component={Link} href='/bfilreact'>Logout</MenuItem>
             </Menu>
         </Box>
     );
