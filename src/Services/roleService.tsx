@@ -35,6 +35,23 @@ export async function getRolesByRole(roleID: any) {
     }
 }
 
+export async function deleteRolesByRole(roleID: any) {
+    const configs = {
+        url: serverPath.authserver + 'role-service/roles/' + roleID,
+        method: 'delete',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        }
+    };
+    try {
+        const response = await axios(configs);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+    }
+}
+
 export async function permissionByAppId(applicationId: any) {
     const configs = {
         url: serverPath.authserver + 'role-service/permissionByAppId/' + applicationId,
