@@ -5,7 +5,7 @@ import {
     MenuItem, Snackbar
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
-import { sd, TPA, PerChk } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 import { listState, listDistrict, talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
@@ -152,7 +152,7 @@ export const WsMaster: React.FC = () => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} />
             {PerChk('EDIT_Watershed Master') && (
-                <Button startIcon={<AddHome />} onClick={() => { /* setwsObj(defObj); setaddM(true); */ setalert("Alert test"); }}>Add WS</Button>)}
+                <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
         </Box>
 
         <TableContainer component={Paper}><Table>

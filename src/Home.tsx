@@ -63,36 +63,30 @@ export const Home: React.FC = () => {
                 </Box>
             </Toolbar>
 
-            {!hasPermission && (<>
-                <Paper elevation={8} sx={{ display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'auto' }}>
-                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left') }}>
-                        <List sx={{ mt: 1 }}>
-                            {sections.map((section, index) => (
-                                PerChk(section.permission) && (
-                                    <ListItem key={section.name} disablePadding>
-                                        <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
-                                            <ListItemText primary={section.name} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                )
-                            ))}
-                        </List>
+            {!hasPermission &&
+                <Paper elevation={8} sx={{ display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                        <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
+                            PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
+                                <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                                    <ListItemText primary={section.name} />
+                                </ListItemButton>
+                            </ListItem>)
+                        ))}</List>
                     </Box>
 
-                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right') }}>
+                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
                         {dIndex !== null && sections[dIndex] && sections[dIndex].component}
                     </Box>
                 </Paper>
-            </>)}
-            {hasPermission && (
-                <Paper
-                    elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}
-                >
+            }
+            {hasPermission &&
+                <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
                     <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
                         You do not have permission to view any sections.
                     </Typography>
                 </Paper>
-            )}
+            }
 
             <Typography component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%' }}>
                 Copyright - 2024. Pragat Watershed, All Rights Reserved.
