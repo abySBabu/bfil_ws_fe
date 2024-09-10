@@ -8,6 +8,7 @@ import { permissionByAppID, rolesByCompanyId } from './RoleManagement'; // Ensur
 import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../Services/loginService';
 
 
 type RoleTypeProps = {
@@ -70,6 +71,8 @@ export default function EditRole(props: RoleTypeProps) {
                 roleName: value.roleName
             }
             let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
+            let logoutresp = await logout();
+
             if (resp) {
                 setSeverityColor("success");
                 setMessage("Role updated successfully");
@@ -78,7 +81,9 @@ export default function EditRole(props: RoleTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
-                    navigate('/');
+                    if (logoutresp) {
+                        navigate('/');
+                    }
                 }, setTimeoutsecs);
             }
             // let getRoleresp = await getRolesByRole(roleDetails?.roleId);
@@ -144,35 +149,13 @@ export default function EditRole(props: RoleTypeProps) {
         fetchData();
     }, [show, roleDetails, reset]);
 
-    // const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     let updatedCheckedPermissions: permissionByAppID[];
-
-    //     if (event.target.checked) {
-    //         // Avoid duplicates
-    //         if (!checkedPermissions.find(p => p.permissionId === perm.permissionId)) {
-    //             updatedCheckedPermissions = [...checkedPermissions, perm];
-    //         } else {
-    //             updatedCheckedPermissions = checkedPermissions;
-    //         }
-    //     } else {
-    //         updatedCheckedPermissions = checkedPermissions.filter(p => p.permissionId !== perm.permissionId);
-    //     }
-
-    //     setCheckedPermissions(updatedCheckedPermissions);
-    // };
-
-    // Function to determine if a permission is checked
-
     const handleCheckboxChange = (perm: permissionByAppID) => (event: React.ChangeEvent<HTMLInputElement>) => {
         let updatedCheckedPermissions: permissionByAppID[] = checkedPermissions;
 
         if (event.target.checked) {
-            // Add the selected permission if not already in the list
             if (!updatedCheckedPermissions.find(p => p.permissionId === perm.permissionId)) {
                 updatedCheckedPermissions = [...updatedCheckedPermissions, perm];
             }
-
-            // Auto-select the corresponding VIEW permission if EDIT is checked
             if (perm.permissionName.startsWith("EDIT")) {
                 const viewPermission = selectedPermissions
                     .flatMap(screen => screen.permission)
@@ -182,10 +165,8 @@ export default function EditRole(props: RoleTypeProps) {
                 }
             }
         } else {
-            // Remove the unchecked permission
             updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== perm.permissionId);
 
-            // If unchecking an "EDIT", remove the corresponding "VIEW" permission
             if (perm.permissionName.startsWith("EDIT")) {
                 const viewPermission = selectedPermissions
                     .flatMap(screen => screen.permission)
