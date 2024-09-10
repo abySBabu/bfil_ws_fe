@@ -1,3 +1,4 @@
+import { Slide } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { sd } from './common';
 
@@ -8,7 +9,7 @@ export const tpaTheme = createTheme({
                 root: {
                     color: '#fff',
                     '&:hover': { color: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: '#000', opacity: 0.25 } //sd('--button-bgcolor-active-brand')
+                    '&.Mui-disabled': { color: '#000', opacity: 0.25 }
                 }
             }
         }
@@ -78,7 +79,6 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    //maxHeight: '640px', overflow: 'auto',
                     '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
                     //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },
@@ -113,22 +113,7 @@ export const bfilTheme = createTheme({
                 root: {
                     padding: sd('--modal-padding'),
                     color: sd('--text-color-default'),
-                    backgroundColor: sd('--text-color-special'),
-                    borderRadius: '15px 15px 0 0'
-                }
-            }
-        },
-        // MuiDialogContent: {
-        //     styleOverrides: {
-        //         root: {
-        //             padding: sd('--modal-padding')
-        //         }
-        //     }
-        // },
-        MuiDialogActions: {
-            styleOverrides: {
-                root: {
-                    padding: sd('--modal-padding')
+                    backgroundColor: sd('--text-color-special')
                 }
             }
         },
@@ -176,10 +161,8 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: {
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'center',
-                }
+                anchorOrigin: { vertical: 'top', horizontal: 'center' },
+                TransitionComponent: Slide
             }
         },
         MuiLink: {

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem
+    MenuItem, Snackbar
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { sd, TPA, PerChk } from '../../common';
@@ -30,12 +30,14 @@ export const WsMaster: React.FC = () => {
     const [wsObj, setwsObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
-    //options lists
+    const [alert, setalert] = React.useState<string | null>(null);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
     const [tlOps, settlOps] = React.useState<any[]>([]);
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
+
+    const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.villageId
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -117,26 +119,40 @@ export const WsMaster: React.FC = () => {
     const WSadd = async () => {
         try {
             const resp = await addWS(wsObj)
-            if (resp) { setaddM(false); fetchData(); }
+            if (resp) {
+                setaddM(false); fetchData();
+                setalert("Watershed added");
+            }
         }
-        catch (error) { console.log(error) }
+        catch (error) {
+            console.log(error);
+            setalert("Failed to add watershed");
+        }
         setaddM(false);
     }
 
     const WSedit = async (id: any) => {
         try {
             const resp = await editWS(wsObj, id)
-            if (resp) { seteditM(false); fetchData(); }
+            if (resp) {
+                seteditM(false); fetchData();
+                setalert(`Watershed ${wsObj.wsName || ""} updated`);
+            }
         }
-        catch (error) { console.log(error) }
+        catch (error) {
+            console.log(error);
+            setalert("Failed to add watershed");
+        }
         seteditM(false);
     }
 
     return (<>
+        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
+
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} />
             {PerChk('EDIT_Watershed Master') && (
-                <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
+                <Button startIcon={<AddHome />} onClick={() => { /* setwsObj(defObj); setaddM(true); */ setalert("Alert test"); }}>Add WS</Button>)}
         </Box>
 
         <TableContainer component={Paper} sx={{ height: '90%' }}><Table>
@@ -196,7 +212,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={WSadd}>Add</Button>
+                <Button onClick={WSadd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 
@@ -227,7 +243,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Close</Button>
-                <Button onClick={() => WSedit(wsObj.wsId)}>Add</Button>
+                <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
     </>)
