@@ -50,7 +50,7 @@ export const Home: React.FC = () => {
     }, []);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
             <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
@@ -64,7 +64,7 @@ export const Home: React.FC = () => {
             </Toolbar>
 
             {!hasPermission &&
-                <Paper elevation={8} sx={{ display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
                     <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
@@ -88,9 +88,9 @@ export const Home: React.FC = () => {
                 </Paper>
             }
 
-            <Typography component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%' }}>
+            <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%' }}>
                 Copyright - 2024. Pragat Watershed, All Rights Reserved.
-            </Typography>
+            </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
                 <MenuItem onClick={logout} component={Link} href='/bfilreact'>Logout</MenuItem>
