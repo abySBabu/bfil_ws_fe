@@ -7,7 +7,7 @@ import {
 import { AddHome, Edit } from '@mui/icons-material';
 import { sd, TPA, PerChk } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
-import { listState, listDistrict, talukById, VillageById, panchayatById } from '../../Services/locationService';
+import { listState, listDistrict, talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 
 const defObj = {
@@ -39,6 +39,39 @@ export const WsMaster: React.FC = () => {
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const resp = await talukById(wsObj.districtId);
+                if (resp) { settlOps(resp); }
+                else { settlOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.districtId])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const resp = await panchayatById(wsObj.talukId);
+                if (resp) { setpanOps(resp); }
+                else { setpanOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.talukId])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const resp = await VillageById(wsObj.grampanchayatId);
+                if (resp) { setvilOps(resp); }
+                else { setvilOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.grampanchayatId])
+
     const fetchData = async () => {
         try {
             const resp1 = await listWS(); if (resp1) {
@@ -54,19 +87,6 @@ export const WsMaster: React.FC = () => {
         catch (error) { console.log(error) }
     };
 
-    const mdlOpen = () => {
-        settlOps(JSON.parse(sessionStorage.getItem("TalukList") as string) || []);
-        setpanOps(JSON.parse(sessionStorage.getItem("PanList") as string) || []);
-        setvilOps(JSON.parse(sessionStorage.getItem("VillageList") as string) || []);
-    }
-
-    const mdlClose = () => {
-        settlOps([]);
-        setpanOps([]);
-        setvilOps([]);
-        setwsObj(defObj);
-    }
-
     const districtCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setwsObj({
             ...wsObj,
@@ -75,11 +95,6 @@ export const WsMaster: React.FC = () => {
             grampanchayatId: "",
             villageId: ""
         })
-        try {
-            const resp = await talukById(e.target.value);
-            if (resp) { settlOps(resp); setpanOps([]); setvilOps([]); }
-        }
-        catch (error) { console.log(error) }
     }
 
     const talukCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -89,11 +104,6 @@ export const WsMaster: React.FC = () => {
             grampanchayatId: "",
             villageId: ""
         })
-        try {
-            const resp = await panchayatById(e.target.value);
-            if (resp) { setpanOps(resp); setvilOps([]); }
-        }
-        catch (error) { console.log(error) }
     }
 
     const panchayatCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -102,17 +112,12 @@ export const WsMaster: React.FC = () => {
             grampanchayatId: e.target.value,
             villageId: ""
         })
-        try {
-            const resp = await VillageById(e.target.value);
-            if (resp) { setvilOps(resp) }
-        }
-        catch (error) { console.log(error) }
     }
 
     const WSadd = async () => {
         try {
             const resp = await addWS(wsObj)
-            if (resp) { console.log('Add success') }
+            if (resp) { setaddM(false); fetchData(); }
         }
         catch (error) { console.log(error) }
         setaddM(false);
@@ -121,7 +126,7 @@ export const WsMaster: React.FC = () => {
     const WSedit = async (id: any) => {
         try {
             const resp = await editWS(wsObj, id)
-            if (resp) { console.log('Add success') }
+            if (resp) { seteditM(false); fetchData(); }
         }
         catch (error) { console.log(error) }
         seteditM(false);
@@ -147,7 +152,7 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
                     {PerChk('EDIT_Watershed Master') && (
-                        <TableCell><IconButton onClick={() => { mdlOpen(); setwsObj(w); seteditM(true); }}><Edit /></IconButton></TableCell>)}
+                        <TableCell><IconButton onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton></TableCell>)}
                 </TableRow>
             ))}</TableBody>
 
@@ -190,7 +195,7 @@ export const WsMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); mdlClose(); }}>Close</Button>
+                <Button onClick={() => { setaddM(false); }}>Close</Button>
                 <Button onClick={WSadd}>Add</Button>
             </DialogActions>
         </Dialog>
@@ -221,7 +226,7 @@ export const WsMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { seteditM(false); mdlClose(); }}>Close</Button>
+                <Button onClick={() => { seteditM(false); }}>Close</Button>
                 <Button onClick={() => WSedit(wsObj.wsId)}>Add</Button>
             </DialogActions>
         </Dialog>

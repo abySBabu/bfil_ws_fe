@@ -19,7 +19,7 @@ export const Dashboard: React.FC = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%', overflow: 'auto' }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
                 {keys.map((k, i) => (
-                    <Card sx={{
+                    <Card key={i} sx={{
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '160px', width: '25%',
                         position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor')
                     }}>

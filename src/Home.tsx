@@ -37,8 +37,7 @@ export const Home: React.FC = () => {
             } catch (error) {
                 console.log(error);
             }
-        };
-        fetchLoc();
+        }; fetchLoc();
 
         const defaultIndex = sections.findIndex(section => PerChk(section.permission));
         if (defaultIndex !== -1) {
@@ -59,7 +58,7 @@ export const Home: React.FC = () => {
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar src="img" alt="Name" onClick={(event) => setavatarAnchor(event.currentTarget)} />
+                    <Avatar src="img" alt={sessionStorage.getItem("userName") as string} onClick={(event) => setavatarAnchor(event.currentTarget)} />
                 </Box>
             </Toolbar>
 

@@ -15,6 +15,7 @@ export async function login(data: any) {
         sessionStorage.setItem("refToken", response.data.jwtRefresh);
         sessionStorage.setItem("userId", response.data.user.userId);
         sessionStorage.setItem("userName", response.data.user.userName);
+        sessionStorage.setItem("userNumber", response.data.user.mobileNumber);
         sessionStorage.setItem("userType", response.data.user.userType);
         sessionStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
         sessionStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
