@@ -311,7 +311,7 @@ export default function UserForm(props: userTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
                     <Button onClick={handleSubmit(addUser)} color="primary">
-                        Update User {loading ? <CircularProgress size={24} /> : null}
+                        Update {loading ? <CircularProgress size={24} /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>
