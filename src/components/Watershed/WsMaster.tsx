@@ -29,6 +29,7 @@ export const WsMaster: React.FC = () => {
     const [wsObj, setwsObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
@@ -37,6 +38,17 @@ export const WsMaster: React.FC = () => {
     const [vilOps, setvilOps] = React.useState<any[]>([]);
 
     const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.villageId
+
+    const filteredWsList = wsList.filter((w) => {
+        const searchTerm = search.toLowerCase();
+        return (
+            w.wsName.toLowerCase().includes(searchTerm) ||
+            w.wsDescription.toLowerCase().includes(searchTerm) ||
+            VillageName(w.villageId).toLowerCase().includes(searchTerm)
+        );
+    });
+
+    const paginatedWsList = filteredWsList.slice(page * rPP, page * rPP + rPP);
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -149,7 +161,7 @@ export const WsMaster: React.FC = () => {
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} />
+            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
             {PerChk('EDIT_Watershed Master') && (
                 <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
         </Box>
@@ -164,7 +176,7 @@ export const WsMaster: React.FC = () => {
                 </TableRow>
             </TableHead>
 
-            <TableBody>{wsList.map((w, i) => (
+            <TableBody>{paginatedWsList.map((w, i) => (
                 <TableRow key={i}>
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
@@ -177,7 +189,7 @@ export const WsMaster: React.FC = () => {
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={wsList.length}
+                    count={filteredWsList.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
