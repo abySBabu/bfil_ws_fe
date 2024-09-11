@@ -289,7 +289,7 @@ export default function EditRole(props: RoleTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button onClick={handleSubmit(editRole)} disabled={loading}>
-                        Edit {loading ? <CircularProgress size={24} /> : null}
+                        Update {loading ? <CircularProgress size={24} /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>
