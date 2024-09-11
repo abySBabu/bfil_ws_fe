@@ -39,25 +39,26 @@ export const WsMaster: React.FC = () => {
 
     const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.villageId
 
-    const filteredWsList = wsList.filter((w) => {
-        const searchTerm = search.toLowerCase();
+    const wsListF = wsList.filter((w) => {
+        const searchTerm = search?.toLowerCase();
         return (
-            w.wsName.toLowerCase().includes(searchTerm) ||
-            w.wsDescription.toLowerCase().includes(searchTerm) ||
-            VillageName(w.villageId).toLowerCase().includes(searchTerm)
+            w.wsName?.toLowerCase().includes(searchTerm) ||
+            w.wsDescription?.toLowerCase().includes(searchTerm) ||
+            VillageName(w.villageId)?.toLowerCase().includes(searchTerm)
         );
     });
 
-    const paginatedWsList = filteredWsList.slice(page * rPP, page * rPP + rPP);
+    const wsListP = wsListF.slice(page * rPP, page * rPP + rPP);
 
     React.useEffect(() => { fetchData() }, [])
 
     React.useEffect(() => {
         (async () => {
             try {
-                const resp = await talukById(wsObj.districtId);
-                if (resp) { settlOps(resp); }
-                else { settlOps([]); }
+                if (wsObj.districtId) {
+                    const resp = await talukById(wsObj.districtId);
+                    if (resp) { settlOps(resp); }
+                } else { settlOps([]); }
             }
             catch (error) { console.log(error) }
         })();
@@ -66,9 +67,10 @@ export const WsMaster: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                const resp = await panchayatById(wsObj.talukId);
-                if (resp) { setpanOps(resp); }
-                else { setpanOps([]); }
+                if (wsObj.talukId) {
+                    const resp = await panchayatById(wsObj.talukId);
+                    if (resp) { setpanOps(resp); }
+                } else { setpanOps([]); }
             }
             catch (error) { console.log(error) }
         })();
@@ -77,9 +79,10 @@ export const WsMaster: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                const resp = await VillageById(wsObj.grampanchayatId);
-                if (resp) { setvilOps(resp); }
-                else { setvilOps([]); }
+                if (wsObj.grampanchayatId) {
+                    const resp = await VillageById(wsObj.grampanchayatId);
+                    if (resp) { setvilOps(resp); }
+                } else { setvilOps([]); }
             }
             catch (error) { console.log(error) }
         })();
@@ -176,7 +179,7 @@ export const WsMaster: React.FC = () => {
                 </TableRow>
             </TableHead>
 
-            <TableBody>{paginatedWsList.map((w, i) => (
+            <TableBody>{wsListP.map((w, i) => (
                 <TableRow key={i}>
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
@@ -189,7 +192,7 @@ export const WsMaster: React.FC = () => {
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={filteredWsList.length}
+                    count={wsListF.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}

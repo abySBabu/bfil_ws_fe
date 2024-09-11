@@ -7,6 +7,7 @@ import UserList from './components/UserPage/UserList';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
 import MappingList from './components/WatersheMapping/MappingList';
+import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 import { logout } from './Services/loginService';
 
@@ -21,7 +22,7 @@ export const Home: React.FC = () => {
         { name: 'User Management', permission: 'VIEW_User Management', component: <UserList /> },
         { name: 'Role Management', permission: 'VIEW_Role Management', component: <RoleList /> },
         { name: 'Watershed Master', permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-        { name: 'Farmer Master', permission: 'VIEW_Farmer Master', component: null },
+        { name: 'Farmer Master', permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
         { name: 'Watershed Mapping', permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
         { name: 'Watershed Activity', permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
         { name: 'Work Plan', permission: 'VIEW_Work Plan', component: null }

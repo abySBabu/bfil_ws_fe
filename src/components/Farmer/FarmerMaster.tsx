@@ -6,190 +6,95 @@ import {
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
-import { listWS, addWS, editWS } from '../../Services/wsService';
-import { listState, listDistrict, talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
+import { listFarmer, addFarmer } from '../../Services/farmerService';
 
 const defObj = {
-    wsId: "",
-    wsName: "",
-    wsDescription: "",
-    stateId: "1",
-    districtId: "",
-    talukId: "",
-    grampanchayatId: "",
-    villageId: "",
-    mapLink: ""
+    wsfarmerName: "",
+    adharNumber: "",
+    mobileNumber: ""
 }
 
-export const WsMaster: React.FC = () => {
+export const FarmerMaster: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
-    const [wsList, setwsList] = React.useState<typeof defObj[]>([]);
-    const [wsObj, setwsObj] = React.useState(defObj);
+    const [fmrList, setfmrList] = React.useState<typeof defObj[]>([]);
+    const [fmrObj, setfmrObj] = React.useState(defObj);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
-    const [stOps, setstOps] = React.useState<any[]>([]);
-    const [dsOps, setdsOps] = React.useState<any[]>([]);
-    const [tlOps, settlOps] = React.useState<any[]>([]);
-    const [panOps, setpanOps] = React.useState<any[]>([]);
-    const [vilOps, setvilOps] = React.useState<any[]>([]);
 
-    const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.villageId
+    const addCheck = !fmrObj.wsfarmerName || !fmrObj.adharNumber || !fmrObj.mobileNumber
 
-    const filteredWsList = wsList.filter((w) => {
-        const searchTerm = search.toLowerCase();
+    const fmrListF = fmrList.filter((w) => {
+        const searchTerm = search?.toLowerCase();
         return (
-            w.wsName.toLowerCase().includes(searchTerm) ||
-            w.wsDescription.toLowerCase().includes(searchTerm) ||
-            VillageName(w.villageId).toLowerCase().includes(searchTerm)
+            w.wsfarmerName?.toLowerCase().includes(searchTerm) ||
+            w.adharNumber?.toLowerCase().includes(searchTerm) ||
+            w.mobileNumber?.toLowerCase().includes(searchTerm)
         );
     });
 
-    const paginatedWsList = filteredWsList.slice(page * rPP, page * rPP + rPP);
+    const fmrListP = fmrListF.slice(page * rPP, page * rPP + rPP);
 
     React.useEffect(() => { fetchData() }, [])
 
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const resp = await talukById(wsObj.districtId);
-                if (resp) { settlOps(resp); }
-                else { settlOps([]); }
-            }
-            catch (error) { console.log(error) }
-        })();
-    }, [wsObj.districtId])
-
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const resp = await panchayatById(wsObj.talukId);
-                if (resp) { setpanOps(resp); }
-                else { setpanOps([]); }
-            }
-            catch (error) { console.log(error) }
-        })();
-    }, [wsObj.talukId])
-
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const resp = await VillageById(wsObj.grampanchayatId);
-                if (resp) { setvilOps(resp); }
-                else { setvilOps([]); }
-            }
-            catch (error) { console.log(error) }
-        })();
-    }, [wsObj.grampanchayatId])
-
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1) {
-                setwsList(resp1)
-            }
-            const resp2 = await listState(); if (resp2) {
-                setstOps(resp2)
-            }
-            const resp3 = await listDistrict(); if (resp3) {
-                setdsOps(resp3)
+            const resp1 = await listFarmer(); if (resp1) {
+                setfmrList(resp1)
             }
         }
         catch (error) { console.log(error) }
     };
 
-    const districtCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setwsObj({
-            ...wsObj,
-            districtId: e.target.value,
-            talukId: "",
-            grampanchayatId: "",
-            villageId: ""
-        })
-    }
-
-    const talukCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setwsObj({
-            ...wsObj,
-            talukId: e.target.value,
-            grampanchayatId: "",
-            villageId: ""
-        })
-    }
-
-    const panchayatCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setwsObj({
-            ...wsObj,
-            grampanchayatId: e.target.value,
-            villageId: ""
-        })
-    }
-
-    const WSadd = async () => {
+    const fmrAdd = async () => {
         try {
-            const resp = await addWS(wsObj)
+            const resp = await addFarmer(fmrObj)
             if (resp) {
                 setaddM(false); fetchData();
-                setalert("Watershed added");
+                setalert("Farmer added");
             }
         }
         catch (error) {
             console.log(error);
-            setalert("Failed to add watershed");
+            setalert("Failed to add farmer");
         }
         setaddM(false);
     }
-
-    const WSedit = async (id: any) => {
-        try {
-            const resp = await editWS(wsObj, id)
-            if (resp) {
-                seteditM(false); fetchData();
-                setalert(`Watershed ${wsObj.wsName || ""} updated`);
-            }
-        }
-        catch (error) {
-            console.log(error);
-            setalert("Failed to add watershed");
-        }
-        seteditM(false);
-    }
-
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
             {PerChk('EDIT_Watershed Master') && (
-                <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
+                <Button startIcon={<AddHome />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>)}
         </Box>
 
         <TableContainer component={Paper}><Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Watershed</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Villages</TableCell>
+                    <TableCell>Aadhar</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Number</TableCell>
                     {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
-            <TableBody>{paginatedWsList.map((w, i) => (
+            <TableBody>{fmrListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.wsName}</TableCell>
-                    <TableCell>{w.wsDescription}</TableCell>
-                    <TableCell>{VillageName(w.villageId)}</TableCell>
+                    <TableCell>{w.adharNumber}</TableCell>
+                    <TableCell>{w.wsfarmerName}</TableCell>
+                    <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Watershed Master') && <TableCell>
-                        <IconButton onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={filteredWsList.length}
+                    count={fmrListF.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
@@ -204,61 +109,28 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
-                    {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
-                    {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
-                    {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
-                    {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
-                    {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4} />
+                <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField
+                    label="Aadhar"
+                    value={fmrObj.adharNumber}
+                    onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
+                    inputProps={{ maxLength: 12 }}
+                    type="tel"
+                />
+                </Grid>
+                <Grid item xs={12}><TextField
+                    label="Mobile"
+                    value={fmrObj.mobileNumber}
+                    onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
+                    inputProps={{ maxLength: 10 }}
+                    type="tel"
+                />
+                </Grid>
             </Grid></DialogContent>
 
             <DialogActions>
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={WSadd} disabled={addCheck}>Add</Button>
-            </DialogActions>
-        </Dialog>
-
-        <Dialog open={editM}>
-            <DialogTitle>Edit {wsObj.wsName}</DialogTitle>
-
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
-                    {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
-                    {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
-                    {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
-                    {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
-                    {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4} />
-            </Grid></DialogContent>
-
-            <DialogActions>
-                <Button onClick={() => { seteditM(false); }}>Close</Button>
-                <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Add</Button>
+                <Button onClick={() => setaddM(false)} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
     </>)
