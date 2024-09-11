@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
 } from '@mui/material';
 import { getRolesByCompany } from '../../Services/roleService';
 import { TPA, PerChk } from '../../common';
@@ -13,6 +13,7 @@ import AddRole from './AddRole';
 import EditRole from './EditRole';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteRole from './DeleteRole';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 export default function RoleList() {
@@ -96,13 +97,20 @@ export default function RoleList() {
         {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '130px' }}>
+                <FormControl sx={{ width: '200px' }}>
                     <TextField
                         label="Search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
                         size="small"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon  />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </FormControl>
                 {PerChk('EDIT_Role Management') && (

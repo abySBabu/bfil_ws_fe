@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
 import { TPA, PerChk } from '../../common';
@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UserDisable from './UserDisable';
 import UserEnable from './UserEnable';
 import UserDelete from './UserDelete';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 export default function UserList() {
     const blockedUserOptions = selectOptions.blockedUserOptions;
@@ -118,13 +120,20 @@ export default function UserList() {
 
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '130px' }}>
+                <FormControl sx={{ width: '200px' }}>
                     <TextField
                         label="Search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
                         size="small"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </FormControl>
                 {PerChk('EDIT_User Management') && (
@@ -134,7 +143,7 @@ export default function UserList() {
             </Box >
         </Box>
 
-        {filteredData.length > 0 ? 
+        {filteredData.length > 0 ?
             <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>

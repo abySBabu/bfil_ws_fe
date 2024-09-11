@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
 } from '@mui/material';
 import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
@@ -14,6 +14,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import MapEdit from './MapEdit';
 import MapAdd from './MapAdd';
 import { allUserType } from '../UserPage/UserManagementType';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 export default function MappingList() {
     const [showAddModal, setShowAddModal] = useState(false);
@@ -102,13 +104,20 @@ export default function MappingList() {
 
         <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '130px' }}>
+                <FormControl sx={{ width: '200px' }}>
                     <TextField
                         label="Search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
                         size="small"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </FormControl>
                 {PerChk('EDIT_Watershed Mapping') && (
@@ -119,7 +128,7 @@ export default function MappingList() {
         </Box>
 
         {filteredData.length > 0 ?
-            <TableContainer component={Paper} sx={{maxHeight:'500px'}}><Table>
+            <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Watershed Name</TableCell>
@@ -157,13 +166,13 @@ export default function MappingList() {
                 <TableFooter>
                     <TableRow>
                         <TablePagination
-                           count={filteredData.length}
-                           rowsPerPage={rowsPerPage}
-                           page={page}
-                           onPageChange={(e, p) => setPage(p)}
-                           rowsPerPageOptions={[5, 10, 15]}
-                           onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
-                           ActionsComponent={TPA}
+                            count={filteredData.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
+                            ActionsComponent={TPA}
                         />
                     </TableRow>
                 </TableFooter>
