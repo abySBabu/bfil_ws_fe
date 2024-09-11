@@ -12,10 +12,6 @@ test.beforeAll(async () => {
 });
 
 test.describe('Login Screen Automation', () => {
-
-
-
-
     test('should display validation error messages for userName field', async () => {
         test.setTimeout(60000);  // Increase timeout to 60 seconds
 
