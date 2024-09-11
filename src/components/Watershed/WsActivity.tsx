@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
-    Card, MenuItem
+    Card, MenuItem, IconButton
 } from "@mui/material";
-import { AddHome } from '@mui/icons-material';
+import { AddHome, Edit } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 
 const actObj = {
@@ -56,24 +56,9 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Supply</TableCell>
                     <TableCell>Earthen bunding</TableCell>
                     <TableCell>200 sqft</TableCell>
-                </TableRow>
-                <TableRow onClick={() => { setselected(2); }}>
-                    <TableCell>Watershed 2</TableCell>
-                    <TableCell>Demand</TableCell>
-                    <TableCell>Sustainable Practice</TableCell>
-                    <TableCell>Crop Rotation</TableCell>
-                </TableRow>
-                <TableRow onClick={() => { setselected(3); }}>
-                    <TableCell>Watershed 1</TableCell>
-                    <TableCell>Demand</TableCell>
-                    <TableCell>Members Capacitated</TableCell>
-                    <TableCell>27</TableCell>
-                </TableRow>
-                <TableRow onClick={() => { setselected(4); }}>
-                    <TableCell>Watershed 1</TableCell>
-                    <TableCell>Demand</TableCell>
-                    <TableCell>Drip/Sprinkler</TableCell>
-                    <TableCell>34 #</TableCell>
+                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                        <IconButton onClick={() => { }}><Edit /></IconButton>
+                    </TableCell>}
                 </TableRow>
             </TableBody>
 

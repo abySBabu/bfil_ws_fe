@@ -11,6 +11,16 @@ export async function listWS() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function idWS(id: any) {
+    const configs = {
+        url: serverPath.bfil + `wsmaster/getWsById/${id}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function addWS(data: any) {
     const configs = {
         url: serverPath.bfil + "wsmaster/addwatershed",
