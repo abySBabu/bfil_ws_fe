@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
-    DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider,
-    Typography, Card, MenuItem
+    Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
+    DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
+    Card, MenuItem
 } from "@mui/material";
-import { sd, TPA } from '../../common';
+import { AddHome } from '@mui/icons-material';
+import { TPA, PerChk } from '../../common';
 
 const actObj = {
     ws_name: "WS1",
@@ -29,14 +30,23 @@ export const WsActivity: React.FC = () => {
     const [selected, setselected] = React.useState(0);
     const [edt, setedt] = React.useState(false);
     const [page, setPage] = React.useState(0);
-    const rPP = 10;
-    const tHeads: string[] = ['Watershed', 'Intervention', 'Activity', 'Total Units'];
+    const [search, setsearch] = React.useState("");
+    const [rPP, setrPP] = React.useState(10);
 
-    return (<Box sx={{ width: '100%' }}>
-        <Table>
+    return (<>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
+            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
+        </Box>
+
+        <TableContainer component={Paper}><Table>
             <TableHead>
-                <TableRow sx={{ bgcolor: sd('--button-bgcolor-hover-brand') }}>
-                    {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
+                <TableRow>
+                    <TableCell>Watershed</TableCell>
+                    <TableCell>Intervention</TableCell>
+                    <TableCell>Activity</TableCell>
+                    <TableCell>Total Units</TableCell>
+                    <TableCell>Actions</TableCell>
                 </TableRow>
             </TableHead>
 
@@ -77,7 +87,7 @@ export const WsActivity: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table>
+        </Table></TableContainer>
 
         <Dialog open={Boolean(selected)} maxWidth='xl'>
             <DialogTitle>{
@@ -173,5 +183,5 @@ export const WsActivity: React.FC = () => {
                 </>
             }</DialogActions>
         </Dialog>
-    </Box>)
+    </>)
 }

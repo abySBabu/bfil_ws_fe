@@ -136,7 +136,22 @@ export const bfilTheme = createTheme({
                 fullWidth: true
             }
         },
-
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    '& .MuiOutlinedInput-root': {
+                        height: '48px',
+                        '& .MuiSelect-select': { height: '100%', padding: '0 12px' },
+                        '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
+                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
+                    },
+                    '& .MuiInputLabel-root': {
+                        '&.Mui-focused': { color: sd('--textfield-label-sel') },
+                        '&.Mui-disabled': { color: sd('--textfield-label-dis') }
+                    }
+                }
+            }
+        },
         MuiListItemButton: {
             styleOverrides: {
                 root: {
