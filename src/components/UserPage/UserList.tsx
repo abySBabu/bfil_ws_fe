@@ -37,7 +37,17 @@ export default function UserList() {
     const [selectedRow, setSelectedRow] = useState<allUserType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let companyID: any;
+    let userId: any;
+    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
+    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+
+    if (companyIdFromLocalStorage !== null) {
+        companyID = parseInt(companyIdFromLocalStorage);
+    }
+    if (userIdFromLocalStorage !== null) {
+        userId = parseInt(userIdFromLocalStorage);
+    }
 
 
     const handleRowClick = async (row: any) => {
@@ -57,7 +67,7 @@ export default function UserList() {
 
     const fetchUserData = async () => {
         try {
-            let resp = await usersList(companyId);
+            let resp = await usersList(companyID);
             console.log("getuserData -", resp)
             setuserData(resp);
         } catch (error) {
