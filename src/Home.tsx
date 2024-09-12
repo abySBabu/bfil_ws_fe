@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
-import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common'; // Assuming PerChk is a permission-checking function
+import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
 import UserList from './components/UserPage/UserList';
@@ -8,6 +8,7 @@ import { Dashboard } from './components/Dashboard/Dashboard';
 import RoleList from './components/RolePage/RoleList';
 import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
+import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 import { logout } from './Services/loginService';
 
@@ -25,7 +26,7 @@ export const Home: React.FC = () => {
         { name: 'Farmer Master', permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
         { name: 'Watershed Mapping', permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
         { name: 'Watershed Activity', permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-        { name: 'Work Plan', permission: 'VIEW_Work Plan', component: null }
+        { name: 'Work Plan', permission: 'VIEW_Work Plan', component: <Workplan /> }
     ];
 
     React.useEffect(() => {

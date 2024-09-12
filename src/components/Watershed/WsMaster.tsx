@@ -2,12 +2,12 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, Snackbar
+    MenuItem, Snackbar, Alert
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
-import { listState, listDistrict, talukById, panchayatById, VillageById } from '../../Services/locationService';
+import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 
 const defObj = {
@@ -31,6 +31,7 @@ export const WsMaster: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
+    const [alertClr, setalertClr] = React.useState(true);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
     const [tlOps, settlOps] = React.useState<any[]>([]);
@@ -90,15 +91,9 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1) {
-                setwsList(resp1)
-            }
-            const resp2 = await listState(); if (resp2) {
-                setstOps(resp2)
-            }
-            const resp3 = await listDistrict(); if (resp3) {
-                setdsOps(resp3)
-            }
+            const resp1 = await listWS(); if (resp1) { setwsList(resp1) }
+            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
+            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
     };
@@ -134,12 +129,12 @@ export const WsMaster: React.FC = () => {
         try {
             const resp = await addWS(wsObj)
             if (resp) {
-                setaddM(false); fetchData();
+                fetchData(); setalertClr(true);
                 setalert("Watershed added");
             }
         }
         catch (error) {
-            console.log(error);
+            console.log(error); setalertClr(false);
             setalert("Failed to add watershed");
         }
         setaddM(false);
@@ -149,19 +144,21 @@ export const WsMaster: React.FC = () => {
         try {
             const resp = await editWS(wsObj, id)
             if (resp) {
-                seteditM(false); fetchData();
+                fetchData(); setalertClr(true);
                 setalert(`Watershed ${wsObj.wsName || ""} updated`);
             }
         }
         catch (error) {
-            console.log(error);
+            console.log(error); setalertClr(false);
             setalert("Failed to add watershed");
         }
         seteditM(false);
     }
 
     return (<>
-        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
+        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000}>
+            <Alert severity={alertClr ? 'success' : 'error'} sx={{ width: '100%' }}>{alert}</Alert>
+        </Snackbar>
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />

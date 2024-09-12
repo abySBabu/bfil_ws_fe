@@ -4,7 +4,7 @@ import {
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
     MenuItem, Snackbar
 } from "@mui/material";
-import { AddHome, Edit } from '@mui/icons-material';
+import { Edit, PersonAddAlt1 } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { listFarmer, addFarmer } from '../../Services/farmerService';
 
@@ -24,7 +24,7 @@ export const FarmerMaster: React.FC = () => {
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
 
-    const addCheck = !fmrObj.wsfarmerName || !fmrObj.adharNumber || !fmrObj.mobileNumber
+    const addCheck = !fmrObj.wsfarmerName || fmrObj.adharNumber.length !== 12 || fmrObj.mobileNumber.length !== 10
 
     const fmrListF = fmrList.filter((w) => {
         const searchTerm = search?.toLowerCase();
@@ -67,8 +67,7 @@ export const FarmerMaster: React.FC = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
-            {PerChk('EDIT_Watershed Master') && (
-                <Button startIcon={<AddHome />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>)}
+            {PerChk('EDIT_Watershed Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
         </Box>
 
         <TableContainer component={Paper}><Table>
@@ -130,7 +129,7 @@ export const FarmerMaster: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={() => setaddM(false)} disabled={addCheck}>Add</Button>
+                <Button onClick={fmrAdd} /* disabled={addCheck} */>Add</Button>
             </DialogActions>
         </Dialog>
     </>)

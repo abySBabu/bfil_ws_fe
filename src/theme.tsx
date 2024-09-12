@@ -1,5 +1,4 @@
-import { Slide } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+import { Slide, createTheme } from '@mui/material';
 import { sd } from './common';
 
 export const tpaTheme = createTheme({
