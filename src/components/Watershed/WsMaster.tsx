@@ -5,7 +5,7 @@ import {
     MenuItem, Snackbar, Alert
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, SnackAlert } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
@@ -31,7 +31,7 @@ export const WsMaster: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
-    const [alertClr, setalertClr] = React.useState(true);
+    const [alertClr, setalertClr] = React.useState(false);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
     const [tlOps, settlOps] = React.useState<any[]>([]);
@@ -156,14 +156,12 @@ export const WsMaster: React.FC = () => {
     }
 
     return (<>
-        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000}>
-            <Alert severity={alertClr ? 'success' : 'error'} sx={{ width: '100%' }}>{alert}</Alert>
-        </Snackbar>
+        <SnackAlert alert={alert} setalert={() => setalert(null)} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
-            {PerChk('EDIT_Watershed Master') && (
-                <Button startIcon={<AddHome />} onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
+            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
+                onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
         </Box>
 
         <TableContainer component={Paper}><Table>

@@ -1,4 +1,5 @@
-import { Box, IconButton, Typography, ThemeProvider } from '@mui/material';
+import React from 'react';
+import { Box, IconButton, Typography, ThemeProvider, Snackbar, Alert } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -77,3 +78,10 @@ export const TPA = (props: any) => {
         </Box>
     </ThemeProvider>);
 }
+
+export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; success: boolean; }> = ({ alert, setalert, success }) =>
+(<Snackbar open={Boolean(alert)} onClose={setalert} autoHideDuration={3000}>
+    <Alert severity={success ? 'success' : 'error'} sx={{ width: '100%' }}>
+        {alert}
+    </Alert>
+</Snackbar>)
