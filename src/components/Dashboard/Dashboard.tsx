@@ -16,11 +16,11 @@ export const Dashboard: React.FC = () => {
     const iclr = ['#96c22f', '#3b77b9', '#f58e1d', '#bfab55']
 
     return (<>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%', overflow: 'auto' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', height: '100%' }}>
+            <Grid container spacing={1}>
                 {keys.map((k, i) => (
-                    <Card key={i} sx={{
-                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '160px', width: '25%',
+                    <Grid item xs={12} md={3}><Card key={i} sx={{
+                        display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '160px',
                         position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor')
                     }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -32,13 +32,13 @@ export const Dashboard: React.FC = () => {
                             onClick={() => setgMod(k)}
                             sx={{ cursor: 'pointer', position: 'absolute', bottom: 0, right: 0, margin: '12px' }}
                         />
-                    </Card>
+                    </Card></Grid>
                 ))}
-            </Box>
+            </Grid>
 
             <Grid container spacing={1}>
                 <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Bunding</Typography>
@@ -46,7 +46,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Waste weirs</Typography>
@@ -54,7 +54,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Pebble/Boulder bund</Typography>
@@ -62,7 +62,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Farm Ponds</Typography>
@@ -70,7 +70,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Check dams</Typography>
@@ -78,7 +78,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Nala treatment</Typography>
@@ -86,7 +86,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Kalyani renovation</Typography>
@@ -94,7 +94,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Afforestation</Typography>
@@ -102,7 +102,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Open Well Renovation</Typography>
@@ -110,7 +110,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Recharge Structures</Typography>
@@ -122,7 +122,7 @@ export const Dashboard: React.FC = () => {
 
             <Grid container spacing={1}>
                 <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Demand Side Interventions</Typography></Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Drip/Sprinkler</Typography>
@@ -130,7 +130,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Soil health cards</Typography>
@@ -138,7 +138,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Members capacitated</Typography>
@@ -146,7 +146,7 @@ export const Dashboard: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={2}>
                     <Card sx={actCard}>
                         <CardContent sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Sustainable practices</Typography>

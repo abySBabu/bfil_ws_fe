@@ -90,7 +90,7 @@ export const Home: React.FC = () => {
                 </Paper>
             }
 
-            <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%' }}>
+            <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
                 Copyright - 2024. Pragat Watershed, All Rights Reserved.
             </Box>
 
