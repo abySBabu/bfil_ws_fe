@@ -60,43 +60,53 @@ export default function EditRole(props: RoleTypeProps) {
 
     const editRole: SubmitHandler<RoleFormInput> = async (value) => {
         setLoading(true);
-        try {
-            let mappingData = {
-                roleId: roleDetails?.roleId || null,
-                companyId: companyID,
-                createdByUserId: userId,
-                updatedByUserId: userId,
-                permissionList: checkedPermissions,
-                roleDescription: value.roleDesc,
-                roleName: value.roleName
-            }
-            let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
-            let logoutresp = await logout();
+        if (checkedPermissions.length == 0) {
+            setSeverityColor("error");
+            setMessage("Kindly add a role for atleast one screen");
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                setOpenSnackbar(false);
+                setLoading(false);
+            }, setAutoHideDurationTimeoutsecs)
+        } else {
+            try {
+                let mappingData = {
+                    roleId: roleDetails?.roleId || null,
+                    companyId: companyID,
+                    createdByUserId: userId,
+                    updatedByUserId: userId,
+                    permissionList: checkedPermissions,
+                    roleDescription: value.roleDesc,
+                    roleName: value.roleName
+                }
+                let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
+                let logoutresp = await logout();
 
-            if (resp) {
-                setSeverityColor("success");
-                setMessage("Role updated successfully");
-                setOpenSnackbar(true);
-                setTimeout(() => {
-                    setOpenSnackbar(false);
-                    setLoading(false);
-                    handleClose();
-                    if (logoutresp) {
-                        navigate('/');
-                    }
-                }, setTimeoutsecs);
-            }
-            // let getRoleresp = await getRolesByRole(roleDetails?.roleId);
-            // setPermissionList(getRoleresp.permissionList);
-        } catch (error: any) {
-            if (error && error.response && error.response.data && error.response.data.message) {
-                setSeverityColor("error");
-                setMessage(error.response.data.message);
-                setOpenSnackbar(true);
-                setTimeout(() => {
-                    setOpenSnackbar(false);
-                    setLoading(false);
-                }, setAutoHideDurationTimeoutsecs)
+                if (resp) {
+                    setSeverityColor("success");
+                    setMessage("Role updated successfully");
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                        setLoading(false);
+                        handleClose();
+                        if (logoutresp) {
+                            navigate('/');
+                        }
+                    }, setTimeoutsecs);
+                }
+                // let getRoleresp = await getRolesByRole(roleDetails?.roleId);
+                // setPermissionList(getRoleresp.permissionList);
+            } catch (error: any) {
+                if (error && error.response && error.response.data && error.response.data.message) {
+                    setSeverityColor("error");
+                    setMessage(error.response.data.message);
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                        setLoading(false);
+                    }, setAutoHideDurationTimeoutsecs)
+                }
             }
         }
     }

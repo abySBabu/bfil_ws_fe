@@ -45,40 +45,50 @@ export default function AddRole(props: userTypeProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<RoleFormInput>();
 
     const addRole: SubmitHandler<RoleFormInput> = async (value) => {
-        console.log('value', value, checkedPermissions)
+        console.log('value', value, checkedPermissions);
         setLoading(true);
-        try {
-            let mappingData = {
-                roleId: null,
-                companyId: companyID,
-                createdByUserId: userId,
-                updatedByUserId: userId,
-                permissionList: checkedPermissions,
-                roleDescription: value.roleDesc,
-                roleName: value.roleName
-            }
-            console.log("mappingData.........", mappingData)
+        if (checkedPermissions.length == 0) {
+            setSeverityColor("error");
+            setMessage("Kindly add a role for atleast one screen");
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                setOpenSnackbar(false);
+                setLoading(false);
+            }, setAutoHideDurationTimeoutsecs)
+        } else {
+            try {
+                let mappingData = {
+                    roleId: null,
+                    companyId: companyID,
+                    createdByUserId: userId,
+                    updatedByUserId: userId,
+                    permissionList: checkedPermissions,
+                    roleDescription: value.roleDesc,
+                    roleName: value.roleName
+                }
+                console.log("mappingData.........", mappingData)
 
-            let resp = await addRolePermission(mappingData);
-            if (resp) {
-                setSeverityColor("success");
-                setMessage("Role created successfully");
-                setOpenSnackbar(true);
-                setTimeout(() => {
-                    setOpenSnackbar(false);
-                    setLoading(false);
-                    handleClose();
-                }, setTimeoutsecs);
-            }
-        } catch (error: any) {
-            if (error && error.response && error.response.data && error.response.data.message) {
-                setSeverityColor("error");
-                setMessage(error.response.data.message);
-                setOpenSnackbar(true);
-                setTimeout(() => {
-                    setOpenSnackbar(false);
-                    setLoading(false);
-                }, setAutoHideDurationTimeoutsecs)
+                let resp = await addRolePermission(mappingData);
+                if (resp) {
+                    setSeverityColor("success");
+                    setMessage("Role created successfully");
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                        setLoading(false);
+                        handleClose();
+                    }, setTimeoutsecs);
+                }
+            } catch (error: any) {
+                if (error && error.response && error.response.data && error.response.data.message) {
+                    setSeverityColor("error");
+                    setMessage(error.response.data.message);
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                        setLoading(false);
+                    }, setAutoHideDurationTimeoutsecs)
+                }
             }
         }
     }
@@ -242,7 +252,7 @@ export default function AddRole(props: userTypeProps) {
 
                                     <React.Fragment key={index}>
                                         <Grid item xs={4}>
-                                            <Typography sx={{fontWeight:'bold'}} >{screendata.screenName}</Typography>
+                                            <Typography sx={{ fontWeight: 'bold' }} >{screendata.screenName}</Typography>
                                         </Grid>
                                         {screendata.permission
                                             .filter(perm => perm.permissionName.startsWith("VIEW"))
