@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+    TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar,
+    CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle, FormControl, InputLabel, Select, OutlinedInput
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
 import { mapDataType, wsData } from "./WatershedMappingMgmtType";
@@ -9,6 +13,8 @@ import { listWS } from '../../Services/wsService';
 import { usersList } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { SelectChangeEvent } from '@mui/material/Select';
+import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 
 interface MapFormInput {
     ws_name: number,
@@ -24,13 +30,14 @@ export default function (props: mapTypeProps) {
     const [wsList, setWsList] = useState<wsData[]>([]);
     const [selectedWs, setSelectedWs] = useState<wsData | null>(null);
     const [userList, setUserList] = useState<allUserType[]>([]);
+    const [selectedRoleName, setSelectedRoleName] = useState<string>('');
     let companyID: any;
     let userId: any;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
     let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<MapFormInput>();
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<MapFormInput>();
 
 
     if (companyIdFromLocalStorage !== null) {
@@ -74,17 +81,20 @@ export default function (props: mapTypeProps) {
     };
 
     const handleWatershedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedWsId = Number(event.target.value);
-        setValue('ws_name', selectedWsId);  // Set watershed id
-
-        // Find the selected watershed from the list and update the state
-        const selectedWsData = wsList.find(ws => ws.wsId === selectedWsId) || null;
+        const selectedWsIds = Number(event.target.value);
+        setValue('ws_name', selectedWsIds);
+        const selectedWsData = wsList.find(ws => ws.wsId === selectedWsIds) || null;
+        // const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
         setSelectedWs(selectedWsData);
     };
 
     const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedUserId = Number(event.target.value);
-        setValue('user', selectedUserId);  // Set user id
+        setValue('user', selectedUserId);
+        const selectedUser = userList.find(user => user.userId === selectedUserId);
+        if (selectedUser) {
+            setSelectedRoleName(selectedUser.userRoleList[0]?.roleName || '');
+        }
     };
 
     const addMap: SubmitHandler<MapFormInput> = async (value) => {
@@ -134,12 +144,10 @@ export default function (props: mapTypeProps) {
                         <Grid item xs={6}>
                             <TextField
                                 select
-                                margin="normal"
-                                fullWidth
                                 id="user"
                                 label="User Name"
                                 {...register('user', {
-                                    required: 'User Name Set is required'
+                                    required: 'User Name is required'
                                 })}
                                 error={!!errors.user}
                                 helperText={errors.user ? errors.user.message : ''}
@@ -149,6 +157,13 @@ export default function (props: mapTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
+                            <TextField
+                                disabled
+                                label="Role"
+                                value={selectedRoleName}>
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
                             <TextField
                                 select
                                 required
@@ -176,10 +191,9 @@ export default function (props: mapTypeProps) {
                         <Grid item xs={4}><TextField label="Grampanchayat" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
                         <Grid item xs={4}><TextField label="Village" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
                         <Grid item xs={12}><Divider /></Grid>
+
                         <Grid item xs={12}>
                             <TextField
-                                margin="normal"
-                                fullWidth
                                 id="remarks"
                                 label="Remarks"
                                 autoFocus
@@ -219,7 +233,6 @@ type mapTypeProps = {
     show: boolean;
     hide: () => void;
     action: string;
-    mapList: mapDataType[];
     mapDetails: mapDataType;
-
+    mapList: mapDataType[];
 }
