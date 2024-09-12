@@ -36,7 +36,7 @@ export const WsActivity: React.FC = () => {
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
-            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
+            {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
         </Box>
 
         <TableContainer component={Paper}><Table>
@@ -46,7 +46,7 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Total Units</TableCell>
-                    <TableCell>Actions</TableCell>
+                    {PerChk('EDIT_Watershed Activity') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -56,7 +56,7 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Supply</TableCell>
                     <TableCell>Earthen bunding</TableCell>
                     <TableCell>200 sqft</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                    {PerChk('EDIT_Watershed Activity') && <TableCell>
                         <IconButton onClick={() => { }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>

@@ -67,7 +67,7 @@ export const FarmerMaster: React.FC = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
-            {PerChk('EDIT_Watershed Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
+            {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
         </Box>
 
         <TableContainer component={Paper}><Table>
@@ -76,7 +76,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>Aadhar</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Number</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
+                    {PerChk('EDIT_Farmer Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -85,7 +85,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{w.adharNumber}</TableCell>
                     <TableCell>{w.wsfarmerName}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                    {PerChk('EDIT_Farmer Master') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>
