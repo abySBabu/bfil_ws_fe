@@ -42,7 +42,14 @@ export default function AddRole(props: userTypeProps) {
         props.hide();
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RoleFormInput>();
+    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<RoleFormInput>({
+        mode: 'onChange',
+        defaultValues: {
+            roleName: '',
+            roleDesc: ''
+        }
+    });
+    const formValues = watch();
 
     const addRole: SubmitHandler<RoleFormInput> = async (value) => {
         console.log('value', value, checkedPermissions);
@@ -207,12 +214,16 @@ export default function AddRole(props: userTypeProps) {
                                 label="Role Name"
                                 autoFocus
                                 {...register('roleName', {
-                                    required: 'Role Name is required',
+                                    // required: 'Role Name is required',
                                     pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
                                         message: 'Role Name must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('roleName').onChange(e);
+                                    trigger('roleName');
+                                }}
                                 error={!!errors.roleName}
                                 helperText={errors.roleName ? errors.roleName.message : ''}
                             />
@@ -226,12 +237,16 @@ export default function AddRole(props: userTypeProps) {
                                 label="Role Description"
                                 autoFocus
                                 {...register('roleDesc', {
-                                    required: 'Role Description is required',
+                                    // required: 'Role Description is required',
                                     pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
                                         message: 'Role Description must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('roleDesc').onChange(e);
+                                    trigger('roleDesc');
+                                }}
                                 error={!!errors.roleDesc}
                                 helperText={errors.roleDesc ? errors.roleDesc.message : ''}
                             />
@@ -298,7 +313,7 @@ export default function AddRole(props: userTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button disabled={loading} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+                    <Button disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>

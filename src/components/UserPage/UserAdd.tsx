@@ -102,7 +102,22 @@ export default function (props: userTypeProps) {
         props.hide();
     };
 
-    const { register, handleSubmit, formState: { errors } } = useForm<UserFormInput>();
+    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<UserFormInput>({
+        mode: 'onChange',
+        defaultValues: {
+            userName: '',
+            employeeCode: '',
+            designation: '',
+            role: '',
+            email: '',
+            mobileNo: '',
+            password: '',
+            manager: '',
+            loginType: ''
+        }
+    });
+    const formValues = watch();
+
 
     const addUser: SubmitHandler<UserFormInput> = async (value) => {
         setLoading(true);
@@ -167,12 +182,16 @@ export default function (props: userTypeProps) {
                                 label="Name"
                                 autoFocus
                                 {...register('userName', {
-                                    required: 'Name is required',
+                                    // required: 'Name is required',
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Name must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('userName').onChange(e);
+                                    trigger('userName');
+                                }}
                                 error={!!errors.userName}
                                 helperText={errors.userName ? errors.userName.message : ''}
                             />
@@ -185,12 +204,16 @@ export default function (props: userTypeProps) {
                                 id="employeeCode"
                                 label="Employee Code"
                                 {...register('employeeCode', {
-                                    required: 'Employee Code is required',
+                                    // required: 'Employee Code is required',
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,                                        
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Employee Code must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('employeeCode').onChange(e);
+                                    trigger('employeeCode');
+                                }}
                                 error={!!errors.employeeCode}
                                 helperText={errors.employeeCode ? errors.employeeCode.message : ''}
                             />
@@ -203,10 +226,14 @@ export default function (props: userTypeProps) {
                                 label="Designation"
                                 {...register('designation', {
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Designation must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('designation').onChange(e);
+                                    trigger('designation');
+                                }}
                                 error={!!errors.designation}
                                 helperText={errors.designation ? errors.designation.message : ''}
                             />
@@ -220,8 +247,12 @@ export default function (props: userTypeProps) {
                                 id="role"
                                 label="Role"
                                 {...register('role', {
-                                    required: 'Role Set is required'
+                                    // required: 'Role Set is required'
                                 })}
+                                onChange={(e) => {
+                                    register('role').onChange(e);
+                                    trigger('role');
+                                }}
                                 error={!!errors.role}
                                 helperText={errors.role ? errors.role.message : ''}
                             >
@@ -236,13 +267,17 @@ export default function (props: userTypeProps) {
                                 id="email"
                                 label="Email"
                                 {...register('email', {
-                                    required: 'Email is required',
+                                    // required: 'Email is required',
                                     pattern: {
                                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                         message: 'Email is invalid'
                                     }
 
                                 })}
+                                onChange={(e) => {
+                                    register('email').onChange(e);
+                                    trigger('email');
+                                }}
                                 error={!!errors.email}
                                 helperText={errors.email ? errors.email.message : ''}
                             />
@@ -255,12 +290,16 @@ export default function (props: userTypeProps) {
                                 id="mobileNo"
                                 label="Mobile Number"
                                 {...register('mobileNo', {
-                                    required: 'Mobile Number is required',
+                                    // required: 'Mobile Number is required',
                                     pattern: {
                                         value: /^[0-9]{10}$/,
                                         message: 'Mobile Number is invalid'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('mobileNo').onChange(e);
+                                    trigger('mobileNo');
+                                }}
                                 error={!!errors.mobileNo}
                                 helperText={errors.mobileNo ? errors.mobileNo.message : ''}
                             />
@@ -274,12 +313,16 @@ export default function (props: userTypeProps) {
                                 type="password"
                                 id="password"
                                 {...register('password', {
-                                    required: 'Password is required',
+                                    // required: 'Password is required',
                                     minLength: {
                                         value: 4,
                                         message: 'Password must be at least 4 characters',
                                     },
                                 })}
+                                onChange={(e) => {
+                                    register('password').onChange(e);
+                                    trigger('password');
+                                }}
                                 error={!!errors.password}
                                 helperText={errors.password ? errors.password.message : ''}
                             />
@@ -293,6 +336,10 @@ export default function (props: userTypeProps) {
                                 label="Manager"
                                 {...register('manager', {
                                 })}
+                                onChange={(e) => {
+                                    register('manager').onChange(e);
+                                    trigger('manager');
+                                }}
                                 error={!!errors.manager}
                                 helperText={errors.manager ? errors.manager.message : ''}
                             >
@@ -308,8 +355,12 @@ export default function (props: userTypeProps) {
                                 id="loginType"
                                 label="Login Type"
                                 {...register('loginType', {
-                                    required: 'Login Type is required'
+                                    // required: 'Login Type is required'
                                 })}
+                                onChange={(e) => {
+                                    register('loginType').onChange(e);
+                                    trigger('loginType');
+                                }}
                                 error={!!errors.loginType}
                                 helperText={errors.loginType ? errors.loginType.message : ''}
                             >
@@ -321,7 +372,9 @@ export default function (props: userTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit(addUser)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+                    <Button
+                        disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.password || !formValues.role || !formValues.userName}
+                        onClick={handleSubmit(addUser)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
@@ -337,7 +390,7 @@ export default function (props: userTypeProps) {
         </Container>
     );
 };
-    
+
 type userTypeProps = {
     show: boolean;
     hide: () => void;

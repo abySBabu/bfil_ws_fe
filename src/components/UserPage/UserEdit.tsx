@@ -4,7 +4,7 @@ import {
     TextField, Button, Snackbar, Alert, Box, Grid, MenuItem, Dialog, DialogActions,
     DialogContent, DialogTitle, Container, CircularProgress
 } from '@mui/material';
-import { getRolesByCompany, updateUserDetails }  from '../../Services/userService';
+import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
@@ -46,7 +46,7 @@ export default function UserForm(props: userTypeProps) {
     let userId: any;
     const [isRolesLoading, setRolesLoading] = useState(true);
 
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<UserFormInput>(
+    const { register, handleSubmit, trigger, setValue, watch, formState: { errors, isValid } } = useForm<UserFormInput>(
         {
             defaultValues: {
                 userName: '',
@@ -60,6 +60,8 @@ export default function UserForm(props: userTypeProps) {
                 loginType: '',
             }
         });
+    const formValues = watch();
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -177,12 +179,16 @@ export default function UserForm(props: userTypeProps) {
                                 autoFocus
                                 InputLabelProps={{ shrink: true }}
                                 {...register('userName', {
-                                    required: 'Name is required',
+                                    // required: 'Name is required',
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Name must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('userName').onChange(e);
+                                    trigger('userName');
+                                }}
                                 error={!!errors.userName}
                                 helperText={errors.userName?.message}
                             />
@@ -197,8 +203,12 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 label="Employee Code"
                                 {...register('employeeCode', {
-                                    required: 'Employee Code is required',
+                                    // required: 'Employee Code is required',
                                 })}
+                                onChange={(e) => {
+                                    register('employeeCode').onChange(e);
+                                    trigger('employeeCode');
+                                }}
                                 error={!!errors.employeeCode}
                                 helperText={errors.employeeCode?.message}
                             />
@@ -212,10 +222,14 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 {...register('designation', {
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,                                        
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Designation must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('designation').onChange(e);
+                                    trigger('designation');
+                                }}
                                 error={!!errors.designation}
                                 helperText={errors.designation?.message}
                             />
@@ -229,7 +243,13 @@ export default function UserForm(props: userTypeProps) {
                                 disabled
                                 id="email"
                                 label="Email"
-                                {...register('email', { required: 'Email is required' })}
+                                {...register('email', {
+                                    // required: 'Email is required' 
+                                })}
+                                onChange={(e) => {
+                                    register('email').onChange(e);
+                                    trigger('email');
+                                }}
                                 error={!!errors.email}
                                 helperText={errors.email?.message}
                             />
@@ -243,7 +263,13 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 id="mobileNo"
                                 label="Mobile Number"
-                                {...register('mobileNo', { required: 'Mobile Number is required' })}
+                                {...register('mobileNo', {
+                                    // required: 'Mobile Number is required'
+                                })}
+                                onChange={(e) => {
+                                    register('mobileNo').onChange(e);
+                                    trigger('mobileNo');
+                                }}
                                 error={!!errors.mobileNo}
                                 helperText={errors.mobileNo?.message}
                             />
@@ -259,8 +285,12 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 value={watch('role')}
                                 {...register('role', {
-                                    required: 'Role is required'
+                                    // required: 'Role is required'
                                 })}
+                                onChange={(e) => {
+                                    register('role').onChange(e);
+                                    trigger('role');
+                                }}
                                 error={!!errors.role}
                                 helperText={errors.role?.message}
                             >
@@ -279,6 +309,10 @@ export default function UserForm(props: userTypeProps) {
                                 id="manager"
                                 label="Manager"
                                 {...register('manager', {})}
+                                onChange={(e) => {
+                                    register('manager').onChange(e);
+                                    trigger('manager');
+                                }}
                                 error={!!errors.manager}
                                 helperText={errors.manager?.message}
                             >
@@ -297,7 +331,13 @@ export default function UserForm(props: userTypeProps) {
                                 id="loginType"
                                 value={watch('loginType')}
                                 label="Login Type"
-                                {...register('loginType', { required: 'Login Type is required' })}
+                                {...register('loginType', {
+                                    // required: 'Login Type is required'
+                                })}
+                                onChange={(e) => {
+                                    register('loginType').onChange(e);
+                                    trigger('loginType');
+                                }}
                                 error={!!errors.loginType}
                                 helperText={errors.loginType?.message}
                             >
@@ -310,7 +350,9 @@ export default function UserForm(props: userTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={handleSubmit(addUser)} color="primary">
+                    <Button
+                        disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.role || !formValues.userName}
+                        onClick={handleSubmit(addUser)} color="primary">
                         Update {loading ? <CircularProgress size={24} /> : null}
                     </Button>
                 </DialogActions>

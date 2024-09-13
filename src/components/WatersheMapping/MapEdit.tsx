@@ -37,7 +37,15 @@ export default function (props: mapTypeProps) {
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
     let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<MapFormInput>();
+    const { register, handleSubmit, setValue, trigger, watch, formState: { errors, isValid } } = useForm<MapFormInput>(
+        {
+            defaultValues: {
+                ws_name: undefined,
+                user: undefined,
+                remarks: '',
+            }
+        });
+    const formValues = watch();
 
 
     if (companyIdFromLocalStorage !== null) {
@@ -80,16 +88,16 @@ export default function (props: mapTypeProps) {
         props.hide();
     };
 
-    const handleWatershedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedWsIds = Number(event.target.value);
+    const handleWatershedChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const selectedWsIds = Number(e.target.value);
         setValue('ws_name', selectedWsIds);
         const selectedWsData = wsList.find(ws => ws.wsId === selectedWsIds) || null;
         // const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
         setSelectedWs(selectedWsData);
     };
 
-    const handleUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedUserId = Number(event.target.value);
+    const handleUserChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const selectedUserId = Number(e.target.value);
         setValue('user', selectedUserId);
         const selectedUser = userList.find(user => user.userId === selectedUserId);
         if (selectedUser) {
@@ -147,11 +155,15 @@ export default function (props: mapTypeProps) {
                                 id="user"
                                 label="User Name"
                                 {...register('user', {
-                                    required: 'User Name is required'
+                                    // required: 'User Name is required'
                                 })}
+                                onChange={(e) => {
+                                    register('user').onChange(e);
+                                    trigger('user');
+                                    handleUserChange(e);
+                                }}
                                 error={!!errors.user}
                                 helperText={errors.user ? errors.user.message : ''}
-                                onChange={handleUserChange}
                             >
                                 {userList.map((option, index) => (<MenuItem key={index} value={option.userId}>{option.userName}</MenuItem>))}
                             </TextField>
@@ -172,11 +184,15 @@ export default function (props: mapTypeProps) {
                                 id="ws_name"
                                 label="Watershed Name"
                                 {...register('ws_name', {
-                                    required: 'Watershed Name Set is required'
+                                    // required: 'Watershed Name Set is required'
                                 })}
+                                onChange={(e) => {
+                                    register('ws_name').onChange(e);
+                                    trigger('ws_name');
+                                    handleWatershedChange(e);
+                                }}
                                 error={!!errors.ws_name}
                                 helperText={errors.ws_name ? errors.ws_name.message : ''}
-                                onChange={handleWatershedChange}
                             >
                                 {wsList.map((option, index) => (<MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>))}
                             </TextField>
@@ -203,6 +219,11 @@ export default function (props: mapTypeProps) {
                                         message: 'Remarks must only contain alphanumeric characters'
                                     }
                                 })}
+                                onChange={(e) => {
+                                    register('remarks').onChange(e);
+                                    trigger('remarks');
+                                    handleWatershedChange(e);
+                                }}
                                 error={!!errors.remarks}
                                 helperText={errors.remarks ? errors.remarks.message : ''}
                             />
@@ -212,7 +233,7 @@ export default function (props: mapTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+                    <Button disabled={loading || !isValid || !formValues.ws_name || !formValues.user} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
@@ -228,6 +249,7 @@ export default function (props: mapTypeProps) {
         </Container>
     );
 };
+
 
 type mapTypeProps = {
     show: boolean;

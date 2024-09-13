@@ -129,25 +129,25 @@ export default function UserList() {
         {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <TextField
-                        label="Search"
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                {PerChk('EDIT_User Management') && (
-                    <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                        Add User
-                    </Button>)}
+            <TextField
+                label="Search"
+                fullWidth={false}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                variant="outlined"
+                size="small"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {PerChk('EDIT_User Management') && (
+                <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    Add User
+                </Button>)}
         </Box>
 
         {filteredData.length > 0 ?
@@ -160,7 +160,7 @@ export default function UserList() {
                         <TableCell >Manager Name</TableCell>
                         <TableCell >Block User</TableCell>
                         {PerChk('EDIT_User Management') && (
-                            <TableCell sx={{textAlign:'center'}}>Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -200,10 +200,11 @@ export default function UserList() {
                                 })()}
                             </TableCell>
                             {PerChk('EDIT_User Management') && (
-                                <TableCell sx={{textAlign:'center'}}>
-                                    <Tooltip title="Edit">
-                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
-                                    </Tooltip>
+                                <TableCell sx={{ textAlign: 'center' }}>
+                                    {row.userBlockedFlag === 'N' &&
+                                        <Tooltip title="Edit">
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
+                                        </Tooltip>}
                                     {row.userBlockedFlag === 'N' &&
                                         <Tooltip title="Block User">
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
