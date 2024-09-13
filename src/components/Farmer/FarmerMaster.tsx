@@ -1,8 +1,8 @@
 import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, Snackbar, InputAdornment
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
+    Snackbar, InputAdornment, Typography
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
@@ -65,10 +65,14 @@ export const FarmerMaster: React.FC = () => {
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '4px', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
+            <div>
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} sx={{ ml: '4px', height: '100%' }}
+                    onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
+            </div>
         </Box>
 
         <TableContainer component={Paper}><Table>
@@ -87,7 +91,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{w.wsfarmerName}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
+                        <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -106,7 +110,7 @@ export const FarmerMaster: React.FC = () => {
         </Table></TableContainer>
 
         <Dialog open={addM}>
-            <DialogTitle>Add New Watershed</DialogTitle>
+            <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
@@ -131,6 +135,35 @@ export const FarmerMaster: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
                 <Button onClick={fmrAdd} /* disabled={addCheck} */>Add</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={editM}>
+            <DialogTitle>Edit {fmrObj.wsfarmerName}</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField
+                    label="Aadhar"
+                    value={fmrObj.adharNumber}
+                    onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
+                    inputProps={{ maxLength: 12 }}
+                    type="tel"
+                />
+                </Grid>
+                <Grid item xs={12}><TextField
+                    label="Mobile"
+                    value={fmrObj.mobileNumber}
+                    onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
+                    inputProps={{ maxLength: 10 }}
+                    type="tel"
+                />
+                </Grid>
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => { seteditM(false); }}>Close</Button>
+                <Button onClick={() => { seteditM(false); }}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

@@ -2,8 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, InputAdornment,
-    Typography
+    MenuItem, InputAdornment, Typography
 } from "@mui/material";
 import { AddHome, Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
