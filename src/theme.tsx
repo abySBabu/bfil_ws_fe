@@ -23,7 +23,12 @@ export const bfilTheme = createTheme({
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
                     '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') },
+                    '&.MuiButton-outlined': {
+                        borderColor: sd('--button-bgcolor-active-brand'),
+                        '&:hover': { borderColor: sd('--button-bgcolor-hover-brand') },
+                        '&.Mui-disabled': { borderColor: sd('--button-bgcolor-disabled') }
+                    }
                 }
             },
             defaultProps: {
@@ -42,7 +47,7 @@ export const bfilTheme = createTheme({
         MuiAvatar: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff', textTransform: 'none',
+                    borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff',
                     '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
@@ -172,7 +177,8 @@ export const bfilTheme = createTheme({
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    textTransform: 'none'
+                    textTransform: 'none',
+                    fontFamily: sd('--text-font')
                 }
             }
         },
