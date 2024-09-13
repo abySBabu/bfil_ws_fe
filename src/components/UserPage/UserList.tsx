@@ -128,7 +128,7 @@ export default function UserList() {
         {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
         {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
-        <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Box sx={{mb: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
                 <FormControl sx={{ width: '200px' }}>
                     <TextField
@@ -154,7 +154,7 @@ export default function UserList() {
         </Box>
 
         {filteredData.length > 0 ?
-            <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
+            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Name</TableCell>
