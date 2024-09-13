@@ -97,22 +97,34 @@ export const Workplan: React.FC = () => {
         </Table></TableContainer>
 
         <Dialog open={addM}>
-            <DialogTitle>Add New Watershed</DialogTitle>
+            <DialogTitle>Add New Plan</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><Divider>Plan Details</Divider></Grid>
+                <Grid item xs={12}><Divider textAlign='left'>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='Year' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Intervention" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Activity" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Land Type" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
 
-                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={12}><Divider textAlign='left'>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='State' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="District" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Taluk" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Panchayat" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Watershed" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
 
+                <Grid item xs={12}><Divider textAlign='left'>Physical Plan</Divider></Grid>
+                <Grid item xs={3}><TextField label='Value' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="UOM" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+
+                <Grid item xs={12}><Divider textAlign='left'>Financial Plan</Divider></Grid>
+                <Grid item xs={3}><TextField label="BFIL" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Other Gov Schemes" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Other" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="MGNREGA" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="IBL" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Community" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Total" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>

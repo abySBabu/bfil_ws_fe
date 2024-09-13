@@ -65,7 +65,7 @@ export const FarmerMaster: React.FC = () => {
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '4px', mb: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
