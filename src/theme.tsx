@@ -25,6 +25,9 @@ export const bfilTheme = createTheme({
                     '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
+            },
+            defaultProps: {
+                variant: 'outlined'
             }
         },
         MuiIconButton: {
