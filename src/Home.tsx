@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -17,6 +17,16 @@ export const Home: React.FC = () => {
     const [message, setMessage] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
+    const [languageAnchor, setLanguageAnchor] = useState<any>(null);
+
+    const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
+        setLanguageAnchor(event.currentTarget);
+    };
+
+    const changeLanguage = (language: string) => {
+        console.log('Selected Language:', language);
+        setLanguageAnchor(null);
+    };
 
     const sections = [
         { name: 'Dashboard', permission: 'VIEW_Dashboard', component: <Dashboard /> },
@@ -96,6 +106,12 @@ export const Home: React.FC = () => {
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
                 <MenuItem onClick={logout} component={Link} href='/bfilreact'>Logout</MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
+            </Menu>
+            <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
+                <MenuItem onClick={() => changeLanguage('English')}>English</MenuItem>
+                <MenuItem onClick={() => changeLanguage('Tamil')}>Tamil</MenuItem>
             </Menu>
         </Box>
     );

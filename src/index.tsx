@@ -7,6 +7,8 @@ import './index.css';
 import { bfilTheme } from './theme';
 import Login from './components/LoginPage/Login';
 import { Home } from './Home';
+import  './i18n';
+
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
