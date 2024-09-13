@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
@@ -135,7 +135,7 @@ export default function MappingList() {
                         <TableCell >User Name</TableCell>
                         <TableCell >Remarks</TableCell>
                         {PerChk('EDIT_Watershed Mapping') && (
-                            <TableCell >Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }} >Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -144,19 +144,19 @@ export default function MappingList() {
                         : filteredData
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {fetchWsData(row.watershedId)}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell >
                                 {fetchUserData(row.userId)}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell >
                                 {row.remarks}
                             </TableCell>
                             {PerChk('EDIT_Watershed Mapping') && (
-                                <TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>
                                     <Tooltip title="Edit">
-                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
                                 </TableCell>)}
 

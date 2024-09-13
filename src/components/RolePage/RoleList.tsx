@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { getRolesByCompany } from '../../Services/roleService';
 import { TPA, PerChk } from '../../common';
@@ -107,7 +107,7 @@ export default function RoleList() {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon  />
+                                    <SearchIcon />
                                 </InputAdornment>
                             ),
                         }}
@@ -127,7 +127,7 @@ export default function RoleList() {
                         <TableCell >Role Name</TableCell>
                         <TableCell >Description</TableCell>
                         {PerChk('EDIT_Role Management') && (
-                            <TableCell >Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -136,19 +136,19 @@ export default function RoleList() {
                         : filteredData
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.roleName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell >
                                 {row.roleDescription}
                             </TableCell>
                             {PerChk('EDIT_Role Management') && (
-                                <TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>
                                     <Tooltip title="Edit">
-                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
                                     <Tooltip title="Delete">
-                                        <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                     </Tooltip>
                                 </TableCell>)}
                         </TableRow>
