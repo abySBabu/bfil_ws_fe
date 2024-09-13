@@ -102,11 +102,10 @@ export default function MappingList() {
         {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' mapList={mapData} /> : null}
         {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '200px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
                     <TextField
                         label="Search"
+                        fullWidth={false}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
@@ -119,12 +118,10 @@ export default function MappingList() {
                             ),
                         }}
                     />
-                </FormControl>
                 {PerChk('EDIT_Watershed Mapping') && (
                     <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add Mapping
                     </Button>)}
-            </Box >
         </Box>
 
         {filteredData.length > 0 ?

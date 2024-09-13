@@ -95,11 +95,10 @@ export default function RoleList() {
         {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
         {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
         {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '200px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
                     <TextField
                         label="Search"
+                        fullWidth={false}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
@@ -112,12 +111,10 @@ export default function RoleList() {
                             ),
                         }}
                     />
-                </FormControl>
                 {PerChk('EDIT_Role Management') && (
                     <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add Role
                     </Button>)}
-            </Box >
         </Box>
 
         {filteredData.length > 0 ?
