@@ -93,6 +93,11 @@ export const bfilTheme = createTheme({
                 }
             }
         },
+        MuiTableCell: {
+            defaultProps: {
+                component: 'th', scope: 'row'
+            }
+        },
         MuiDialog: {
             styleOverrides: {
                 root: {

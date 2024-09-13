@@ -6,12 +6,29 @@ import {
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
-import { listFarmer, addFarmer } from '../../Services/farmerService';
 
 const defObj = {
-    wsfarmerName: "",
-    adharNumber: "",
-    mobileNumber: ""
+    year: "",
+    activity: "",
+    intervention: "",
+    landType: "",
+
+    stateId: "1",
+    districtId: "",
+    talukId: "",
+    grampanchayatId: "",
+    wsId: "",
+
+    phyValue: "",
+    phyUnit: "",
+
+    finTotal: "",
+    finBfil: "",
+    finOther: "",
+    finGov: "",
+    finMgn: "",
+    finIbl: "",
+    finCom: ""
 }
 
 export const Workplan: React.FC = () => {
@@ -24,14 +41,12 @@ export const Workplan: React.FC = () => {
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
 
-    const addCheck = !planObj.wsfarmerName || planObj.adharNumber.length !== 12 || planObj.mobileNumber.length !== 10
-
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
-            w.wsfarmerName?.toLowerCase().includes(searchTerm) ||
-            w.adharNumber?.toLowerCase().includes(searchTerm) ||
-            w.mobileNumber?.toLowerCase().includes(searchTerm)
+            w.year?.toLowerCase().includes(searchTerm) ||
+            w.activity?.toLowerCase().includes(searchTerm) ||
+            w.intervention?.toLowerCase().includes(searchTerm)
         );
     });
 
@@ -51,7 +66,7 @@ export const Workplan: React.FC = () => {
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Activity</TableCell>
-                    <TableCell>Physical</TableCell>
+                    <TableCell>intervention</TableCell>
                     <TableCell>Financial</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
@@ -59,9 +74,9 @@ export const Workplan: React.FC = () => {
 
             <TableBody>{planListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.adharNumber}</TableCell>
-                    <TableCell>{w.wsfarmerName}</TableCell>
-                    <TableCell>{w.mobileNumber}</TableCell>
+                    <TableCell>{w.activity}</TableCell>
+                    <TableCell>{w.year}</TableCell>
+                    <TableCell>{w.intervention}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
@@ -85,23 +100,19 @@ export const Workplan: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={planObj.wsfarmerName} onChange={(e) => setplanObj({ ...planObj, wsfarmerName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField
-                    label="Aadhar"
-                    value={planObj.adharNumber}
-                    onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setplanObj({ ...planObj, adharNumber: e.target.value }) } }}
-                    inputProps={{ maxLength: 12 }}
-                    type="tel"
-                />
-                </Grid>
-                <Grid item xs={12}><TextField
-                    label="Mobile"
-                    value={planObj.mobileNumber}
-                    onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setplanObj({ ...planObj, mobileNumber: e.target.value }); } }}
-                    inputProps={{ maxLength: 10 }}
-                    type="tel"
-                />
-                </Grid>
+                <Grid item xs={12}><Divider>Plan Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='Year' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Intervention" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Activity" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Land Type" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+
+                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='State' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="District" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Watershed" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+
             </Grid></DialogContent>
 
             <DialogActions>

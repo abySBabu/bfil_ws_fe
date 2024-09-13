@@ -30,8 +30,8 @@ export const FarmerMaster: React.FC = () => {
         const searchTerm = search?.toLowerCase();
         return (
             w.wsfarmerName?.toLowerCase().includes(searchTerm) ||
-            w.adharNumber?.toLowerCase().includes(searchTerm) ||
-            w.mobileNumber?.toLowerCase().includes(searchTerm)
+            w.adharNumber?.toString().toLowerCase().includes(searchTerm) ||
+            w.mobileNumber?.toString().toLowerCase().includes(searchTerm)
         );
     });
 

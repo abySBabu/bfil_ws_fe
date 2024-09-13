@@ -162,7 +162,7 @@ export const WsMaster: React.FC = () => {
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                 InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
             {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
-                onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
+                onClick={() => { setwsObj(defObj); setaddM(true); }}>Add Watershed</Button>)}
         </Box>
 
         <TableContainer component={Paper}><Table>
