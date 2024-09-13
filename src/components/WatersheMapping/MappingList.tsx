@@ -103,7 +103,6 @@ export default function MappingList() {
         {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                <FormControl sx={{ width: '200px' }}>
                     <TextField
                         label="Search"
                         fullWidth={false}
@@ -119,7 +118,6 @@ export default function MappingList() {
                             ),
                         }}
                     />
-                </FormControl>
                 {PerChk('EDIT_Watershed Mapping') && (
                     <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add Mapping

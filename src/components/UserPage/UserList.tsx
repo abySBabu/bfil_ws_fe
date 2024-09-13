@@ -128,11 +128,10 @@ export default function UserList() {
         {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
         {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
-        <Box sx={{mb: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '200px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
                     <TextField
                         label="Search"
+                        fullWidth={false}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         variant="outlined"
@@ -145,12 +144,10 @@ export default function UserList() {
                             ),
                         }}
                     />
-                </FormControl>
                 {PerChk('EDIT_User Management') && (
                     <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add User
                     </Button>)}
-            </Box >
         </Box>
 
         {filteredData.length > 0 ?
