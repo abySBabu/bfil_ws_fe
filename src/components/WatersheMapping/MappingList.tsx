@@ -121,7 +121,7 @@ export default function MappingList() {
                     />
                 </FormControl>
                 {PerChk('EDIT_Watershed Mapping') && (
-                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add Mapping
                     </Button>)}
             </Box >

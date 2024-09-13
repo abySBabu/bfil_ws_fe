@@ -147,7 +147,7 @@ export default function UserList() {
                     />
                 </FormControl>
                 {PerChk('EDIT_User Management') && (
-                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add User
                     </Button>)}
             </Box >
