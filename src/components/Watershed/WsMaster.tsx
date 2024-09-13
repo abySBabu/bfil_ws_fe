@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, InputAdornment
+    MenuItem, InputAdornment,
+    Typography
 } from "@mui/material";
 import { AddHome, Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -158,11 +159,14 @@ export const WsMaster: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert(null)} success={alertClr} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
-                onClick={() => { setwsObj(defObj); setaddM(true); }}>Add Watershed</Button>)}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
+            <div>
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
+                    onClick={() => { setwsObj(defObj); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
+            </div>
         </Box>
 
         <TableContainer component={Paper}><Table>
