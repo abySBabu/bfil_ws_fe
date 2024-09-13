@@ -107,7 +107,7 @@ export const Home: React.FC = () => {
             }
 
             <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
-                Copyright - 2024. Pragat Watershed, All Rights Reserved.
+                <Typography variant='body2'>Copyright - 2024. Pragat Watershed, All Rights Reserved.</Typography>
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
