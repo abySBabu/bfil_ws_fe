@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, Snackbar, Alert
+    MenuItem
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -160,7 +160,7 @@ export const WsMaster: React.FC = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
-            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
+            {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
                 onClick={() => { setwsObj(defObj); setaddM(true); }}>Add WS</Button>)}
         </Box>
 
@@ -179,9 +179,9 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>
-                        <IconButton onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>}
+                    {PerChk('EDIT_Watershed Master') && <TableCell><IconButton
+                        title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}>
+                        <Edit /></IconButton></TableCell>}
                 </TableRow>
             ))}</TableBody>
 
