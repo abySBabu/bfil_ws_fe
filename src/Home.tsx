@@ -11,6 +11,8 @@ import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 import { logout } from './Services/loginService';
+import { useTranslation } from 'react-i18next';
+
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = useState<number | null>(null);
@@ -18,6 +20,10 @@ export const Home: React.FC = () => {
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
+    const { i18n } = useTranslation();
+    const handleLanguageChange = (lng: string) => {
+        i18n.changeLanguage(lng);
+    }
 
     const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
         setLanguageAnchor(event.currentTarget);
@@ -110,8 +116,8 @@ export const Home: React.FC = () => {
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
-                <MenuItem onClick={() => changeLanguage('English')}>English</MenuItem>
-                <MenuItem onClick={() => changeLanguage('Tamil')}>Tamil</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('ka')}>Karnataka</MenuItem>
             </Menu>
         </Box>
     );
