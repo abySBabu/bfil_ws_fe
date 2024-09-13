@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
-    Card, MenuItem, IconButton
+    Card, MenuItem, IconButton, InputAdornment
 } from "@mui/material";
-import { AddHome, Edit } from '@mui/icons-material';
+import { AddHome, Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { listAct } from '../../Services/activityService';
 
@@ -55,7 +55,8 @@ export const WsActivity: React.FC = () => {
 
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
+            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
             {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
         </Box>
 

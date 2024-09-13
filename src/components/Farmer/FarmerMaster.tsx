@@ -2,9 +2,9 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, Snackbar
+    MenuItem, Snackbar, InputAdornment
 } from "@mui/material";
-import { Edit, PersonAddAlt1 } from '@mui/icons-material';
+import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { listFarmer, addFarmer } from '../../Services/farmerService';
 
@@ -66,7 +66,8 @@ export const FarmerMaster: React.FC = () => {
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)} />
+            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
             {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
         </Box>
 
