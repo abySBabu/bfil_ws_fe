@@ -114,7 +114,7 @@ export default function RoleList() {
                     />
                 </FormControl>
                 {PerChk('EDIT_Role Management') && (
-                    <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                         Add Role
                     </Button>)}
             </Box >
