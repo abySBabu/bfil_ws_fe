@@ -6,11 +6,12 @@ import {
 } from "@mui/material";
 import { AddHome, Edit } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
+import { listAct } from '../../Services/activityService';
 
-const actObj = {
-    ws_name: "WS1",
-    intervention: "supply",
-    activity: "Earthen bunding",
+const defObj = {
+    ws_name: "",
+    intervention: "",
+    activity: "",
     villages: [],
     surveys: [],
     farmer_aadhar: "",
@@ -30,8 +31,27 @@ export const WsActivity: React.FC = () => {
     const [selected, setselected] = React.useState(0);
     const [edt, setedt] = React.useState(false);
     const [page, setPage] = React.useState(0);
-    const [search, setsearch] = React.useState("");
     const [rPP, setrPP] = React.useState(10);
+    const [search, setsearch] = React.useState("");
+    const [actList, setactList] = React.useState<typeof defObj[]>([]);
+    const [alert, setalert] = React.useState<string | null>(null);
+    const [alertClr, setalertClr] = React.useState(false);
+    const [stOps, setstOps] = React.useState<any[]>([]);
+    const [dsOps, setdsOps] = React.useState<any[]>([]);
+    const [tlOps, settlOps] = React.useState<any[]>([]);
+    const [panOps, setpanOps] = React.useState<any[]>([]);
+    const [vilOps, setvilOps] = React.useState<any[]>([]);
+
+    React.useEffect(() => { fetchData() }, [])
+
+    const fetchData = async () => {
+        try {
+            const resp1 = await listAct(); if (resp1) { setactList(resp1) }
+            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
+            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+        }
+        catch (error) { console.log(error) }
+    };
 
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
@@ -75,49 +95,9 @@ export const WsActivity: React.FC = () => {
         </Table></TableContainer>
 
         <Dialog open={Boolean(selected)} maxWidth='xl'>
-            <DialogTitle>{
-                selected === 1 ?
-                    "Earthen bunding"
-                    : selected === 2 ?
-                        "Sustainable Agriculture"
-                        : selected === 3 ?
-                            "Members capacitated"
-                            :
-                            "Drip/Sprinkler "
-            }</DialogTitle>
+            <DialogTitle>Earthen bunding</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>{selected === 3 ? <>
-
-                <Grid item xs={3}><TextField disabled label='Event Name' value="October Meeting" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Event Type' value="Camp">
-                    <MenuItem value='Group discussion'>Group discussion</MenuItem>
-                    <MenuItem value='Training'>Training</MenuItem>
-                    <MenuItem value='Camp'>Camp</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Event Date' value="04.10.2024" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Target Group' value="Farmers" /></Grid>
-
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={3}><TextField disabled label='Habitations' value="Village A, Village C" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
-
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Total Participants' value="27" /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Male Participants' value="16" /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Female Participants' value="11" /></Grid>
-
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Facilitator' value="Prabhakar" /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Mobilizer' value="Nagraj" /></Grid>
-                <Grid item xs={6}><TextField disabled={!edt} label='Remarks' value="Remarks" /></Grid>
-
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={2}>{ImgCard("wsact4.jpeg")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact5.jpg")}</Grid>
-            </> : <>
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField disabled label='Intervention Type' value={selected === 1 ? "Supply" : "Demand"} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Activity' value={selected === 1 ? "Earthen bunding" : selected === 2 ? "Sustainable Agriculture Practice" : "Drip/Sprinkler"} /></Grid>
                 {selected === 2 && <Grid item xs={3}><TextField disabled label='Sustainable Practice' value="Crop Rotation" /></Grid>}
@@ -156,7 +136,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
                 <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
                 <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
-            </>}</Grid></DialogContent>
+            </Grid></DialogContent>
 
             <DialogActions>{
                 edt ? <>
