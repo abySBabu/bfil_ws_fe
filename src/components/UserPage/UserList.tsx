@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
 import { TPA, PerChk } from '../../common';
@@ -163,7 +163,7 @@ export default function UserList() {
                         <TableCell >Manager Name</TableCell>
                         <TableCell >Block User</TableCell>
                         {PerChk('EDIT_User Management') && (
-                            <TableCell >Action</TableCell>)}
+                            <TableCell sx={{textAlign:'center'}}>Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -172,19 +172,19 @@ export default function UserList() {
                         : filteredData
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.userName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.mobileNumber}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.userRoleList[0].roleName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.managerName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {(() => {
                                     const option = blockedUserOptions.find(option => option.value === row.userBlockedFlag);
                                     if (option && option.dispalyValue === "Blocked") {
@@ -203,21 +203,21 @@ export default function UserList() {
                                 })()}
                             </TableCell>
                             {PerChk('EDIT_User Management') && (
-                                <TableCell>
+                                <TableCell sx={{textAlign:'center'}}>
                                     <Tooltip title="Edit">
-                                        <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
                                     {row.userBlockedFlag === 'N' &&
                                         <Tooltip title="Block User">
-                                            <PersonRemoveIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}></PersonRemoveIcon>
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&
                                         <Tooltip title="UnBlock User">
-                                            <PersonIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}></PersonIcon>
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&
                                         <Tooltip title="Delete User">
-                                            <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                         </Tooltip>}
                                 </TableCell>
                             )}
