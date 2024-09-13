@@ -1,6 +1,6 @@
 {
     "text":{
-        "font": {"$value":"Roboto"},
+        "font": {"$value":"Lato"},
         "size":{
             "heading":{"$value":"48px"},
             "subheading":{"$value":"32px"},
