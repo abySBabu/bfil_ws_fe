@@ -95,7 +95,7 @@ export default function RoleList() {
         {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
         {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
         {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
-        <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
                 <FormControl sx={{ width: '200px' }}>
                     <TextField
@@ -121,7 +121,7 @@ export default function RoleList() {
         </Box>
 
         {filteredData.length > 0 ?
-            <TableContainer component={Paper} sx={{ maxHeight: '500px' }}><Table>
+            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Role Name</TableCell>
