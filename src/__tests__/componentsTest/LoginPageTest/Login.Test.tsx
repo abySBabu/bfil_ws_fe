@@ -11,10 +11,10 @@ test.beforeAll(async () => {
     }) as any;
 });
 
-test.describe('Login Screen Automation', () => {
-    test('should display validation error messages for userName field', async () => {
-        test.setTimeout(60000);  // Increase timeout to 60 seconds
 
+test.describe('Login Screen Automation', () => {
+    test('should display validation error messages for empty userName field', async () => {
+        test.setTimeout(60000);
         const browser = await chromium.launch({
             headless: false,
             channel: 'chrome',
@@ -22,30 +22,17 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-
-        // 1. Check for error message when username is missing
         await page.fill('input#userName', '');
-        await page.fill('input#password', 'validPass');
+        await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
         const usernameRequiredError = await page.textContent('.MuiFormHelperText-root');
         console.log("Username Error Message:", usernameRequiredError);
         expect(usernameRequiredError).toBe('UserName is required');
-
-        // 2. Check for error message with invalid credentials
-        await page.fill('input#userName', 'invalidUser');
-        await page.fill('input#password', 'invalidPass');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        const errorMessage = await page.textContent('.MuiAlert-message');
-        console.log("Error Message:", errorMessage);
-        expect(errorMessage).toBe('User error:Username or password incorrect');
         await browser.close();
     });
 
-    test.only('should navigate to home page on successful login', async () => {
+    test('should display validation error messages for empty password field', async () => {
         test.setTimeout(60000);
-        // const browser = await chromium.launch({ headless: false });  // Launch Chrome in non-headless mode
         const browser = await chromium.launch({
             headless: false,
             channel: 'chrome',
@@ -53,43 +40,17 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9677694777');
-        await page.fill('input#password', '1234');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '');
         await page.click('button[type="submit"]');
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        await page.waitForTimeout(3000);
-        console.log("Login success message :" + alertMessage);
-        expect(alertMessage).toBe('Login successfully');
-        // await page.waitForNavigation();
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
-        console.log("Current URL:", page.url());
-        /** 
-         * Here need to understand locator to place or get the data through id or class 
-         * dated on 27/08/2024 added by poun
-         * 
-         * **/
-        const sections = [
-            'Dashboard',
-            'Watershed Master',
-            'Watershed Mapping',
-            'User Management',
-            'Role Management',
-            'Watershed Activity'
-        ];
-
-        for (const section of sections) {
-            const sectionElement = await page.locator(`text=${section}`);
-            await expect(sectionElement).toBeVisible();
-        }
-        await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
-
-        // Assert that the URL is now the home page
-        // expect(page.url()).toBe('http://localhost:3000/home');
-        //await browser.close(); 
+        const userPasswordRequiredError = await page.textContent('.MuiFormHelperText-root');
+        console.log("UserPassword Error Message:", userPasswordRequiredError);
+        expect(userPasswordRequiredError).toBe('Password is required');
+        await browser.close();
     });
 
-    test('should display required error message when password is not provided', async () => {
+
+    test('should display validation error messages for empty userName and password field', async () => {
         test.setTimeout(60000);
         const browser = await chromium.launch({
             headless: false,
@@ -97,16 +58,19 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/login');
-        await page.fill('input#userName', 'validUser');
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '');
         await page.fill('input#password', '');
         await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        const passwordRequiredError = await page.textContent('.MuiFormHelperText-root');
-        console.log("Password Error Message:", passwordRequiredError);
-        expect(passwordRequiredError).toBe('Password is required');
+        const userPasswordRequiredError = await page.locator('#password-helper-text').innerText();
+        const userNameRequiredError = await page.locator('#userName-helper-text').innerText();
+        console.log("UserPassword Error Message:", userPasswordRequiredError);
+        console.log("UserName Error Message:", userNameRequiredError);
+         expect(userNameRequiredError).toBe('UserName is required');
+         expect(userPasswordRequiredError).toBe('Password is required');
         await browser.close();
     });
+
 
     test('should display minimum length error message when password is too short', async () => {
         test.setTimeout(60000);
@@ -116,17 +80,109 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/login');
-        await page.fill('input#userName', 'validUser');
-        await page.fill('input#password', 'abc');
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '1234567890');
+        await page.fill('input#password', 'ABC');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
         const passwordLengthError = await page.textContent('.MuiFormHelperText-root');
         console.log("Password Error Message:", passwordLengthError);
-        console.log("Password Length Error Message:", passwordLengthError);
         expect(passwordLengthError).toBe('Password must be at least 4 characters');
         await browser.close();
+    });
+
+
+    test('should display validation error in alphanumeric for username', async () => {
+        test.setTimeout(60000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', 'ABC@');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        const userNameAlphaNumeric = await page.textContent('.MuiFormHelperText-root');
+        console.log("userName Error Message:", userNameAlphaNumeric);
+        expect(userNameAlphaNumeric).toBe('UserName must only contain alphanumeric characters');
+        await browser.close();
+    });
+
+    test('should display invalid user error', async () => {
+        test.setTimeout(60000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', 'Poun@123');
+        await page.click('button[type="submit"]');
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        console.log("Incorrect error "+ alertMessage);
+        expect(alertMessage).toBe('User error:Username or password incorrect');
+        await browser.close();
+    });
+
+    
+    test('should display invalid user error contact admin', async () => {
+        test.setTimeout(60000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '1234567890');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        console.log("Incorrect error "+ alertMessage);
+        expect(alertMessage).toBe('User error:User disabled');
+        await browser.close();
+    });
+
+    test('should navigate to home page on successful login', async () => {
+        test.setTimeout(60000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        console.log("Alertmessage "+ alertMessage);
+        expect(alertMessage).toBe('Login successfully');
+        // /** 
+        //  * Here need to understand locator to place or get the data through id or class 
+        //  * dated on 27/08/2024 added by poun
+        //  * 
+        //  * **/
+        // const sections = [
+        //     'Dashboard',
+        //     'Watershed Master',
+        //     'Watershed Mapping',
+        //     'User Management',
+        //     'Role Management',
+        //     'Watershed Activity'
+        // ];
+
+        // for (const section of sections) {
+        //     const sectionElement = await page.locator(`text=${section}`);
+        //     await expect(sectionElement).toBeVisible();
+        // }
+
+        await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
     });
 
 });
