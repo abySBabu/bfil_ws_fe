@@ -37,9 +37,9 @@ test.describe('User Management Automation', () => {
     await page.fill('input#password', '');
     const roleDropdown = page.locator('#role');
     await roleDropdown.click();
-    const roleOptions = page.locator('ul[role="listbox"]'); // Use the class of MenuItem
+    const roleOptions = page.locator('ul[role="listbox"]'); 
     await expect(roleOptions).toBeVisible();
-    const roleOption = roleOptions.locator('text="Project Head"'); // Replace with actual role name
+    const roleOption = roleOptions.locator('text="Project Head"');
     await expect(roleOption).toBeVisible();
     await roleOption.click();
 
