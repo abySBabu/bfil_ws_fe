@@ -112,7 +112,7 @@ export const bfilTheme = createTheme({
                     backdropFilter: sd('--modal-backdrop'),
                 },
                 paper: {
-                    borderRadius: '15px'
+                    borderRadius: sd('--modal-bradius')
                 }
             },
             defaultProps: {
@@ -185,7 +185,7 @@ export const bfilTheme = createTheme({
         MuiSnackbar: {
             styleOverrides: {
                 root: {
-                    borderRadius: '15px',
+                    borderRadius: sd('--alert-bradius'),
                 }
             },
             defaultProps: {
