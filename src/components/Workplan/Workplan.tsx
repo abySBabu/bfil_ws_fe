@@ -65,7 +65,7 @@ export const Workplan: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }}>Add Plan</Button>}
+                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
             </div>
         </Box>
 
@@ -73,8 +73,9 @@ export const Workplan: React.FC = () => {
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
+                    <TableCell>Year</TableCell>
                     <TableCell>Activity</TableCell>
-                    <TableCell>Intervention</TableCell>
+                    <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>}
                 </TableRow>
@@ -84,7 +85,9 @@ export const Workplan: React.FC = () => {
                 <TableRow key={i}>
                     <TableCell>{w.activity}</TableCell>
                     <TableCell>{w.year}</TableCell>
-                    <TableCell>{w.intervention}</TableCell>
+                    <TableCell>{w.intervention} - {w.activity}</TableCell>
+                    <TableCell>{w.phyValue} {w.phyUnit}</TableCell>
+                    <TableCell>{w.finTotal}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
