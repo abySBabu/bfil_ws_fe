@@ -12,23 +12,20 @@ const defObj = {
     activity: "",
     intervention: "",
     landType: "",
-
     stateId: "1",
     districtId: "",
     talukId: "",
     grampanchayatId: "",
     wsId: "",
-
     phyValue: "",
     phyUnit: "",
-
-    finTotal: "",
-    finBfil: "",
-    finOther: "",
-    finGov: "",
-    finMgn: "",
-    finIbl: "",
-    finCom: ""
+    finTotal: 0,
+    finBfil: 0,
+    finOther: 0,
+    finGov: 0,
+    finMgn: 0,
+    finIbl: 0,
+    finCom: 0
 }
 
 export const Workplan: React.FC = () => {
@@ -55,7 +52,7 @@ export const Workplan: React.FC = () => {
     React.useEffect(() => {
         setplanObj({
             ...planObj,
-            finTotal: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
+            finTotal: [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)
         });
     }, [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom]);
 
@@ -126,17 +123,17 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField label="UOM" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider textAlign='left'>Financial Plan</Divider></Grid>
-                <Grid item xs={3}><TextField label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField type='number' label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: parseInt(e.target.value) })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
                 <Grid item xs={3}><TextField label="Total" value={planObj.finTotal} disabled /></Grid>
             </Grid></DialogContent>
