@@ -52,13 +52,21 @@ export const Workplan: React.FC = () => {
 
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
+    React.useEffect(() => {
+        setplanObj({
+            ...planObj,
+            finTotal: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
+        });
+    }, [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom]);
+
+
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                 InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }}>Add Farmer</Button>}
+            {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }}>Add Plan</Button>}
         </Box>
 
         <TableContainer component={Paper}><Table>
@@ -66,9 +74,9 @@ export const Workplan: React.FC = () => {
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Activity</TableCell>
-                    <TableCell>intervention</TableCell>
+                    <TableCell>Intervention</TableCell>
                     <TableCell>Financial</TableCell>
-                    {PerChk('EDIT_Farmer Master') && <TableCell>Actions</TableCell>}
+                    {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -77,7 +85,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.activity}</TableCell>
                     <TableCell>{w.year}</TableCell>
                     <TableCell>{w.intervention}</TableCell>
-                    {PerChk('EDIT_Farmer Master') && <TableCell>
+                    {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>
@@ -99,32 +107,38 @@ export const Workplan: React.FC = () => {
         <Dialog open={addM}>
             <DialogTitle>Add New Plan</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><Divider textAlign='left'>Plan Details</Divider></Grid>
+            <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
+                <Grid item xs={15}><Divider textAlign='left'>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='Year' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Intervention" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Activity" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Land Type" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
 
-                <Grid item xs={12}><Divider textAlign='left'>Watershed Details</Divider></Grid>
+                <Grid item xs={15}><Divider textAlign='left'>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='State' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="District" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Taluk" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Panchayat" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Watershed" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
 
-                <Grid item xs={12}><Divider textAlign='left'>Physical Plan</Divider></Grid>
+                <Grid item xs={15}><Divider textAlign='left'>Physical Plan</Divider></Grid>
                 <Grid item xs={3}><TextField label='Value' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="UOM" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
 
-                <Grid item xs={12}><Divider textAlign='left'>Financial Plan</Divider></Grid>
-                <Grid item xs={3}><TextField label="BFIL" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Other Gov Schemes" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Other" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="MGNREGA" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="IBL" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Community" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Total" value={planObj.activity} onChange={(e) => setplanObj({ ...planObj, activity: e.target.value })} /></Grid>
+                <Grid item xs={15}><Divider textAlign='left'>Financial Plan</Divider></Grid>
+                <Grid item xs={3}><TextField label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
+                <Grid item xs={3}><TextField label="Total" value={planObj.finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
