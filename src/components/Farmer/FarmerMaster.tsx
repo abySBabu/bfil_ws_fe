@@ -4,7 +4,7 @@ import {
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
     Snackbar, InputAdornment, Typography
 } from "@mui/material";
-import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
+import { Edit, PersonAdd, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { listFarmer, addFarmer } from '../../Services/farmerService';
 
@@ -70,12 +70,12 @@ export const FarmerMaster: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAddAlt1 />} sx={{ ml: '4px', height: '100%' }}
+                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
                     onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
 
-        <TableContainer component={Paper}><Table>
+        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Aadhar</TableCell>

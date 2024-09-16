@@ -168,7 +168,7 @@ export const WsMaster: React.FC = () => {
             </div>
         </Box>
 
-        <TableContainer component={Paper}><Table>
+        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>

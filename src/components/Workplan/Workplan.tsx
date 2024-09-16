@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, Snackbar, InputAdornment
+    Typography, Snackbar, InputAdornment
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
@@ -60,10 +60,13 @@ export const Workplan: React.FC = () => {
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }}>Add Plan</Button>}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
+            <div>
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }}>Add Plan</Button>}
+            </div>
         </Box>
 
         <TableContainer component={Paper}><Table>

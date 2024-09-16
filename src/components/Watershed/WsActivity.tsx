@@ -54,13 +54,16 @@ export const WsActivity: React.FC = () => {
     };
 
     return (<>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
+            <div>
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<AddHome />} onClick={() => { }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
+            </div>
         </Box>
 
-        <TableContainer component={Paper}><Table>
+        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
