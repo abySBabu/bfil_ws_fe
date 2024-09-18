@@ -260,7 +260,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Close</Button>
-                <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Add</Button>
+                <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

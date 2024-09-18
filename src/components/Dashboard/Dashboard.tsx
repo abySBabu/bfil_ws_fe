@@ -2,16 +2,21 @@ import React from 'react';
 import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { CropSquare, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
+import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 
 const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
+const ActivityCard: React.FC<{ name: string, value: string }> = ({ name, value }) => (<Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
+    <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{name}</Typography>
+    <Typography variant='body2'>{value}</Typography>
+</CardContent></Card></Grid>)
+
 export const Dashboard: React.FC = () => {
     const [gMod, setgMod] = React.useState<string | null>(null);
     const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Government Amount Leveraged']
-    const icos = [CropSquare, Water, Agriculture, CurrencyRupee]
+    const icos = [Square, Water, Agriculture, CurrencyRupee]
     const data = ['4000 sqft', '20000 litres', '45 farmers', '₹ 40,00,000']
     const iclr = ['#96c22f', '#3b77b9', '#f58e1d', '#bfab55']
 
