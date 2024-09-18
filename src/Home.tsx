@@ -69,20 +69,20 @@ export const Home: React.FC = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
-            <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
                     <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
                 </Box>
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
                     <Avatar src="img" alt={sessionStorage.getItem("userName") as string} onClick={(event) => setavatarAnchor(event.currentTarget)} />
                 </Box>
             </Toolbar>
 
             {!hasPermission &&
-                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
                     <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>

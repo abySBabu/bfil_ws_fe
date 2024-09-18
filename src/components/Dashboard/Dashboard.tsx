@@ -27,13 +27,13 @@ export const Dashboard: React.FC = () => {
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px',
                 position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px'
             }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography sx={{ fontSize: '125%' }}>{k}</Typography>
                     <CardMedia component={icos[i]} sx={{ fontSize: '250%', color: iclr[i] }} />
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h4'><b>{data[i]}</b></Typography>
-                    <BarChartIcon onClick={() => setgMod(k)} sx={{ cursor: 'pointer' }} />
+                    <BarChartIcon onClick={() => setgMod(k)} sx={{ cursor: 'pointer', mt: '12px' }} />
                 </Box>
             </Card></Grid>))}
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
