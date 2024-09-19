@@ -74,8 +74,9 @@ export const FarmerMaster: React.FC = () => {
                     onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
-
-        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Aadhar</TableCell>
@@ -107,7 +108,7 @@ export const FarmerMaster: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer>
+        </Table></TableContainer>}
 
         <Dialog open={addM}>
             <DialogTitle>Add New Farmer</DialogTitle>

@@ -168,7 +168,9 @@ export const WsMaster: React.FC = () => {
             </div>
         </Box>
 
-        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+        {wsList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
@@ -200,7 +202,7 @@ export const WsMaster: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer>
+        </Table></TableContainer>}
 
         <Dialog open={addM}>
             <DialogTitle>Add New Watershed</DialogTitle>

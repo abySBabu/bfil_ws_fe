@@ -65,7 +65,9 @@ export const WsActivity: React.FC = () => {
             </div>
         </Box>
 
-        <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+        {actList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
@@ -98,7 +100,7 @@ export const WsActivity: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer>
+        </Table></TableContainer>}
 
         <Dialog open={addM} maxWidth='xl'>
             <DialogTitle>Earthen bunding</DialogTitle>

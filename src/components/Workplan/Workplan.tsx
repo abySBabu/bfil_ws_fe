@@ -69,7 +69,9 @@ export const Workplan: React.FC = () => {
             </div>
         </Box>
 
-        <TableContainer component={Paper}><Table>
+        {planList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
@@ -105,7 +107,7 @@ export const Workplan: React.FC = () => {
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer>
+        </Table></TableContainer>}
 
         <Dialog open={addM}>
             <DialogTitle>Add New Plan</DialogTitle>
