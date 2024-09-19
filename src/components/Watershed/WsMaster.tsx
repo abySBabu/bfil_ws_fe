@@ -30,7 +30,7 @@ export const WsMaster: React.FC = () => {
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
-    const [alert, setalert] = React.useState<string | null>(null);
+    const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
@@ -156,7 +156,7 @@ export const WsMaster: React.FC = () => {
     }
 
     return (<>
-        <SnackAlert alert={alert} setalert={() => setalert(null)} success={alertClr} />
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>

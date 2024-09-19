@@ -5,13 +5,18 @@ import {
     Snackbar, InputAdornment, Typography
 } from "@mui/material";
 import { Edit, PersonAdd, Search } from '@mui/icons-material';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer } from '../../Services/farmerService';
 
 const defObj = {
     wsfarmerName: "",
     adharNumber: "",
-    mobileNumber: ""
+    mobileNumber: "",
+    createdUser: 1,
+    updatedUser: 1,
+    createTime: new Date(),
+    updatedTime: new Date(),
+    Remarks: "None"
 }
 
 export const FarmerMaster: React.FC = () => {
@@ -22,7 +27,8 @@ export const FarmerMaster: React.FC = () => {
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
-    const [alert, setalert] = React.useState<string | null>(null);
+    const [alert, setalert] = React.useState("");
+    const [alertClr, setalertClr] = React.useState(false);
 
     const addCheck = !fmrObj.wsfarmerName || fmrObj.adharNumber.length !== 12 || fmrObj.mobileNumber.length !== 10
 
@@ -52,18 +58,20 @@ export const FarmerMaster: React.FC = () => {
         try {
             const resp = await addFarmer(fmrObj)
             if (resp) {
-                setaddM(false); fetchData();
+                fetchData();
+                setalertClr(true);
                 setalert("Farmer added");
             }
         }
         catch (error) {
             console.log(error);
+            setalertClr(false);
             setalert("Failed to add farmer");
         }
         setaddM(false);
     }
     return (<>
-        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
@@ -114,28 +122,39 @@ export const FarmerMaster: React.FC = () => {
             <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField
+                    required
+                    label="Name"
+                    value={fmrObj.wsfarmerName}
+                    onChange={(e) => {
+                        const regex = /^[A-Za-z\s]*$/;
+                        if (regex.test(e.target.value)) {
+                            setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
+                        }
+                    }}
+                /></Grid>
                 <Grid item xs={6}><TextField
+                    required
                     label="Aadhar"
                     value={fmrObj.adharNumber}
                     onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
                     inputProps={{ maxLength: 12 }}
                     type="tel"
-                />
-                </Grid>
+                /></Grid>
                 <Grid item xs={6}><TextField
+                    required
                     label="Mobile"
                     value={fmrObj.mobileNumber}
                     onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
                     inputProps={{ maxLength: 10 }}
                     type="tel"
-                />
-                </Grid>
+                /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
+                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={fmrAdd} /* disabled={addCheck} */>Add</Button>
+                <Button onClick={fmrAdd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 
