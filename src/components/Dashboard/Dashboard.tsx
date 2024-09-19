@@ -23,7 +23,7 @@ export const Dashboard: React.FC = () => {
     return (<>
         <Grid container spacing={1}>
             <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Key Impact Indicators</Typography></Grid>
-            {keys.map((k, i) => (<Grid item xs={12} md={3}><Card key={i} sx={{
+            {keys.map((k, i) => (<Grid item xs={12} md={3} key={i}><Card sx={{
                 display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px',
                 position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px'
             }}>

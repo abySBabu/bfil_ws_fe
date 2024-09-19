@@ -113,9 +113,9 @@ export const FarmerMaster: React.FC = () => {
         <Dialog open={addM}>
             <DialogTitle>Add New Farmer</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+            <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField
+                <Grid item xs={6}><TextField
                     label="Aadhar"
                     value={fmrObj.adharNumber}
                     onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
@@ -123,7 +123,7 @@ export const FarmerMaster: React.FC = () => {
                     type="tel"
                 />
                 </Grid>
-                <Grid item xs={12}><TextField
+                <Grid item xs={6}><TextField
                     label="Mobile"
                     value={fmrObj.mobileNumber}
                     onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}

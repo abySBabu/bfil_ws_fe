@@ -79,13 +79,13 @@ export const WsActivity: React.FC = () => {
             </TableHead>
 
             <TableBody>{actList.map((a, i) =>
-            (<TableRow key={i} onClick={() => { setactObj(a); seteditM(true); }}>
+            (<TableRow key={i}>
                 <TableCell>{a.ws_name}</TableCell>
                 <TableCell>{a.intervention}</TableCell>
                 <TableCell>{a.activity}</TableCell>
                 <TableCell>{a.units}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
-                    <IconButton onClick={() => { }}><Edit /></IconButton>
+                    <IconButton onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
                 </TableCell>}
             </TableRow>)
             )}</TableBody>

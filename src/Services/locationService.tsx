@@ -5,7 +5,10 @@ export async function listState() {
     const configs = {
         url: serverPath.bfil + "state/getState",
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Access-Control-Allow-Origin': '*'
+        }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

@@ -208,28 +208,29 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
-                    {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.stateId}>
+                    {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
-                    {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
+                    {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
-                    {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
+                    {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
-                    {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
+                    {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
-                    {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
+                    {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={4} />
             </Grid></DialogContent>
 
             <DialogActions>
+                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
                 <Button onClick={WSadd} disabled={addCheck}>Add</Button>
             </DialogActions>
@@ -239,28 +240,29 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Edit {wsObj.wsName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} multiline rows={2} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
                     {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
+                <Grid item xs={4}><TextField required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e)}>
                     {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
+                <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e)}>
                     {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
+                <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.grampanchayatId} onChange={(e) => panchayatCh(e)}>
                     {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
+                <Grid item xs={4}><TextField required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
                     {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={4} />
             </Grid></DialogContent>
 
             <DialogActions>
+                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>Please fill all *required fields</Typography>}
                 <Button onClick={() => { seteditM(false); }}>Close</Button>
                 <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Update</Button>
             </DialogActions>
