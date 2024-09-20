@@ -6,17 +6,18 @@ import {
 } from "@mui/material";
 import { Edit, PersonAdd, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { listFarmer, addFarmer } from '../../Services/farmerService';
+import { listFarmer, addFarmer, editFarmer } from '../../Services/farmerService';
 
 const defObj = {
-    wsfarmerName: "",
+    wsfarmerId: "",
     adharNumber: "",
     mobileNumber: "",
-    createdUser: 1,
-    updatedUser: 1,
-    createTime: new Date(),
-    updatedTime: new Date(),
-    Remarks: "None"
+    wsfarmerName: "",
+    createdUser: "",
+    updatedUser: "",
+    updatedTime: "",
+    remarks: "",
+    createTime: ""
 }
 
 export const FarmerMaster: React.FC = () => {
@@ -48,7 +49,7 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer(); if (resp1) {
-                setfmrList(resp1)
+                setfmrList(resp1.data)
             }
         }
         catch (error) { console.log(error) }
@@ -70,6 +71,24 @@ export const FarmerMaster: React.FC = () => {
         }
         setaddM(false);
     }
+
+    const fmrEdit = async (id: any) => {
+        try {
+            const resp = await editFarmer(fmrObj, id)
+            if (resp) {
+                fetchData();
+                setalertClr(true);
+                setalert("Farmer edited");
+            }
+        }
+        catch (error) {
+            console.log(error);
+            setalertClr(false);
+            setalert("Failed to edit farmer");
+        }
+        seteditM(false);
+    }
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
@@ -183,7 +202,7 @@ export const FarmerMaster: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Close</Button>
-                <Button onClick={() => { seteditM(false); }}>Update</Button>
+                <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

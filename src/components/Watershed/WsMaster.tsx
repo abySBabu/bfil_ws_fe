@@ -91,7 +91,7 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1) { setwsList(resp1) }
+            const resp1 = await listWS(); if (resp1) { setwsList(resp1.data.slice(1)) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -127,7 +127,17 @@ export const WsMaster: React.FC = () => {
 
     const WSadd = async () => {
         try {
-            const resp = await addWS(wsObj)
+            const defData = {
+                wsName: "Example Watershed",
+                wsDescription: "This is a description for the watershed.",
+                stateId: 1,
+                districtId: 2,
+                talukId: 3,
+                grampanchayatId: 4,
+                villageId: 5,
+                mapLink: "http://example.com/maplink"
+            }
+            const resp = await addWS(defData)
             if (resp) {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
@@ -232,7 +242,7 @@ export const WsMaster: React.FC = () => {
             <DialogActions>
                 {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={WSadd} disabled={addCheck}>Add</Button>
+                <Button onClick={WSadd} /* disabled={addCheck} */>Add</Button>
             </DialogActions>
         </Dialog>
 
