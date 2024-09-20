@@ -8,7 +8,7 @@ import { tpaTheme } from './theme';
 
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
-export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" } // https://172.104.56.206:9077/auth/
+export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
     const permList = sessionStorage.getItem('permList');
@@ -85,3 +85,6 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
         {alert}
     </Alert>
 </Snackbar>)
+
+//Old auth: https://172.104.56.206:9077/auth/ 
+//Poun Backend: http://192.168.1.10:8080/bfil/

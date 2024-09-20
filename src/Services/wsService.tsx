@@ -26,7 +26,10 @@ export async function addWS(data: any) {
         url: serverPath.bfil + "wsmaster/addwatershed",
         method: 'post',
         data: data,
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -38,7 +41,10 @@ export async function editWS(data: any, id: any) {
         url: serverPath.bfil + `wsmaster/updateWsById/${id}`,
         method: 'post',
         data: data,
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
