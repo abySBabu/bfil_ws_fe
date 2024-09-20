@@ -242,7 +242,7 @@ export const WsMaster: React.FC = () => {
             <DialogActions>
                 {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={WSadd} /* disabled={addCheck} */>Add</Button>
+                <Button onClick={WSadd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 

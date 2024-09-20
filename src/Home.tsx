@@ -13,7 +13,6 @@ import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from '
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 
-
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = useState<number | null>(null);
     const [message, setMessage] = useState('');
@@ -120,5 +119,5 @@ export const Home: React.FC = () => {
                 <MenuItem onClick={() => handleLanguageChange('ka')}>Karnataka</MenuItem>
             </Menu>
         </Box>
-    );
+    )
 }
