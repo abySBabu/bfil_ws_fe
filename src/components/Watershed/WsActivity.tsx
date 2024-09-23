@@ -7,7 +7,7 @@ import {
 import { Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { WsName } from '../../LocName';
-import { listAct } from '../../Services/activityService';
+import { listAct, editAct } from '../../Services/activityService';
 
 const defObj = {
     activityId: '',
@@ -47,11 +47,6 @@ const defObj = {
     photoattendanceResolution: ''
 }
 
-const ImgCard = (img: string) => (<Card sx={{ height: '100px', width: '100px', border: '1px solid black', }}>
-    <img src={`${process.env.PUBLIC_URL}/images/${img}`} alt={`${img}`}
-        style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
-</Card>)
-
 export const WsActivity: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -61,22 +56,31 @@ export const WsActivity: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
-    const [stOps, setstOps] = React.useState<any[]>([]);
-    const [dsOps, setdsOps] = React.useState<any[]>([]);
-    const [tlOps, settlOps] = React.useState<any[]>([]);
-    const [panOps, setpanOps] = React.useState<any[]>([]);
-    const [vilOps, setvilOps] = React.useState<any[]>([]);
 
     React.useEffect(() => { fetchData() }, [])
 
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
-            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
-            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+            const resp1 = await listAct();
+            if (resp1.status === 'success') { setactList(resp1.data) }
         }
         catch (error) { console.log(error) }
     };
+
+    const ActEdit = async (id: any) => {
+        try {
+            const resp1 = await editAct(actObj, id)
+            if (resp1.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Activity ${actObj.activityName || ""} updated`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update activity");
+        }
+        seteditM(false);
+    }
 
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -112,11 +116,12 @@ export const WsActivity: React.FC = () => {
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={1}
+                    count={actList.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[]}
+                    rowsPerPageOptions={[5, 10, 15]}
+                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
@@ -156,7 +161,7 @@ export const WsActivity: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => seteditM(false)}>Close</Button>
-                <Button onClick={() => seteditM(false)}>Update</Button>
+                <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

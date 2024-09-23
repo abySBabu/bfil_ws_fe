@@ -127,17 +127,7 @@ export const WsMaster: React.FC = () => {
 
     const WSadd = async () => {
         try {
-            const defData = {
-                wsName: "Example Watershed",
-                wsDescription: "This is a description for the watershed.",
-                stateId: 1,
-                districtId: 2,
-                talukId: 3,
-                grampanchayatId: 4,
-                villageId: 5,
-                mapLink: "http://example.com/maplink"
-            }
-            const resp = await addWS(defData)
+            const resp = await addWS(wsObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
@@ -160,7 +150,7 @@ export const WsMaster: React.FC = () => {
         }
         catch (error) {
             console.log(error); setalertClr(false);
-            setalert("Failed to add watershed");
+            setalert("Failed to update watershed");
         }
         seteditM(false);
     }
