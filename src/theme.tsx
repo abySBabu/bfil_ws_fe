@@ -201,6 +201,14 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: { underline: 'hover' }
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    borderColor: 'rgba(0, 0, 0, 0.5)', '&::before, &::after': { borderColor: 'rgba(0, 0, 0, 0.5)' },
+                    color: 'rgba(0, 0, 0, 0.75)'
+                }
+            }
         }
     }
 })

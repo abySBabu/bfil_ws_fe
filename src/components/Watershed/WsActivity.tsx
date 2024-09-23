@@ -53,15 +53,13 @@ const ImgCard = (img: string) => (<Card sx={{ height: '100px', width: '100px', b
 </Card>)
 
 export const WsActivity: React.FC = () => {
-    const [edt, setedt] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
     const [actObj, setactObj] = React.useState(defObj);
     const [actList, setactList] = React.useState<typeof defObj[]>([]);
-    const [alert, setalert] = React.useState<string | null>(null);
-    const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
@@ -124,92 +122,42 @@ export const WsActivity: React.FC = () => {
             </TableRow></TableFooter>
         </Table></TableContainer>}
 
-        {/* <Dialog open={addM} maxWidth='xl'>
-            <DialogTitle>Earthen bunding</DialogTitle>
-
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField disabled label='Intervention Type' value="Supply" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Activity' value="Earthen bunding" /></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Watershed' value="Watershed 1" /></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Villages' value="Value" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Survey Numbers' value="Value" /></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Activity Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Total Units' value="200 sqft" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Land Type' value="Wet land">
-                    <MenuItem value='Wet land'>Public</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label="Water Conserved (litres)" value="40000" /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label="Funds spent" value="2,00,000" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label="Funds source" value="BFIL">
-                    <MenuItem value='BFIL'>BFIL</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Name' value="Farmer" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Aadhar' value="**** **** 7251">
-                    <MenuItem value='**** **** 7251'>**** **** 7251</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
-            </Grid></DialogContent>
-            <DialogActions>
-                <Button onClick={() => setaddM(false)}>Close</Button>
-                <Button>Add</Button>
-            </DialogActions>
-        </Dialog> */}
-
         <Dialog open={editM} maxWidth='xl'>
             <DialogTitle>Earthen bunding</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField disabled label='Intervention Type' value="Supply" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Activity' value="Earthen bunding" /></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Watershed' value="Watershed 1" /></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Villages' value="Value" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Survey Numbers' value="Value" /></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Activity Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Total Units' value="200 sqft" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Land Type' value="Wet land">
-                    <MenuItem value='Wet land'>Public</MenuItem>
+                <Grid item xs={3}><TextField disabled label='Intervention Type' value={actObj.interventionType} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
+                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Watershed' value={WsName(actObj.watershedId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
+                <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
+                <Grid item xs={3}><TextField select label='Villages' value="" /></Grid>
+                <Grid item xs={3}><TextField select label='Survey Numbers' value={actObj.surveyNo} /></Grid>
+                <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} /></Grid>
+                <Grid item xs={3}><TextField select label='Land Type' value={actObj.landType}>
+                    <MenuItem value='Wet land'>Type A</MenuItem>
                 </TextField></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label="Water Conserved (litres)" value="40000" /></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label="Funds spent" value="2,00,000" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label="Funds source" value="BFIL">
+                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} /></Grid>
+                <Grid item xs={3}><TextField label="Funds spent" value="" /></Grid>
+                <Grid item xs={3}><TextField select label="Funds source" value="BFIL">
                     <MenuItem value='BFIL'>BFIL</MenuItem>
                 </TextField></Grid>
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Name' value="Farmer" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Aadhar' value="**** **** 7251">
+                <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Name' value={actObj.farmerId} /></Grid>
+                <Grid item xs={3}><TextField select label='Aadhar' value="**** **** 7251">
                     <MenuItem value='**** **** 7251'>**** **** 7251</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
             </Grid></DialogContent>
 
-            <DialogActions>{
-                edt ? <>
-                    <Button onClick={() => setedt(false)}>Discard</Button>
-                    <Button onClick={() => setedt(false)}>Update</Button>
-                </> : <>
-                    <Button onClick={() => seteditM(false)}>Close</Button>
-                    <Button onClick={() => setedt(true)}>Edit</Button>
-                </>
-            }</DialogActions>
+            <DialogActions>
+                <Button onClick={() => seteditM(false)}>Close</Button>
+                <Button onClick={() => seteditM(false)}>Update</Button>
+            </DialogActions>
         </Dialog>
     </>)
 }

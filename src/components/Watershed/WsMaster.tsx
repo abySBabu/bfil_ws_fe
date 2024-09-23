@@ -251,7 +251,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} multiline rows={2} /></Grid>
+                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
                     {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
