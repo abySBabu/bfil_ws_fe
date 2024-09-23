@@ -142,7 +142,7 @@ export const WsActivity: React.FC = () => {
         </Table></TableContainer>}
 
         <Dialog open={editM} maxWidth='xl'>
-            <DialogTitle>Earthen bunding</DialogTitle>
+            <DialogTitle>{actObj.activityName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField disabled label='Intervention Type' value={actObj.interventionType} /></Grid>
@@ -161,8 +161,8 @@ export const WsActivity: React.FC = () => {
                     <MenuItem value='Wet land'>Type A</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} /></Grid>
-                <Grid item xs={3}><TextField label="Funds spent" value="" /></Grid>
-                <Grid item xs={3}><TextField select label="Funds source" value="">
+                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} /></Grid>
+                <Grid item xs={3}><TextField select label="Funds source" value={actObj.sourceExpenditure}>
                     <MenuItem value='BFIL'>BFIL</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>

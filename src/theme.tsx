@@ -48,7 +48,7 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff',
-                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand'), cursor: 'pointer' },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
