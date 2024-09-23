@@ -10,6 +10,7 @@ import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
+import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 
@@ -51,7 +52,8 @@ export const Home: React.FC = () => {
                 const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
                 const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
                 const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
-                const resp5 = await listVillage(); if (resp5.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp5.data));
+                const resp5 = await listWS(); if (resp5.status === 'success') sessionStorage.setItem("WsList", JSON.stringify(resp5.data));
+                const resp6 = await listVillage(); if (resp6.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp5.data));
             } catch (error) {
                 console.log(error);
             }

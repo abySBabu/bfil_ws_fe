@@ -6,20 +6,45 @@ import {
 } from "@mui/material";
 import { Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
+import { WsName } from '../../LocName';
 import { listAct } from '../../Services/activityService';
 
 const defObj = {
-    ws_name: "",
-    intervention: "",
-    activity: "",
-    villages: [],
-    surveys: [],
-    farmer_aadhar: "",
-    units: "",
-    land_type: "",
-    wtr_saved: "",
-    funds_spd: "",
-    funds_src: ""
+    activityId: '',
+    activityName: '',
+    userId: '',
+    activityDescription: '',
+    activityWorkflowStatus: '',
+    interventionType: '',
+    activityImage: '',
+    activityFormData: '',
+    watershedId: '',
+    farmerId: '',
+    remarks: '',
+    surveyNo: '',
+    hissa: '',
+    landType: '',
+    areaTreated: '',
+    total: '',
+    waterConserved: '',
+    amountSpend: '',
+    sourceExpenditure: '',
+    geotaggedPhoto: '',
+    capacitytypeEvent: '',
+    participantsType: '',
+    capacitynameEvent: '',
+    habitationsCovered: '',
+    state: '',
+    district: '',
+    taluk: '',
+    gramPanchayat: '',
+    eventDate: '',
+    participantsMale: '',
+    participantsFemale: '',
+    trainerFacilitator: '',
+    mobilizer: '',
+    photoEvent: '',
+    photoattendanceResolution: ''
 }
 
 const ImgCard = (img: string) => (<Card sx={{ height: '100px', width: '100px', border: '1px solid black', }}>
@@ -77,10 +102,10 @@ export const WsActivity: React.FC = () => {
 
             <TableBody>{actList.map((a, i) =>
             (<TableRow key={i}>
-                <TableCell>{a.ws_name}</TableCell>
-                <TableCell>{a.intervention}</TableCell>
-                <TableCell>{a.activity}</TableCell>
-                <TableCell>{a.units}</TableCell>
+                <TableCell>{WsName(a.watershedId)}</TableCell>
+                <TableCell>{a.interventionType}</TableCell>
+                <TableCell>{a.activityName}</TableCell>
+                <TableCell>{a.total}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
                     <IconButton onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
                 </TableCell>}
@@ -99,7 +124,7 @@ export const WsActivity: React.FC = () => {
             </TableRow></TableFooter>
         </Table></TableContainer>}
 
-        <Dialog open={addM} maxWidth='xl'>
+        {/* <Dialog open={addM} maxWidth='xl'>
             <DialogTitle>Earthen bunding</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
@@ -138,7 +163,7 @@ export const WsActivity: React.FC = () => {
                 <Button onClick={() => setaddM(false)}>Close</Button>
                 <Button>Add</Button>
             </DialogActions>
-        </Dialog>
+        </Dialog> */}
 
         <Dialog open={editM} maxWidth='xl'>
             <DialogTitle>Earthen bunding</DialogTitle>

@@ -8,7 +8,7 @@ import { AddHome, Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listWS, addWS, editWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
+import { VillageName } from '../../LocName';
 
 const defObj = {
     wsId: "",

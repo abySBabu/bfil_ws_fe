@@ -46,6 +46,18 @@ export const PanName = (id) => {
     return ("")
 }
 
+export const WsName = (id) => {
+    if (id !== null && id !== undefined) {
+        const list = JSON.parse(sessionStorage.getItem("WsList")) || null;
+        if (list) {
+            const obj = list.find(x => x.wsId === id);
+            return obj ? obj.wsName : id;
+        }
+        return id;
+    }
+    return ("")
+}
+
 export const VillageName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(sessionStorage.getItem("VillageList")) || null;
