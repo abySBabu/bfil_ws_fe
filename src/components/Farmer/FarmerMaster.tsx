@@ -48,9 +48,8 @@ export const FarmerMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listFarmer(); if (resp1) {
-                setfmrList(resp1.data)
-            }
+            const resp1 = await listFarmer();
+            if (resp1.status === 'success') { setfmrList(resp1.data) }
         }
         catch (error) { console.log(error) }
     };
@@ -58,7 +57,7 @@ export const FarmerMaster: React.FC = () => {
     const fmrAdd = async () => {
         try {
             const resp = await addFarmer(fmrObj)
-            if (resp) {
+            if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
                 setalert("Farmer added");
@@ -75,7 +74,7 @@ export const FarmerMaster: React.FC = () => {
     const fmrEdit = async (id: any) => {
         try {
             const resp = await editFarmer(fmrObj, id)
-            if (resp) {
+            if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
                 setalert("Farmer edited");

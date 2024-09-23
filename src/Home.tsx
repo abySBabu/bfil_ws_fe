@@ -47,11 +47,11 @@ export const Home: React.FC = () => {
     React.useEffect(() => {
         const fetchLoc = async () => {
             try {
-                const resp1 = await listState(); if (resp1) sessionStorage.setItem("StateList", JSON.stringify(resp1));
-                const resp2 = await listDistrict(); if (resp2) sessionStorage.setItem("DistrictList", JSON.stringify(resp2));
-                const resp3 = await listTaluk(); if (resp3) sessionStorage.setItem("TalukList", JSON.stringify(resp3));
-                const resp4 = await listPanchayat(); if (resp4) sessionStorage.setItem("PanList", JSON.stringify(resp4));
-                const resp5 = await listVillage(); if (resp5) sessionStorage.setItem("VillageList", JSON.stringify(resp5));
+                const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
+                const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
+                const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
+                const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
+                const resp5 = await listVillage(); if (resp5.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp5.data));
             } catch (error) {
                 console.log(error);
             }

@@ -58,7 +58,7 @@ export const WsMaster: React.FC = () => {
             try {
                 if (wsObj.districtId) {
                     const resp = await talukById(wsObj.districtId);
-                    if (resp) { settlOps(resp); }
+                    if (resp.status === 'success') { settlOps(resp.data); }
                 } else { settlOps([]); }
             }
             catch (error) { console.log(error) }
@@ -70,7 +70,7 @@ export const WsMaster: React.FC = () => {
             try {
                 if (wsObj.talukId) {
                     const resp = await panchayatById(wsObj.talukId);
-                    if (resp) { setpanOps(resp); }
+                    if (resp.status === 'success') { setpanOps(resp.data); }
                 } else { setpanOps([]); }
             }
             catch (error) { console.log(error) }
@@ -82,7 +82,7 @@ export const WsMaster: React.FC = () => {
             try {
                 if (wsObj.grampanchayatId) {
                     const resp = await VillageById(wsObj.grampanchayatId);
-                    if (resp) { setvilOps(resp); }
+                    if (resp.status === 'success') { setvilOps(resp.data); }
                 } else { setvilOps([]); }
             }
             catch (error) { console.log(error) }
@@ -91,7 +91,7 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1) { setwsList(resp1.data.slice(1)) }
+            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -138,7 +138,7 @@ export const WsMaster: React.FC = () => {
                 mapLink: "http://example.com/maplink"
             }
             const resp = await addWS(defData)
-            if (resp) {
+            if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
             }
@@ -153,7 +153,7 @@ export const WsMaster: React.FC = () => {
     const WSedit = async (id: any) => {
         try {
             const resp = await editWS(wsObj, id)
-            if (resp) {
+            if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed ${wsObj.wsName || ""} updated`);
             }

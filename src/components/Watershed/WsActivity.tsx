@@ -48,7 +48,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1) { setactList(resp1.data) }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -58,8 +58,8 @@ export const WsActivity: React.FC = () => {
     return (<>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
-                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+            <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
         </Box>
 
         {actList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
