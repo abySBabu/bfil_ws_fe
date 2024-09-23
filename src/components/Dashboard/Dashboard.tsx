@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
@@ -31,9 +31,9 @@ export const Dashboard: React.FC = () => {
                     <Typography sx={{ fontSize: '125%' }}>{k}</Typography>
                     <CardMedia component={icos[i]} sx={{ fontSize: '250%', color: iclr[i] }} />
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant='h4'><b>{data[i]}</b></Typography>
-                    <BarChartIcon onClick={() => setgMod(k)} sx={{ cursor: 'pointer', mt: '12px' }} />
+                    <IconButton onClick={() => setgMod(k)}><BarChartIcon /></IconButton>
                 </Box>
             </Card></Grid>))}
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
