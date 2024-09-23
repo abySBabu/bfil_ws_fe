@@ -10,7 +10,7 @@ import { listWS, addWS, editWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { VillageName } from '../../LocName';
 
-const defObj = {
+export const wsDef = {
     wsId: "",
     wsName: "",
     wsDescription: "",
@@ -25,8 +25,8 @@ const defObj = {
 export const WsMaster: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
-    const [wsList, setwsList] = React.useState<typeof defObj[]>([]);
-    const [wsObj, setwsObj] = React.useState(defObj);
+    const [wsList, setwsList] = React.useState<typeof wsDef[]>([]);
+    const [wsObj, setwsObj] = React.useState(wsDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
@@ -164,7 +164,7 @@ export const WsMaster: React.FC = () => {
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
-                    onClick={() => { setwsObj(defObj); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
+                    onClick={() => { setwsObj(wsDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
             </div>
         </Box>
 

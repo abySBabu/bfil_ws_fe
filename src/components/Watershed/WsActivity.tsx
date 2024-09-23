@@ -5,11 +5,13 @@ import {
     Card, MenuItem, IconButton, InputAdornment
 } from "@mui/material";
 import { Edit, Search } from '@mui/icons-material';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, SnackAlert } from '../../common';
 import { WsName } from '../../LocName';
+import { fmrDef } from '../Farmer/FarmerMaster';
 import { listAct, editAct } from '../../Services/activityService';
+import { listFarmer } from '../../Services/farmerService';
 
-const defObj = {
+export const actDef = {
     activityId: '',
     activityName: '',
     userId: '',
@@ -51,13 +53,16 @@ export const WsActivity: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
-    const [actObj, setactObj] = React.useState(defObj);
-    const [actList, setactList] = React.useState<typeof defObj[]>([]);
+    const [actObj, setactObj] = React.useState(actDef);
+    const [actList, setactList] = React.useState<typeof actDef[]>([]);
+    const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
 
     React.useEffect(() => { fetchData() }, [])
+
+    React.useEffect(() => { FmrSet(actObj.farmerId) }, [actObj.farmerId])
 
     const fetchData = async () => {
         try {
@@ -66,6 +71,13 @@ export const WsActivity: React.FC = () => {
         }
         catch (error) { console.log(error) }
     };
+
+    const FmrSet = async (id: any) => {
+        const resp = await listFarmer();
+        if (resp.status === 'success') {
+            setfmrObj(resp.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
+        }
+    }
 
     const ActEdit = async (id: any) => {
         try {
@@ -83,6 +95,8 @@ export const WsActivity: React.FC = () => {
     }
 
     return (<>
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
@@ -148,15 +162,15 @@ export const WsActivity: React.FC = () => {
                 </TextField></Grid>
                 <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} /></Grid>
                 <Grid item xs={3}><TextField label="Funds spent" value="" /></Grid>
-                <Grid item xs={3}><TextField select label="Funds source" value="BFIL">
+                <Grid item xs={3}><TextField select label="Funds source" value="">
                     <MenuItem value='BFIL'>BFIL</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Name' value={actObj.farmerId} /></Grid>
-                <Grid item xs={3}><TextField select label='Aadhar' value="**** **** 7251">
+                <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
+                <Grid item xs={3}><TextField select label='Aadhar' value={fmrObj.adharNumber}>
                     <MenuItem value='**** **** 7251'>**** **** 7251</MenuItem>
                 </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
+                <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>

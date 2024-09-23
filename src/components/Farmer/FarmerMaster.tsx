@@ -2,13 +2,13 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
-    Snackbar, InputAdornment, Typography
+    InputAdornment, Typography
 } from "@mui/material";
 import { Edit, PersonAdd, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer, editFarmer } from '../../Services/farmerService';
 
-const defObj = {
+export const fmrDef = {
     wsfarmerId: "",
     adharNumber: "",
     mobileNumber: "",
@@ -23,8 +23,8 @@ const defObj = {
 export const FarmerMaster: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
-    const [fmrList, setfmrList] = React.useState<typeof defObj[]>([]);
-    const [fmrObj, setfmrObj] = React.useState(defObj);
+    const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
+    const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
@@ -97,7 +97,7 @@ export const FarmerMaster: React.FC = () => {
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
-                    onClick={() => { setfmrObj(defObj); setaddM(true); }}>Add Farmer</Button>}
+                    onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
         {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
