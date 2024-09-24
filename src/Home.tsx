@@ -10,9 +10,9 @@ import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
+import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
-
 
 export const Home: React.FC = () => {
     const [dIndex, setdIndex] = useState<number | null>(null);
@@ -48,11 +48,12 @@ export const Home: React.FC = () => {
     React.useEffect(() => {
         const fetchLoc = async () => {
             try {
-                const resp1 = await listState(); if (resp1) sessionStorage.setItem("StateList", JSON.stringify(resp1));
-                const resp2 = await listDistrict(); if (resp2) sessionStorage.setItem("DistrictList", JSON.stringify(resp2));
-                const resp3 = await listTaluk(); if (resp3) sessionStorage.setItem("TalukList", JSON.stringify(resp3));
-                const resp4 = await listPanchayat(); if (resp4) sessionStorage.setItem("PanList", JSON.stringify(resp4));
-                const resp5 = await listVillage(); if (resp5) sessionStorage.setItem("VillageList", JSON.stringify(resp5));
+                const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
+                const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
+                const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
+                const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
+                const resp5 = await listWS(); if (resp5.status === 'success') sessionStorage.setItem("WsList", JSON.stringify(resp5.data));
+                const resp6 = await listVillage(); if (resp6.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp6.data));
             } catch (error) {
                 console.log(error);
             }
@@ -69,20 +70,20 @@ export const Home: React.FC = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
-            <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
                     <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
                 </Box>
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '60px', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
                     <Avatar src="img" alt={sessionStorage.getItem("userName") as string} onClick={(event) => setavatarAnchor(event.currentTarget)} />
                 </Box>
             </Toolbar>
 
             {!hasPermission &&
-                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
                     <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
@@ -120,5 +121,5 @@ export const Home: React.FC = () => {
                 <MenuItem onClick={() => handleLanguageChange('ka')}>Karnataka</MenuItem>
             </Menu>
         </Box>
-    );
+    )
 }

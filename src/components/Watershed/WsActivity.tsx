@@ -2,152 +2,187 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
-    Card, MenuItem, IconButton, InputAdornment
+    MenuItem, IconButton, InputAdornment
 } from "@mui/material";
-import { AddHome, Edit, Search } from '@mui/icons-material';
-import { TPA, PerChk } from '../../common';
-import { listAct } from '../../Services/activityService';
+import { Edit, Search } from '@mui/icons-material';
+import { TPA, PerChk, SnackAlert } from '../../common';
+import { WsName, VillageName, DateTime } from '../../LocName';
+import { fmrDef } from '../Farmer/FarmerMaster';
+import { listAct, editAct } from '../../Services/activityService';
+import { listFarmer } from '../../Services/farmerService';
 
-const defObj = {
-    ws_name: "",
-    intervention: "",
-    activity: "",
-    villages: [],
-    surveys: [],
-    farmer_aadhar: "",
-    units: "",
-    land_type: "",
-    wtr_saved: "",
-    funds_spd: "",
-    funds_src: ""
+export const actDef = {
+    activityId: '',
+    activityName: '',
+    userId: '',
+    activityDescription: '',
+    activityWorkflowStatus: '',
+    interventionType: '',
+    activityImage: '',
+    activityFormData: '',
+    watershedId: '',
+    farmerId: '',
+    remarks: '',
+    surveyNo: '',
+    hissa: '',
+    landType: '',
+    areaTreated: '',
+    total: '',
+    waterConserved: '',
+    amountSpend: '',
+    sourceExpenditure: '',
+    geotaggedPhoto: '',
+    capacitytypeEvent: '',
+    participantsType: '',
+    capacitynameEvent: '',
+    habitationsCovered: '',
+    state: '',
+    district: '',
+    taluk: '',
+    gramPanchayat: '',
+    village: '',
+    updatedTime: '',
+    updatedUser: '',
+    eventDate: '',
+    participantsMale: '',
+    participantsFemale: '',
+    trainerFacilitator: '',
+    mobilizer: '',
+    photoEvent: '',
+    photoattendanceResolution: ''
 }
 
-const ImgCard = (img: string) => (<Card sx={{ height: '100px', width: '100px', border: '1px solid black', }}>
-    <img src={`${process.env.PUBLIC_URL}/images/${img}`} alt={`${img}`}
-        style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
-</Card>)
-
 export const WsActivity: React.FC = () => {
-    const [selected, setselected] = React.useState(0);
-    const [edt, setedt] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
-    const [actList, setactList] = React.useState<typeof defObj[]>([]);
+    const [actObj, setactObj] = React.useState(actDef);
+    const [actList, setactList] = React.useState<typeof actDef[]>([]);
+    const [fmrObj, setfmrObj] = React.useState(fmrDef);
+    const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
+    const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
-    const [stOps, setstOps] = React.useState<any[]>([]);
-    const [dsOps, setdsOps] = React.useState<any[]>([]);
-    const [tlOps, settlOps] = React.useState<any[]>([]);
-    const [panOps, setpanOps] = React.useState<any[]>([]);
-    const [vilOps, setvilOps] = React.useState<any[]>([]);
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => { FmrSet(actObj.farmerId) }, [actObj.farmerId])
+
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1) { setactList(resp1) }
-            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
-            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+            const resp1 = await listAct();
+            if (resp1.status === 'success') { setactList(resp1.data) }
         }
         catch (error) { console.log(error) }
     };
 
+    const FmrSet = async (id: any) => {
+        try {
+            const resp1 = await listFarmer();
+            if (resp1.status === 'success') {
+                setfmrList(resp1.data)
+                setfmrObj(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
+
+    const ActEdit = async (id: any) => {
+        try {
+            const resp1 = await editAct(actObj, id)
+            if (resp1.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Activity ${actObj.activityName || ""} updated`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update activity");
+        }
+        seteditM(false);
+    }
+
     return (<>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
             <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                 InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-            {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<AddHome />} onClick={() => { }}>Add Activity</Button>)}
         </Box>
 
-        <TableContainer component={Paper}><Table>
+        {actList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Total Units</TableCell>
+                    <TableCell>Last Update On</TableCell>
+                    <TableCell>Last Update By</TableCell>
                     {PerChk('EDIT_Watershed Activity') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
-            <TableBody>
-                <TableRow onClick={() => setselected(1)}>
-                    <TableCell>Watershed 1</TableCell>
-                    <TableCell>Supply</TableCell>
-                    <TableCell>Earthen bunding</TableCell>
-                    <TableCell>200 sqft</TableCell>
-                    {PerChk('EDIT_Watershed Activity') && <TableCell>
-                        <IconButton onClick={() => { }}><Edit /></IconButton>
-                    </TableCell>}
-                </TableRow>
-            </TableBody>
+            <TableBody>{actList.map((a, i) =>
+            (<TableRow key={i}>
+                <TableCell>{WsName(a.watershedId)}</TableCell>
+                <TableCell>{a.interventionType}</TableCell>
+                <TableCell>{a.activityName}</TableCell>
+                <TableCell>{a.total}</TableCell>
+                <TableCell>{DateTime(a.updatedTime)}</TableCell>
+                <TableCell>{a.updatedUser}</TableCell>
+                {PerChk('EDIT_Watershed Activity') && <TableCell>
+                    <IconButton onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
+                </TableCell>}
+            </TableRow>)
+            )}</TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={1}
+                    count={actList.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[]}
+                    rowsPerPageOptions={[5, 10, 15]}
+                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table></TableContainer>
+        </Table></TableContainer>}
 
-        <Dialog open={Boolean(selected)} maxWidth='xl'>
-            <DialogTitle>Earthen bunding</DialogTitle>
+        <Dialog open={editM} maxWidth='xl'>
+            <DialogTitle>{actObj.activityName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField disabled label='Intervention Type' value={selected === 1 ? "Supply" : "Demand"} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Activity' value={selected === 1 ? "Earthen bunding" : selected === 2 ? "Sustainable Agriculture Practice" : "Drip/Sprinkler"} /></Grid>
-                {selected === 2 && <Grid item xs={3}><TextField disabled label='Sustainable Practice' value="Crop Rotation" /></Grid>}
-
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Watershed' value={selected === 2 ? "Watershed 2" : "Watershed 1"} /></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value="Karnataka" /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value="District" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value="Taluk" /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value="Panchayat" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Villages' value="Value" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Survey Numbers' value="Value" /></Grid>
-
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Activity Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled={!edt} label='Total Units' value="200 sqft" /></Grid>
-                {selected === 1 && <>
-                    <Grid item xs={3}><TextField select disabled={!edt} label='Land Type' value="Wet land">
-                        <MenuItem value='Wet land'>Public</MenuItem>
-                    </TextField></Grid>
-
-                    <Grid item xs={3}><TextField disabled={!edt} label="Water Conserved (litres)" value="40000" /></Grid>
-                </>}
-                <Grid item xs={3}><TextField disabled={!edt} label="Funds spent" value="2,00,000" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label="Funds source" value="BFIL">
-                    <MenuItem value='BFIL'>BFIL</MenuItem>
-                </TextField></Grid>
-
-                <Grid item xs={12}><Divider component={Typography} textAlign='left'>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Name' value="Farmer" /></Grid>
-                <Grid item xs={3}><TextField select disabled={!edt} label='Aadhar' value="**** **** 7251">
-                    <MenuItem value='**** **** 7251'>**** **** 7251</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Mobile No.' value="0123456789" /></Grid>
-
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={2}>{ImgCard("wsact1.webp")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact2.jpg")}</Grid>
-                <Grid item xs={2}>{ImgCard("wsact3.jfif")}</Grid>
+                <Grid item xs={3}><TextField disabled label='Intervention Type' value={actObj.interventionType} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
+                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Watershed' value={WsName(actObj.watershedId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
+                <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Village' value={actObj.village} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Survey No.' value={actObj.surveyNo} /></Grid>
+                <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
+                <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
-            <DialogActions>{
-                edt ? <>
-                    <Button onClick={() => setedt(false)}>Discard</Button>
-                    <Button onClick={() => setedt(false)}>Save</Button>
-                </> : <>
-                    <Button onClick={() => setselected(0)}>Close</Button>
-                    <Button onClick={() => setedt(true)}>Edit</Button>
-                </>
-            }</DialogActions>
+            <DialogActions>
+                <Button onClick={() => seteditM(false)}>Cancel</Button>
+                <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
+            </DialogActions>
         </Dialog>
     </>)
 }

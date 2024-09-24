@@ -39,11 +39,6 @@
   --textfield-border-def: 1px solid gray;
   --textfield-border-sel: 1px solid #b5651d;
   --textfield-size: fullwidth;
-  --modal-position-pos: absolute;
-  --modal-position-top: 50%;
-  --modal-position-left: 50%;
-  --modal-zindex: 1000;
-  --modal-backdrop: blur(15px);
   --table-bgcolor-head: #b5651d;
   --table-bgcolor-body-default: #fff;
   --table-bgcolor-body-hover: #fcf2e7;
@@ -80,4 +75,8 @@
   --align-end: end;
   --align-center: center;
   --align-spaced: space-between;
+  --modal-bradius: 15px;
+  --modal-padding: 8px;
+  --modal-zindex: 1000;
+  --modal-backdrop: blur(16px);
 }

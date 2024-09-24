@@ -233,7 +233,7 @@ export default function (props: mapTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button disabled={loading || !isValid || !formValues.ws_name || !formValues.user} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+                    <Button disabled={loading || !isValid || !formValues.ws_name || !formValues.user} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
@@ -495,7 +495,7 @@ type mapTypeProps = {
 //                 </DialogContent>
 //                 <DialogActions>
 //                     <Button onClick={handleClose}>Cancel</Button>
-//                     <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+//                     <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress/> : null}</Button>
 //                 </DialogActions>
 //             </Dialog>
 //             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>

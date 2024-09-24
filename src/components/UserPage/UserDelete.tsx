@@ -40,7 +40,7 @@ export default function UserDelete(props: userTypeProps) {
             let resp = await blockUser(blockParams);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("User Blocked successfully");
+                setMessage("User Deleted successfully");
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -64,15 +64,15 @@ export default function UserDelete(props: userTypeProps) {
 
     return (
         <Container>
-            <Dialog open={modalShow}>
+            <Dialog open={modalShow} maxWidth={'sm'}>
                 <DialogTitle>Confirmation</DialogTitle>
                 <DialogContent>
                     Are you sure you want to delete {props.userDetails?.userName}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={DisableUser} color="primary">
-                    Delete User {loading ? <CircularProgress size={24} /> : null}
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={DisableUser} disabled={loading}>
+                        Delete {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

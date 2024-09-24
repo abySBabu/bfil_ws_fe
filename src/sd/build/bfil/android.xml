@@ -25,13 +25,6 @@
   <string name="textfield_border_dis">1px solid #666</string>
   <string name="textfield_label_sel">#cc802a</string>
   <string name="textfield_label_dis">#666</string>
-  <string name="modal_position_pos">absolute</string>
-  <string name="modal_position_top">50%</string>
-  <string name="modal_position_left">50%</string>
-  <string name="modal_position_transform">translate(-50%, -50%)</string>
-  <string name="modal_padding">8px</string>
-  <string name="modal_zindex">1000</string>
-  <string name="modal_backdrop">blur(16px)</string>
   <string name="page_header_txtcolor">#fff</string>
   <string name="page_header_bgcolor">#8d272b</string>
   <string name="page_header_padding">8px</string>

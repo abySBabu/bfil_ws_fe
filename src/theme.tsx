@@ -48,7 +48,7 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff',
-                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
+                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand'), cursor: 'pointer' },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
@@ -62,6 +62,16 @@ export const bfilTheme = createTheme({
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
                 }
             }
+        },
+        MuiCircularProgress: {
+            defaultProps: {
+                size: 24,
+            },
+            styleOverrides: {
+                root: {
+                    color: 'var(--button-bgcolor-active-brand)'
+                },
+            },
         },
         MuiCheckbox: {
             styleOverrides: {
@@ -112,7 +122,7 @@ export const bfilTheme = createTheme({
                     backdropFilter: sd('--modal-backdrop'),
                 },
                 paper: {
-                    borderRadius: '15px'
+                    borderRadius: sd('--modal-bradius')
                 }
             },
             defaultProps: {
@@ -134,14 +144,15 @@ export const bfilTheme = createTheme({
                 root: {
                     '& .MuiOutlinedInput-root': {
                         height: '48px',
-                        '& input': { height: '100%', padding: '0 12px' },
+                        '& input': { height: '100%', padding: '0px 8px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
                         '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
                     },
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
                         '&.Mui-disabled': { color: sd('--textfield-label-dis') }
-                    }
+                    },
+                    '& .MuiFormHelperText-root': { color: 'red' }
                 }
             },
             defaultProps: {
@@ -153,7 +164,7 @@ export const bfilTheme = createTheme({
                 root: {
                     '& .MuiOutlinedInput-root': {
                         height: '48px',
-                        '& .MuiSelect-select': { height: '100%', padding: '0 12px' },
+                        '& .MuiSelect-select': { height: '100%', padding: '0px 8px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
                         '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
                     },
@@ -185,7 +196,7 @@ export const bfilTheme = createTheme({
         MuiSnackbar: {
             styleOverrides: {
                 root: {
-                    borderRadius: '15px',
+                    borderRadius: sd('--alert-bradius'),
                 }
             },
             defaultProps: {
@@ -201,6 +212,14 @@ export const bfilTheme = createTheme({
                 }
             },
             defaultProps: { underline: 'hover' }
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    borderColor: 'rgba(0, 0, 0, 0.5)', '&::before, &::after': { borderColor: 'rgba(0, 0, 0, 0.5)' },
+                    color: 'rgba(0, 0, 0, 0.75)'
+                }
+            }
         }
     }
 })

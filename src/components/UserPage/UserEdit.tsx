@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
-let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
 
 
 interface UserFormInput {
@@ -43,6 +42,7 @@ export default function UserForm(props: userTypeProps) {
     const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
     const [managerList, setManagerList] = useState<allUserType[]>([]);
     const loginTypeOptions = selectOptions.loginTypeOptions;
+    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
     let userId: any;
     const [isRolesLoading, setRolesLoading] = useState(true);
 
@@ -349,11 +349,11 @@ export default function UserForm(props: userTypeProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button
                         disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.role || !formValues.userName}
-                        onClick={handleSubmit(addUser)} color="primary">
-                        Update {loading ? <CircularProgress size={24} /> : null}
+                        onClick={handleSubmit(addUser)}>
+                        Update {loading ? <CircularProgress/> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

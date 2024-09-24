@@ -25,13 +25,6 @@
   --textfield-border-dis: 1px solid #666;
   --textfield-label-sel: #cc802a;
   --textfield-label-dis: #666;
-  --modal-position-pos: absolute;
-  --modal-position-top: 50%;
-  --modal-position-left: 50%;
-  --modal-position-transform: translate(-50%, -50%);
-  --modal-padding: 8px;
-  --modal-zindex: 1000;
-  --modal-backdrop: blur(16px);
   --page-header-txtcolor: #fff;
   --page-header-bgcolor: #8d272b;
   --page-header-padding: 8px;
@@ -82,4 +75,8 @@
   --align-end: end;
   --align-center: center;
   --align-spaced: space-between;
+  --modal-bradius: 15px;
+  --modal-padding: 8px;
+  --modal-zindex: 1000;
+  --modal-backdrop: blur(16px);
 }

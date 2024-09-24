@@ -131,7 +131,7 @@ const Login: React.FC = () => {
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
-                                    Sign In {loading ? <CircularProgress size={24} /> : null}
+                                    Sign In {loading ? <CircularProgress /> : null}
                                 </Button>
 
                                 <Grid container>

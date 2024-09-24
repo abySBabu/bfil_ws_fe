@@ -371,10 +371,10 @@ export default function (props: userTypeProps) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button
                         disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.password || !formValues.role || !formValues.userName}
-                        onClick={handleSubmit(addUser)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
+                        onClick={handleSubmit(addUser)}>Add{loading ? <CircularProgress/> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
