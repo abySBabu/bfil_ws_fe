@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container, Typography, Button, Snackbar, Alert, Dialog, DialogActions,
+    Container, Typography, Button, Snackbar, Alert, Dialog, DialogActions,
     DialogContent, DialogTitle, CircularProgress
 } from '@mui/material';
 import { rolesByCompanyId } from './RoleManagement';
@@ -36,7 +36,7 @@ export default function DeleteRole(props: RoleTypeProps) {
     const deleteRole = async () => {
         setLoading(true);
         try {
-          
+
             let resp = await deleteRolesByRole(roleDetails?.roleId);
             if (resp) {
                 setSeverityColor("success");
@@ -49,7 +49,7 @@ export default function DeleteRole(props: RoleTypeProps) {
                     navigate('/');
                 }, setTimeoutsecs);
             }
-           
+
         } catch (error: any) {
             if (error && error.response && error.response.data && error.response.data.message) {
                 setSeverityColor("error");
@@ -83,7 +83,7 @@ export default function DeleteRole(props: RoleTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button onClick={deleteRole} disabled={loading}>
-                        Delete {loading ? <CircularProgress size={24} /> : null}
+                        Delete {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

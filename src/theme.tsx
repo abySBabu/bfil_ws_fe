@@ -63,6 +63,16 @@ export const bfilTheme = createTheme({
                 }
             }
         },
+        MuiCircularProgress: {
+            defaultProps: {
+                size: 24,
+            },
+            styleOverrides: {
+                root: {
+                    color: 'var(--button-bgcolor-active-brand)'
+                },
+            },
+        },
         MuiCheckbox: {
             styleOverrides: {
                 root: {
