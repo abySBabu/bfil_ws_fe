@@ -67,12 +67,12 @@ export default function UserDisable(props: userTypeProps) {
             <Dialog open={modalShow}>
                 <DialogTitle>Confirmation</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to Enable {props.userDetails?.userName}
+                    Are you sure you want to Unblock {props.userDetails?.userName}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button onClick={DisableUser} disabled={loading}>
-                        Enable{loading ? <CircularProgress /> : null}
+                        Unblock{loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -67,7 +67,7 @@ export default function UserDisable(props: userTypeProps) {
             <Dialog open={modalShow}>
                 <DialogTitle>Confirmation</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to block {props.userDetails?.userName}
+                    Are you sure you want to Block {props.userDetails?.userName}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
