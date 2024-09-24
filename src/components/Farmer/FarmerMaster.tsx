@@ -27,6 +27,7 @@ export const FarmerMaster: React.FC = () => {
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    const [editName, seteditName] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
@@ -118,7 +119,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{w.adharNumber}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton onClick={() => { setfmrObj(w); seteditName(w.wsfarmerName); seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -150,6 +151,7 @@ export const FarmerMaster: React.FC = () => {
                             setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
                         }
                     }}
+                    helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                 /></Grid>
                 <Grid item xs={6}><TextField
                     required
@@ -158,6 +160,7 @@ export const FarmerMaster: React.FC = () => {
                     onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
                     inputProps={{ maxLength: 12 }}
                     type="tel"
+                    helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
                 /></Grid>
                 <Grid item xs={6}><TextField
                     required
@@ -166,42 +169,55 @@ export const FarmerMaster: React.FC = () => {
                     onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
                     inputProps={{ maxLength: 10 }}
                     type="tel"
+                    helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                 /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Cancel</Button>
                 <Button onClick={fmrAdd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 
         <Dialog open={editM} maxWidth='sm'>
-            <DialogTitle>Edit {fmrObj.wsfarmerName}</DialogTitle>
+            <DialogTitle>Edit {editName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setfmrObj({ ...fmrObj, wsfarmerName: e.target.value })} /></Grid>
                 <Grid item xs={12}><TextField
+                    required
+                    label="Name"
+                    value={fmrObj.wsfarmerName}
+                    onChange={(e) => {
+                        const regex = /^[A-Za-z\s]*$/;
+                        if (regex.test(e.target.value)) {
+                            setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
+                        }
+                    }}
+                    helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
+                /></Grid>
+                <Grid item xs={12}><TextField
+                    required
                     label="Aadhar"
                     value={fmrObj.adharNumber}
                     onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
                     inputProps={{ maxLength: 12 }}
                     type="tel"
-                />
-                </Grid>
+                    helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
+                /></Grid>
                 <Grid item xs={12}><TextField
+                    required
                     label="Mobile"
                     value={fmrObj.mobileNumber}
                     onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
                     inputProps={{ maxLength: 10 }}
                     type="tel"
-                />
-                </Grid>
+                    helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
+                /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Cancel</Button>
-                <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }}>Update</Button>
+                <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

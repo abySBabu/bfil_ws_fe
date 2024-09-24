@@ -151,7 +151,8 @@ export const bfilTheme = createTheme({
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
                         '&.Mui-disabled': { color: sd('--textfield-label-dis') }
-                    }
+                    },
+                    '& .MuiFormHelperText-root': { color: 'red' }
                 }
             },
             defaultProps: {

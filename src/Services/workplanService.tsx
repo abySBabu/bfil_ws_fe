@@ -1,9 +1,9 @@
 import axios from "axios";
 import { serverPath } from "../common";
 
-export async function listWS() {
+export async function listWP() {
     const configs = {
-        url: serverPath.bfil + "wsmaster/getallwatershed",
+        url: serverPath.bfil + "workplan/getAllWorkplan",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
@@ -11,19 +11,9 @@ export async function listWS() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function idWS(id: any) {
+export async function addWP(data: any) {
     const configs = {
-        url: serverPath.bfil + `wsmaster/getWsById/${id}`,
-        method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
-    }
-    try { const response = await axios(configs); return response.data; }
-    catch (error) { console.error(error); throw error; }
-}
-
-export async function addWS(data: any) {
-    const configs = {
-        url: serverPath.bfil + "wsmaster/addwatershed",
+        url: serverPath.bfil + "workplan/addworkplan",
         method: 'post',
         data: data,
         headers: {
@@ -35,7 +25,7 @@ export async function addWS(data: any) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function editWS(data: any, id: any) {
+export async function editWP(data: any, id: any) {
     const configs = {
         url: serverPath.bfil + `wsmaster/updateWsById/${id}`,
         method: 'post',

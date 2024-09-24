@@ -5,8 +5,8 @@ import {
     Typography, Snackbar, InputAdornment
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
-import { VillageName } from '../../LocName';
 import { TPA, PerChk } from '../../common';
+import { listWP } from '../../Services/workplanService';
 
 const defObj = {
     year: "",
@@ -50,9 +50,7 @@ export const Workplan: React.FC = () => {
 
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
-    React.useEffect(() => {
-        console.log('Village Name By ID--', VillageName(1))
-    }, [])
+    React.useEffect(() => { fetchData() }, [])
 
     React.useEffect(() => {
         setplanObj({
@@ -60,6 +58,16 @@ export const Workplan: React.FC = () => {
             finTotal: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
         });
     }, [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom]);
+
+    const fetchData = async () => {
+        try {
+            const resp1 = await listWP();
+            if (resp1.status === 'success') {
+                console.log(resp1.data)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
 
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
