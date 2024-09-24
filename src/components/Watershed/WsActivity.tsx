@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
-    Card, MenuItem, IconButton, InputAdornment
+    MenuItem, IconButton, InputAdornment
 } from "@mui/material";
 import { Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -56,6 +56,7 @@ export const WsActivity: React.FC = () => {
     const [actObj, setactObj] = React.useState(actDef);
     const [actList, setactList] = React.useState<typeof actDef[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
+    const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
@@ -73,10 +74,14 @@ export const WsActivity: React.FC = () => {
     };
 
     const FmrSet = async (id: any) => {
-        const resp = await listFarmer();
-        if (resp.status === 'success') {
-            setfmrObj(resp.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
+        try {
+            const resp = await listFarmer();
+            if (resp.status === 'success') {
+                setfmrList(resp.data)
+                setfmrObj(resp.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
+            }
         }
+        catch (error) { console.log(error) }
     }
 
     const ActEdit = async (id: any) => {
@@ -162,9 +167,7 @@ export const WsActivity: React.FC = () => {
                 </TextField></Grid>
                 <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} /></Grid>
                 <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} /></Grid>
-                <Grid item xs={3}><TextField select label="Funds source" value={actObj.sourceExpenditure}>
-                    <MenuItem value='BFIL'>BFIL</MenuItem>
-                </TextField></Grid>
+                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} /></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                 <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
                 <Grid item xs={3}><TextField select label='Aadhar' value={fmrObj.adharNumber}>
