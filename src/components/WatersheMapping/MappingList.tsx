@@ -37,24 +37,14 @@ export default function MappingList() {
         setTableDialog(true);
         console.log('Selected row:', row);
     };
-
-
-    const formatDate = (timestamp: string | number | Date) => {
-        const date = new Date(timestamp);
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    }
-
     const fetchMapData = async () => {
         try {
             let resp = await listWSMap();
-            setmapData(resp);
+            setmapData(resp.data);
             let userData = await usersList(companyId);
             setUserList(userData);
             let wsDatalist = await listWS();
-            setWsList(wsDatalist);
+            setWsList(wsDatalist.data);
         } catch (error) {
 
             console.log(error)
@@ -76,6 +66,12 @@ export default function MappingList() {
     };
 
     const filteredData = mapData.filter(user => {
+        const UserName = fetchUserData(user.userId);
+        const matchesUserName = UserName && UserName.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const WsName = fetchWsData(user.watershedId);
+        const matchesWatershedName = WsName && WsName.toLowerCase().includes(searchQuery.toLowerCase());
+
         const matchesSearchQuery = Object.values(user).some(value => {
             if (typeof value === 'string') {
                 return value.toLowerCase().includes(searchQuery.toLowerCase());
@@ -83,7 +79,7 @@ export default function MappingList() {
             return false;
         });
 
-        return matchesSearchQuery;
+        return matchesSearchQuery || matchesUserName || matchesWatershedName;
     });
 
     function fetchUserData(userid: number) {
@@ -92,9 +88,14 @@ export default function MappingList() {
 
     };
 
-    function fetchWsData(wsId: number) {
-        const wsdatabyName = wsList.find(ws => ws.wsId === wsId);
-        return wsdatabyName ? wsdatabyName.wsName : null;
+    function fetchWsData(wsId: string) {
+        const wsIds = wsId.split(',').map(id => parseInt(id, 10));
+        return wsIds.map(id => {
+            const ws = wsList.find(ws => ws.wsId === id);
+            return ws ? ws.wsName : null;
+        }).filter(name => name).join(', ');
+        // const wsdatabyName = wsList.find(ws => ws.wsId === wsId);
+        // return wsdatabyName ? wsdatabyName.wsName : null;
 
     };
 
@@ -103,25 +104,25 @@ export default function MappingList() {
         {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <TextField
-                        label="Search"
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                {PerChk('EDIT_Watershed Mapping') && (
-                    <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                        Add Mapping
-                    </Button>)}
+            <TextField
+                label="Search"
+                fullWidth={false}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                variant="outlined"
+                size="small"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {PerChk('EDIT_Watershed Mapping') && (
+                <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                    Add Mapping
+                </Button>)}
         </Box>
 
         {filteredData.length > 0 ?

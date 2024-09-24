@@ -10,25 +10,26 @@ import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagement
 import { mapDataType, wsData } from "./WatershedMappingMgmtType";
 import { addWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
-import { usersList } from '../../Services/userService'
+import { usersList, getRolesByCompany } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 
 interface MapFormInput {
-    ws_name: number,
+    ws_name: number[],
     user: number,
     remarks: string
 }
 export default function (props: mapTypeProps) {
+    const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(props.show);
     const [wsList, setWsList] = useState<wsData[]>([]);
-    const [selectedWs, setSelectedWs] = useState<wsData | null>(null);
+    const [selectedWs, setSelectedWs] = useState<wsData[]>([]);
     const [userList, setUserList] = useState<allUserType[]>([]);
     const [selectedRoleName, setSelectedRoleName] = useState<string>('');
     let companyID: any;
@@ -40,13 +41,12 @@ export default function (props: mapTypeProps) {
     const { register, handleSubmit, setValue, trigger, watch, formState: { errors, isValid } } = useForm<MapFormInput>(
         {
             defaultValues: {
-                ws_name: undefined,
+                ws_name: [],
                 user: undefined,
                 remarks: '',
             }
         });
     const formValues = watch();
-
 
     if (companyIdFromLocalStorage !== null) {
         companyID = parseInt(companyIdFromLocalStorage);
@@ -56,11 +56,21 @@ export default function (props: mapTypeProps) {
     }
 
     useEffect(() => {
+        if (props.action === "Edit" && props.mapDetails) {
+            const wsIdArray = props.mapDetails.watershedId.split(',').map(Number);
+            setValue('ws_name', wsIdArray); 
+            setValue('remarks', props.mapDetails.remarks);
+            setValue('user', props.mapDetails.userId);
+        }
         const fetchData = async () => {
             try {
+                let Roleresp = await getRolesByCompany(companyID);
+                if (Roleresp) {
+                    setRolesListFromService(Roleresp);
+                }
                 let resp = await listWS();
                 if (resp) {
-                    setWsList(resp);
+                    setWsList(resp.data);
                 }
                 let userResp = await usersList(companyId);
                 let temp: allUserType[] = userResp;
@@ -81,18 +91,24 @@ export default function (props: mapTypeProps) {
         };
 
         fetchData();
-    }, []);
+    }, [props.action, props.mapDetails, setValue]);
 
     const handleClose = () => {
         setModalShow(false);
         props.hide();
     };
 
-    const handleWatershedChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const selectedWsIds = Number(e.target.value);
+    function fetchUserData(userid: number) {
+        const user = userList.find(user => user.userId === userid);
+        return user ? user.userName : null;
+
+    };
+
+    const handleWatershedChange = (event: SelectChangeEvent<number[]>) => {
+        const selectedWsIds = event.target.value as number[];
         setValue('ws_name', selectedWsIds);
-        const selectedWsData = wsList.find(ws => ws.wsId === selectedWsIds) || null;
-        // const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
+
+        const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
         setSelectedWs(selectedWsData);
     };
 
@@ -107,15 +123,19 @@ export default function (props: mapTypeProps) {
 
     const addMap: SubmitHandler<MapFormInput> = async (value) => {
         setLoading(true);
+        let roleListTemp = rolesListFromService.filter(option => option.roleName === selectedRoleName);
+
         try {
-            let mapData = {
+            const watershedIdsString = value.ws_name.join(',');
+
+            const mapData = selectedWs.map(ws => ({
                 userId: value.user,
-                watershedId: value.ws_name,
-                createdUser: userId,
-                updatedUser: userId,
+                watershedId: watershedIdsString,
+                createdUser: fetchUserData(userId),
+                updatedUser: fetchUserData(userId),
                 remarks: value.remarks,
-            }
-            console.log("mapData.........", mapData)
+                roleId: roleListTemp[0].roleId
+            }));
 
             let resp = await addWS(mapData);
             if (resp) {
@@ -176,38 +196,43 @@ export default function (props: mapTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                select
-                                required
-                                margin="normal"
-                                fullWidth
-                                id="ws_name"
-                                label="Watershed Name"
-                                {...register('ws_name', {
-                                    // required: 'Watershed Name Set is required'
-                                })}
-                                onChange={(e) => {
-                                    register('ws_name').onChange(e);
-                                    trigger('ws_name');
-                                    handleWatershedChange(e);
-                                }}
-                                error={!!errors.ws_name}
-                                helperText={errors.ws_name ? errors.ws_name.message : ''}
-                            >
-                                {wsList.map((option, index) => (<MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>))}
-                            </TextField>
+                            <FormControl fullWidth required>
+                                <InputLabel id="ws_name-label">Watershed Name</InputLabel>
+                                <Select
+                                    labelId="ws_name-label"
+                                    id="ws_name"
+                                    multiple
+                                    value={watch('ws_name') || []}
+                                    onChange={handleWatershedChange}
+                                    input={<OutlinedInput label="Watershed Name" />}
+                                    renderValue={(selected: number[]) => selected.map(id => {
+                                        const ws = wsList.find(option => option.wsId === id);
+                                        return ws ? ws.wsName : '';
+                                    }).join(', ')}
+                                    error={!!errors.ws_name}
+                                >
+                                    {wsList.map((option, index) => (
+                                        <MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.ws_name && <p>{errors.ws_name.message}</p>}
+                            </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Divider textAlign="left">Watershed Details</Divider>
-                        </Grid>
-                        <Grid item xs={4}><TextField label='Description' disabled value={selectedWs?.wsDescription} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={4}><TextField label='State' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={4}><TextField label='District' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={4}><TextField label='Taluka' disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={4}><TextField label="Grampanchayat" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={4}><TextField label="Village" disabled value={selectedWs?.villageId} InputLabelProps={{ shrink: true }} /></Grid>
-                        <Grid item xs={12}><Divider /></Grid>
-
+                        {selectedWs.map(ws => (
+                            <>
+                                <Grid item xs={12}>
+                                    <Divider textAlign="left">{ws.wsName}</Divider>
+                                </Grid>
+                                <React.Fragment key={ws.wsId}>
+                                    <Grid item xs={4}><TextField label='Description' disabled value={ws.wsDescription || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='State' disabled value={StateName(ws.stateId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='District' disabled value={DistrictName(ws.districtId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='Taluka' disabled value={TalukName(ws.talukId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label="Grampanchayat" disabled value={PanName(ws.grampanchayatId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label="Village" disabled value={VillageName(ws.villageId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                </React.Fragment>
+                                <Grid item xs={12}><Divider /></Grid>
+                            </>))}
                         <Grid item xs={12}>
                             <TextField
                                 id="remarks"
@@ -219,11 +244,6 @@ export default function (props: mapTypeProps) {
                                         message: 'Remarks must only contain alphanumeric characters'
                                     }
                                 })}
-                                onChange={(e) => {
-                                    register('remarks').onChange(e);
-                                    trigger('remarks');
-                                    handleWatershedChange(e);
-                                }}
                                 error={!!errors.remarks}
                                 helperText={errors.remarks ? errors.remarks.message : ''}
                             />
@@ -233,7 +253,7 @@ export default function (props: mapTypeProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button disabled={loading || !isValid || !formValues.ws_name || !formValues.user} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress /> : null}</Button>
+                    <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
@@ -249,7 +269,6 @@ export default function (props: mapTypeProps) {
         </Container>
     );
 };
-
 
 type mapTypeProps = {
     show: boolean;
