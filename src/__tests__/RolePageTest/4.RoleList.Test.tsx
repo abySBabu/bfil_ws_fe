@@ -1,16 +1,16 @@
 import { test, expect, chromium, Page } from '@playwright/test';
+test.describe('Role Management Automation', () => {
 
-test.describe('User Edit Automation', () => {
+    test('should click the edit icon in the table row', async () => {
 
-
-    test('should display user data in the table', async () => {
-        test.setTimeout(60000);
+        test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
             channel: 'chrome',
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
+
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
@@ -19,16 +19,18 @@ test.describe('User Edit Automation', () => {
 
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
         await page.reload();
-        // Navigate to the User Management page
-        const userManagementButton = page.locator('text=User Management');
+        const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
-        await page.waitForTimeout(10000);
+        // // Wait for the table to be visible
         await page.waitForSelector('table');
+        // Locate all rows in the table
         const rows = page.locator('tr');
+        // Log the row count to ensure data is loaded
         const rowCount = await rows.count();
         console.log('Number of rows:', rowCount);
         expect(rowCount).toBeGreaterThan(0);
         await browser.close();
+
     });
 
 });
