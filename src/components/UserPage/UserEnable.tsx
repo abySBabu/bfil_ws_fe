@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
     Button, Snackbar, Alert, Dialog, DialogActions,
-    DialogContent, DialogTitle, Container, CircularProgress
+    DialogContent, DialogTitle, Container, CircularProgress,
+    Typography
 } from '@mui/material';
 import { blockUser } from '../../Services/userService';
 import { allUserType } from "./UserManagementType";
@@ -64,10 +65,10 @@ export default function UserDisable(props: userTypeProps) {
 
     return (
         <Container>
-            <Dialog open={modalShow}>
+            <Dialog open={modalShow} maxWidth={'sm'}>
                 <DialogTitle>Confirmation</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to Unblock {props.userDetails?.userName}
+                    <Typography>Are you sure you want to Unblock {props.userDetails?.userName}</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
