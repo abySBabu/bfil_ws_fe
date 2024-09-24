@@ -59,7 +59,7 @@ export default function UserList() {
 
     const formatDate = (timestamp: string | number | Date) => {
         const date = new Date(timestamp);
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const year = date.getFullYear();
         const hours = String(date.getHours()).padStart(2, '0');
@@ -207,7 +207,7 @@ export default function UserList() {
                             {PerChk('EDIT_User Management') && (
                                 <TableCell sx={{ textAlign: 'center' }}>
                                     {row.userBlockedFlag === 'N' &&
-                                        <Tooltip title="Edit">
+                                        <Tooltip title="Edit User">
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'N' &&
@@ -215,7 +215,7 @@ export default function UserList() {
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&
-                                        <Tooltip title="UnBlock User">
+                                        <Tooltip title="Unblock User">
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&

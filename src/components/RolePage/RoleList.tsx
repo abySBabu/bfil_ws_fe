@@ -141,10 +141,10 @@ export default function RoleList() {
                             </TableCell>
                             {PerChk('EDIT_Role Management') && (
                                 <TableCell sx={{ textAlign: 'center' }}>
-                                    <Tooltip title="Edit">
+                                    <Tooltip title="Edit Role">
                                         <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
-                                    <Tooltip title="Delete">
+                                    <Tooltip title="Delete Role">
                                         <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                     </Tooltip>
                                 </TableCell>)}
