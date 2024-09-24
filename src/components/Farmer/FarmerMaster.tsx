@@ -4,9 +4,9 @@ import {
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
     InputAdornment, Typography
 } from "@mui/material";
-import { Edit, PersonAdd, Search } from '@mui/icons-material';
+import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { listFarmer, addFarmer, editFarmer } from '../../Services/farmerService';
+import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 
 export const fmrDef = {
     wsfarmerId: "",
@@ -28,6 +28,7 @@ export const FarmerMaster: React.FC = () => {
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [editName, seteditName] = React.useState("");
+    const [deleteM, setdeleteM] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
@@ -89,6 +90,21 @@ export const FarmerMaster: React.FC = () => {
         seteditM(false);
     }
 
+    const fmrDelete = async (id: any) => {
+        try {
+            const resp = await deleteFarmer(id)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Farmer ${editName || ""} deleted`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to delete farmer");
+        }
+        setdeleteM('');
+    }
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
@@ -120,6 +136,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
                         <IconButton onClick={() => { setfmrObj(w); seteditName(w.wsfarmerName); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title='Delete watershed' onClick={() => { seteditName(w.wsfarmerName); setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -218,6 +235,15 @@ export const FarmerMaster: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Cancel</Button>
                 <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+            <DialogTitle>Delete {editName}</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
+            <DialogActions>
+                <Button onClick={() => setdeleteM('')}>Cancel</Button>
+                <Button onClick={() => fmrDelete(deleteM)}>Delete</Button>
             </DialogActions>
         </Dialog>
     </>)

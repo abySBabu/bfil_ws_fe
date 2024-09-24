@@ -41,7 +41,7 @@ export async function editFarmer(data: any, id: any) {
 
 export async function deleteFarmer(id: any) {
     const configs = {
-        url: serverPath.bfil + `wsmaster/deleteFarmerById/${id}`,
+        url: serverPath.bfil + `ws_farmers/deleteFarmerById/${id}`,
         method: 'delete',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,

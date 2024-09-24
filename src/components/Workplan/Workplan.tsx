@@ -6,21 +6,23 @@ import {
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
+import { wsDef } from '../Watershed/WsMaster';
 import { listWP } from '../../Services/workplanService';
+import { idWS } from '../../Services/wsService';
 
-const defObj = {
-    year: "",
+const wpDef = {
+    planningYear: "",
     activityId: "",
-    intervention: "",
-    landType: "",
+    interventionType_Components: "",
+    planlandType: "",
     stateId: "1",
     districtId: "",
     talukId: "",
     grampanchayatId: "",
-    wsId: "",
-    phyValue: "",
-    phyUnit: "",
-    finTotal: "",
+    watershedId: "",
+    plan: "",
+    unitofMeasurement: "",
+    wfsValue: "",
     finBfil: "",
     finOther: "",
     finGov: "",
@@ -32,8 +34,9 @@ const defObj = {
 export const Workplan: React.FC = () => {
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
-    const [planList, setplanList] = React.useState<typeof defObj[]>([]);
-    const [planObj, setplanObj] = React.useState(defObj);
+    const [planList, setplanList] = React.useState<typeof wpDef[]>([]);
+    const [planObj, setplanObj] = React.useState(wpDef);
+    const [wsObj, setwsObj] = React.useState(wsDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
@@ -42,9 +45,9 @@ export const Workplan: React.FC = () => {
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
-            w.year?.toLowerCase().includes(searchTerm) ||
+            w.planningYear?.toLowerCase().includes(searchTerm) ||
             w.activityId?.toLowerCase().includes(searchTerm) ||
-            w.intervention?.toLowerCase().includes(searchTerm)
+            w.interventionType_Components?.toLowerCase().includes(searchTerm)
         );
     });
 
@@ -55,7 +58,7 @@ export const Workplan: React.FC = () => {
     React.useEffect(() => {
         setplanObj({
             ...planObj,
-            finTotal: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
+            wfsValue: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
         });
     }, [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom]);
 
@@ -69,6 +72,16 @@ export const Workplan: React.FC = () => {
         catch (error) { console.log(error) }
     }
 
+    const WsSet = async (id: any) => {
+        try {
+            const resp1 = await idWS(id);
+            if (resp1.status === 'success') {
+                setwsObj(resp1.data)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
+
     return (<>
         <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
 
@@ -77,7 +90,7 @@ export const Workplan: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(defObj); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
+                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
             </div>
         </Box>
 
@@ -87,7 +100,7 @@ export const Workplan: React.FC = () => {
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
-                    <TableCell>Year</TableCell>
+                    <TableCell>planningYear</TableCell>
                     <TableCell>activityId</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
@@ -98,10 +111,10 @@ export const Workplan: React.FC = () => {
             <TableBody>{planListP.map((w, i) => (
                 <TableRow key={i}>
                     <TableCell>{w.activityId}</TableCell>
-                    <TableCell>{w.year}</TableCell>
-                    <TableCell>{w.intervention} - {w.activityId}</TableCell>
-                    <TableCell>{w.phyValue} {w.phyUnit}</TableCell>
-                    <TableCell>{w.finTotal}</TableCell>
+                    <TableCell>{w.planningYear}</TableCell>
+                    <TableCell>{w.interventionType_Components} - {w.activityId}</TableCell>
+                    <TableCell>{w.plan} {w.unitofMeasurement}</TableCell>
+                    <TableCell>{w.wfsValue}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
@@ -126,20 +139,20 @@ export const Workplan: React.FC = () => {
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider textAlign='left'>Plan Details</Divider></Grid>
-                <Grid item xs={3}><TextField label='Year' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Intervention" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="activityId" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Land Type" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='planningYear' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="interventionType_Components" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="activityId" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Land Type" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider textAlign='left'>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField label='State' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='State' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="District" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Taluk" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Panchayat" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Watershed" value={planObj.intervention} onChange={(e) => setplanObj({ ...planObj, intervention: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Watershed" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider textAlign='left'>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField label='Value' value={planObj.year} onChange={(e) => setplanObj({ ...planObj, year: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='Value' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="UOM" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider textAlign='left'>Financial Plan</Divider></Grid>
@@ -155,7 +168,7 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
                 <Grid item xs={3}><TextField type='number' label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField label="Total" value={planObj.finTotal} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Total" value={planObj.wfsValue} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>

@@ -4,9 +4,9 @@ import {
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
     MenuItem, InputAdornment, Typography
 } from "@mui/material";
-import { AddHome, Edit, Search } from '@mui/icons-material';
+import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { listWS, addWS, editWS } from '../../Services/wsService';
+import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { VillageName } from '../../LocName';
 
@@ -29,6 +29,8 @@ export const WsMaster: React.FC = () => {
     const [wsObj, setwsObj] = React.useState(wsDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    const [editName, seteditName] = React.useState("");
+    const [deleteM, setdeleteM] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
@@ -155,6 +157,21 @@ export const WsMaster: React.FC = () => {
         seteditM(false);
     }
 
+    const WSdelete = async (id: any) => {
+        try {
+            const resp = await deleteWS(id)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Watershed ${editName || ""} deleted`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to delete watershed");
+        }
+        setdeleteM('');
+    }
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
@@ -185,9 +202,10 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsName}</TableCell>
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell><IconButton
-                        title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}>
-                        <Edit /></IconButton></TableCell>}
+                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditName(w.wsName); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title='Delete watershed' onClick={() => { seteditName(w.wsName); setdeleteM(w.wsId); }}><Delete /></IconButton>
+                    </TableCell>}
                 </TableRow>
             ))}</TableBody>
 
@@ -208,8 +226,14 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
+                    onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
+                    helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                /></Grid>
+                <Grid item xs={12}><TextField required label='Description'
+                    value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
+                    helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.stateId}>
                     {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
@@ -226,22 +250,27 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
                     {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4} />
+                {!wsObj.villageId && <Grid item xs={12}><Typography variant='body2' sx={{ color: '#f00' }}>Please enter location details</Typography></Grid>}
             </Grid></DialogContent>
 
             <DialogActions>
-                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
                 <Button onClick={() => { setaddM(false); }}>Cancel</Button>
                 <Button onClick={WSadd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 
         <Dialog open={editM}>
-            <DialogTitle>Edit {wsObj.wsName}</DialogTitle>
+            <DialogTitle>Edit {editName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName} onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField required label='Description' value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
+                    onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
+                    helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                /></Grid>
+                <Grid item xs={12}><TextField required label='Description'
+                    value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
+                    helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                /></Grid>
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={4}><TextField select label='State' disabled value={wsObj.stateId}>
                     {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
@@ -258,13 +287,21 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
                     {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4} />
+                {!wsObj.villageId && <Grid item xs={12}><Typography variant='body2' sx={{ color: '#f00' }}>Please enter location details</Typography></Grid>}
             </Grid></DialogContent>
 
             <DialogActions>
-                {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>Please fill all *required fields</Typography>}
                 <Button onClick={() => { seteditM(false); }}>Cancel</Button>
                 <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Update</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+            <DialogTitle>Delete Watershed {editName}</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
+            <DialogActions>
+                <Button onClick={() => setdeleteM('')}>Cancel</Button>
+                <Button onClick={() => WSdelete(deleteM)}>Delete</Button>
             </DialogActions>
         </Dialog>
     </>)
