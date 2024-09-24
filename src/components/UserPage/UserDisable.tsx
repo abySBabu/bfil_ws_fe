@@ -70,9 +70,9 @@ export default function UserDisable(props: userTypeProps) {
                     Are you sure you want to block {props.userDetails?.userName}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={DisableUser} color="primary">
-                    Block User {loading ? <CircularProgress size={24} /> : null}
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={DisableUser} disabled={loading}>
+                        Block{loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

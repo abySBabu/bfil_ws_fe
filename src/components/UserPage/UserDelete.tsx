@@ -70,9 +70,9 @@ export default function UserDelete(props: userTypeProps) {
                     Are you sure you want to delete {props.userDetails?.userName}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={DisableUser} color="primary">
-                    Delete User {loading ? <CircularProgress size={24} /> : null}
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={DisableUser} disabled={loading}>
+                        Delete {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -312,7 +312,7 @@ export default function AddRole(props: userTypeProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress size={24} /> : null}</Button>
                 </DialogActions>
             </Dialog>
