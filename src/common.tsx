@@ -85,6 +85,3 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
         {alert}
     </Alert>
 </Snackbar>)
-
-//Old auth: https://172.104.56.206:9077/auth/ 
-//Poun Backend: http://192.168.1.10:8080/bfil/

@@ -170,7 +170,7 @@ export const WsMaster: React.FC = () => {
 
         {wsList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
             No records
-        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+        </Typography> : <TableContainer component={Paper} sx={{ height: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
@@ -231,7 +231,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogActions>
                 {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
-                <Button onClick={() => { setaddM(false); }}>Close</Button>
+                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
                 <Button onClick={WSadd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
@@ -263,7 +263,7 @@ export const WsMaster: React.FC = () => {
 
             <DialogActions>
                 {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>Please fill all *required fields</Typography>}
-                <Button onClick={() => { seteditM(false); }}>Close</Button>
+                <Button onClick={() => { seteditM(false); }}>Cancel</Button>
                 <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Update</Button>
             </DialogActions>
         </Dialog>

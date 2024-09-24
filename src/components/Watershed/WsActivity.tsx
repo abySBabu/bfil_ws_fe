@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Edit, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { WsName } from '../../LocName';
+import { WsName, VillageName, DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { listAct, editAct } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
@@ -40,6 +40,9 @@ export const actDef = {
     district: '',
     taluk: '',
     gramPanchayat: '',
+    village: '',
+    updatedTime: '',
+    updatedUser: '',
     eventDate: '',
     participantsMale: '',
     participantsFemale: '',
@@ -75,10 +78,10 @@ export const WsActivity: React.FC = () => {
 
     const FmrSet = async (id: any) => {
         try {
-            const resp = await listFarmer();
-            if (resp.status === 'success') {
-                setfmrList(resp.data)
-                setfmrObj(resp.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
+            const resp1 = await listFarmer();
+            if (resp1.status === 'success') {
+                setfmrList(resp1.data)
+                setfmrObj(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
             }
         }
         catch (error) { console.log(error) }
@@ -117,6 +120,8 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Total Units</TableCell>
+                    <TableCell>Last Update On</TableCell>
+                    <TableCell>Last Update By</TableCell>
                     {PerChk('EDIT_Watershed Activity') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
@@ -127,6 +132,8 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{a.interventionType}</TableCell>
                 <TableCell>{a.activityName}</TableCell>
                 <TableCell>{a.total}</TableCell>
+                <TableCell>{DateTime(a.updatedTime)}</TableCell>
+                <TableCell>{a.updatedUser}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
                     <IconButton onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
                 </TableCell>}
@@ -158,26 +165,22 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
-                <Grid item xs={3}><TextField select label='Villages' value="" /></Grid>
-                <Grid item xs={3}><TextField select label='Survey Numbers' value={actObj.surveyNo} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Village' value={actObj.village} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Survey No.' value={actObj.surveyNo} /></Grid>
                 <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
-                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} /></Grid>
-                <Grid item xs={3}><TextField select label='Land Type' value={actObj.landType}>
-                    <MenuItem value='Wet land'>Type A</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} /></Grid>
-                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} /></Grid>
-                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} /></Grid>
+                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                 <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
-                <Grid item xs={3}><TextField select label='Aadhar' value={fmrObj.adharNumber}>
-                    <MenuItem value='**** **** 7251'>**** **** 7251</MenuItem>
-                </TextField></Grid>
+                <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => seteditM(false)}>Close</Button>
+                <Button onClick={() => seteditM(false)}>Cancel</Button>
                 <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
             </DialogActions>
         </Dialog>

@@ -105,8 +105,8 @@ export const FarmerMaster: React.FC = () => {
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Aadhar</TableCell>
                     <TableCell>Name</TableCell>
+                    <TableCell>Aadhar</TableCell>
                     <TableCell>Number</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
@@ -114,8 +114,8 @@ export const FarmerMaster: React.FC = () => {
 
             <TableBody>{fmrListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.adharNumber}</TableCell>
                     <TableCell>{w.wsfarmerName}</TableCell>
+                    <TableCell>{w.adharNumber}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
                         <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
@@ -136,7 +136,7 @@ export const FarmerMaster: React.FC = () => {
             </TableRow></TableFooter>
         </Table></TableContainer>}
 
-        <Dialog open={addM}>
+        <Dialog open={addM} maxWidth='sm'>
             <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
@@ -171,12 +171,12 @@ export const FarmerMaster: React.FC = () => {
 
             <DialogActions>
                 {addCheck && <Typography sx={{ color: '#f00', mr: 4 }}>* Please fill all required fields</Typography>}
-                <Button onClick={() => { setaddM(false); }}>Close</Button>
+                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
                 <Button onClick={fmrAdd} disabled={addCheck}>Add</Button>
             </DialogActions>
         </Dialog>
 
-        <Dialog open={editM}>
+        <Dialog open={editM} maxWidth='sm'>
             <DialogTitle>Edit {fmrObj.wsfarmerName}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
@@ -200,7 +200,7 @@ export const FarmerMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { seteditM(false); }}>Close</Button>
+                <Button onClick={() => { seteditM(false); }}>Cancel</Button>
                 <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }}>Update</Button>
             </DialogActions>
         </Dialog>
