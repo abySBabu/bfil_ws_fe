@@ -2,26 +2,28 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    Typography, Snackbar, InputAdornment
+    Typography, Snackbar, InputAdornment,
+    MenuItem
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
-import { listWP } from '../../Services/workplanService';
+import { StateName, DistrictName, TalukName, PanName, WsName, VillageName } from '../../LocName';
+import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { idWS } from '../../Services/wsService';
 
 const wpDef = {
     planningYear: "",
-    activityId: "",
     interventionType_Components: "",
+    activityId: "",
     planlandType: "",
-    stateId: "1",
-    districtId: "",
-    talukId: "",
-    grampanchayatId: "",
+
     watershedId: "",
+
     plan: "",
+    value: "",
     unitofMeasurement: "",
+
     wfsValue: "",
     finBfil: "",
     finOther: "",
@@ -41,6 +43,7 @@ export const Workplan: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState<string | null>(null);
+    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
 
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
@@ -70,6 +73,7 @@ export const Workplan: React.FC = () => {
             if (resp1.status === 'success' && resp1.data) {
                 setplanList(resp1.data)
             }
+            setwsOps(JSON.parse(sessionStorage.getItem("WsList") as string))
         }
         catch (error) { console.log(error) }
     }
@@ -142,20 +146,25 @@ export const Workplan: React.FC = () => {
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='Year' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Intervention" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })}>
+                    <MenuItem value='Supply'>Supply Side</MenuItem>
+                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                </TextField></Grid>
                 <Grid item xs={3}><TextField label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField label='State' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="District" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Taluk" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Panchayat" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Watershed" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='State' value={StateName(1)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.grampanchayatId)} disabled /></Grid>
+                <Grid item xs={3}><TextField select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                </TextField></Grid>
 
                 <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField label='Value' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="UOM" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 <Grid item xs={3}><TextField type='number' label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>

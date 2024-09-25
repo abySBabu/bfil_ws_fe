@@ -46,7 +46,7 @@ export const WsMaster: React.FC = () => {
         return (
             w.wsName?.toLowerCase().includes(searchTerm) ||
             w.wsDescription?.toLowerCase().includes(searchTerm) ||
-            VillageName(w.villageId)?.toLowerCase().includes(searchTerm)
+            VillageName(w.villageId)?.toString().toLowerCase().includes(searchTerm)
         );
     });
 
