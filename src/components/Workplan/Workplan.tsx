@@ -55,6 +55,8 @@ export const Workplan: React.FC = () => {
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => { WsSet(planObj.watershedId) }, [planObj.watershedId])
+
     React.useEffect(() => {
         setplanObj({
             ...planObj,
@@ -65,8 +67,8 @@ export const Workplan: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listWP();
-            if (resp1.status === 'success') {
-                console.log(resp1.data)
+            if (resp1.status === 'success' && resp1.data) {
+                setplanList(resp1.data)
             }
         }
         catch (error) { console.log(error) }
@@ -94,7 +96,7 @@ export const Workplan: React.FC = () => {
             </div>
         </Box>
 
-        {planList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+        {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
             No records
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
@@ -141,8 +143,8 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15}><Divider textAlign='left'>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='planningYear' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="interventionType_Components" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="activityId" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Land Type" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="activityId" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider textAlign='left'>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='State' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>

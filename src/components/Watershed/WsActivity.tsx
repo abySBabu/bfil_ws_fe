@@ -111,7 +111,7 @@ export const WsActivity: React.FC = () => {
                 InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
         </Box>
 
-        {actList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+        {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
             No records
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>

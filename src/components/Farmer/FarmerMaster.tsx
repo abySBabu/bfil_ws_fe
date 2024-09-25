@@ -117,7 +117,7 @@ export const FarmerMaster: React.FC = () => {
                     onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
-        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
             No records
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>

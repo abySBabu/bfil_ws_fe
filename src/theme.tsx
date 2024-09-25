@@ -204,6 +204,16 @@ export const bfilTheme = createTheme({
                 TransitionComponent: Slide
             }
         },
+        MuiAlert: {
+            styleOverrides: {
+                root: {
+                    borderRadius: sd('--alert-bradius'),
+                }
+            },
+            defaultProps: {
+                variant: 'filled'
+            }
+        },
         MuiLink: {
             styleOverrides: {
                 root: {

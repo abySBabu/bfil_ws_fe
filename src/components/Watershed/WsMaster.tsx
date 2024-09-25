@@ -185,14 +185,14 @@ export const WsMaster: React.FC = () => {
             </div>
         </Box>
 
-        {wsList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+        {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
             No records
-        </Typography> : <TableContainer component={Paper} sx={{ height: '75vh' }}><Table>
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Description</TableCell>
-                    <TableCell>Villages</TableCell>
+                    <TableCell>Village</TableCell>
                     {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
