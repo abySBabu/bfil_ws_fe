@@ -13,7 +13,7 @@ export async function listAct() {
 
 export async function addAct(data: any) {
     const configs = {
-        url: serverPath.bfil + `data_capture/adddatacapture/`,
+        url: serverPath.bfil + 'data_capture/addcaptureData',
         method: 'post',
         data: data,
         headers: {

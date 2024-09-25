@@ -2,17 +2,17 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    Typography, Snackbar, InputAdornment,
-    MenuItem
+    Typography, InputAdornment, MenuItem
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
-import { StateName, DistrictName, TalukName, PanName, WsName, VillageName } from '../../LocName';
+import { StateName, DistrictName, TalukName, PanName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { idWS } from '../../Services/wsService';
 
 const wpDef = {
+    planningId: '',
     planningYear: "",
     interventionType_Components: "",
     activityId: "",
@@ -39,11 +39,12 @@ export const Workplan: React.FC = () => {
     const [planList, setplanList] = React.useState<typeof wpDef[]>([]);
     const [planObj, setplanObj] = React.useState(wpDef);
     const [wsObj, setwsObj] = React.useState(wsDef);
+    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
-    const [alert, setalert] = React.useState<string | null>(null);
-    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
+    const [alert, setalert] = React.useState('');
+    const [alertClr, setalertClr] = React.useState(false);
 
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
@@ -88,8 +89,38 @@ export const Workplan: React.FC = () => {
         catch (error) { console.log(error) }
     }
 
+    const PlanAdd = async () => {
+        try {
+            const resp1 = await addWP(planObj)
+            if (resp1.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Plan added`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to add plan");
+        }
+        setaddM(false);
+    }
+
+    const PlanEdit = async (id: any) => {
+        try {
+            const resp1 = await editWP(planObj, id)
+            if (resp1.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Plan updated`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update plan");
+        }
+        seteditM(false);
+    }
+
     return (<>
-        <Snackbar open={Boolean(alert)} onClose={() => setalert(null)} autoHideDuration={3000} message={alert} />
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
@@ -119,7 +150,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.activityId}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components} - {w.activityId}</TableCell>
-                    <TableCell>{w.plan} {w.unitofMeasurement}</TableCell>
+                    <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>{w.wfsValue}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
@@ -141,7 +172,7 @@ export const Workplan: React.FC = () => {
         </Table></TableContainer>}
 
         <Dialog open={addM}>
-            <DialogTitle>Add New Plan</DialogTitle>
+            <DialogTitle>Add Plan</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
@@ -184,6 +215,54 @@ export const Workplan: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => { setaddM(false); }}>Close</Button>
+                <Button onClick={PlanAdd}>Add</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={editM}>
+            <DialogTitle>Edit Plan</DialogTitle>
+
+            <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
+                <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='Year' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value })}>
+                    <MenuItem value='Supply'>Supply Side</MenuItem>
+                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                </TextField></Grid>
+                <Grid item xs={3}><TextField label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })} /></Grid>
+
+                <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='State' value={StateName(1)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.grampanchayatId)} disabled /></Grid>
+                <Grid item xs={3}><TextField select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                </TextField></Grid>
+
+                <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
+                <Grid item xs={3}><TextField label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+
+                <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
+                <Grid item xs={3}><TextField type='number' label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField type='number' label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField type='number' label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField type='number' label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField type='number' label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
+                <Grid item xs={3}><TextField type='number' label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
+                <Grid item xs={3}><TextField label="Total" value={planObj.wfsValue} disabled /></Grid>
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => { PlanEdit(planObj.planningId) }}>Close</Button>
                 <Button onClick={() => { setaddM(false); }}>Add</Button>
             </DialogActions>
         </Dialog>

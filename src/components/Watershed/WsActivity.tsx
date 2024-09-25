@@ -19,7 +19,7 @@ export const actDef = {
     activityName: '',
     userId: '',
     activityDescription: '',
-    activityWorkflowStatus: '',
+    activityWorkflowStatus: 'New',
     interventionType: '',
     activityImage: '',
     activityFormData: '',
@@ -67,7 +67,7 @@ export const WsActivity: React.FC = () => {
     const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
-    const [alert, setalert] = React.useState<string | null>(null);
+    const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
 
     const actListF = actList.filter((a) => {
@@ -127,12 +127,12 @@ export const WsActivity: React.FC = () => {
             const resp1 = await addAct(actObj)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Activity ${actObj.activityName || ""} updated`);
+                setalert(`Activity added`);
             }
         }
         catch (error) {
             console.log(error); setalertClr(false);
-            setalert("Failed to update activity");
+            setalert("Failed to add activity");
         }
         setaddM(false);
     }
@@ -212,8 +212,8 @@ export const WsActivity: React.FC = () => {
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
-                    <MenuItem value='Supply'>Supply Side</MenuItem>
-                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                    <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
+                    <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={3}><TextField label='Activity' value={actObj.activityName} onChange={(e) => setactObj({ ...actObj, activityName: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
@@ -251,8 +251,8 @@ export const WsActivity: React.FC = () => {
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
-                    <MenuItem value='Supply'>Supply Side</MenuItem>
-                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                    <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
+                    <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
                 <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
