@@ -68,7 +68,7 @@ export default function UserDelete(props: userTypeProps) {
             <Dialog open={modalShow} maxWidth={'sm'}>
                 <DialogTitle>Delete User</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to delete {props.userDetails?.userName}
+                    Are you sure you want to delete {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
