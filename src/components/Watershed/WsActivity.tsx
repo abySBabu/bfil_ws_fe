@@ -6,10 +6,12 @@ import {
 } from "@mui/material";
 import { Edit, Search, Add } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { WsName, VillageName, DateTime } from '../../LocName';
+import { WsName, DateTime, StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
-import { listAct, editAct } from '../../Services/activityService';
+import { wsDef } from './WsMaster';
+import { listAct, addAct, editAct } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
+import { idWS } from '../../Services/wsService';
 import { listInt } from '../../Services/dashboardService';
 
 export const actDef = {
@@ -60,7 +62,9 @@ export const WsActivity: React.FC = () => {
     const [actObj, setactObj] = React.useState(actDef);
     const [actList, setactList] = React.useState<typeof actDef[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
-    const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
+    const [fmrOps, setfmrOps] = React.useState<typeof fmrDef[]>([]);
+    const [wsObj, setwsObj] = React.useState(wsDef);
+    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
@@ -84,12 +88,15 @@ export const WsActivity: React.FC = () => {
 
     React.useEffect(() => { FmrSet(actObj.farmerId) }, [actObj.farmerId])
 
+    React.useEffect(() => { WsSet(actObj.watershedId) }, [actObj.watershedId])
+
     const fetchData = async () => {
         try {
             const resp1 = await listAct();
             if (resp1.status === 'success') { setactList(resp1.data) }
-            const resp2 = await listInt();
-            if (resp2) { console.log(resp2) }
+            const resp2 = await listFarmer();
+            if (resp2.status === 'success') { setfmrOps(resp2.data) }
+            setwsOps(JSON.parse(sessionStorage.getItem("WsList") as string))
         }
         catch (error) { console.log(error) }
     };
@@ -98,11 +105,36 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await listFarmer();
             if (resp1.status === 'success') {
-                setfmrList(resp1.data)
                 setfmrObj(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
+                console.log(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
             }
         }
         catch (error) { console.log(error) }
+    }
+
+    const WsSet = async (id: any) => {
+        try {
+            const resp1 = await idWS(id);
+            if (resp1.status === 'success') {
+                setwsObj(resp1.data)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
+
+    const ActAdd = async () => {
+        try {
+            const resp1 = await addAct(actObj)
+            if (resp1.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Activity ${actObj.activityName || ""} updated`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update activity");
+        }
+        setaddM(false);
     }
 
     const ActEdit = async (id: any) => {
@@ -128,8 +160,8 @@ export const WsActivity: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add a new watershed'
-                    onClick={() => { setactObj(actDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
+                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add new watershed'
+                    onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setwsObj(wsDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
             </div>
         </Box>
 
@@ -176,19 +208,24 @@ export const WsActivity: React.FC = () => {
         </Table></TableContainer>}
 
         <Dialog open={addM} maxWidth='xl'>
-            <DialogTitle>{actObj.activityName}</DialogTitle>
+            <DialogTitle>Add Activity</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField disabled label='Intervention' value={actObj.interventionType} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
+                <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
+                    <MenuItem value='Supply'>Supply Side</MenuItem>
+                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                </TextField></Grid>
+                <Grid item xs={3}><TextField label='Activity' value={actObj.activityName} onChange={(e) => setactObj({ ...actObj, activityName: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField disabled label='Watershed' value={WsName(actObj.watershedId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Village' value={actObj.village} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Survey No.' value={actObj.surveyNo} /></Grid>
+                <Grid item xs={3}><TextField select label='Watershed' value={actObj.watershedId} onChange={(e) => setactObj({ ...actObj, watershedId: e.target.value })}>
+                    {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={3}><TextField disabled label='State' value={StateName(1)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='District' value={DistrictName(wsObj.districtId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Taluk' value={TalukName(wsObj.talukId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Panchayat' value={PanName(wsObj.grampanchayatId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Village' value={VillageName(wsObj.villageId)} /></Grid>
+                <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
@@ -196,24 +233,27 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
                 <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField select label='Name' value={fmrObj.wsfarmerName} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
-                    {fmrList?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
+                <Grid item xs={3}><TextField select label='Name' value={actObj.farmerId} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
+                    {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => seteditM(false)}>Cancel</Button>
-                <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
+                <Button onClick={() => setaddM(false)}>Cancel</Button>
+                <Button onClick={ActAdd}>Add</Button>
             </DialogActions>
         </Dialog>
 
         <Dialog open={editM} maxWidth='xl'>
-            <DialogTitle>{actObj.activityName}</DialogTitle>
+            <DialogTitle>Edit Activity</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField disabled label='Intervention' value={actObj.interventionType} /></Grid>
+                <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
+                    <MenuItem value='Supply'>Supply Side</MenuItem>
+                    <MenuItem value='Demand'>Demand Side</MenuItem>
+                </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
                 <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField disabled label='Watershed' value={WsName(actObj.watershedId)} /></Grid>

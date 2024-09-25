@@ -11,6 +11,20 @@ export async function listAct() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function addAct(data: any) {
+    const configs = {
+        url: serverPath.bfil + `data_capture/adddatacapture/`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function editAct(data: any, id: any) {
     const configs = {
         url: serverPath.bfil + `data_capture/updatedatacapturebyId/${id}`,
