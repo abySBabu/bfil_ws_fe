@@ -66,7 +66,7 @@ export default function UserDelete(props: userTypeProps) {
     return (
         <Container>
             <Dialog open={modalShow} maxWidth={'sm'}>
-                <DialogTitle>Confirmation</DialogTitle>
+                <DialogTitle>Delete User</DialogTitle>
                 <DialogContent>
                     Are you sure you want to delete {props.userDetails?.userName}
                 </DialogContent>

@@ -67,7 +67,7 @@ export default function UserDisable(props: userTypeProps) {
     return (
         <Container>
             <Dialog open={modalShow} maxWidth={'sm'}>
-                <DialogTitle>Confirmation</DialogTitle>
+                <DialogTitle>Unblock User</DialogTitle>
                 <DialogContent>
                     <Typography>Are you sure you want to Unblock {props.userDetails?.userName}</Typography>
                 </DialogContent>
