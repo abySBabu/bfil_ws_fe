@@ -1,4 +1,5 @@
 export type mapDataType = {
+    mappingId:number,
     userId: number,
     watershedId: string,
     createdUser: number,

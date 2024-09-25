@@ -30,10 +30,13 @@ export async function addWS(data: any) {
 
 export async function editWS(data: any, id: any) {
     const configs = {
-        url: serverPath.bfil + `wsmaster/updatemappingbyid/${id}`,
+        url: serverPath.bfil + `ws_mapping/updatemappingbyid/${id}`,
         method: 'post',
         data: data,
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

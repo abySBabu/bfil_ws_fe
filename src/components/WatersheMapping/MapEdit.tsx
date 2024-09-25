@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
 import { mapDataType, wsData } from "./WatershedMappingMgmtType";
-import { addWS } from '../../Services/wsMappingService';
+import { addWS, editWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { usersList, getRolesByCompany } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
@@ -56,12 +56,6 @@ export default function (props: mapTypeProps) {
     }
 
     useEffect(() => {
-        if (props.action === "Edit" && props.mapDetails) {
-            const wsIdArray = props.mapDetails.watershedId.split(',').map(Number);
-            setValue('ws_name', wsIdArray); 
-            setValue('remarks', props.mapDetails.remarks);
-            setValue('user', props.mapDetails.userId);
-        }
         const fetchData = async () => {
             try {
                 let Roleresp = await getRolesByCompany(companyID);
@@ -74,7 +68,7 @@ export default function (props: mapTypeProps) {
                 }
                 let userResp = await usersList(companyId);
                 let temp: allUserType[] = userResp;
-                if (props.action === "Add") {
+                if (props.action === "Edit") {
                     let userListTemp = temp.filter(user => user.userBlockedFlag === "N")
                     const sorteduserList = userListTemp.sort((a: { userName: string; }, b: { userName: string; }) => {
                         if (a.userName < b.userName) return -1;
@@ -92,6 +86,24 @@ export default function (props: mapTypeProps) {
 
         fetchData();
     }, [props.action, props.mapDetails, setValue]);
+
+    useEffect(() => {
+        if (props.action === "Edit" && props.mapDetails && userList.length > 0 && wsList.length > 0) {
+            const wsIdArray = props.mapDetails.watershedId.split(',').map(Number);
+            setValue('ws_name', wsIdArray);
+
+            const selectedWsData = wsList.filter(ws => wsIdArray.includes(ws.wsId));
+            setSelectedWs(selectedWsData);
+
+            setValue('remarks', props.mapDetails.remarks);
+            setValue('user', props.mapDetails.userId);
+            const selectedUser = userList.find(user => user.userId === props.mapDetails.userId);
+            if (selectedUser) {
+                setSelectedRoleName(selectedUser.userRoleList[0]?.roleName || '');
+            }
+        }
+    }, [props.action, props.mapDetails, userList, wsList, setValue]);
+
 
     const handleClose = () => {
         setModalShow(false);
@@ -121,26 +133,34 @@ export default function (props: mapTypeProps) {
         }
     };
 
-    const addMap: SubmitHandler<MapFormInput> = async (value) => {
+    const editMap: SubmitHandler<MapFormInput> = async (value) => {
         setLoading(true);
         let roleListTemp = rolesListFromService.filter(option => option.roleName === selectedRoleName);
 
         try {
-            const watershedIdsString = value.ws_name.join(',');
+            // const watershedIdsString = value.ws_name.join(',');
 
-            const mapData = selectedWs.map(ws => ({
+            // const mapData = selectedWs.map(ws => ({
+            //     userId: value.user,
+            //     watershedId: value.ws_name,
+            //     createdUser: fetchUserData(userId),
+            //     updatedUser: fetchUserData(userId),
+            //     remarks: value.remarks,
+            //     roleId: roleListTemp[0].roleId
+            // }));
+            let mapData = {
                 userId: value.user,
-                watershedId: watershedIdsString,
-                createdUser: fetchUserData(userId),
+                watershedId: value.ws_name,
+                createdUser: props.mapDetails.createdUser,
                 updatedUser: fetchUserData(userId),
                 remarks: value.remarks,
                 roleId: roleListTemp[0].roleId
-            }));
+            }
 
-            let resp = await addWS(mapData);
+            let resp = await editWS(mapData,props.mapDetails.mappingId);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("WaterShed mapping created successfully");
+                setMessage("WaterShed mapping updated successfully");
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -166,7 +186,7 @@ export default function (props: mapTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>Add Watershed Mapping</DialogTitle>
+                <DialogTitle>Edit Watershed Mapping</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={6}>
@@ -177,6 +197,7 @@ export default function (props: mapTypeProps) {
                                 {...register('user', {
                                     // required: 'User Name is required'
                                 })}
+                                defaultValue={props.mapDetails.userId}
                                 onChange={(e) => {
                                     register('user').onChange(e);
                                     trigger('user');
@@ -237,7 +258,7 @@ export default function (props: mapTypeProps) {
                             <TextField
                                 id="remarks"
                                 label="Remarks"
-                                autoFocus
+                                InputLabelProps={{ shrink: true }}
                                 {...register('remarks', {
                                     pattern: {
                                         value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
@@ -252,8 +273,8 @@ export default function (props: mapTypeProps) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button disabled={loading} onClick={handleSubmit(addMap)}>Add{loading ? <CircularProgress /> : null}</Button>
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button disabled={loading || !isValid || selectedWs.length === 0 || !formValues.user} onClick={handleSubmit(editMap)}>Update{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
