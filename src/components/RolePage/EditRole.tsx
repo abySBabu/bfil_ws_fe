@@ -312,7 +312,7 @@ export default function EditRole(props: RoleTypeProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert
                     onClose={() => setOpenSnackbar(false)}
                     severity={severityColor}
