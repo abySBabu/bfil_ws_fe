@@ -76,8 +76,8 @@ export default function (props: mapTypeProps) {
                         return 0;
                     });
 
-                    setUserList(sorteduserList);
-
+                    const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
+                    setUserList(filterUser);
                 }
             } catch (error) {
                 console.log(error)
@@ -157,7 +157,7 @@ export default function (props: mapTypeProps) {
                 roleId: roleListTemp[0].roleId
             }
 
-            let resp = await editWS(mapData,props.mapDetails.mappingId);
+            let resp = await editWS(mapData, props.mapDetails.mappingId);
             if (resp) {
                 setSeverityColor("success");
                 setMessage("WaterShed mapping updated successfully");
