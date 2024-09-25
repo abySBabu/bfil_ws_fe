@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { blockUser } from '../../Services/userService';
 import { allUserType } from "./UserManagementType";
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 
 type userTypeProps = {
@@ -46,7 +47,7 @@ export default function UserDelete(props: userTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
-                }, 3000);
+                }, setTimeoutsecs);
             }
         } catch (error: any) {
             if (error?.response?.data?.message) {
@@ -56,7 +57,7 @@ export default function UserDelete(props: userTypeProps) {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
 
@@ -76,7 +77,7 @@ export default function UserDelete(props: userTypeProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>
