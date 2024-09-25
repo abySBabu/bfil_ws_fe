@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel, Snackbar, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Avatar } from '@mui/material';
 import { login } from '../../Services/loginService';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { Height } from '@mui/icons-material';
 
 
 interface ILoginFormInput {
@@ -64,9 +63,8 @@ const Login: React.FC = () => {
                     xs={false}
                     md={8}
                     sx={{
-                        backgroundImage: 'url(/images/loginBg.jpg)',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/images/loginBg.jpg)`,
+                        backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'left',
                     }}
@@ -81,16 +79,8 @@ const Login: React.FC = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: '#224a59' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign in
-                        </Typography>
+                        <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt='Pragat' style={{ height: '100px', width: '100px', objectFit: 'cover' }} />
                         <Box>
-                            {/* <Typography component="h1" variant="h5">
-                                Sign in
-                            </Typography> */}
                             <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
                                 <TextField
                                     margin="normal"

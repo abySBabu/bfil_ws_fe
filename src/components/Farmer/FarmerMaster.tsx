@@ -131,7 +131,7 @@ export const FarmerMaster: React.FC = () => {
             <TableBody>{fmrListP.map((w, i) => (
                 <TableRow key={i}>
                     <TableCell>{w.wsfarmerName}</TableCell>
-                    <TableCell>{w.adharNumber}</TableCell>
+                    <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
                         <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
