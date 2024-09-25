@@ -66,10 +66,10 @@ export default function UserDisable(props: userTypeProps) {
 
     return (
         <Container>
-            <Dialog open={modalShow} maxWidth={'sm'}>
+            <Dialog open={modalShow} maxWidth={'xs'}>
                 <DialogTitle>Unblock User</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to Unblock {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})</Typography>
+                <DialogContent sx={{ mt: 2 }}>
+                    Are you sure you want to Unblock {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
