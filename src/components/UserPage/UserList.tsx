@@ -163,7 +163,7 @@ export default function UserList() {
                         <TableCell >Mobile Number</TableCell>
                         <TableCell >Role</TableCell>
                         <TableCell >Manager Name</TableCell>
-                        <TableCell >Block User</TableCell>
+                        <TableCell >Status</TableCell>
                         {PerChk('EDIT_User Management') && (
                             <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
