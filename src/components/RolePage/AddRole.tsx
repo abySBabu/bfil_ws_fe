@@ -316,7 +316,7 @@ export default function AddRole(props: userTypeProps) {
                     <Button disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress/> : null}</Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert
                     onClose={() => setOpenSnackbar(false)}
                     severity={severityColor}

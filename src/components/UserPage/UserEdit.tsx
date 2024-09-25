@@ -6,6 +6,8 @@ import {
 } from '@mui/material';
 import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+
 
 
 interface UserFormInput {
@@ -139,7 +141,7 @@ export default function UserForm(props: userTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
-                }, 3000);
+                }, setTimeoutsecs);
             }
         } catch (error: any) {
             if (error?.response?.data?.message) {
@@ -149,7 +151,7 @@ export default function UserForm(props: userTypeProps) {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
     }
@@ -357,7 +359,7 @@ export default function UserForm(props: userTypeProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>

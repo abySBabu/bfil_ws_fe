@@ -5,6 +5,7 @@ import { login } from '../../Services/loginService';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 
 interface ILoginFormInput {
@@ -39,7 +40,7 @@ const Login: React.FC = () => {
                     setOpenSnackbar(false);
                     setLoading(false);
                     navigate('/home');
-                }, 3000);
+                }, setTimeoutsecs);
             }
 
         } catch (error: any) {
@@ -50,7 +51,7 @@ const Login: React.FC = () => {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
     };
@@ -146,7 +147,7 @@ const Login: React.FC = () => {
                     </Box>
                 </Grid>
             </Grid>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>
