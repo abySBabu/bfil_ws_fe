@@ -104,6 +104,9 @@ export default function MappingList() {
         {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                Watershed Mapping
+            </Typography>
             <TextField
                 label="Search"
                 fullWidth={false}
