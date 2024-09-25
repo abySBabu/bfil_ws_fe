@@ -216,7 +216,7 @@ export default function AddRole(props: userTypeProps) {
                                 {...register('roleName', {
                                     // required: 'Role Name is required',
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Role Name must only contain alphanumeric characters'
                                     }
                                 })}
@@ -239,7 +239,7 @@ export default function AddRole(props: userTypeProps) {
                                 {...register('roleDesc', {
                                     // required: 'Role Description is required',
                                     pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/, 
+                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
                                         message: 'Role Description must only contain alphanumeric characters'
                                     }
                                 })}
@@ -251,10 +251,13 @@ export default function AddRole(props: userTypeProps) {
                                 helperText={errors.roleDesc ? errors.roleDesc.message : ''}
                             />
                         </Grid>
-                        <Card sx={{ marginTop: '3%', padding: '2%' }}>
+                        {/* <Card sx={{ marginTop: '3%', padding: '2%' }}> */}
+                        <Grid item xs={12}>
                             <Box component={Grid} container spacing={1} sx={{
                                 border: `2px solid ${sd('--button-bgcolor-disabled')}`,
-                                borderRadius: '4px'
+                                borderRadius: '4px',
+                                maxHeight: '400px',
+                                overflowY: 'auto',
                             }}>
                                 <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
@@ -308,12 +311,13 @@ export default function AddRole(props: userTypeProps) {
                                             ))}
                                     </React.Fragment>))}
                             </Box>
-                        </Card>
+                            {/* </Card> */}
+                        </Grid>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
-                    <Button disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress/> : null}</Button>
+                    <Button disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>

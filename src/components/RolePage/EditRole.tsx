@@ -250,10 +250,12 @@ export default function EditRole(props: RoleTypeProps) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Card sx={{ marginTop: '3%', padding: '2%' }}>
+                            {/* <Card sx={{ marginTop: '3%', padding: '2%' }}> */}
                                 <Box component={Grid} container spacing={1} sx={{
                                     border: `2px solid ${sd('--button-bgcolor-disabled')}`,
-                                    borderRadius: '4px'
+                                    borderRadius: '4px',
+                                    maxHeight: '400px', // Set the maximum height for the scrollable box
+                                    overflowY: 'auto',
                                 }}>
                                     <Grid item xs={4}></Grid>
                                     <Grid item xs={4}>
@@ -301,7 +303,7 @@ export default function EditRole(props: RoleTypeProps) {
                                         </React.Fragment>
                                     ))}
                                 </Box>
-                            </Card>
+                            {/* </Card> */}
                         </Grid>
                     </Box>
                 </DialogContent>
