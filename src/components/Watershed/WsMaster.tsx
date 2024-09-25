@@ -29,7 +29,6 @@ export const WsMaster: React.FC = () => {
     const [wsObj, setwsObj] = React.useState(wsDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
-    const [editName, seteditName] = React.useState("");
     const [deleteM, setdeleteM] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
@@ -162,7 +161,7 @@ export const WsMaster: React.FC = () => {
             const resp = await deleteWS(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Watershed ${editName || ""} deleted`);
+                setalert(`Watershed deleted`);
             }
         }
         catch (error) {
@@ -203,8 +202,8 @@ export const WsMaster: React.FC = () => {
                     <TableCell>{w.wsDescription}</TableCell>
                     <TableCell>{VillageName(w.villageId)}</TableCell>
                     {PerChk('EDIT_Watershed Master') && <TableCell>
-                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditName(w.wsName); seteditM(true); }}><Edit /></IconButton>
-                        <IconButton title='Delete watershed' onClick={() => { seteditName(w.wsName); setdeleteM(w.wsId); }}><Delete /></IconButton>
+                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsId); }}><Delete /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -260,7 +259,7 @@ export const WsMaster: React.FC = () => {
         </Dialog>
 
         <Dialog open={editM}>
-            <DialogTitle>Edit {editName}</DialogTitle>
+            <DialogTitle>Edit Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
@@ -297,7 +296,7 @@ export const WsMaster: React.FC = () => {
         </Dialog>
 
         <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-            <DialogTitle>Delete Watershed {editName}</DialogTitle>
+            <DialogTitle>Delete Watershed</DialogTitle>
             <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
             <DialogActions>
                 <Button onClick={() => setdeleteM('')}>Cancel</Button>

@@ -60,6 +60,7 @@ export const WsActivity: React.FC = () => {
     const [actList, setactList] = React.useState<typeof actDef[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
+    const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState<string | null>(null);
     const [alertClr, setalertClr] = React.useState(false);
@@ -152,6 +153,38 @@ export const WsActivity: React.FC = () => {
                 />
             </TableRow></TableFooter>
         </Table></TableContainer>}
+
+        <Dialog open={addM} maxWidth='xl'>
+            <DialogTitle>{actObj.activityName}</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={3}><TextField disabled label='Intervention Type' value={actObj.interventionType} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Activity' value={actObj.activityName} /></Grid>
+                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Watershed' value={WsName(actObj.watershedId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
+                <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Village' value={actObj.village} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Survey No.' value={actObj.surveyNo} /></Grid>
+                <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
+                <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => seteditM(false)}>Cancel</Button>
+                <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
+            </DialogActions>
+        </Dialog>
 
         <Dialog open={editM} maxWidth='xl'>
             <DialogTitle>{actObj.activityName}</DialogTitle>

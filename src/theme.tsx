@@ -197,6 +197,7 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--alert-bradius'),
+                    minWidth: '30%'
                 }
             },
             defaultProps: {
@@ -208,10 +209,11 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--alert-bradius'),
+                    width: '100%'
                 }
             },
             defaultProps: {
-                variant: 'filled'
+                variant: 'filled',
             }
         },
         MuiLink: {

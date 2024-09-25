@@ -27,7 +27,6 @@ export const FarmerMaster: React.FC = () => {
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
-    const [editName, seteditName] = React.useState("");
     const [deleteM, setdeleteM] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
@@ -95,7 +94,7 @@ export const FarmerMaster: React.FC = () => {
             const resp = await deleteFarmer(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Farmer ${editName || ""} deleted`);
+                setalert(`Farmer deleted`);
             }
         }
         catch (error) {
@@ -135,8 +134,8 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{w.adharNumber}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton onClick={() => { setfmrObj(w); seteditName(w.wsfarmerName); seteditM(true); }}><Edit /></IconButton>
-                        <IconButton title='Delete watershed' onClick={() => { seteditName(w.wsfarmerName); setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                        <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -197,7 +196,7 @@ export const FarmerMaster: React.FC = () => {
         </Dialog>
 
         <Dialog open={editM} maxWidth='sm'>
-            <DialogTitle>Edit {editName}</DialogTitle>
+            <DialogTitle>Edit farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField
@@ -239,7 +238,7 @@ export const FarmerMaster: React.FC = () => {
         </Dialog>
 
         <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-            <DialogTitle>Delete {editName}</DialogTitle>
+            <DialogTitle>Delete farmer</DialogTitle>
             <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
             <DialogActions>
                 <Button onClick={() => setdeleteM('')}>Cancel</Button>
