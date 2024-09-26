@@ -237,7 +237,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField select label='Name' value={actObj.farmerId} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
                     {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
@@ -272,7 +272,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                 <Grid item xs={3}><TextField disabled label='Name' value={fmrObj.wsfarmerName} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Aadhar' value={fmrObj.adharNumber} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
                 <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
             </Grid></DialogContent>
 
