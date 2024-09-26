@@ -225,11 +225,11 @@ export default function (props: mapTypeProps) {
                                 </Grid>
                                 <React.Fragment key={ws.wsId}>
                                     <Grid item xs={4}><TextField label='Description' disabled value={ws.wsDescription || ''} InputLabelProps={{ shrink: true }} /></Grid>
-                                    <Grid item xs={4}><TextField label='State' disabled value={StateName(ws.stateId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
-                                    <Grid item xs={4}><TextField label='District' disabled value={DistrictName(ws.districtId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
-                                    <Grid item xs={4}><TextField label='Taluka' disabled value={TalukName(ws.talukId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
-                                    <Grid item xs={4}><TextField label="Grampanchayat" disabled value={PanName(ws.grampanchayatId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
-                                    <Grid item xs={4}><TextField label="Village" disabled value={VillageName(ws.villageId) || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='State' disabled value={ws.state.stateName || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='District' disabled value={ws.district.districtName || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label='Taluka' disabled value={ws.taluk.talukName || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label="Grampanchayat" disabled value={ws.gramPanchayat.panchayatName || ''} InputLabelProps={{ shrink: true }} /></Grid>
+                                    <Grid item xs={4}><TextField label="Village" disabled value={ws.village.villageName || ''} InputLabelProps={{ shrink: true }} /></Grid>
                                 </React.Fragment>
                                 <Grid item xs={12}><Divider /></Grid>
                             </>))}
