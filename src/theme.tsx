@@ -197,11 +197,23 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: sd('--alert-bradius'),
+                    minWidth: '30%'
                 }
             },
             defaultProps: {
                 anchorOrigin: { vertical: 'top', horizontal: 'center' },
                 TransitionComponent: Slide
+            }
+        },
+        MuiAlert: {
+            styleOverrides: {
+                root: {
+                    borderRadius: sd('--alert-bradius'),
+                    width: '100%'
+                }
+            },
+            defaultProps: {
+                variant: 'filled',
             }
         },
         MuiLink: {

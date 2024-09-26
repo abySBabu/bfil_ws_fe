@@ -11,6 +11,16 @@ export async function listFarmer() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function idFarmer(id: any) {
+    const configs = {
+        url: serverPath.bfil + `ws_farmers/getFarmerById/${id}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function addFarmer(data: any) {
     const configs = {
         url: serverPath.bfil + "ws_farmers/addFarmer",
@@ -41,7 +51,7 @@ export async function editFarmer(data: any, id: any) {
 
 export async function deleteFarmer(id: any) {
     const configs = {
-        url: serverPath.bfil + `wsmaster/deleteFarmerById/${id}`,
+        url: serverPath.bfil + `ws_farmers/deleteFarmerById/${id}`,
         method: 'delete',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,

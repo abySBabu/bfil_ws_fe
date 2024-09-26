@@ -74,11 +74,11 @@ export default function DeleteRole(props: RoleTypeProps) {
         <Container>
             <Dialog
                 open={modalShow}
-                onClose={handleClose}
+                onClose={handleClose} maxWidth='xs'
             >
                 <DialogTitle>Delete Role</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to delete {roleDetails?.roleName} ? </Typography>
+                <DialogContent sx={{ mt: 2 }}>
+                    Are you sure you want to delete {roleDetails?.roleName} ? 
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
@@ -87,7 +87,7 @@ export default function DeleteRole(props: RoleTypeProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert
                     onClose={() => setOpenSnackbar(false)}
                     severity={severityColor}

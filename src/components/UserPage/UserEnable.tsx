@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { blockUser } from '../../Services/userService';
 import { allUserType } from "./UserManagementType";
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 
 type userTypeProps = {
@@ -47,7 +48,7 @@ export default function UserDisable(props: userTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
-                }, 3000);
+                }, setTimeoutsecs);
             }
         } catch (error: any) {
             if (error?.response?.data?.message) {
@@ -57,7 +58,7 @@ export default function UserDisable(props: userTypeProps) {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
 
@@ -65,10 +66,10 @@ export default function UserDisable(props: userTypeProps) {
 
     return (
         <Container>
-            <Dialog open={modalShow} maxWidth={'sm'}>
-                <DialogTitle>Confirmation</DialogTitle>
-                <DialogContent>
-                    <Typography>Are you sure you want to Unblock {props.userDetails?.userName}</Typography>
+            <Dialog open={modalShow} maxWidth={'xs'}>
+                <DialogTitle>Unblock User</DialogTitle>
+                <DialogContent sx={{ mt: 2 }}>
+                    Are you sure you want to Unblock {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
@@ -77,7 +78,7 @@ export default function UserDisable(props: userTypeProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>

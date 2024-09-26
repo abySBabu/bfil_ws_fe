@@ -4,9 +4,9 @@ import {
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
     InputAdornment, Typography
 } from "@mui/material";
-import { Edit, PersonAdd, Search } from '@mui/icons-material';
+import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { listFarmer, addFarmer, editFarmer } from '../../Services/farmerService';
+import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 
 export const fmrDef = {
     wsfarmerId: "",
@@ -27,10 +27,18 @@ export const FarmerMaster: React.FC = () => {
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
-    const [editName, seteditName] = React.useState("");
+    const [deleteM, setdeleteM] = React.useState("");
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
+    const [isTouched, setIsTouched] = React.useState({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+
+    const handleFieldChange = (field: string, value: string, validator: (value: string) => boolean) => {
+        setIsTouched((prev) => ({ ...prev, [field]: true }));
+        if (validator(value)) {
+            setfmrObj((prev) => ({ ...prev, [field]: value }));
+        }
+    };
 
     const addCheck = !fmrObj.wsfarmerName || fmrObj.adharNumber.length !== 12 || fmrObj.mobileNumber.length !== 10
 
@@ -89,6 +97,21 @@ export const FarmerMaster: React.FC = () => {
         seteditM(false);
     }
 
+    const fmrDelete = async (id: any) => {
+        try {
+            const resp = await deleteFarmer(id)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Farmer deleted`);
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to delete farmer");
+        }
+        setdeleteM('');
+    }
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
@@ -97,11 +120,11 @@ export const FarmerMaster: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
+                {PerChk('EDIT_Farmer Master') && <Button title="Add farmer" startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
                     onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
-        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ mt: 4, textAlign: 'center' }}>
+        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
             No records
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
@@ -116,10 +139,11 @@ export const FarmerMaster: React.FC = () => {
             <TableBody>{fmrListP.map((w, i) => (
                 <TableRow key={i}>
                     <TableCell>{w.wsfarmerName}</TableCell>
-                    <TableCell>{w.adharNumber}</TableCell>
+                    <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton onClick={() => { setfmrObj(w); seteditName(w.wsfarmerName); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>
@@ -141,36 +165,42 @@ export const FarmerMaster: React.FC = () => {
             <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField
-                    required
-                    label="Name"
-                    value={fmrObj.wsfarmerName}
-                    onChange={(e) => {
-                        const regex = /^[A-Za-z\s]*$/;
-                        if (regex.test(e.target.value)) {
-                            setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
-                        }
-                    }}
-                    helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
-                /></Grid>
-                <Grid item xs={6}><TextField
-                    required
-                    label="Aadhar"
-                    value={fmrObj.adharNumber}
-                    onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
-                    inputProps={{ maxLength: 12 }}
-                    type="tel"
-                    helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
-                /></Grid>
-                <Grid item xs={6}><TextField
-                    required
-                    label="Mobile"
-                    value={fmrObj.mobileNumber}
-                    onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
-                    inputProps={{ maxLength: 10 }}
-                    type="tel"
-                    helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
-                /></Grid>
+                {/* Name Field */}
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        label="Name"
+                        value={fmrObj.wsfarmerName}
+                        onChange={(e) => handleFieldChange('wsfarmerName', e.target.value, (value) => /^[A-Za-z\s]*$/.test(value))}
+                        helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
+                    />
+                </Grid>
+
+                {/* Aadhar Field */}
+                <Grid item xs={6}>
+                    <TextField
+                        required
+                        label="Aadhar"
+                        value={fmrObj.adharNumber}
+                        onChange={(e) => handleFieldChange('adharNumber', e.target.value, (value) => /^\d{0,12}$/.test(value))}
+                        inputProps={{ maxLength: 12 }}
+                        type="tel"
+                        helperText={isTouched.adharNumber && fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
+                    />
+                </Grid>
+
+                {/* Mobile Field */}
+                <Grid item xs={6}>
+                    <TextField
+                        required
+                        label="Mobile"
+                        value={fmrObj.mobileNumber}
+                        onChange={(e) => handleFieldChange('mobileNumber', e.target.value, (value) => /^\d{0,10}$/.test(value))}
+                        inputProps={{ maxLength: 10 }}
+                        type="tel"
+                        helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
+                    />
+                </Grid>
             </Grid></DialogContent>
 
             <DialogActions>
@@ -180,7 +210,7 @@ export const FarmerMaster: React.FC = () => {
         </Dialog>
 
         <Dialog open={editM} maxWidth='sm'>
-            <DialogTitle>Edit {editName}</DialogTitle>
+            <DialogTitle>Edit farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12}><TextField
@@ -218,6 +248,15 @@ export const FarmerMaster: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => { seteditM(false); }}>Cancel</Button>
                 <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+            <DialogTitle>Delete farmer</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
+            <DialogActions>
+                <Button onClick={() => setdeleteM('')}>Cancel</Button>
+                <Button onClick={() => fmrDelete(deleteM)}>Delete</Button>
             </DialogActions>
         </Dialog>
     </>)

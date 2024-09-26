@@ -65,10 +65,10 @@ export default function UserList() {
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const seconds = String(date.getSeconds()).padStart(2, '0');
-    
+
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
     };
-    
+
 
     const fetchUserData = async () => {
         try {
@@ -134,6 +134,9 @@ export default function UserList() {
         {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                User Management
+            </Typography>
             <TextField
                 label="Search"
                 fullWidth={false}
@@ -163,7 +166,7 @@ export default function UserList() {
                         <TableCell >Mobile Number</TableCell>
                         <TableCell >Role</TableCell>
                         <TableCell >Manager Name</TableCell>
-                        <TableCell >Block User</TableCell>
+                        <TableCell >Status</TableCell>
                         {PerChk('EDIT_User Management') && (
                             <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
