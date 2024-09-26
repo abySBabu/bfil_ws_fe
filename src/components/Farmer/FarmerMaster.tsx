@@ -165,7 +165,6 @@ export const FarmerMaster: React.FC = () => {
             <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                {/* Name Field */}
                 <Grid item xs={12}>
                     <TextField
                         required
@@ -175,8 +174,6 @@ export const FarmerMaster: React.FC = () => {
                         helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                     />
                 </Grid>
-
-                {/* Aadhar Field */}
                 <Grid item xs={6}>
                     <TextField
                         required
@@ -188,8 +185,6 @@ export const FarmerMaster: React.FC = () => {
                         helperText={isTouched.adharNumber && fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
                     />
                 </Grid>
-
-                {/* Mobile Field */}
                 <Grid item xs={6}>
                     <TextField
                         required

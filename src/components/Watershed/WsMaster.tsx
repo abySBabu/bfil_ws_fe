@@ -38,6 +38,12 @@ export const WsMaster: React.FC = () => {
     const [tlOps, settlOps] = React.useState<any[]>([]);
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
+    const [isTouched, setIsTouched] = React.useState({ wsName: false, wsDescription: false });
+
+    const handleFieldChange = (field: string, value: string) => {
+        setIsTouched((prev) => ({ ...prev, [field]: true }));
+        setwsObj((prev) => ({ ...prev, [field]: value }));
+    };
 
     const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.villageId
 
@@ -225,14 +231,24 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
-                    onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
-                    helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
-                /></Grid>
-                <Grid item xs={12}><TextField required label='Description'
-                    value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
-                    helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
-                /></Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        label="Name"
+                        value={wsObj.wsName}
+                        onChange={(e) => handleFieldChange('wsName', e.target.value)}
+                        helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        label="Description"
+                        value={wsObj.wsDescription}
+                        onChange={(e) => handleFieldChange('wsDescription', e.target.value)}
+                        helperText={isTouched.wsDescription && !wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                    />
+                </Grid>
                 <Grid item xs={12}><Divider /></Grid>
                 <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.stateId}>
                     {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
@@ -249,7 +265,6 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
                     {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
-                {!wsObj.villageId && <Grid item xs={12}><Typography variant='body2' sx={{ color: '#f00' }}>Please enter location details</Typography></Grid>}
             </Grid></DialogContent>
 
             <DialogActions>
@@ -286,7 +301,6 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField required select label="Village" value={wsObj.villageId} onChange={(e) => setwsObj({ ...wsObj, villageId: e.target.value })}>
                     {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
-                {!wsObj.villageId && <Grid item xs={12}><Typography variant='body2' sx={{ color: '#f00' }}>Please enter location details</Typography></Grid>}
             </Grid></DialogContent>
 
             <DialogActions>
