@@ -183,9 +183,9 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.grampanchayatId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
                 <Grid item xs={3}><TextField select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
                     {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>
@@ -231,9 +231,9 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.grampanchayatId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
                 <Grid item xs={3}><TextField select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
                     {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>

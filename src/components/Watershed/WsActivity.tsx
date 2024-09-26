@@ -222,10 +222,10 @@ export const WsActivity: React.FC = () => {
                     {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField disabled label='State' value={StateName(1)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value={DistrictName(wsObj.districtId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value={TalukName(wsObj.talukId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value={PanName(wsObj.grampanchayatId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Village' value={VillageName(wsObj.villageId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='District' value={DistrictName(wsObj.district.districtId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Taluk' value={TalukName(wsObj.taluk.talukId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Panchayat' value={PanName(wsObj.gramPanchayat.panchayatId)} /></Grid>
+                <Grid item xs={3}><TextField disabled label='Village' value={VillageName(wsObj.village.villageId)} /></Grid>
                 <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
                 <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                 <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
