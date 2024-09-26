@@ -76,8 +76,8 @@ export default function (props: mapTypeProps) {
                         return 0;
                     });
 
-                    const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
-                    setUserList(filterUser);
+                    // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
+                    setUserList(sorteduserList);
                 }
             } catch (error) {
                 console.log(error)
