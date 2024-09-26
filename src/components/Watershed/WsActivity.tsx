@@ -115,9 +115,9 @@ export const WsActivity: React.FC = () => {
 
     const WsSet = async (id: any) => {
         try {
-            const resp1 = await idWS(id);
-            if (resp1.status === 'success') {
-                setwsObj(resp1.data || wsDef)
+            const resp1 = JSON.parse(sessionStorage.getItem("WsList") as string)
+            if (resp1) {
+                setwsObj(resp1.find((x: typeof wsDef) => x.wsId === id) || wsDef)
             }
         }
         catch (error) { console.log(error) }
