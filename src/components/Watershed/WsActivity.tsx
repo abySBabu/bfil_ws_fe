@@ -44,8 +44,10 @@ export const actDef = {
     taluk: '',
     gramPanchayat: '',
     village: '',
+    createdTime: '',
+    createdUser: sessionStorage.getItem("userName") as string,
     updatedTime: '',
-    updatedUser: '',
+    updatedUser: sessionStorage.getItem("userName") as string,
     eventDate: '',
     participantsMale: '',
     participantsFemale: '',
@@ -106,7 +108,6 @@ export const WsActivity: React.FC = () => {
             const resp1 = await listFarmer();
             if (resp1.status === 'success') {
                 setfmrObj(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
-                console.log(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id))
             }
         }
         catch (error) { console.log(error) }
@@ -116,7 +117,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await idWS(id);
             if (resp1.status === 'success') {
-                setwsObj(resp1.data)
+                setwsObj(resp1.data || wsDef)
             }
         }
         catch (error) { console.log(error) }
@@ -160,7 +161,7 @@ export const WsActivity: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add new watershed'
+                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add activity'
                     onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setwsObj(wsDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
             </div>
         </Box>
@@ -189,7 +190,7 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
-                    <IconButton onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
+                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
                 </TableCell>}
             </TableRow>)
             )}</TableBody>
@@ -250,7 +251,7 @@ export const WsActivity: React.FC = () => {
             <DialogTitle>Edit Activity</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
+                <Grid item xs={3}><TextField disabled select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
                     <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
                     <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
                 </TextField></Grid>

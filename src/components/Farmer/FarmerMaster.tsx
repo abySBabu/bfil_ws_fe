@@ -112,7 +112,7 @@ export const FarmerMaster: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
+                {PerChk('EDIT_Farmer Master') && <Button title="Add farmer" startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
                     onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
             </div>
         </Box>
@@ -134,8 +134,8 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                     <TableCell>{w.mobileNumber}</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                        <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                     </TableCell>}
                 </TableRow>
             ))}</TableBody>

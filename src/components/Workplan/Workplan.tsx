@@ -12,18 +12,15 @@ import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { idWS } from '../../Services/wsService';
 
 const wpDef = {
-    planningId: '',
+    planningId: "",
     planningYear: "",
     interventionType_Components: "",
     activityId: "",
     planlandType: "",
-
     watershedId: "",
-
     plan: "",
     value: "",
     unitofMeasurement: "",
-
     wfsValue: "",
     finBfil: "",
     finOther: "",
@@ -49,9 +46,9 @@ export const Workplan: React.FC = () => {
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
-            w.planningYear?.toLowerCase().includes(searchTerm) ||
-            w.activityId?.toLowerCase().includes(searchTerm) ||
-            w.interventionType_Components?.toLowerCase().includes(searchTerm)
+            w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
+            w.activityId?.toString().toLowerCase().includes(searchTerm) ||
+            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm)
         );
     });
 
@@ -137,8 +134,8 @@ export const Workplan: React.FC = () => {
             <TableHead>
                 <TableRow>
                     <TableCell>Watershed</TableCell>
-                    <TableCell>planningYear</TableCell>
-                    <TableCell>activityId</TableCell>
+                    <TableCell>Year</TableCell>
+                    <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>}
