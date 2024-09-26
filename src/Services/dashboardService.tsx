@@ -11,6 +11,16 @@ export async function ListKey() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function ListInter() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Interventions",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function ListSupply() {
     const configs = {
         url: serverPath.bfil + "parameter/getParameterByType?parameterType=Supply Side Interventions",

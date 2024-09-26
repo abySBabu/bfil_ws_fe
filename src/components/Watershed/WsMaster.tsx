@@ -15,7 +15,7 @@ export const wsDef = {
     wsName: "",
     wsDescription: "",
     state: {
-        stateId: "",
+        stateId: "1",
         stateName: "",
         createdUser: "",
         updatedUser: "",
