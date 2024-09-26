@@ -193,6 +193,7 @@ export default function (props: mapTypeProps) {
                             <TextField
                                 select
                                 id="user"
+                                disabled
                                 label="User Name"
                                 {...register('user', {
                                     // required: 'User Name is required'
