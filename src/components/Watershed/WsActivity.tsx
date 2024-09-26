@@ -11,8 +11,7 @@ import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
-import { idWS } from '../../Services/wsService';
-import { listInt } from '../../Services/dashboardService';
+import { ListDemand, ListSupply } from '../../Services/dashboardService';
 
 export const actDef = {
     activityId: '',
@@ -63,6 +62,7 @@ export const WsActivity: React.FC = () => {
     const [search, setsearch] = React.useState("");
     const [actObj, setactObj] = React.useState(actDef);
     const [actList, setactList] = React.useState<typeof actDef[]>([]);
+    const [actOps, setactOps] = React.useState<any[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [fmrOps, setfmrOps] = React.useState<typeof fmrDef[]>([]);
     const [wsObj, setwsObj] = React.useState(wsDef);
@@ -92,6 +92,8 @@ export const WsActivity: React.FC = () => {
 
     React.useEffect(() => { WsSet(actObj.watershedId) }, [actObj.watershedId])
 
+    React.useEffect(() => { ActSet() }, [actObj.interventionType])
+
     const fetchData = async () => {
         try {
             const resp1 = await listAct();
@@ -118,6 +120,23 @@ export const WsActivity: React.FC = () => {
             const resp1 = JSON.parse(sessionStorage.getItem("WsList") as string)
             if (resp1) {
                 setwsObj(resp1.find((x: typeof wsDef) => x.wsId === id) || wsDef)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
+
+    const ActSet = async () => {
+        try {
+            if (actObj.interventionType === 'Supply Side Intervention') {
+                const resp1 = await ListSupply();
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (actObj.interventionType === 'Demand Side Intervention') {
+                const resp1 = await ListDemand();
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else {
+                setactOps([]);
             }
         }
         catch (error) { console.log(error) }
@@ -211,35 +230,61 @@ export const WsActivity: React.FC = () => {
         <Dialog open={addM} maxWidth='xl'>
             <DialogTitle>Add Activity</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
-                    <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
-                    <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
-                </TextField></Grid>
-                <Grid item xs={3}><TextField label='Activity' value={actObj.activityName} onChange={(e) => setactObj({ ...actObj, activityName: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField select label='Watershed' value={actObj.watershedId} onChange={(e) => setactObj({ ...actObj, watershedId: e.target.value })}>
-                    {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='State' value={StateName(1)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='District' value={DistrictName(wsObj.district.districtId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Taluk' value={TalukName(wsObj.taluk.talukId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Panchayat' value={PanName(wsObj.gramPanchayat.panchayatId)} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Village' value={VillageName(wsObj.village.villageId)} /></Grid>
-                <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
-                <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
-                <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
-                <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
-                <Grid item xs={3}><TextField select label='Name' value={actObj.farmerId} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
-                    {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
-                <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
-            </Grid></DialogContent>
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>{actObj.activityName === 'Members Capacitated' ?
+                <>
+                    <Grid item xs={3}><TextField disabled label='Event Name' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Event Type' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Event Date' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Target Group' /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Habitation' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Panchayat' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Taluk' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='District' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='State' /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Total Participants' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Male Participants' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Female Participants' /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Facilitator' /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Mobilizer' /></Grid>
+                    <Grid item xs={6}><TextField disabled label='Remarks' /></Grid>
+                </> : <>
+                    <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value })}>
+                        <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
+                        <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
+                    </TextField></Grid>
+                    <Grid item xs={3}><TextField select label='Activity' value={actObj.activityName} onChange={(e) => setactObj({ ...actObj, activityName: e.target.value })}>
+                        {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                    </TextField></Grid>
+                    {actObj.activityName === 'Sustainable Practices' && <Grid item xs={3}><TextField label='Sustainable Practice' /></Grid>}
+                    <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                    <Grid item xs={3}><TextField select label='Watershed' value={actObj.watershedId} onChange={(e) => setactObj({ ...actObj, watershedId: e.target.value })}>
+                        {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                    </TextField></Grid>
+                    <Grid item xs={3}><TextField disabled label='State' value={StateName(1)} /></Grid>
+                    <Grid item xs={3}><TextField disabled label='District' value={DistrictName(wsObj.district.districtId)} /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Taluk' value={TalukName(wsObj.taluk.talukId)} /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Panchayat' value={PanName(wsObj.gramPanchayat.panchayatId)} /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Village' value={VillageName(wsObj.village.villageId)} /></Grid>
+                    <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
+                    <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                    <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
+                    {actObj.interventionType !== 'Demand Side Intervention' && <>
+                        <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
+                        <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                    </>}
+                    <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
+                    <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                    <Grid item xs={3}><TextField select label='Name' value={actObj.farmerId} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
+                        {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
+                    </TextField></Grid>
+                    <Grid item xs={3}><TextField disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
+                    <Grid item xs={3}><TextField disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
+                </>
+            }</Grid></DialogContent>
 
             <DialogActions>
                 <Button onClick={() => setaddM(false)}>Cancel</Button>
