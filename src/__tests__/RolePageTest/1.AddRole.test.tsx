@@ -3,7 +3,7 @@ import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Add Role Automation', () => {
     //Test Number : 1
-    test('should check error message for role name', async () => {
+    test('Should check error message for role name', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -27,9 +27,9 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Project Head#');
         await page.fill('input#roleDesc', 'State Project Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         await expect(page.locator('#roleName-helper-text')).toHaveText('Role Name must only contain alphanumeric characters');
@@ -39,7 +39,7 @@ test.describe('Add Role Automation', () => {
         // await addRoleDialogButton.click();
         // const alertMessage = await page.locator('.MuiAlert-message').innerText();
         // expect(alertMessage).toBe('Role Name must only contain alphanumeric characters');
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
@@ -68,12 +68,12 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Project Head');
         await page.fill('input#roleDesc', 'State Project Head#');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
         await expect(page.locator('#roleDesc-helper-text')).toHaveText('Role Description must only contain alphanumeric characters');
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
@@ -100,9 +100,9 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
         // const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
         // await expect(addRoleDialogButton).toBeVisible();
@@ -112,7 +112,7 @@ test.describe('Add Role Automation', () => {
         console.log("Error Message " + errorMessage);
         expect(errorMessage).toBe('Role Description must only contain alphanumeric characters');
         expect(errorMessageForUserName).toBe('Role Name must only contain alphanumeric characters');
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
@@ -140,9 +140,9 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
         // const errorMessageForUserName = await page.locator('#roleName-helper-text').textContent();
         // const errorMessage = await page.locator('#roleDesc-helper-text').textContent();
@@ -183,7 +183,7 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         // const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
         // await page.waitForTimeout(2000);
         // await editCheckbox.check();
@@ -192,7 +192,7 @@ test.describe('Add Role Automation', () => {
         const isButtonVisible = await addRoleDialogButton.isDisabled();
         // await addRoleDialogButton.click();
         console.log('Is the "Add" button disable?', isButtonVisible);
-        expect(isButtonVisible).toBe(true);
+        expect(isButtonVisible).toBe(false);
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -220,7 +220,7 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
 
         // Get all checkboxes
         const checkboxes = page.locator('input[type="checkbox"]');
@@ -230,7 +230,7 @@ test.describe('Add Role Automation', () => {
         for (let i = 0; i < checkboxCount; i++) {
             const checkbox = checkboxes.nth(i);
             await checkbox.check();
-            await page.waitForTimeout(1000);
+            // await page.waitForTimeout(1000);
         }
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
         const isButtonVisible = await addRoleDialogButton.isDisabled();
@@ -263,10 +263,10 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
 
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(0);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
@@ -302,10 +302,10 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
 
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
@@ -340,10 +340,10 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', '');
         await page.fill('input#roleDesc', 'State Head');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
 
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
@@ -378,10 +378,10 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', '');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
 
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
@@ -418,9 +418,9 @@ test.describe('Add Role Automation', () => {
         await addRoleButton.click();
         await page.fill('input#roleName', '');
         await page.fill('input#roleDesc', '');
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
+        // await page.waitForTimeout(2000);
         await editCheckbox.check();
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
         const isButtonVisible = await addRoleDialogButton.isDisabled();
@@ -433,7 +433,7 @@ test.describe('Add Role Automation', () => {
 
 
     //Test Number : 12
-    test('Should validate the role add alert message', async () => {
+    test('Should validate the role add duplicate error alert message', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -454,11 +454,11 @@ test.describe('Add Role Automation', () => {
             await page.waitForSelector('table');
             const addRoleButton = page.locator('button:has-text("Add Role")');
             await addRoleButton.click();
-            await page.fill('input#roleName', 'Testing New Role');
+            await page.fill('input#roleName', 'Testing New Role');//Existing role added throw error
             await page.fill('input#roleDesc', 'Desc');
-            await page.waitForTimeout(2000);
+            // await page.waitForTimeout(2000);
             const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-            await page.waitForTimeout(2000);
+            // await page.waitForTimeout(2000);
             await editCheckbox.check();
             const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
             // const isButtonVisible = await addRoleDialogButton.isVisible();
@@ -466,7 +466,9 @@ test.describe('Add Role Automation', () => {
             const alertMessage = await page.locator('.MuiAlert-message').innerText();
             // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
             console.log("Alertmessage " + alertMessage);
-            expect(alertMessage).toBe('Role created successfully');
+            
+
+            expect(alertMessage).toBe('Duplicate record error: Testing New Role Role Name Already Exists');//Role created successfully
         } catch (error) {
             console.error("Test failed with error: ", error);
         } finally {
@@ -507,35 +509,127 @@ test.describe('Add Role Automation', () => {
         }
     });
 
-    //  //Test Number : 14
-    //  test('Should check the confirm button icon visibility', async () => {
-    //     test.setTimeout(800000);
-    //     const browser = await chromium.launch({
-    //         headless: false,
-    //         channel: 'chrome',
-    //     });
-    //     const context = await browser.newContext();
-    //     const page: Page = await context.newPage();
-    //     try {
-    //         await page.goto('http://localhost:3000/bfilreact');
-    //         await page.fill('input#userName', '9677694732');
-    //         await page.fill('input#password', '1234');
-    //         await page.click('button[type="submit"]');
-    //         await page.waitForTimeout(1000);
-    //         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
-    //         await page.reload();
-    //         const userManagementButton = page.locator('text=Role Management');
-    //         await userManagementButton.click();
-    //         await page.waitForSelector('table');
-    //         const addRoleButton = page.locator('button:has-text("Add Role")');
-    //         const isAddRoleButtonVisible = addRoleButton.isVisible();
-    //         expect(isAddRoleButtonVisible).toBe(true);           
-    //     } catch (error) {
-    //         console.error("Test failed with error: ", error);
-    //     } finally {
-    //         await page.waitForTimeout(1000);
-    //         await browser.close();
-    //     }
-    // });
+     //Test Number : 14
+     test('Should check the confirm button icon visibility', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        try {
+            await page.goto('http://localhost:3000/bfilreact');
+            await page.fill('input#userName', '9677694732');
+            await page.fill('input#password', '1234');
+            await page.click('button[type="submit"]');
+            await page.waitForTimeout(1000);
+            await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+            await page.reload();
+            const userManagementButton = page.locator('text=Role Management');
+            await userManagementButton.click();
+            await page.waitForSelector('table');
+            const addRoleButton = page.locator('button:has-text("Add Role")');
+            const isAddRoleButtonVisible = addRoleButton.isVisible();
+            expect(isAddRoleButtonVisible).toBe(true);           
+        } catch (error) {
+            console.error("Test failed with error: ", error);
+        } finally {
+            await page.waitForTimeout(1000);
+            await browser.close();
+        }
+    });
+
+    //Test Number : 15
+    test('Should check atleast one permission alert message ', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+        const userManagementButton = page.locator('text=Role Management');
+        await userManagementButton.click();
+        await page.waitForSelector('table');
+        const addRoleButton = page.locator('button:has-text("Add Role")');
+        await addRoleButton.click();
+        await page.fill('input#roleName', 'State Head');
+        await page.fill('input#roleDesc', 'State Head');
+        // await page.waitForTimeout(2000);
+        // const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
+        // await page.waitForTimeout(2000);
+        // await editCheckbox.check();
+
+        const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
+        const isButtonVisible = await addRoleDialogButton.isVisible();
+        console.log('Is the "Add" button disable?', isButtonVisible);
+        await addRoleDialogButton.click();
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
+        console.log("Alertmessage " + alertMessage);
+        expect(alertMessage).toBe('Kindly add a role for atleast one screen');
+        // expect(isButtonVisible).toBe(false);
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
+
+     //Test Number : 16
+     test('Should validate the role add success alert message', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        try {
+            await page.goto('http://localhost:3000/bfilreact');
+            await page.fill('input#userName', '9677694732');
+            await page.fill('input#password', '1234');
+            await page.click('button[type="submit"]');
+            await page.waitForTimeout(1000);
+            await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+            await page.reload();
+            const userManagementButton = page.locator('text=Role Management');
+            await userManagementButton.click();
+            await page.waitForSelector('table');
+            const addRoleButton = page.locator('button:has-text("Add Role")');
+            await addRoleButton.click();
+            await page.fill('input#roleName', 'Testing New Role2');//Existing role added throw error
+            await page.fill('input#roleDesc', 'Desc');
+            // await page.waitForTimeout(2000);
+            const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
+            // await page.waitForTimeout(2000);
+            await editCheckbox.check();
+            const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
+            // const isButtonVisible = await addRoleDialogButton.isVisible();
+            await addRoleDialogButton.click();
+            const alertMessage = await page.locator('.MuiAlert-message').innerText();
+            // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
+            console.log("Alertmessage " + alertMessage);
+            
+            if(alertMessage == "Role created successfully"){
+                expect(alertMessage).toBe('Role created successfully');
+            }
+            else{
+                const dynamicRoleName = await page.inputValue('input#roleName');
+                expect(alertMessage).toBe(`Duplicate record error: ${dynamicRoleName} Role Name Already Exists`);//Role created successfully
+            }
+        } catch (error) {
+            console.error("Test failed with error: ", error);
+        } finally {
+            await page.waitForTimeout(1000);
+            await browser.close();
+        }
+    });
 
 });

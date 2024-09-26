@@ -1,21 +1,22 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
-test.beforeAll(async () => {
-  global.getComputedStyle = (element: Element) => ({
-    getPropertyValue: (prop: string): string => {
-      if (prop === '--button-bradius') return '4px';
-      if (prop === '--text-color-default') return '#000000';
-      if (prop === '--button-bgcolor-active-brand') return '#1976d2';
-      return '';
-    }
-  }) as any;
-});
+// test.beforeAll(async () => {
+//   global.getComputedStyle = (element: Element) => ({
+//     getPropertyValue: (prop: string): string => {
+//       if (prop === '--button-bradius') return '4px';
+//       if (prop === '--text-color-default') return '#000000';
+//       if (prop === '--button-bgcolor-active-brand') return '#1976d2';
+//       return '';
+//     }
+//   }) as any;
+// });
 
 
 test.describe('User Management Automation', () => {
 
   //Test Number : 1
   test('Add user details with alphanumeric validation', async () => {
+    test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -47,21 +48,6 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '65432ert#');
     await page.fill('input#password', '1');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
-
-    //  const managerTypeDropdown = page.locator('#manager');
-    //     await managerTypeDropdown.click();
-    //     const mangerTypeOptions = page.locator('ul[role="listbox"]');
-    //     await expect(mangerTypeOptions).toBeVisible();
-    //     const managerTypeOption = mangerTypeOptions.locator('text="Lakshmi Vimsla"');
-    //     await expect(managerTypeOption).toBeVisible();
-    //     await managerTypeOption.click();
     // const managerTypeDropdown = page.locator('#manager');
     // await managerTypeDropdown.click();
     // await page.waitForSelector('ul[role="listbox"]');
@@ -73,7 +59,6 @@ test.describe('User Management Automation', () => {
     const roleDropdown = page.locator('#role');
     await roleDropdown.click();
     await page.waitForSelector('ul[role="listbox"]');
-    // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -94,19 +79,13 @@ test.describe('User Management Automation', () => {
     await expect(page.locator('#email-helper-text')).toHaveText('Email is invalid');
     await expect(page.locator('#mobileNo-helper-text')).toHaveText('Mobile Number is invalid');
     await expect(page.locator('#password-helper-text')).toHaveText('Password must be at least 4 characters');
-
-    //  const addUserDialogButton = page.locator('button:has-text("Add User")').nth(1);
-    //     await expect(addUserDialogButton).toBeVisible();
-    //     await addUserDialogButton.click();
-    //     await page.waitForTimeout(1000);
-
+    await page.waitForTimeout(1000);
     await browser.close();
   });
 
   //Test Number : 2
   test('Should check the onchange error for empty fields', async () => {
     test.setTimeout(800000);
-
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -139,37 +118,27 @@ test.describe('User Management Automation', () => {
 
     const roleDropdown = page.locator('#role');
     await roleDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    // // Select manager from dropdown - extended wait and check for text content
     // const managerTypeDropdown = page.locator('#manager');
     // await managerTypeDropdown.click();
-    // // Wait longer for the options to load
-    // const managerTypeOptions = page.locator('ul[role="listbox"]');
-    // await managerTypeOptions.waitFor({ state: 'visible', timeout: 10000 }); // Extended timeout
-    // // Debugging: Log available options
-    // const managerTypeOptionsText = await managerTypeOptions.evaluateAll(elements => elements.map(el => el.textContent));
-    // console.log('Manager Type Options:', managerTypeOptionsText);
-    // // Select the manager (Ensure the name matches exactly)
-    // const managerTypeOption = managerTypeOptions.locator('text="Lakshmi Vimsla"');
-    // await expect(managerTypeOption).toBeVisible();  // Ensure it's visible
-    // await managerTypeOption.click();
-
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -177,18 +146,11 @@ test.describe('User Management Automation', () => {
     }
 
     const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
-    // // Check if the button has the disabled attribute
-    // const isDisabledAttributePresent = await addUserDialogButton.evaluate(node => node.hasAttribute('disabled'));
-    // console.log('Is the "Add User" button disabled attribute present?', isDisabledAttributePresent);
-    // expect(isDisabledAttributePresent).toBe(true);
-    // Print all class names applied to the button
     const classes = await addUserDialogButton.evaluate(node => node.className);
     console.log('Button classes:', classes);
-    // Check if the button has the 'Mui-disabled' class
     const hasDisabledClass = classes.split(' ').includes('Mui-disabled');
     console.log('Does the "Add User" button have the disabled class?', hasDisabledClass);
     expect(hasDisabledClass).toBe(true);
-    // Optionally, verify that the button is not interactable
     const isClickable = await addUserDialogButton.evaluate(node => !node.hasAttribute('disabled') && node.classList.contains('Mui-disabled'));
     expect(isClickable).toBe(false);
     await page.waitForTimeout(1000);
@@ -224,30 +186,29 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', '');
-    // await page.fill('input#employeeCode', '');
-    // await page.fill('input#email', '');
-    // await page.fill('input#mobileNo', '');
-    // await page.fill('input#password', '');
-
     const roleDropdown = page.locator('#role');
     await roleDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -295,31 +256,31 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    // await page.fill('input#userName', '');
     await page.fill('input#employeeCode', '');
-    // await page.fill('input#email', '');
-    // await page.fill('input#mobileNo', '');
-    // await page.fill('input#password', '');
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+    // await roleDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -365,29 +326,27 @@ test.describe('User Management Automation', () => {
     await expect(addUserButton).toBeVisible();
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
-
-    // await page.fill('input#userName', '');
-    // await page.fill('input#employeeCode', '');
     await page.fill('input#email', '');
-    // await page.fill('input#mobileNo', '');
-    // await page.fill('input#password', '');
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+    // await roleDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
+    await page.waitForTimeout(1000);
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
@@ -437,31 +396,30 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    // await page.fill('input#userName', '');
-    // await page.fill('input#employeeCode', '');
-    // await page.fill('input#email', '');
     await page.fill('input#mobileNo', '');
-    // await page.fill('input#password', '');
+    await page.locator('#role').click();
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -514,25 +472,29 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '123456789');
     await page.fill('input#password', '12');
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      console.log("managerOptions" + managerOptions[2]);
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   console.log("managerOptions" + managerOptions[2]);
+    //   await managerOptions[0].click();
+    // }
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
     await page.waitForSelector('ul[role="listbox"]');
+    await page.waitForTimeout(1000);
+
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
@@ -584,31 +546,6 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '');
     await page.fill('input#password', '');
 
-    // const roleDropdown = page.locator('#role');
-    // await roleDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const roleOptions = await page.$$('ul[role="listbox"] > li');
-    // if (roleOptions.length > 0) {
-    //   await roleOptions[0].click();
-    // }
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   console.log("managerOptions" + managerOptions[2]);
-    //   await managerOptions[0].click();
-    // }
-
-    // const loginTypeDropdown = page.locator('#loginType');
-    // await loginTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    // if (loginTypeOptions.length > 0) {
-    //   await loginTypeOptions[2].click();
-    // }
-
     const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
     const classes = await addUserDialogButton.evaluate(node => node.className);
     console.log('Button classes:', classes);
@@ -624,6 +561,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 9
   test('Should all numbers for username, employee code, designation and mail', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -655,16 +594,19 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '1234567890');
     await page.fill('input#password', '12345');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
+    await page.waitForTimeout(1000);
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -673,6 +615,8 @@ test.describe('User Management Automation', () => {
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -687,6 +631,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 10
   test('Should check the important field', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -718,16 +664,18 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '1234567890');
     await page.fill('input#password', '12345');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForTimeout(1000);
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
+
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -737,6 +685,8 @@ test.describe('User Management Automation', () => {
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
     await page.waitForSelector('ul[role="listbox"]');
+    await page.waitForTimeout(1000);
+
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
@@ -750,6 +700,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 11
   test('Should check the miss any dropdown error message', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -781,30 +733,22 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '1234567890');
     await page.fill('input#password', '12345');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
 
-    // const loginTypeDropdown = page.locator('#loginType');
-    // await loginTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    // if (loginTypeOptions.length > 0) {
-    //   await loginTypeOptions[2].click();
-    // }
-    // await expect(page.locator('#designation-helper-text')).toHaveText('Designation must only contain alphanumeric characters');
     const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
     const classes = await addUserDialogButton.evaluate(node => node.className);
     console.log('Button classes:', classes);
@@ -821,6 +765,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 12
   test('Should check the successful message after add user', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -852,16 +798,16 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '0000000000');
     await page.fill('input#password', '1234');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -884,13 +830,14 @@ test.describe('User Management Automation', () => {
     //User error: MobileNumber already exits 8310450995
     expect(alertMessage).toBe('User created successfully');
     await page.waitForTimeout(1000);
-    await page.waitForTimeout(1000);
     await browser.close();
   });
 
 
   //Test Number : 13
   test('Should check the duplicate error message after add user', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -922,16 +869,16 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '0000000000');
     await page.fill('input#password', '1234');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -960,6 +907,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 14
   test('Should check the duplicate error message for usercode exist after add user', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',
@@ -991,16 +940,16 @@ test.describe('User Management Automation', () => {
     await page.fill('input#mobileNo', '1234567899');
     await page.fill('input#password', '1234');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -1028,6 +977,8 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 15
   test('Should check the useradd button visibility', async () => {
+    test.setTimeout(800000);
+
     const browser = await chromium.launch({
       headless: false,
       channel: 'chrome',

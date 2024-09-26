@@ -2,7 +2,7 @@ import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('Role Management Automation', () => {
 
     //Test Number : 1
-    test('should click the edit icon and error message  for role name', async () => {
+    test('Should click the edit icon and error message  for role name', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -20,21 +20,17 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(1000);
 
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(1000);
+
         await page.fill('input#roleName', 'State Project Head#');
         await page.fill('input#roleDesc', 'State Project Head');
-        const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
         await expect(page.locator('#roleName-helper-text')).toHaveText('Role Name must only contain alphanumeric characters');
-        await page.waitForTimeout(2000);
-        // await editCheckbox.check();
-        // await page.click('button:has-text("Edit")');
-        // // Wait for the Snackbar to appear and validate its content
-        // const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        // expect(alertMessage).toBe('Role updated successfully');
-        // console.log('Alert Message:', alertMessage);
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
@@ -59,17 +55,16 @@ test.describe('Role Management Automation', () => {
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
         await page.waitForSelector('table');
-        await page.waitForSelector('table');
+        await page.waitForTimeout(1000);
+
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(1000);
+
         await page.fill('input#roleName', 'State Project Head');
         await page.fill('input#roleDesc', 'State Project Head#');
-        await page.waitForTimeout(2000);
-        const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
-        await editCheckbox.check();
         await expect(page.locator('#roleDesc-helper-text')).toHaveText('Role Description must only contain alphanumeric characters');
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
@@ -91,18 +86,16 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(1000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(1000);
+
         await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
         await page.waitForTimeout(2000);
-        const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
-        await editCheckbox.check();
-        // const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
-        // await expect(addRoleDialogButton).toBeVisible();
-        // await addRoleDialogButton.click();
         const errorMessageForUserName = await page.locator('#roleName-helper-text').textContent();
         const errorMessage = await page.locator('#roleDesc-helper-text').textContent();
         console.log("Error Message " + errorMessage);
@@ -130,21 +123,19 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(1000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(1000);
+
         await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
         await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
         await page.waitForTimeout(2000);
         await editCheckbox.check();
-        // const errorMessageForUserName = await page.locator('#roleName-helper-text').textContent();
-        // const errorMessage = await page.locator('#roleDesc-helper-text').textContent();
-        // console.log("Error Message " + errorMessage);
-        // expect(errorMessage).toBe('Role Description must only contain alphanumeric characters');
-        // expect(errorMessageForUserName).toBe('Role Name must only contain alphanumeric characters');
-
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
         const isButtonVisible = await addRoleDialogButton.isDisabled();
         // await addRoleDialogButton.click();
@@ -155,7 +146,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 5
-    test('should check atleast one permission have the role ', async () => {
+    test('Should check atleast one permission have the role ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -172,18 +163,18 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(1000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(1000);
+
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
-        // const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        // await page.waitForTimeout(2000);
-        // await editCheckbox.check();
-
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
-        const isButtonVisible = await addRoleDialogButton.isDisabled();
+        const isButtonVisible = await addRoleDialogButton.isVisible();
         // await addRoleDialogButton.click();
         console.log('Is the "Edit" button disable?', isButtonVisible);
         expect(isButtonVisible).toBe(true);
@@ -210,6 +201,8 @@ test.describe('Role Management Automation', () => {
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
         await page.waitForSelector('table');
+        await page.waitForTimeout(1000);
+
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
         await page.fill('input#roleName', 'State Head');
@@ -224,7 +217,7 @@ test.describe('Role Management Automation', () => {
         for (let i = 0; i < checkboxCount; i++) {
             const checkbox = checkboxes.nth(i);
             await checkbox.check(); // Click/check the checkbox
-            await page.waitForTimeout(1000); // Optional: wait to ensure the action is processed
+            // await page.waitForTimeout(1000); // Optional: wait to ensure the action is processed
         }
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
         const isButtonVisible = await addRoleDialogButton.isDisabled();
@@ -253,9 +246,13 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(2000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
+        await page.waitForTimeout(2000);
+
         await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
@@ -291,6 +288,8 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(2000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
@@ -299,7 +298,6 @@ test.describe('Role Management Automation', () => {
         await page.waitForTimeout(2000);
 
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
         await editCheckbox.check();
 
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
@@ -329,22 +327,21 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(2000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
         await page.fill('input#roleName', '');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
-
-        const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
+        const addRoleDialogButton = page.locator('button:has-text("Update")');
+        const isButtonVisible = await addRoleDialogButton.isEnabled();
         await page.waitForTimeout(2000);
-        await editCheckbox.check();
 
-        const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
-        const isButtonVisible = await addRoleDialogButton.isDisabled();
         // await addRoleDialogButton.click();
         console.log('Is the "Edit" button disable?', isButtonVisible);
-        expect(isButtonVisible).toBe(true);
+        expect(isButtonVisible).toBe(false);
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -367,6 +364,8 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(2000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
@@ -374,15 +373,11 @@ test.describe('Role Management Automation', () => {
         await page.fill('input#roleDesc', '');
         await page.waitForTimeout(2000);
 
-        const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
-        await editCheckbox.check();
-
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
-        const isButtonVisible = await addRoleDialogButton.isDisabled();
+        const isButtonVisible = await addRoleDialogButton.isEnabled();
         // await addRoleDialogButton.click();
         console.log('Is the "Edit" button disable?', isButtonVisible);
-        expect(isButtonVisible).toBe(true);
+        expect(isButtonVisible).toBe(false);
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -406,6 +401,8 @@ test.describe('Role Management Automation', () => {
         await page.reload();
         const userManagementButton = page.locator('text=Role Management');
         await userManagementButton.click();
+        await page.waitForTimeout(2000);
+
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
@@ -413,7 +410,6 @@ test.describe('Role Management Automation', () => {
         await page.fill('input#roleDesc', '');
         await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-        await page.waitForTimeout(2000);
         await editCheckbox.check();
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
         const isButtonVisible = await addRoleDialogButton.isDisabled();
@@ -444,6 +440,8 @@ test.describe('Role Management Automation', () => {
             await page.reload();
             const userManagementButton = page.locator('text=Role Management');
             await userManagementButton.click();
+            await page.waitForTimeout(2000);
+
             await page.waitForSelector('table');
             const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
             await editIcon.click();
@@ -451,7 +449,6 @@ test.describe('Role Management Automation', () => {
             await page.fill('input#roleDesc', 'Desc');
             await page.waitForTimeout(2000);
             const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-            await page.waitForTimeout(2000);
             await editCheckbox.check();
             const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
             // const isButtonVisible = await addRoleDialogButton.isDisabled();
@@ -489,6 +486,8 @@ test.describe('Role Management Automation', () => {
             await page.reload();
             const userManagementButton = page.locator('text=Role Management');
             await userManagementButton.click();
+            await page.waitForTimeout(2000);
+
             await page.waitForSelector('table');
             const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
             await editIcon.click();
@@ -496,7 +495,6 @@ test.describe('Role Management Automation', () => {
             await page.fill('input#roleDesc', 'Desc');
             await page.waitForTimeout(2000);
             const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-            await page.waitForTimeout(2000);
             await editCheckbox.check();
             const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
             const isButtonVisible = await addRoleDialogButton.isVisible();

@@ -1,6 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
+  workers: 1,  // This ensures that tests run one by one, no parallel execution
+
   testDir: './src/__tests__',  // Directory where your test files are located
   // testMatch: '**/*.test.tsx',  // Pattern to match your test files (you can adjust it if needed)
 //   timeout: 30000,              // Set global timeout for tests (in milliseconds)

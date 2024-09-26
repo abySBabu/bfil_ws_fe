@@ -33,17 +33,18 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
     await page.waitForSelector('ul[role="listbox"]');
+    await page.waitForTimeout(1000);
+
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -53,6 +54,8 @@ test.describe('User Edit Automation', () => {
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
     await page.waitForSelector('ul[role="listbox"]');
+    await page.waitForTimeout(1000);
+
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
@@ -61,19 +64,6 @@ test.describe('User Edit Automation', () => {
 
     await page.waitForTimeout(1000);
     await browser.close();
-
-
-    // const addUserDialogButton = page.locator('button:has-text("Update")');
-    // await expect(addUserDialogButton).toBeVisible();
-    // await addUserDialogButton.click();
-    // await page.waitForTimeout(5000);
-
-
-    // // Wait for the success snackbar to appear
-    // const snackbar = await page.waitForSelector('role=alert', { timeout: 100000 });
-
-    // // Verify the success message
-    // await expect(snackbar).toContain('User updated successfully');
 
   });
 
@@ -111,17 +101,19 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
+    await page.waitForTimeout(1000);
+
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
@@ -175,16 +167,16 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+    
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -232,16 +224,16 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -297,16 +289,16 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', '');
     await page.fill('input#designation', '');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -367,16 +359,16 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', '');
     // await page.fill('input#designation', '');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -432,18 +424,20 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', '');
     await page.fill('input#designation', '');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
+    await page.waitForTimeout(1000);
+
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -451,6 +445,8 @@ test.describe('User Edit Automation', () => {
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+        await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -503,18 +499,20 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'User Edited');
     await page.fill('input#designation', 'Admin');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
+    await page.waitForTimeout(1000);
+
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -522,6 +520,8 @@ test.describe('User Edit Automation', () => {
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -570,18 +570,20 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Manhattan');
     await page.fill('input#designation', 'Admin');
 
-    const managerTypeDropdown = page.locator('#manager');
-    await managerTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const managerOptions = await page.$$('ul[role="listbox"] > li');
-    if (managerOptions.length > 0) {
-      await managerOptions[0].click();
-    }
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
 
-    const roleDropdown = page.locator('#role');
-    await roleDropdown.click();
+    await page.locator('#role').click();
+
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
+    await page.waitForTimeout(1000);
+
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -589,6 +591,8 @@ test.describe('User Edit Automation', () => {
 
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
+    await page.waitForTimeout(1000);
+
     await page.waitForSelector('ul[role="listbox"]');
     const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
     if (loginTypeOptions.length > 0) {
@@ -603,13 +607,11 @@ test.describe('User Edit Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User updated successfully...');
+    expect(alertMessage).toBe('User updated successfully');
     await page.waitForTimeout(1000);
 
     await browser.close();
   });
-
-
 
    //Test Number : 10
    test('Should check the edit icon  ', async () => {
@@ -630,6 +632,7 @@ test.describe('User Edit Automation', () => {
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
+    await page.waitForTimeout(5000);
 
     const userRow = page.locator('tr').nth(1);
     console.log("Hi this userrow testing " + userRow);

@@ -29,6 +29,7 @@ test.describe('Role Management Automation', () => {
         const rowCount = await rows.count();
         console.log('Number of rows:', rowCount);
         expect(rowCount).toBeGreaterThan(0);
+        await page.waitForTimeout(1000);
         await browser.close();
 
     });
