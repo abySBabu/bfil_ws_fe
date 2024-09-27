@@ -177,7 +177,7 @@ export const WsActivity: React.FC = () => {
             const resp1 = await editAct(actObj, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Activity ${actObj.activityName || ""} updated`);
+                setalert(`Activity updated`);
             }
         }
         catch (error) {
@@ -206,7 +206,7 @@ export const WsActivity: React.FC = () => {
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Watershed</TableCell>
+                    {/* <TableCell>Watershed</TableCell> */}
                     <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Status</TableCell>
@@ -218,7 +218,7 @@ export const WsActivity: React.FC = () => {
 
             <TableBody>{actListP.map((a, i) =>
             (<TableRow key={i}>
-                <TableCell>{WsName(a.watershedId)}</TableCell>
+                {/* <TableCell>{WsName(a.watershedId)}</TableCell> */}
                 <TableCell>{a.interventionType}</TableCell>
                 <TableCell>{a.activityName}</TableCell>
                 <TableCell>{a.activityWorkflowStatus}</TableCell>
@@ -259,13 +259,15 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField label='Event Name' value={actObj.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, capacitynameEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Event Type' value={actObj.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, capacitytypeEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
+
                     <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><TextField label='State' value={actObj.state} onChange={(e) => setactObj({ ...actObj, state: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='District' value={actObj.district} onChange={(e) => setactObj({ ...actObj, district: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Taluk' value={actObj.taluk} onChange={(e) => setactObj({ ...actObj, taluk: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Panchayat' value={actObj.gramPanchayat} onChange={(e) => setactObj({ ...actObj, gramPanchayat: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Habitation' value={actObj.habitationsCovered} onChange={(e) => setactObj({ ...actObj, habitationsCovered: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
+
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
@@ -328,13 +330,15 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField label='Event Name' value={actObj.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, capacitynameEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Event Type' value={actObj.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, capacitytypeEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
+
                     <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><TextField label='State' value={actObj.state} onChange={(e) => setactObj({ ...actObj, state: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='District' value={actObj.district} onChange={(e) => setactObj({ ...actObj, district: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Taluk' value={actObj.taluk} onChange={(e) => setactObj({ ...actObj, taluk: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField label='Panchayat' value={actObj.gramPanchayat} onChange={(e) => setactObj({ ...actObj, gramPanchayat: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Habitation' value={actObj.habitationsCovered} onChange={(e) => setactObj({ ...actObj, habitationsCovered: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Panchayat' value={actObj.gramPanchayat} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='Taluk' value={actObj.taluk} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='District' value={actObj.district} /></Grid>
-                    <Grid item xs={3}><TextField disabled label='State' value={actObj.state} /></Grid>
+
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
