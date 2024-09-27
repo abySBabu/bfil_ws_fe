@@ -13,8 +13,11 @@ import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from '
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 
 export const Home: React.FC = () => {
+    const navigate = useNavigate();
     const [dIndex, setdIndex] = useState<number | null>(null);
     const [message, setMessage] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
@@ -29,6 +32,16 @@ export const Home: React.FC = () => {
         setLanguageAnchor(event.currentTarget);
     };
 
+    const logOut = async () => {
+        try {
+            let logoutresp = await logout();
+            if (logoutresp) {
+                navigate('/');
+            }
+        } catch (error: any) {
+            console.log('error', error);
+        }
+    }
     const changeLanguage = (language: string) => {
         console.log('Selected Language:', language);
         setLanguageAnchor(null);
@@ -112,7 +125,7 @@ export const Home: React.FC = () => {
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={logout}>Logout</MenuItem>
+                <MenuItem onClick={logOut}>Logout</MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>
