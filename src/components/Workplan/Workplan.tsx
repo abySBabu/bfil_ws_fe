@@ -9,25 +9,33 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
-import { idWS } from '../../Services/wsService';
 
 const wpDef = {
     planningId: "",
     planningYear: "",
+    watershedId: "",
     interventionType_Components: "",
     activityId: "",
     planlandType: "",
-    watershedId: "",
+    planRemarks: "",
+    createdUser: "",
+    updatedUser: "",
+    unitofMeasurement: "",
     plan: "",
     value: "",
-    unitofMeasurement: "",
-    wfsValue: "",
-    finBfil: "",
-    finOther: "",
-    finGov: "",
-    finMgn: "",
-    finIbl: "",
-    finCom: ""
+    financialDetails: [
+        {
+            wfsId: 101,
+            wfsName: "BFIL",
+            wfsValue: 0,
+
+        },
+        {
+            wfsId: 102,
+            wfsName: "Other",
+            wfsValue: 0,
+        }
+    ]
 }
 
 export const Workplan: React.FC = () => {
@@ -43,6 +51,7 @@ export const Workplan: React.FC = () => {
     const [search, setsearch] = React.useState("");
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
+    const [finTotal, setfinTotal] = React.useState(0);
 
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
@@ -60,11 +69,12 @@ export const Workplan: React.FC = () => {
     React.useEffect(() => { WsSet(planObj.watershedId) }, [planObj.watershedId])
 
     React.useEffect(() => {
-        setplanObj({
-            ...planObj,
-            wfsValue: ([planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom].reduce((acc, val) => acc + Number(val), 0)).toString()
-        });
-    }, [planObj.finBfil, planObj.finOther, planObj.finGov, planObj.finMgn, planObj.finIbl, planObj.finCom]);
+        const totalWfsValue = wpDef.financialDetails.reduce((sum, item) => {
+            return sum + item.wfsValue;
+        }, 0);
+        setfinTotal(totalWfsValue);
+    }, [wpDef.financialDetails.map(item => item.wfsValue)]);
+
 
     const fetchData = async () => {
         try {
@@ -145,7 +155,7 @@ export const Workplan: React.FC = () => {
                 <TableRow key={i}>
                     <TableCell>{w.watershedId}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
-                    <TableCell>{w.interventionType_Components} - {w.activityId}</TableCell>
+                    <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>{w.wfsValue}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
@@ -208,8 +218,8 @@ export const Workplan: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); }}>Close</Button>
-                <Button onClick={PlanAdd}>Add</Button>
+                <Button onClick={() => { setaddM(false); }} disabled={loading}>Close</Button>
+                <Button onClick={PlanAdd} disabled={loading}>Add</Button>
             </DialogActions>
         </Dialog>
 
@@ -256,8 +266,8 @@ export const Workplan: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
-                <Button onClick={() => { PlanEdit(planObj.planningId) }}>Update</Button>
+                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)
