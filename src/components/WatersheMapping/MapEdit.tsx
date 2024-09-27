@@ -63,7 +63,7 @@ export default function (props: mapTypeProps) {
                     setRolesListFromService(Roleresp);
                 }
                 let resp = await listWS();
-                if (resp) {
+                if (resp.status === 'success') {
                     setWsList(resp.data);
                 }
                 let userResp = await usersList(companyId);
