@@ -142,7 +142,7 @@ export const WsActivity: React.FC = () => {
                 const resp1 = await ListSupply();
                 if (resp1) { setactOps(resp1.data) }
             }
-            else if (actObj.interventionType === 'Demand Side Intervention') {
+            else if (actObj.interventionType === 'Demand Side Interventions') {
                 const resp1 = await ListDemand();
                 if (resp1) { setactOps(resp1.data) }
             }
@@ -253,7 +253,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField label='Event Name' value={actObj.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, capacitynameEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Event Type' value={actObj.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, capacitytypeEvent: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} /></Grid>
+                    <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
                     <Grid item xs={3}><TextField disabled label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField label='Habitation' value={actObj.habitationsCovered} onChange={(e) => setactObj({ ...actObj, habitationsCovered: e.target.value })} /></Grid>
@@ -282,7 +282,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
                     <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                     <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
-                    {actObj.interventionType !== 'Demand Side Intervention' && <>
+                    {actObj.interventionType !== 'Demand Side Interventions' && <>
                         <Grid item xs={3}><TextField select label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })}>
                             {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
@@ -312,8 +312,7 @@ export const WsActivity: React.FC = () => {
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value, activityName: '' })}>
-                    <MenuItem value='Supply Side Intervention'>Supply Side Intervention</MenuItem>
-                    <MenuItem value='Demand Side Intervention'>Demand Side Intervention</MenuItem>
+                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField select label='Activity' value={actObj.activityName} onChange={(e) => setactObj({ ...actObj, activityName: e.target.value })}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
@@ -323,7 +322,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField label='Event Name' value={actObj.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, capacitynameEvent: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField label='Event Type' value={actObj.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, capacitytypeEvent: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} /></Grid>
+                    <Grid item xs={3}><TextField type='date' label='Event Date' value={actObj.eventDate} onChange={(e) => setactObj({ ...actObj, eventDate: e.target.value })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
                     <Grid item xs={3}><TextField disabled label='Target Group' value={actObj.participantsType} onChange={(e) => setactObj({ ...actObj, participantsType: e.target.value })} /></Grid>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField label='Habitation' value={actObj.habitationsCovered} onChange={(e) => setactObj({ ...actObj, habitationsCovered: e.target.value })} /></Grid>
@@ -352,12 +351,16 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField type='number' label='Survey No.' value={actObj.surveyNo} onChange={(e) => setactObj({ ...actObj, surveyNo: e.target.value })} /></Grid>
                     <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                     <Grid item xs={3}><TextField label='Total Units' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
-                    {actObj.interventionType !== 'Demand Side Intervention' && <>
-                        <Grid item xs={3}><TextField label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })} /></Grid>
+                    {actObj.interventionType !== 'Demand Side Interventions' && <>
+                        <Grid item xs={3}><TextField select label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })}>
+                            {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        </TextField></Grid>
                         <Grid item xs={3}><TextField label="Water Conserved" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
                     </>}
                     <Grid item xs={3}><TextField label="Funds spent" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField select label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })}>
+                        {fundOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                    </TextField></Grid>
                     <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                     <Grid item xs={3}><TextField select label='Name' value={actObj.farmerId} onChange={(e) => setactObj({ ...actObj, farmerId: e.target.value })}>
                         {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
