@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
     TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar,
-    CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText,
+    CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, Checkbox,
     DialogTitle, FormControl, InputLabel, Select, OutlinedInput
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -116,12 +116,21 @@ export default function (props: mapTypeProps) {
 
     };
 
-    const handleWatershedChange = (event: SelectChangeEvent<number[]>) => {
-        const selectedWsIds = event.target.value as number[];
-        setValue('ws_name', selectedWsIds);
+    const handleWatershedChange = (event: SelectChangeEvent<number[] | number>) => {
+        const value = event.target.value;
 
-        const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
-        setSelectedWs(selectedWsData);
+        if (selectedRoleName === 'Community Resource person') {
+            // Single selection
+            setValue('ws_name', [value as number]); // wrap in an array for consistency
+            const selectedWsData = wsList.filter(ws => ws.wsId === value);
+            setSelectedWs(selectedWsData);
+        } else {
+            // Multiple selection
+            const selectedWsIds = value as number[];
+            setValue('ws_name', selectedWsIds);
+            const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
+            setSelectedWs(selectedWsData);
+        }
     };
 
     const handleUserChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -218,27 +227,56 @@ export default function (props: mapTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth required>
-                                <InputLabel id="ws_name-label">Watershed Name</InputLabel>
-                                <Select
-                                    labelId="ws_name-label"
-                                    id="ws_name"
-                                    multiple
-                                    value={watch('ws_name') || []}
-                                    onChange={handleWatershedChange}
-                                    input={<OutlinedInput label="Watershed Name" />}
-                                    renderValue={(selected: number[]) => selected.map(id => {
-                                        const ws = wsList.find(option => option.wsId === id);
-                                        return ws ? ws.wsName : '';
-                                    }).join(', ')}
-                                    error={!!errors.ws_name}
-                                >
-                                    {wsList.map((option, index) => (
-                                        <MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.ws_name && <p>{errors.ws_name.message}</p>}
-                            </FormControl>
+                            {selectedRoleName === 'Community Resource person' ? <>
+                                <FormControl fullWidth required>
+                                    <InputLabel id="ws_name-label">Watershed Name</InputLabel>
+                                    <Select
+                                        labelId="ws_name-label"
+                                        id="ws_name"
+                                        value={(watch('ws_name') && watch('ws_name')[0]) || ''}
+                                        onChange={handleWatershedChange}
+                                        input={<OutlinedInput label="Watershed Name" />}
+                                        renderValue={(selected: number) => {
+                                            const ws = wsList.find(option => option.wsId === selected);
+                                            return ws ? ws.wsName : '';
+                                        }}
+                                        error={!!errors.ws_name}
+                                    >
+                                        {wsList.map((option, index) => (
+                                            <MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>
+                                        ))}
+                                    </Select>
+
+                                    {errors.ws_name && <p>{errors.ws_name.message}</p>}
+                                </FormControl>
+                            </> : <>
+                                <FormControl fullWidth required>
+                                    <InputLabel id="ws_name-label">Watershed Name</InputLabel>
+                                    <Select
+                                        labelId="ws_name-label"
+                                        id="ws_name"
+                                        multiple
+                                        value={watch('ws_name') || []}
+                                        onChange={handleWatershedChange}
+                                        input={<OutlinedInput label="Watershed Name" />}
+                                        renderValue={(selected: number[]) => selected.map(id => {
+                                            const ws = wsList.find(option => option.wsId === id);
+                                            return ws ? ws.wsName : '';
+                                        }).join(', ')}
+                                        error={!!errors.ws_name}
+                                    >
+                                        {wsList.map((option, index) => (
+                                            <MenuItem key={index} value={option.wsId}>
+                                                <Checkbox
+                                                    checked={watch('ws_name')?.indexOf(option.wsId) > -1}
+                                                />
+                                                {option.wsName}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {errors.ws_name && <p>{errors.ws_name.message}</p>}
+                                </FormControl>
+                            </>}
                         </Grid>
                         {selectedWs.map(ws => (
                             <>
