@@ -19,7 +19,14 @@ const Login: React.FC = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormInput>();
+    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<ILoginFormInput>({
+        mode: 'onChange',
+        defaultValues: {
+            userName: '',
+            password: '',
+        }
+    });
+    const formValues = watch();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async (value) => {
         setLoading(true);
@@ -96,6 +103,10 @@ const Login: React.FC = () => {
                                             message: 'UserName must only contain alphanumeric characters'
                                         }
                                     })}
+                                    onChange={(e) => {
+                                        register('userName').onChange(e);
+                                        trigger('userName');
+                                    }}
                                     error={!!errors.userName}
                                     helperText={errors.userName ? errors.userName.message : ''}
                                 />
@@ -113,12 +124,17 @@ const Login: React.FC = () => {
                                             message: 'Password must be at least 4 characters',
                                         },
                                     })}
+                                    onChange={(e) => {
+                                        register('password').onChange(e);
+                                        trigger('password');
+                                    }}
                                     error={!!errors.password}
                                     helperText={errors.password ? errors.password.message : ''}
                                 />
                                 <Button
                                     type="submit"
                                     fullWidth
+                                    disabled={loading}
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
