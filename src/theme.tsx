@@ -1,4 +1,4 @@
-import { Slide, createTheme } from '@mui/material';
+import { Fade, createTheme  } from '@mui/material';
 import { sd } from './common';
 
 export const tpaTheme = createTheme({
@@ -202,7 +202,7 @@ export const bfilTheme = createTheme({
             },
             defaultProps: {
                 anchorOrigin: { vertical: 'top', horizontal: 'center' },
-                TransitionComponent: Slide
+                TransitionComponent: Fade
             }
         },
         MuiAlert: {

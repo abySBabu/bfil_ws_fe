@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
-    MenuItem, IconButton, InputAdornment
+    MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
 import { Edit, Search, Add } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -57,6 +57,7 @@ export const actDef = {
 }
 
 export const WsActivity: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
@@ -154,6 +155,7 @@ export const WsActivity: React.FC = () => {
     }
 
     const ActAdd = async () => {
+        setLoading(true);
         try {
             const resp1 = await addAct(actObj)
             if (resp1.status === 'success') {
@@ -165,10 +167,12 @@ export const WsActivity: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to add activity");
         }
+        setLoading(false);
         setaddM(false);
     }
 
     const ActEdit = async (id: any) => {
+        setLoading(true);
         try {
             const resp1 = await editAct(actObj, id)
             if (resp1.status === 'success') {
@@ -180,6 +184,7 @@ export const WsActivity: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to update activity");
         }
+        setLoading(false);
         seteditM(false);
     }
 
@@ -302,8 +307,8 @@ export const WsActivity: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => setaddM(false)}>Cancel</Button>
-                <Button onClick={ActAdd}>Add</Button>
+                <Button onClick={() => setaddM(false)} disabled={loading}>Cancel</Button>
+                <Button onClick={ActAdd} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
             </DialogActions>
         </Dialog>
 
@@ -371,8 +376,8 @@ export const WsActivity: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => seteditM(false)}>Cancel</Button>
-                <Button onClick={() => ActEdit(actObj.activityId)}>Update</Button>
+                <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
+                <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)
