@@ -59,9 +59,12 @@ export const Home: React.FC = () => {
         }
     }
 
-    const handleClose = () => {
-        setOpenSnackbar(false);
-        navigate('/')
+    const handleClose = async () => {
+        let logoutresp = await logout();
+        if (logoutresp) {
+            setOpenSnackbar(false);
+            navigate('/')
+        }
     };
 
     const changeLanguage = (language: string) => {
@@ -149,8 +152,8 @@ export const Home: React.FC = () => {
                 <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
                     {tokenExpired &&
                         <Dialog
-                            open={openSnackbar}>
-                            <DialogContent>
+                            open={openSnackbar} maxWidth={'xs'}>
+                            <DialogContent sx={{ mt: 2 }}>
                                 {message}
                             </DialogContent>
                             <DialogActions>
