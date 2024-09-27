@@ -40,3 +40,23 @@ export async function ListDemand() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function ListFund() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Found Source",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function ListLand() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Land Type",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
