@@ -112,7 +112,7 @@ export const Home: React.FC = () => {
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={logout} component={Link} href='/bfilreact'>Logout</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>
