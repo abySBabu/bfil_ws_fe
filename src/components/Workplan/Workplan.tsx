@@ -31,6 +31,7 @@ const wpDef = {
 }
 
 export const Workplan: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [planList, setplanList] = React.useState<typeof wpDef[]>([]);
@@ -77,16 +78,11 @@ export const Workplan: React.FC = () => {
     }
 
     const WsSet = async (id: any) => {
-        try {
-            const resp1 = await idWS(id);
-            if (resp1.status === 'success') {
-                setwsObj(resp1.data)
-            }
-        }
-        catch (error) { console.log(error) }
+        setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef);
     }
 
     const PlanAdd = async () => {
+        setLoading(true);
         try {
             const resp1 = await addWP(planObj)
             if (resp1.status === 'success') {
@@ -98,10 +94,12 @@ export const Workplan: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to add plan");
         }
+        setLoading(false);
         setaddM(false);
     }
 
     const PlanEdit = async (id: any) => {
+        setLoading(true);
         try {
             const resp1 = await editWP(planObj, id)
             if (resp1.status === 'success') {
@@ -113,6 +111,7 @@ export const Workplan: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to update plan");
         }
+        setLoading(false);
         seteditM(false);
     }
 
@@ -144,7 +143,7 @@ export const Workplan: React.FC = () => {
 
             <TableBody>{planListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.activityId}</TableCell>
+                    <TableCell>{w.watershedId}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components} - {w.activityId}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
@@ -155,17 +154,15 @@ export const Workplan: React.FC = () => {
                 </TableRow>
             ))}</TableBody>
 
-            <TableFooter><TableRow>
-                <TablePagination
-                    count={planListF.length}
-                    rowsPerPage={rPP}
-                    page={page}
-                    onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[5, 10, 15]}
-                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                    ActionsComponent={TPA}
-                />
-            </TableRow></TableFooter>
+            <TableFooter><TableRow><TablePagination
+                count={planListF.length}
+                rowsPerPage={rPP}
+                page={page}
+                onPageChange={(e, p) => setPage(p)}
+                rowsPerPageOptions={[5, 10, 15]}
+                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                ActionsComponent={TPA}
+            /></TableRow></TableFooter>
         </Table></TableContainer>}
 
         <Dialog open={addM}>
@@ -259,8 +256,8 @@ export const Workplan: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { PlanEdit(planObj.planningId) }}>Close</Button>
-                <Button onClick={() => { setaddM(false); }}>Add</Button>
+                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
+                <Button onClick={() => { PlanEdit(planObj.planningId) }}>Update</Button>
             </DialogActions>
         </Dialog>
     </>)

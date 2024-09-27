@@ -182,7 +182,16 @@ export const WsMaster: React.FC = () => {
     const WSadd = async () => {
         setLoading(true);
         try {
-            const resp = await addWS(wsObj)
+            let AEObj = {
+                wsName: wsObj.wsName,
+                wsDescription: wsObj.wsDescription,
+                stateId: wsObj.state.stateId,
+                districtId: wsObj.district.districtId,
+                talukId: wsObj.taluk.talukId,
+                grampanchayatId: wsObj.gramPanchayat.panchayatId,
+                villageId: wsObj.village.villageId
+            }
+            const resp = await addWS(AEObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
@@ -199,7 +208,16 @@ export const WsMaster: React.FC = () => {
     const WSedit = async (id: any) => {
         setLoading(true);
         try {
-            const resp = await editWS(wsObj, id)
+            let AEObj = {
+                wsName: wsObj.wsName,
+                wsDescription: wsObj.wsDescription,
+                stateId: wsObj.state.stateId,
+                districtId: wsObj.district.districtId,
+                talukId: wsObj.taluk.talukId,
+                grampanchayatId: wsObj.gramPanchayat.panchayatId,
+                villageId: wsObj.village.villageId
+            }
+            const resp = await editWS(AEObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed updated`);
