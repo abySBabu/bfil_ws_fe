@@ -218,6 +218,7 @@ export default function EditRole(props: RoleTypeProps) {
                                 margin="normal"
                                 required
                                 fullWidth
+                                disabled
                                 id="roleName"
                                 label="Role Name"
                                 autoFocus
