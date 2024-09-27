@@ -128,7 +128,7 @@ export const FarmerMaster: React.FC = () => {
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Farmer Master') && <Button title="Add farmer" startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
-                    onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
+                    onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
             </div>
         </Box>
         {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, InputAdornment, Typography
+    MenuItem, InputAdornment, Typography, CircularProgress
 } from "@mui/material";
 import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -62,6 +62,7 @@ export const wsDef = {
 }
 
 export const WsMaster: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [wsList, setwsList] = React.useState<typeof wsDef[]>([]);
@@ -179,6 +180,7 @@ export const WsMaster: React.FC = () => {
     }
 
     const WSadd = async () => {
+        setLoading(true);
         try {
             const resp = await addWS(wsObj)
             if (resp.status === 'success') {
@@ -190,25 +192,29 @@ export const WsMaster: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to add watershed");
         }
+        setLoading(false);
         setaddM(false);
     }
 
     const WSedit = async (id: any) => {
+        setLoading(true);
         try {
             const resp = await editWS(wsObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Watershed ${wsObj.wsName || ""} updated`);
+                setalert(`Watershed updated`);
             }
         }
         catch (error) {
             console.log(error); setalertClr(false);
             setalert("Failed to update watershed");
         }
+        setLoading(false);
         seteditM(false);
     }
 
     const WSdelete = async (id: any) => {
+        setLoading(true);
         try {
             const resp = await deleteWS(id)
             if (resp.status === 'success') {
@@ -220,6 +226,7 @@ export const WsMaster: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to delete watershed");
         }
+        setLoading(false);
         setdeleteM('');
     }
 
@@ -232,7 +239,8 @@ export const WsMaster: React.FC = () => {
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
-                    onClick={() => { setwsObj(wsDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
+                    onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
+                    sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
             </div>
         </Box>
 
@@ -314,8 +322,8 @@ export const WsMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
-                <Button onClick={WSadd} disabled={addCheck}>Add</Button>
+                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
             </DialogActions>
         </Dialog>
 
@@ -350,8 +358,8 @@ export const WsMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { seteditM(false); }}>Cancel</Button>
-                <Button onClick={() => WSedit(wsObj.wsId)} disabled={addCheck}>Update</Button>
+                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.wsId)} disabled={addCheck || loading}>Update</Button>
             </DialogActions>
         </Dialog>
 
@@ -359,8 +367,8 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>Delete Watershed</DialogTitle>
             <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
             <DialogActions>
-                <Button onClick={() => setdeleteM('')}>Cancel</Button>
-                <Button onClick={() => WSdelete(deleteM)}>Delete</Button>
+                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>Delete</Button>
             </DialogActions>
         </Dialog>
     </>)
