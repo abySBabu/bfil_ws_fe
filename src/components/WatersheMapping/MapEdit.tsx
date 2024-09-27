@@ -3,7 +3,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import {
     TextField, Button, Snackbar, Alert, Box, Typography, Container, Grid, Link, Paper, Avatar,
     CssBaseline, Divider, FormControlLabel, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, Checkbox,
-    DialogTitle, FormControl, InputLabel, Select, OutlinedInput
+    DialogTitle, FormControl, InputLabel, Select, OutlinedInput, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
+    TableRow,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "../UserPage/UserManagementType";
@@ -22,6 +23,8 @@ interface MapFormInput {
     remarks: string
 }
 export default function (props: mapTypeProps) {
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = React.useState(0);
     const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
@@ -227,6 +230,21 @@ export default function (props: mapTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
+                            <TextField
+                                id="remarks"
+                                label="Remarks"
+                                InputLabelProps={{ shrink: true }}
+                                {...register('remarks', {
+                                    pattern: {
+                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
+                                        message: 'Remarks must only contain alphanumeric characters'
+                                    }
+                                })}
+                                error={!!errors.remarks}
+                                helperText={errors.remarks ? errors.remarks.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             {selectedRoleName === 'Community Resource person' ? <>
                                 <FormControl fullWidth required>
                                     <InputLabel id="ws_name-label">Watershed Name</InputLabel>
@@ -278,7 +296,63 @@ export default function (props: mapTypeProps) {
                                 </FormControl>
                             </>}
                         </Grid>
-                        {selectedWs.map(ws => (
+                        <Grid item xs={12}>
+                            {selectedWs.length > 0 &&
+                                <TableContainer component={Paper} sx={{ maxHeight: '300px' }}><Table>
+                                    <TableHead>
+                                        <TableRow sx={{ alignItems: 'center' }}>
+                                            <TableCell >Watershed Name</TableCell>
+                                            <TableCell >State</TableCell>
+                                            <TableCell >District</TableCell>
+                                            <TableCell >Taluka</TableCell>
+                                            <TableCell >Grampanchayat</TableCell>
+                                            <TableCell >Village</TableCell>
+
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {(rowsPerPage > 0
+                                            ? selectedWs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            : selectedWs
+                                        ).map((row, id) => (
+                                            <TableRow key={id}>
+                                                <TableCell>
+                                                    {row.wsName || ''}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.state.stateName || ''}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.district.districtName || ''}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.taluk.talukName || ''}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.gramPanchayat.panchayatName || ''}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.village.villageName || ''}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                    {/* <TableFooter>
+                                        <TableRow>
+                                            <TablePagination
+                                                count={selectedWs.length}
+                                                rowsPerPage={rowsPerPage}
+                                                page={page}
+                                                onPageChange={(e, p) => setPage(p)}
+                                                rowsPerPageOptions={[5, 10, 15]}
+                                                onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
+                                                ActionsComponent={TPA}
+                                            />
+                                        </TableRow>
+                                    </TableFooter> */}
+                                </Table></TableContainer>}
+                        </Grid>
+                        {/* {selectedWs.map(ws => (
                             <>
                                 <Grid item xs={12}>
                                     <Divider textAlign="left">{ws.wsName}</Divider>
@@ -292,22 +366,8 @@ export default function (props: mapTypeProps) {
                                     <Grid item xs={4}><TextField label="Village" disabled value={ws.village.villageName || ''} InputLabelProps={{ shrink: true }} /></Grid>
                                 </React.Fragment>
                                 <Grid item xs={12}><Divider /></Grid>
-                            </>))}
-                        <Grid item xs={12}>
-                            <TextField
-                                id="remarks"
-                                label="Remarks"
-                                InputLabelProps={{ shrink: true }}
-                                {...register('remarks', {
-                                    pattern: {
-                                        value: /^[A-Za-z]+([ '-][A-Za-z0-9]+)*$/,
-                                        message: 'Remarks must only contain alphanumeric characters'
-                                    }
-                                })}
-                                error={!!errors.remarks}
-                                helperText={errors.remarks ? errors.remarks.message : ''}
-                            />
-                        </Grid>
+                            </>))} */}
+
                     </Box>
 
                 </DialogContent>
