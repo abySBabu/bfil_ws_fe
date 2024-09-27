@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
@@ -13,14 +13,29 @@ import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from '
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import checkTknExpiry from './TokenCheck';
+
+
 
 export const Home: React.FC = () => {
+    const [tokenExpired, setTokenExpired] = useState(false);
+    const navigate = useNavigate();
     const [dIndex, setdIndex] = useState<number | null>(null);
     const [message, setMessage] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
     const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const result = checkTknExpiry((expired) => { setTokenExpired(expired) }); if (result) {
+            const { timerRef, tknExpired } = result;
+            setTokenExpired(tknExpired);
+            return () => clearTimeout(timerRef);
+        };
+    }, [])
+
     const handleLanguageChange = (lng: string) => {
         i18n.changeLanguage(lng);
     }
@@ -29,6 +44,16 @@ export const Home: React.FC = () => {
         setLanguageAnchor(event.currentTarget);
     };
 
+    const logOut = async () => {
+        try {
+            let logoutresp = await logout();
+            if (logoutresp) {
+                navigate('/');
+            }
+        } catch (error: any) {
+            console.log('error', error);
+        }
+    }
     const changeLanguage = (language: string) => {
         console.log('Selected Language:', language);
         setLanguageAnchor(null);
@@ -112,7 +137,7 @@ export const Home: React.FC = () => {
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={logout} component={Link} href='/bfilreact'>Logout</MenuItem>
+                <MenuItem onClick={logOut}>Logout</MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>

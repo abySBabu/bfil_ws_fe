@@ -43,8 +43,11 @@ export default function MappingList() {
             setmapData(resp.data);
             let userData = await usersList(companyId);
             setUserList(userData);
-            let wsDatalist = await listWS();
-            setWsList(wsDatalist.data);
+            const wsDatalist = await listWS();
+            if (wsDatalist.status === 'success') {
+                setWsList(wsDatalist.data);
+
+            }
         } catch (error) {
 
             console.log(error)

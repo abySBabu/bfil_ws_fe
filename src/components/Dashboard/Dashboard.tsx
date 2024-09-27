@@ -6,7 +6,7 @@ import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 
-const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
+const actCard = { minHeight: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 const ActivityCard: React.FC<{ name: string, value: string }> = ({ name, value }) => (<Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
     <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{name}</Typography>
@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
         <Grid container spacing={1}>
             <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Key Impact Indicators</Typography></Grid>
             {keys.map((k, i) => (<Grid item xs={12} md={3} key={i}><Card sx={{
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px',
+                display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px',
                 position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px'
             }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
-    InputAdornment, Typography
+    InputAdornment, Typography, CircularProgress
 } from "@mui/material";
 import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
@@ -21,6 +21,7 @@ export const fmrDef = {
 }
 
 export const FarmerMaster: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
@@ -64,6 +65,7 @@ export const FarmerMaster: React.FC = () => {
     };
 
     const fmrAdd = async () => {
+        setLoading(true);
         try {
             const resp = await addFarmer(fmrObj)
             if (resp.status === 'success') {
@@ -77,10 +79,12 @@ export const FarmerMaster: React.FC = () => {
             setalertClr(false);
             setalert("Failed to add farmer");
         }
+        setLoading(false);
         setaddM(false);
     }
 
     const fmrEdit = async (id: any) => {
+        setLoading(true);
         try {
             const resp = await editFarmer(fmrObj, id)
             if (resp.status === 'success') {
@@ -94,10 +98,12 @@ export const FarmerMaster: React.FC = () => {
             setalertClr(false);
             setalert("Failed to edit farmer");
         }
+        setLoading(false);
         seteditM(false);
     }
 
     const fmrDelete = async (id: any) => {
+        setLoading(true);
         try {
             const resp = await deleteFarmer(id)
             if (resp.status === 'success') {
@@ -109,6 +115,7 @@ export const FarmerMaster: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to delete farmer");
         }
+        setLoading(false);
         setdeleteM('');
     }
 
@@ -121,7 +128,7 @@ export const FarmerMaster: React.FC = () => {
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Farmer Master') && <Button title="Add farmer" startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
-                    onClick={() => { setfmrObj(fmrDef); setaddM(true); }}>Add Farmer</Button>}
+                    onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
             </div>
         </Box>
         {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
@@ -165,7 +172,6 @@ export const FarmerMaster: React.FC = () => {
             <DialogTitle>Add New Farmer</DialogTitle>
 
             <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                {/* Name Field */}
                 <Grid item xs={12}>
                     <TextField
                         required
@@ -175,8 +181,6 @@ export const FarmerMaster: React.FC = () => {
                         helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                     />
                 </Grid>
-
-                {/* Aadhar Field */}
                 <Grid item xs={6}>
                     <TextField
                         required
@@ -188,8 +192,6 @@ export const FarmerMaster: React.FC = () => {
                         helperText={isTouched.adharNumber && fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
                     />
                 </Grid>
-
-                {/* Mobile Field */}
                 <Grid item xs={6}>
                     <TextField
                         required
@@ -204,8 +206,8 @@ export const FarmerMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); }}>Cancel</Button>
-                <Button onClick={fmrAdd} disabled={addCheck}>Add</Button>
+                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck || loading}>Add</Button>
             </DialogActions>
         </Dialog>
 
@@ -246,8 +248,8 @@ export const FarmerMaster: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { seteditM(false); }}>Cancel</Button>
-                <Button onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>
+                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck || loading}>Update</Button>
             </DialogActions>
         </Dialog>
 
@@ -255,8 +257,8 @@ export const FarmerMaster: React.FC = () => {
             <DialogTitle>Delete farmer</DialogTitle>
             <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
             <DialogActions>
-                <Button onClick={() => setdeleteM('')}>Cancel</Button>
-                <Button onClick={() => fmrDelete(deleteM)}>Delete</Button>
+                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>
             </DialogActions>
         </Dialog>
     </>)

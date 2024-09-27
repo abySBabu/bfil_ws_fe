@@ -26,6 +26,10 @@ export const btnSx = {
     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
 }
 
+export const pBtn = { backgroundColor: 'var(--button-bgcolor-active-positive)', '&:hover': { backgroundColor: 'var(--button-bgcolor-hover-positive)' } }
+
+export const nBtn = { backgroundColor: 'var(--button-bgcolor-active-negative)', '&:hover': { backgroundColor: 'var(--button-bgcolor-hover-negative)' } }
+
 export const TPA = (props: any) => {
     const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props;
 
