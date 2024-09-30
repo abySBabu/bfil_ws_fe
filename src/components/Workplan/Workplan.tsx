@@ -32,7 +32,27 @@ const wpDef = {
         },
         {
             wfsId: 102,
+            wfsName: "Other Gov Scheme",
+            wfsValue: 0,
+        },
+        {
+            wfsId: 103,
             wfsName: "Other",
+            wfsValue: 0,
+        },
+        {
+            wfsId: 104,
+            wfsName: "MGNREGA",
+            wfsValue: 0,
+        },
+        {
+            wfsId: 105,
+            wfsName: "IBL",
+            wfsValue: 0,
+        },
+        {
+            wfsId: 106,
+            wfsName: "Community",
             wfsValue: 0,
         }
     ]
@@ -157,7 +177,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                    <TableCell>{w.wfsValue}</TableCell>
+                    <TableCell></TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { seteditM(true); }}><Edit /></IconButton>
                     </TableCell>}
@@ -202,19 +222,103 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
-                <Grid item xs={3}><TextField type='number' label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="BFIL"
+                    value={planObj.financialDetails[0].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 0
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Other Gov Schemes"
+                    value={planObj.financialDetails[1].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 1
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Other"
+                    value={planObj.financialDetails[2].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 2
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="MGNREGA"
+                    value={planObj.financialDetails[3].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 3
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="IBL"
+                    value={planObj.financialDetails[4].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 4
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Community"
+                    value={planObj.financialDetails[5].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 5
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField label="Total" value={planObj.wfsValue} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Total" value={finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
@@ -250,19 +354,103 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
-                <Grid item xs={3}><TextField type='number' label="BFIL" value={planObj.finBfil} onChange={(e) => setplanObj({ ...planObj, finBfil: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="BFIL"
+                    value={planObj.financialDetails[0].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 0
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Other Gov Schemes" value={planObj.finGov} onChange={(e) => setplanObj({ ...planObj, finGov: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Other Gov Schemes"
+                    value={planObj.financialDetails[1].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 1
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Other" value={planObj.finOther} onChange={(e) => setplanObj({ ...planObj, finOther: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Other"
+                    value={planObj.financialDetails[2].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 2
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="MGNREGA" value={planObj.finMgn} onChange={(e) => setplanObj({ ...planObj, finMgn: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="MGNREGA"
+                    value={planObj.financialDetails[3].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 3
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="IBL" value={planObj.finIbl} onChange={(e) => setplanObj({ ...planObj, finIbl: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="IBL"
+                    value={planObj.financialDetails[4].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 4
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>
-                <Grid item xs={3}><TextField type='number' label="Community" value={planObj.finCom} onChange={(e) => setplanObj({ ...planObj, finCom: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField
+                    type="number"
+                    label="Community"
+                    value={planObj.financialDetails[5].wfsValue}
+                    onChange={(e) =>
+                        setplanObj({
+                            ...planObj,
+                            financialDetails: planObj.financialDetails.map((detail, index) =>
+                                index === 5
+                                    ? { ...detail, wfsValue: Number(e.target.value) }
+                                    : detail
+                            ),
+                        })
+                    }
+                /></Grid>
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField label="Total" value={planObj.wfsValue} disabled /></Grid>
+                <Grid item xs={3}><TextField label="Total" value={finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
