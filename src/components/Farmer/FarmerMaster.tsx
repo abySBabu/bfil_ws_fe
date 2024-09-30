@@ -227,7 +227,7 @@ export const FarmerMaster: React.FC = () => {
                     }}
                     helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                 /></Grid>
-                <Grid item xs={12}><TextField
+                <Grid item xs={6}><TextField
                     required
                     label="Aadhar"
                     value={fmrObj.adharNumber}
@@ -236,7 +236,7 @@ export const FarmerMaster: React.FC = () => {
                     type="tel"
                     helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
                 /></Grid>
-                <Grid item xs={12}><TextField
+                <Grid item xs={6}><TextField
                     required
                     label="Mobile"
                     value={fmrObj.mobileNumber}

@@ -1,4 +1,4 @@
-import { Slide, createTheme } from '@mui/material';
+import { Fade, createTheme  } from '@mui/material';
 import { sd } from './common';
 
 export const tpaTheme = createTheme({
@@ -21,7 +21,7 @@ export const bfilTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none', minWidth: '75px',
+                    borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none', minWidth: '100px',
                     '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
                     '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') },
                     '&.MuiButton-outlined': {
@@ -202,7 +202,7 @@ export const bfilTheme = createTheme({
             },
             defaultProps: {
                 anchorOrigin: { vertical: 'top', horizontal: 'center' },
-                TransitionComponent: Slide
+                TransitionComponent: Fade
             }
         },
         MuiAlert: {

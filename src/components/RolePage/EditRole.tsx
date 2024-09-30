@@ -38,6 +38,7 @@ export default function EditRole(props: RoleTypeProps) {
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<'success' | 'error' | 'warning' | 'info' | undefined>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(show);
 
@@ -81,7 +82,6 @@ export default function EditRole(props: RoleTypeProps) {
                     roleName: value.roleName
                 }
                 let resp = await updateRolePermission(mappingData, roleDetails?.roleId);
-                let logoutresp = await logout();
 
                 if (resp) {
                     setSeverityColor("success");
@@ -90,14 +90,10 @@ export default function EditRole(props: RoleTypeProps) {
                     setTimeout(() => {
                         setOpenSnackbar(false);
                         setLoading(false);
-                        handleClose();
-                        if (logoutresp) {
-                            navigate('/');
-                        }
+                        // handleClose();
+                        setOpenDialog(true);
                     }, setTimeoutsecs);
                 }
-                // let getRoleresp = await getRolesByRole(roleDetails?.roleId);
-                // setPermissionList(getRoleresp.permissionList);
             } catch (error: any) {
                 if (error && error.response && error.response.data && error.response.data.message) {
                     setSeverityColor("error");
@@ -112,11 +108,15 @@ export default function EditRole(props: RoleTypeProps) {
         }
     }
 
-    // const setPermissionList = (permissionList: permissionByAppID[]) => {
-    //     const permissionNames = permissionList.map(permission => permission.permissionName);
-
-    //     sessionStorage.setItem("permList", JSON.stringify(permissionNames));
-    // };
+    const handleClosedialog = async () => {
+        let logoutresp = await logout();
+        if (logoutresp) {
+            setOpenDialog(false);
+            handleClose();
+            navigate('/')       
+         }
+       
+    };
 
     useEffect(() => {
         setModalShow(show);
@@ -198,6 +198,15 @@ export default function EditRole(props: RoleTypeProps) {
     return (
         <Container>
             <Dialog
+                open={openDialog} maxWidth={'xs'}>
+                <DialogContent sx={{ mt: 2 }}>
+                Screen permission has changed. Please login
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClosedialog}>Okay</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
                 open={modalShow}
                 onClose={handleClose}
             >
@@ -209,6 +218,7 @@ export default function EditRole(props: RoleTypeProps) {
                                 margin="normal"
                                 required
                                 fullWidth
+                                disabled
                                 id="roleName"
                                 label="Role Name"
                                 autoFocus
@@ -251,58 +261,58 @@ export default function EditRole(props: RoleTypeProps) {
                         </Grid>
                         <Grid item xs={12}>
                             {/* <Card sx={{ marginTop: '3%', padding: '2%' }}> */}
-                                <Box component={Grid} container spacing={1} sx={{
-                                    border: `2px solid ${sd('--button-bgcolor-disabled')}`,
-                                    borderRadius: '4px',
-                                    maxHeight: '400px', // Set the maximum height for the scrollable box
-                                    overflowY: 'auto',
-                                }}>
-                                    <Grid item xs={4}></Grid>
-                                    <Grid item xs={4}>
-                                        <Typography>View</Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography >Edit</Typography>
-                                    </Grid>
-                                    {selectedPermissions.map((screendata, index) => (
-                                        <React.Fragment key={index}>
-                                            <Grid item xs={4}>
-                                                <Typography sx={{ fontWeight: 'bold' }}>{screendata.screenName}</Typography>
-                                            </Grid>
-                                            {screendata.permission
-                                                .filter(perm => perm.permissionName.startsWith("VIEW"))
-                                                .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={4} key={`view-${perm.permissionId}`}>
-                                                        <Checkbox
-                                                            checked={isPermissionChecked(perm)}
-                                                            onChange={handleCheckboxChange(perm)}
-                                                        />
-                                                    </Grid>
-                                                ))}
-                                            {screendata.permission
-                                                .filter(perm => perm.permissionName.startsWith("EDIT"))
-                                                .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={4} key={`edit-${perm.permissionId}`}>
-                                                        <Checkbox
-                                                            checked={isPermissionChecked(perm)}
-                                                            onChange={handleCheckboxChange(perm)}
-                                                        />
-                                                    </Grid>
-                                                ))}
-                                            {screendata.permission
-                                                .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
-                                                .map((perm: permissionByAppID) => (
-                                                    <Grid item xs={4} key={`other-${perm.permissionId}`}>
-                                                        <Checkbox
-                                                            checked={isPermissionChecked(perm)}
-                                                            onChange={handleCheckboxChange(perm)}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                ))}
-                                        </React.Fragment>
-                                    ))}
-                                </Box>
+                            <Box component={Grid} container spacing={1} sx={{
+                                border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                borderRadius: '4px',
+                                maxHeight: '400px', // Set the maximum height for the scrollable box
+                                overflowY: 'auto',
+                            }}>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4}>
+                                    <Typography>View</Typography>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Typography >Edit</Typography>
+                                </Grid>
+                                {selectedPermissions.map((screendata, index) => (
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={4}>
+                                            <Typography sx={{ fontWeight: 'bold' }}>{screendata.screenName}</Typography>
+                                        </Grid>
+                                        {screendata.permission
+                                            .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                            .map((perm: permissionByAppID) => (
+                                                <Grid item xs={4} key={`view-${perm.permissionId}`}>
+                                                    <Checkbox
+                                                        checked={isPermissionChecked(perm)}
+                                                        onChange={handleCheckboxChange(perm)}
+                                                    />
+                                                </Grid>
+                                            ))}
+                                        {screendata.permission
+                                            .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                            .map((perm: permissionByAppID) => (
+                                                <Grid item xs={4} key={`edit-${perm.permissionId}`}>
+                                                    <Checkbox
+                                                        checked={isPermissionChecked(perm)}
+                                                        onChange={handleCheckboxChange(perm)}
+                                                    />
+                                                </Grid>
+                                            ))}
+                                        {screendata.permission
+                                            .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
+                                            .map((perm: permissionByAppID) => (
+                                                <Grid item xs={4} key={`other-${perm.permissionId}`}>
+                                                    <Checkbox
+                                                        checked={isPermissionChecked(perm)}
+                                                        onChange={handleCheckboxChange(perm)}
+                                                        disabled
+                                                    />
+                                                </Grid>
+                                            ))}
+                                    </React.Fragment>
+                                ))}
+                            </Box>
                             {/* </Card> */}
                         </Grid>
                     </Box>
@@ -310,7 +320,7 @@ export default function EditRole(props: RoleTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>
                     <Button onClick={handleSubmit(editRole)} disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc}>
-                        Update {loading ? <CircularProgress/> : null}
+                        Update {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

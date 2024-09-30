@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Toolbar, Avatar, Menu, MenuItem, Link } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -19,22 +19,26 @@ import checkTknExpiry from './TokenCheck';
 
 
 export const Home: React.FC = () => {
+    const [message, setMessage] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [tokenExpired, setTokenExpired] = useState(false);
     const navigate = useNavigate();
     const [dIndex, setdIndex] = useState<number | null>(null);
-    const [message, setMessage] = useState('');
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
     const { i18n } = useTranslation();
 
     useEffect(() => {
-        const result = checkTknExpiry((expired) => { setTokenExpired(expired) }); if (result) {
-            const { timerRef, tknExpired } = result;
-            setTokenExpired(tknExpired);
-            return () => clearTimeout(timerRef);
-        };
-    }, [])
+        const tokenresult = checkTknExpiry((expired) => {
+            if (expired) {
+                setTokenExpired(expired);
+                setMessage("Your token has expired");
+                setOpenSnackbar(true);
+            };
+        });
+
+    }, [setTimeoutsecs, message, tokenExpired])
 
     const handleLanguageChange = (lng: string) => {
         i18n.changeLanguage(lng);
@@ -54,6 +58,15 @@ export const Home: React.FC = () => {
             console.log('error', error);
         }
     }
+
+    const handleClose = async () => {
+        let logoutresp = await logout();
+        if (logoutresp) {
+            setOpenSnackbar(false);
+            navigate('/')
+        }
+    };
+
     const changeLanguage = (language: string) => {
         console.log('Selected Language:', language);
         setLanguageAnchor(null);
@@ -109,6 +122,17 @@ export const Home: React.FC = () => {
 
             {!hasPermission &&
                 <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                    {tokenExpired &&
+                        <Dialog
+                            open={openSnackbar} maxWidth={'xs'}>
+                            <DialogContent sx={{ mt: 2 }}>
+                                {message}
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Okay</Button>
+                            </DialogActions>
+                        </Dialog>
+                    }
                     <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
@@ -126,6 +150,17 @@ export const Home: React.FC = () => {
             }
             {hasPermission &&
                 <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
+                    {tokenExpired &&
+                        <Dialog
+                            open={openSnackbar} maxWidth={'xs'}>
+                            <DialogContent sx={{ mt: 2 }}>
+                                {message}
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Okay</Button>
+                            </DialogActions>
+                        </Dialog>
+                    }
                     <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
                         You do not have permission to view any sections.
                     </Typography>
