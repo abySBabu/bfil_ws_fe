@@ -139,7 +139,7 @@ export const WsActivity: React.FC = () => {
 
     const ActSet = async () => {
         try {
-            if (actObj.interventionType === 'Supply Side Intervention') {
+            if (actObj.interventionType === 'Supply Side Interventions') {
                 const resp1 = await ListSupply();
                 if (resp1) { setactOps(resp1.data) }
             }
@@ -162,6 +162,10 @@ export const WsActivity: React.FC = () => {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
             }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
+            }
         }
         catch (error) {
             console.log(error); setalertClr(false);
@@ -178,6 +182,10 @@ export const WsActivity: React.FC = () => {
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
             }
         }
         catch (error) {
@@ -206,7 +214,6 @@ export const WsActivity: React.FC = () => {
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
-                    {/* <TableCell>Watershed</TableCell> */}
                     <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Status</TableCell>
@@ -218,7 +225,6 @@ export const WsActivity: React.FC = () => {
 
             <TableBody>{actListP.map((a, i) =>
             (<TableRow key={i}>
-                {/* <TableCell>{WsName(a.watershedId)}</TableCell> */}
                 <TableCell>{a.interventionType}</TableCell>
                 <TableCell>{a.activityName}</TableCell>
                 <TableCell>{a.activityWorkflowStatus}</TableCell>

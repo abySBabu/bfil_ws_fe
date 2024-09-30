@@ -6,36 +6,65 @@ import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 
+const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px' }
 const actCard = { minHeight: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
-const ActivityCard: React.FC<{ name: string, value: string }> = ({ name, value }) => (<Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
-    <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{name}</Typography>
-    <Typography variant='body2'>{value}</Typography>
-</CardContent></Card></Grid>)
+const ActivityCard: React.FC<{ name: string, value: string }> = ({ name, value }) => (
+    <Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
+        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{name}</Typography>
+        <Typography variant='body2'>{value}</Typography>
+    </CardContent></Card></Grid>
+)
 
 export const Dashboard: React.FC = () => {
-    const [gMod, setgMod] = React.useState<string | null>(null);
-    const keys = ['Watershed Area Treated', 'Water Conserved', 'Farmers Impacted', 'Government Amount Leveraged']
-    const icos = [Square, Water, Agriculture, CurrencyRupee]
-    const data = ['4000 sqft', '20000 litres', '45 farmers', '₹ 40,00,000']
-    const iclr = ['#96c22f', '#3b77b9', '#f58e1d', '#bfab55']
+    const [gMod, setgMod] = React.useState("");
 
     return (<>
         <Grid container spacing={1}>
             <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Key Impact Indicators</Typography></Grid>
-            {keys.map((k, i) => (<Grid item xs={12} md={3} key={i}><Card sx={{
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px',
-                position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px'
-            }}>
+            <Grid item xs={12} md={3}><Card sx={keyCard}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: '125%' }}>{k}</Typography>
-                    <CardMedia component={icos[i]} sx={{ fontSize: '250%', color: iclr[i] }} />
+                    <Typography sx={{ fontSize: '125%' }}>Watershed Area Treated</Typography>
+                    <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='h4'><b>{data[i]}</b></Typography>
-                    <IconButton onClick={() => setgMod(k)}><BarChartIcon /></IconButton>
+                    <Typography variant='h4'><b>4000 sqft</b></Typography>
+                    <IconButton onClick={() => setgMod('Watershed Area Treated')}><BarChartIcon /></IconButton>
                 </Box>
-            </Card></Grid>))}
+            </Card></Grid>
+
+            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontSize: '125%' }}>Water Conserved</Typography>
+                    <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant='h4'><b>20000 litres</b></Typography>
+                    <IconButton onClick={() => setgMod('Water Conserved')}><BarChartIcon /></IconButton>
+                </Box>
+            </Card></Grid>
+
+            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontSize: '125%' }}>Farmers Impacted</Typography>
+                    <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant='h4'><b>45 farmers</b></Typography>
+                    <IconButton onClick={() => setgMod('Farmers Impacted')}><BarChartIcon /></IconButton>
+                </Box>
+            </Card></Grid>
+
+            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontSize: '125%' }}>Government Amount Leveraged</Typography>
+                    <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant='h4'><b>₹ 40,00,000</b></Typography>
+                    <IconButton onClick={() => setgMod('Government Amount Leveraged')}><BarChartIcon /></IconButton>
+                </Box>
+            </Card></Grid>
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
             <Grid item xs={6} md={2}>
                 <Card sx={actCard}>
@@ -152,7 +181,7 @@ export const Dashboard: React.FC = () => {
             </Grid>
         </Grid>
 
-        <Modal open={Boolean(gMod)} onClose={() => setgMod(null)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
+        <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
             <Card sx={{ outline: 'none' }}>
                 <CardHeader title={gMod} sx={{ color: '#fff', bgcolor: sd('--text-color-special') }} />
 
