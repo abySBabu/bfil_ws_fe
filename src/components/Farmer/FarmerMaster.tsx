@@ -73,6 +73,10 @@ export const FarmerMaster: React.FC = () => {
                 setalertClr(true);
                 setalert("Farmer added");
             }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
         }
         catch (error) {
             console.log(error);
@@ -92,6 +96,10 @@ export const FarmerMaster: React.FC = () => {
                 setalertClr(true);
                 setalert("Farmer edited");
             }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
         }
         catch (error) {
             console.log(error);
@@ -109,6 +117,10 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Farmer deleted`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
             }
         }
         catch (error) {

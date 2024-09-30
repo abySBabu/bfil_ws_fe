@@ -143,6 +143,10 @@ export const Workplan: React.FC = () => {
                 fetchData(); setalertClr(true);
                 setalert(`Plan added`);
             }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
+            }
         }
         catch (error) {
             console.log(error); setalertClr(false);
@@ -159,6 +163,10 @@ export const Workplan: React.FC = () => {
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Plan updated`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
             }
         }
         catch (error) {

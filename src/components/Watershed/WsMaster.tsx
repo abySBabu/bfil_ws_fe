@@ -196,6 +196,10 @@ export const WsMaster: React.FC = () => {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
             }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
         }
         catch (error) {
             console.log(error); setalertClr(false);
@@ -222,6 +226,10 @@ export const WsMaster: React.FC = () => {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed updated`);
             }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
         }
         catch (error) {
             console.log(error); setalertClr(false);
@@ -238,6 +246,10 @@ export const WsMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed deleted`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
             }
         }
         catch (error) {

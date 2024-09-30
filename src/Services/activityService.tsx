@@ -38,3 +38,33 @@ export async function editAct(data: any, id: any) {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function DashKey() {
+    const configs = {
+        url: serverPath.bfil + "data_capture/getAllDashboardData",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function DashDemand() {
+    const configs = {
+        url: serverPath.bfil + "data_capture/dashboard-data?interventionType=Demand Side Interventions",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function DashSupply() {
+    const configs = {
+        url: serverPath.bfil + "data_capture/dashboard-data?interventionType=Supply Side Interventions",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}

@@ -162,6 +162,10 @@ export const WsActivity: React.FC = () => {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
             }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
+            }
         }
         catch (error) {
             console.log(error); setalertClr(false);
@@ -178,6 +182,10 @@ export const WsActivity: React.FC = () => {
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp1.message || "");
             }
         }
         catch (error) {
