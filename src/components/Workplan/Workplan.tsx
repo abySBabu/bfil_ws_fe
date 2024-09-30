@@ -7,7 +7,7 @@ import {
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
-import { StateName, DistrictName, TalukName, PanName } from '../../LocName';
+import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { ListLand, ListInter, ListSupply, ListDemand } from '../../Services/dashboardService';
 
@@ -199,20 +199,20 @@ export const Workplan: React.FC = () => {
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>}
+                    {/* {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>} */}
                 </TableRow>
             </TableHead>
 
             <TableBody>{planListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.watershedId}</TableCell>
+                    <TableCell>{WsName(w.watershedId)}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>{w.financialDetails.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)}</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell>
+                    {/* {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>}
+                    </TableCell>} */}
                 </TableRow>
             ))}</TableBody>
 

@@ -43,7 +43,7 @@ export async function ListDemand() {
 
 export async function ListFund() {
     const configs = {
-        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Found Source",
+        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Fund Source",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
