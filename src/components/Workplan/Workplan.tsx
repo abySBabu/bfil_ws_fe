@@ -7,7 +7,7 @@ import {
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
-import { StateName, DistrictName, TalukName, PanName } from '../../LocName';
+import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { ListLand, ListInter, ListSupply, ListDemand } from '../../Services/dashboardService';
 
@@ -81,9 +81,12 @@ export const Workplan: React.FC = () => {
         const searchTerm = search?.toLowerCase();
         return (
             w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
-            w.activityId?.toString().toLowerCase().includes(searchTerm) ||
-            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm)
-        );
+            WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
+            w.value?.toString().toLowerCase().includes(searchTerm) ||
+            w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
+            w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
+        )
     });
 
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
@@ -95,7 +98,7 @@ export const Workplan: React.FC = () => {
     React.useEffect(() => { ActSet() }, [planObj.interventionType_Components])
 
     React.useEffect(() => {
-        const total = planObj.financialDetails.reduce((sum, detail) => {
+        const total = planObj.financialDetails?.reduce((sum, detail) => {
             return sum + detail.wfsValue;
         }, 0);
         setfinTotal(total);
@@ -199,20 +202,20 @@ export const Workplan: React.FC = () => {
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>}
+                    {/* {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>} */}
                 </TableRow>
             </TableHead>
 
             <TableBody>{planListP.map((w, i) => (
                 <TableRow key={i}>
-                    <TableCell>{w.watershedId}</TableCell>
+                    <TableCell>{WsName(w.watershedId)}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                    <TableCell>{w.financialDetails.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)}</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell>
+                    <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
+                    {/* {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>}
+                    </TableCell>} */}
                 </TableRow>
             ))}</TableBody>
 
@@ -284,7 +287,7 @@ export const Workplan: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        <Dialog open={editM}>
+        {/* <Dialog open={editM}>
             <DialogTitle>Edit Plan</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
@@ -339,6 +342,6 @@ export const Workplan: React.FC = () => {
                 <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
                 <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
             </DialogActions>
-        </Dialog>
+        </Dialog> */}
     </>)
 }
