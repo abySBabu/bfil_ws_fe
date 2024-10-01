@@ -80,10 +80,10 @@ export const Dashboard: React.FC = () => {
             </Card></Grid>
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
-            {Object.entries(supplyList)?.map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
+            {Object.entries(supplyList)?.map(([k, v], i) => (<ActivityCard key={i} activity={k} value={v} />))}
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Demand Side Interventions</Typography></Grid>
-            {Object.entries(demandList)?.map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
+            {Object.entries(demandList)?.map(([k, v], i) => (<ActivityCard key={i} activity={k} value={v} />))}
         </Grid>
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>

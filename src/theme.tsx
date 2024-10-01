@@ -1,4 +1,4 @@
-import { Fade, createTheme  } from '@mui/material';
+import { Fade, createTheme } from '@mui/material';
 import { sd } from './common';
 
 export const tpaTheme = createTheme({
@@ -146,11 +146,11 @@ export const bfilTheme = createTheme({
                         height: '48px',
                         '& input': { height: '100%', padding: '0px 8px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
-                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
+                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis'), opacity: 0.5 }
                     },
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
-                        '&.Mui-disabled': { color: sd('--textfield-label-dis') }
+                        '&.Mui-disabled': { color: sd('--textfield-label-dis'), opacity: 0.5 }
                     },
                     '& .MuiFormHelperText-root': { color: 'red' }
                 }
