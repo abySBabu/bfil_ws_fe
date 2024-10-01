@@ -95,7 +95,7 @@ export const Workplan: React.FC = () => {
     React.useEffect(() => { ActSet() }, [planObj.interventionType_Components])
 
     React.useEffect(() => {
-        const total = planObj.financialDetails.reduce((sum, detail) => {
+        const total = planObj.financialDetails?.reduce((sum, detail) => {
             return sum + detail.wfsValue;
         }, 0);
         setfinTotal(total);
@@ -209,7 +209,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                    <TableCell>{w.financialDetails.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)}</TableCell>
+                    <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
                     {/* {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
                     </TableCell>} */}

@@ -5,19 +5,35 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
+import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
 
 const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px' }
+
 const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
-const ActivityCard: React.FC<{ name: string, value: string }> = ({ name, value }) => (
+const ActivityCard: React.FC<{ activity: string, value: string }> = ({ activity, value }) => (
     <Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
-        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{name}</Typography>
+        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
         <Typography variant='body2'>{value}</Typography>
     </CardContent></Card></Grid>
 )
 
 export const Dashboard: React.FC = () => {
     const [gMod, setgMod] = React.useState("");
+    const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
+    const [supplyList, setsupplyList] = React.useState<{ [key: string]: string }>({});
+    const [demandList, setdemandList] = React.useState<{ [key: string]: string }>({});
+
+    React.useEffect(() => { fetchData() }, [])
+
+    const fetchData = async () => {
+        try {
+            const resp1 = await DashKey(); if (resp1) { setkeyList(resp1) }
+            const resp2 = await DashSupply(); if (resp2) { setsupplyList(resp2) }
+            const resp3 = await DashDemand(); if (resp3) { setdemandList(resp3) }
+        }
+        catch (error) { console.log(error) }
+    }
 
     return (<>
         <Grid container spacing={1}>
@@ -28,157 +44,46 @@ export const Dashboard: React.FC = () => {
                     <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='h4'><b>4000 sqft</b></Typography>
+                    <Typography variant='h4'><b>{keyList?.totalAreaTreated || ''}</b></Typography>
                     <IconButton onClick={() => setgMod('Watershed Area Treated')}><BarChartIcon /></IconButton>
                 </Box>
             </Card></Grid>
-
             <Grid item xs={12} md={3}><Card sx={keyCard}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography sx={{ fontSize: '125%' }}>Water Conserved</Typography>
                     <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='h4'><b>20000 litres</b></Typography>
+                    <Typography variant='h4'><b>{keyList?.totalWaterConserved || ''}</b></Typography>
                     <IconButton onClick={() => setgMod('Water Conserved')}><BarChartIcon /></IconButton>
                 </Box>
             </Card></Grid>
-
             <Grid item xs={12} md={3}><Card sx={keyCard}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography sx={{ fontSize: '125%' }}>Farmers Impacted</Typography>
                     <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='h4'><b>45 farmers</b></Typography>
+                    <Typography variant='h4'><b>{keyList?.Farmers || ''}</b></Typography>
                     <IconButton onClick={() => setgMod('Farmers Impacted')}><BarChartIcon /></IconButton>
                 </Box>
             </Card></Grid>
-
             <Grid item xs={12} md={3}><Card sx={keyCard}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography sx={{ fontSize: '125%' }}>Government Amount Leveraged</Typography>
                     <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant='h4'><b>₹ 40,00,000</b></Typography>
+                    <Typography variant='h4'><b>{keyList?.totalAmountSpent || ''}</b></Typography>
                     <IconButton onClick={() => setgMod('Government Amount Leveraged')}><BarChartIcon /></IconButton>
                 </Box>
             </Card></Grid>
+
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Bunding</Typography>
-                        <Typography variant='body2'>2000 cubic metres</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Waste weirs</Typography>
-                        <Typography variant='body2'>36 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Pebble/Boulder bund</Typography>
-                        <Typography variant='body2'>350 cubic metres</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Farm Ponds</Typography>
-                        <Typography variant='body2'>7 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Check dams</Typography>
-                        <Typography variant='body2'>12 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Nala treatment</Typography>
-                        <Typography variant='body2'>4000 cubic metres</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Kalyani renovation</Typography>
-                        <Typography variant='body2'>9 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Afforestation</Typography>
-                        <Typography variant='body2'>234 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Open Well Renovation</Typography>
-                        <Typography variant='body2'>16 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Recharge Structures</Typography>
-                        <Typography variant='body2'>9 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
+            {Object.entries(supplyList).map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
+
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Demand Side Interventions</Typography></Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Drip/Sprinkler</Typography>
-                        <Typography variant='body2'>200 hectares</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Soil health cards</Typography>
-                        <Typography variant='body2'>60 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Members capacitated</Typography>
-                        <Typography variant='body2'>20 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={2}>
-                <Card sx={actCard}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>Sustainable practices</Typography>
-                        <Typography variant='body2'>43 #</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
+            {Object.entries(demandList).map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
         </Grid>
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
