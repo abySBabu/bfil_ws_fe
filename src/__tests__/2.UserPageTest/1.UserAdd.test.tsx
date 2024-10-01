@@ -790,11 +790,11 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    await page.fill('input#userName', 'Manhatten shetty');
-    await page.fill('input#employeeCode', '08');
+    await page.fill('input#userName', 'S D Kalyanshetti');
+    await page.fill('input#employeeCode', '13');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'narasimhanaru192@gmail.com');
-    await page.fill('input#mobileNo', '9655008960');
+    await page.fill('input#mobileNo', '9655008963');
     await page.fill('input#password', '1234'); 
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -833,7 +833,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 13
-  test('Should check the duplicate error message after add user', async () => {
+  test('Should check the mobile number duplicate error message after add user', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -860,11 +860,11 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    await page.fill('input#userName', 'PounkumarAfterEdit');
-    await page.fill('input#employeeCode', '03');
+    await page.fill('input#userName', 'Duplicate');
+    await page.fill('input#employeeCode', '14');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008960');
+    await page.fill('input#mobileNo', '9655008963');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -897,13 +897,14 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008960');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008963');
     await page.waitForTimeout(1000);
     await browser.close();
 
   });
 
   //Test Number : 14
+  //Need to changes
   test('Should check the duplicate error message for usercode exist after add user', async () => {
     test.setTimeout(800000);
 
@@ -932,10 +933,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'Hussainappa');
-    await page.fill('input#employeeCode', '08');
+    await page.fill('input#employeeCode', '13');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008961');
+    await page.fill('input#mobileNo', '9655008964');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');

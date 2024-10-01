@@ -176,7 +176,7 @@ test.describe('User Delete Automation', () => {
 
 
   //Test Number : 5
-  test.only('Should check the user delete confirm button', async () => {
+  test('Should check the user delete confirm button', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,

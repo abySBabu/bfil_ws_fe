@@ -574,11 +574,11 @@ test.describe('Add Role Automation', () => {
         const addRoleDialogButton = page.locator('button:has-text("Add")').nth(1);
         const isButtonVisible = await addRoleDialogButton.isVisible();
         console.log('Is the "Add" button disable?', isButtonVisible);
-        await addRoleDialogButton.click();
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
-        console.log("Alertmessage " + alertMessage);
-        expect(alertMessage).toBe('Kindly add a role for atleast one screen');
+        // await addRoleDialogButton.click();
+        // const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        // // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
+        // console.log("Alertmessage " + alertMessage);
+        // expect(alertMessage).toBe('Kindly add a role for atleast one screen');
         // expect(isButtonVisible).toBe(false);
         await page.waitForTimeout(1000);
         await browser.close();

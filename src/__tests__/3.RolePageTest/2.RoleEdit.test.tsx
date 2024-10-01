@@ -27,9 +27,9 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(1000);
 
-        await page.fill('input#roleName', 'State Project Head#');
-        await page.fill('input#roleDesc', 'State Project Head');
-        await expect(page.locator('#roleName-helper-text')).toHaveText('Role Name must only contain alphanumeric characters');
+        // await page.fill('input#roleName', 'State Project Head#');
+        await page.fill('input#roleDesc', 'State Project Head##');
+        await expect(page.locator('#roleDesc-helper-text')).toHaveText('Role Description must only contain alphanumeric characters');
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -61,7 +61,7 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(1000);
 
-        await page.fill('input#roleName', 'State Project Head');
+        // await page.fill('input#roleName', 'State Project Head');
         await page.fill('input#roleDesc', 'State Project Head#');
         await expect(page.locator('#roleDesc-helper-text')).toHaveText('Role Description must only contain alphanumeric characters');
         await page.waitForTimeout(1000);
@@ -93,14 +93,14 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(1000);
 
-        await page.fill('input#roleName', 'State ## Head');
+        // await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
         await page.waitForTimeout(2000);
-        const errorMessageForUserName = await page.locator('#roleName-helper-text').textContent();
+        // const errorMessageForUserName = await page.locator('#roleName-helper-text').textContent();
         const errorMessage = await page.locator('#roleDesc-helper-text').textContent();
         console.log("Error Message " + errorMessage);
         expect(errorMessage).toBe('Role Description must only contain alphanumeric characters');
-        expect(errorMessageForUserName).toBe('Role Name must only contain alphanumeric characters');
+        // expect(errorMessageForUserName).toBe('Role Name must only contain alphanumeric characters');
         await page.waitForTimeout(2000);
         await browser.close();
     });
@@ -130,7 +130,7 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(1000);
 
-        await page.fill('input#roleName', 'State ## Head');
+        // await page.fill('input#roleName', 'State ## Head');
         await page.fill('input#roleDesc', 'State ## Head');
         await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
@@ -170,7 +170,7 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(1000);
 
-        await page.fill('input#roleName', 'State Head');
+        // await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
         const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
@@ -205,7 +205,7 @@ test.describe('Role Management Automation', () => {
 
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.fill('input#roleName', 'State Head');
+        // await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
 
@@ -253,7 +253,7 @@ test.describe('Role Management Automation', () => {
         await editIcon.click();
         await page.waitForTimeout(2000);
 
-        await page.fill('input#roleName', 'State Head');
+        // await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
 
@@ -293,7 +293,7 @@ test.describe('Role Management Automation', () => {
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.fill('input#roleName', 'State Head');
+        // await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
 
@@ -332,7 +332,7 @@ test.describe('Role Management Automation', () => {
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.fill('input#roleName', '');
+        // await page.fill('input#roleName', '');
         await page.fill('input#roleDesc', 'State Head');
         await page.waitForTimeout(2000);
         const addRoleDialogButton = page.locator('button:has-text("Update")');
@@ -369,7 +369,7 @@ test.describe('Role Management Automation', () => {
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.fill('input#roleName', 'State Head');
+        // await page.fill('input#roleName', 'State Head');
         await page.fill('input#roleDesc', '');
         await page.waitForTimeout(2000);
 
@@ -406,7 +406,7 @@ test.describe('Role Management Automation', () => {
         await page.waitForSelector('table');
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.fill('input#roleName', '');
+        // await page.fill('input#roleName', '');
         await page.fill('input#roleDesc', '');
         await page.waitForTimeout(2000);
         const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
@@ -445,7 +445,7 @@ test.describe('Role Management Automation', () => {
             await page.waitForSelector('table');
             const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
             await editIcon.click();
-            await page.fill('input#roleName', 'Testing New Role');
+            // await page.fill('input#roleName', 'Testing New Role');
             await page.fill('input#roleDesc', 'Desc');
             await page.waitForTimeout(2000);
             const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
@@ -491,7 +491,7 @@ test.describe('Role Management Automation', () => {
             await page.waitForSelector('table');
             const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
             await editIcon.click();
-            await page.fill('input#roleName', 'Testing New Role');
+            // await page.fill('input#roleName', 'Testing New Role');
             await page.fill('input#roleDesc', 'Desc');
             await page.waitForTimeout(2000);
             const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);

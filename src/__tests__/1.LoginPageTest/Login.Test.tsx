@@ -159,6 +159,8 @@ test.describe('Login Screen Automation', () => {
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
         console.log("Incorrect error " + alertMessage);
         //User error:User disabled.If it's an error,please contact your administrator
+        //User error:User disabled.If it's an error,please contact your administrator
+
         const disabledErrorMessage = "User error:User disabled.If it's an error,please contact your administrator";
 
         expect(alertMessage).toBe(disabledErrorMessage);
