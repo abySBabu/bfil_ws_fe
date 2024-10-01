@@ -81,9 +81,12 @@ export const Workplan: React.FC = () => {
         const searchTerm = search?.toLowerCase();
         return (
             w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
-            w.activityId?.toString().toLowerCase().includes(searchTerm) ||
-            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm)
-        );
+            WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
+            w.value?.toString().toLowerCase().includes(searchTerm) ||
+            w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
+            w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
+        )
     });
 
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
@@ -284,7 +287,7 @@ export const Workplan: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        <Dialog open={editM}>
+        {/* <Dialog open={editM}>
             <DialogTitle>Edit Plan</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
@@ -339,6 +342,6 @@ export const Workplan: React.FC = () => {
                 <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
                 <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
             </DialogActions>
-        </Dialog>
+        </Dialog> */}
     </>)
 }
