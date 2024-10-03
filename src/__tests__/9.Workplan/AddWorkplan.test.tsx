@@ -278,7 +278,7 @@ test.describe('Worplan Add Automation', () => {
 
 
     //Test Number : 5
-    test.only('Should click the add icon and click the cancel button', async () => {
+    test('Should click the add icon and click the cancel button', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -345,4 +345,226 @@ test.describe('Worplan Add Automation', () => {
         await browser.close();
     });
 
+
+    //Test Number : 6
+    test('Should click the add icon and check year missing , add button visibility', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+
+        const userManagementButton = page.locator('text=Work Plan');
+        await userManagementButton.click();
+        await page.waitForTimeout(5000);
+        const addIcon = await page.locator('button:has-text("Add Plan")');
+        await addIcon.click();
+        // await page.getByRole('textbox', { name: 'Year' }).fill('2024');
+
+        const interventionDropdown = page.locator('label:has-text("Intervention") + *');
+        await interventionDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const interventionOptions = await page.$$('ul[role="listbox"] > li');
+        if (interventionOptions.length > 0) {
+            await interventionOptions[1].click();
+        }
+        const activityDropdown = page.locator('label:has-text("Activity") + *');
+        await activityDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const activityDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        if (activityDropdownOptions.length > 0) {
+            await activityDropdownOptions[0].click();
+        }
+        const landTypeDropdown = page.locator('label:has-text("Land Type") + *');
+        await landTypeDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const landTypeDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        if (landTypeDropdownOptions.length > 0) {
+            await landTypeDropdownOptions[0].click();
+        }
+
+        const watershedDropdown = page.locator('label:has-text("Watershed") + *');
+        await watershedDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const watershedDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedDropdownOptions.length > 0) {
+            await watershedDropdownOptions[0].click();
+        }
+        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
+        await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
+        await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        if (await addButton.isHidden()) {
+            console.log("Button is hidden");
+        }
+        else {
+            console.log("Button is Enable");
+        }
+        // await addButton.click();
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
+    //Test Number : 7
+    test.only('Should click the add icon and check dropdown missing , add button visibility', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+
+        const userManagementButton = page.locator('text=Work Plan');
+        await userManagementButton.click();
+        await page.waitForTimeout(5000);
+        const addIcon = await page.locator('button:has-text("Add Plan")');
+        await addIcon.click();
+        // await page.getByRole('textbox', { name: 'Year' }).fill('2024');
+
+        // const interventionDropdown = page.locator('label:has-text("Intervention") + *');
+        // await interventionDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const interventionOptions = await page.$$('ul[role="listbox"] > li');
+        // if (interventionOptions.length > 0) {
+        //     await interventionOptions[1].click();
+        // }
+        // const activityDropdown = page.locator('label:has-text("Activity") + *');
+        // await activityDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const activityDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        // if (activityDropdownOptions.length > 0) {
+        //     await activityDropdownOptions[0].click();
+        // }
+        // const landTypeDropdown = page.locator('label:has-text("Land Type") + *');
+        // await landTypeDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const landTypeDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        // if (landTypeDropdownOptions.length > 0) {
+        //     await landTypeDropdownOptions[0].click();
+        // }
+
+        const watershedDropdown = page.locator('label:has-text("Watershed") + *');
+        await watershedDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const watershedDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedDropdownOptions.length > 0) {
+            await watershedDropdownOptions[0].click();
+        }
+        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
+        await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
+        await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        if (await addButton.isHidden()) {
+            console.log("Button is hidden");
+        }
+        else {
+            console.log("Button is Enable");
+        }
+        // await addButton.click();
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
+    //Test Number : 8
+    test.only('Should click the add icon and check dropdown missing , add button visibility', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+
+        const userManagementButton = page.locator('text=Work Plan');
+        await userManagementButton.click();
+        await page.waitForTimeout(5000);
+        const addIcon = await page.locator('button:has-text("Add Plan")');
+        await addIcon.click();
+        // await page.getByRole('textbox', { name: 'Year' }).fill('2024');
+
+        // const interventionDropdown = page.locator('label:has-text("Intervention") + *');
+        // await interventionDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const interventionOptions = await page.$$('ul[role="listbox"] > li');
+        // if (interventionOptions.length > 0) {
+        //     await interventionOptions[1].click();
+        // }
+        // const activityDropdown = page.locator('label:has-text("Activity") + *');
+        // await activityDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const activityDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        // if (activityDropdownOptions.length > 0) {
+        //     await activityDropdownOptions[0].click();
+        // }
+        // const landTypeDropdown = page.locator('label:has-text("Land Type") + *');
+        // await landTypeDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        // const landTypeDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        // if (landTypeDropdownOptions.length > 0) {
+        //     await landTypeDropdownOptions[0].click();
+        // }
+
+        const watershedDropdown = page.locator('label:has-text("Watershed") + *');
+        await watershedDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
+        const watershedDropdownOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedDropdownOptions.length > 0) {
+            await watershedDropdownOptions[0].click();
+        }
+        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
+        await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
+        await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
+        await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        if (await addButton.isHidden()) {
+            console.log("Button is hidden");
+        }
+        else {
+            console.log("Button is Enable");
+        }
+        // await addButton.click();
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
 });

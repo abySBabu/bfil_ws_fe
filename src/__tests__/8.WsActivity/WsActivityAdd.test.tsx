@@ -500,28 +500,24 @@ test.describe('Watershed Activity Add Automation', () => {
         }
 
         // Fill out the Members Capacitated form
-        await page.getByRole('textbox', { name: 'Event Name' }).fill('Community Training'); // Empty name
-        await page.getByRole('textbox', { name: 'Event Type' }).fill('Workshop'); // Empty name
-        await page.getByRole('textbox', { name: 'date' }).fill('2024-09-30'); // Empty name
-        await page.getByRole('textbox', { name: 'Group' }).fill('NGO'); // Empty name
-        await page.getByRole('textbox', { name: 'State' }).fill('Karnataka'); // Empty name
-        await page.getByRole('textbox', { name: 'District' }).fill('Belleri'); // Empty name
-        await page.getByRole('textbox', { name: 'Taluk' }).fill('Belleri'); // Empty name
-        await page.getByRole('textbox', { name: 'Panchayat' }).fill('algood'); 
-        await page.getByRole('textbox', { name: 'Habitation' }).fill('Greenfield'); 
+        await page.getByRole('textbox', { name: 'Event Name' }).fill('Community Training'); 
+        await page.getByRole('textbox', { name: 'Event Type' }).fill('Workshop');
+        await page.getByRole('textbox', { name: 'date' }).fill('2024-09-30'); 
+        await page.getByRole('textbox', { name: 'Group' }).fill('NGO'); 
+        await page.getByRole('textbox', { name: 'State' }).fill('Karnataka'); 
+        await page.getByRole('textbox', { name: 'District' }).fill('Belleri'); 
+        await page.getByRole('textbox', { name: 'Taluk' }).fill('Belleri'); 
+        await page.getByRole('textbox', { name: 'Panchayat' }).fill('algood');
+        await page.getByRole('textbox', { name: 'Habitation' }).fill('Greenfield');
         // await page.getByRole('textbox', { name: 'Male Participants' }).fill('20'); 
         // await page.getByRole('textbox', { name: 'Female Participants' }).fill('20'); 
-        await page.getByRole('textbox', { name: 'Facilitator' }).fill('Nagarguna Reddy'); 
-        await page.getByRole('textbox', { name: 'Mobilizer' }).fill('Suji'); 
-        await page.getByRole('textbox', { name: 'Remarks' }).fill('Testing'); 
+        await page.getByRole('textbox', { name: 'Facilitator' }).fill('Nagarguna Reddy');
+        await page.getByRole('textbox', { name: 'Mobilizer' }).fill('Suji');
+        await page.getByRole('textbox', { name: 'Remarks' }).fill('Testing');
         await page.getByRole('spinbutton', { name: 'Male Participants' }).nth(0).fill('20');
         await page.getByRole('spinbutton', { name: 'Female Participants' }).nth(0).fill('20');
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
-        // const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        // // expect(alertMessage).toBe(`Activity ${activityName} updated`);
-        // expect(alertMessage).toBe('Activity added');
-        // console.log('Alert Message:', alertMessage);
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -595,14 +591,39 @@ test.describe('Watershed Activity Add Automation', () => {
         }
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
-        // const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        // // expect(alertMessage).toBe(`Activity ${activityName} updated`);
-        // expect(alertMessage).toBe('Activity added');
-        // console.log('Alert Message:', alertMessage);
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
+    test('Should click the add icon and all fields are empty , check add button visibility', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
 
+        const userManagementButton = page.locator('text=Watershed Activity');
+        await userManagementButton.click();
+        // await page.waitForTimeout(5000);
+        const addIcon = await page.locator('button:has-text("Add Activity")');
+        await addIcon.click();
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        if (await addButton.isHidden()) {
+            console.log("Button Hidden");
+        } else {
+            console.log("Button Enable");
+        }
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
 
 });
