@@ -268,7 +268,7 @@ export const WsMaster: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
+                {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
                     onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
                     sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
             </div>

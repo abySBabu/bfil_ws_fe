@@ -279,7 +279,7 @@ export const WsActivity: React.FC = () => {
             <div>
                 <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add activity'
+                {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />}
                     onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
             </div>
         </Box>
