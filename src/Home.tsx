@@ -64,11 +64,6 @@ export const Home: React.FC = () => {
             navigate('/')
     };
 
-    const changeLanguage = (language: string) => {
-        console.log('Selected Language:', language);
-        setLanguageAnchor(null);
-    };
-
     const sections = [
         { name: 'Dashboard', permission: 'VIEW_Dashboard', component: <Dashboard /> },
         { name: 'User Management', permission: 'VIEW_User Management', component: <UserList /> },
@@ -175,7 +170,7 @@ export const Home: React.FC = () => {
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-                <MenuItem onClick={() => handleLanguageChange('ka')}>Karnataka</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('ka')}>Kannada</MenuItem>
             </Menu>
         </Box>
     )
