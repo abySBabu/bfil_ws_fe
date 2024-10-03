@@ -6,13 +6,12 @@ import {
 } from "@mui/material";
 import { Edit, Search, Add } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
-import { WsName, DateTime, StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
+import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
-import { idWS } from '../../Services/wsService';
 
 export const actDef = {
     activityId: '',
@@ -81,7 +80,7 @@ export const WsActivity: React.FC = () => {
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
 
-    const totalP = actObj.participantsFemale + actObj.participantsMale
+    const totalP = (actObj.participantsFemale || 0) + (actObj.participantsMale || 0)
 
     const actListF = actList.filter((a) => {
         const searchTerm = search?.toLowerCase();
@@ -221,7 +220,7 @@ export const WsActivity: React.FC = () => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
             <div>
-                <TextField required label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                     InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                 {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} title='Add activity'
                     onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
