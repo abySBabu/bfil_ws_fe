@@ -61,8 +61,8 @@ export const Home: React.FC = () => {
     }
 
     const handleClose = async () => {
-            setOpenSnackbar(false);
-            navigate('/')
+        setOpenSnackbar(false);
+        navigate('/')
     };
 
     const sections = [
@@ -109,7 +109,7 @@ export const Home: React.FC = () => {
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar src="img" alt={sessionStorage.getItem("userName") as string} onClick={(event) => setavatarAnchor(event.currentTarget)} />
+                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{(sessionStorage.getItem("userName") as string)[0]}</Avatar>
                 </Box>
             </Toolbar>
 

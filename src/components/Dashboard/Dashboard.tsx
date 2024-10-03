@@ -7,7 +7,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
 
-const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px' }
+const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
 const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
