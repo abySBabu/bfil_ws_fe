@@ -282,7 +282,7 @@ export const WsMaster: React.FC = () => {
                     <TableCell>Watershed</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Village</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
+                    {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 

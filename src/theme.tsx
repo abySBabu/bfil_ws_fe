@@ -96,9 +96,8 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
-                    //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },
+                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' }
                 }
             }
         },
@@ -111,11 +110,8 @@ export const bfilTheme = createTheme({
                 }
             }
         },
-        MuiTableCell: {
-            defaultProps: {
-                component: 'th', scope: 'row'
-            }
-        },
+        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word', height: '40px' } } },
+        MuiTableRow: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word', height: '40px' } } },
         MuiDialog: {
             styleOverrides: {
                 root: {
