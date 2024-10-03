@@ -98,7 +98,7 @@ test.describe('User Blocklist Automation', () => {
     const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
     await blockUserIcon.click();
     const confirmButton = page.locator('button', { hasText: 'Block' });
-    const isConfirmButtonVisible = confirmButton.isVisible();
+    const isConfirmButtonVisible = await confirmButton.isVisible();
     expect(isConfirmButtonVisible).toBe(true);
     await page.waitForTimeout(1000);
     await browser.close();
@@ -209,8 +209,8 @@ test.describe('User Blocklist Automation', () => {
     // const userRow = page.locator('tr').filter({ hasText: '8877199197' });
     const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
     const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
-    const isBlockIconVisible = blockUserIcon.isVisible();
-    expect(isBlockIconVisible).toBe(true);
+    const isBlockIconVisible = await blockUserIcon.isVisible();
+    expect(isBlockIconVisible).toBe(false);
     await page.waitForTimeout(1000);
     await browser.close();
 

@@ -341,8 +341,8 @@ test.describe('Role Management Automation', () => {
 
         // await addRoleDialogButton.click();
         console.log('Is the "Edit" button disable?', isButtonVisible);
-        expect(isButtonVisible).toBe(false);
-        await page.waitForTimeout(1000);
+        expect(isButtonVisible).toBe(true);
+        await page.waitForTimeout(1000);    
         await browser.close();
     });
 

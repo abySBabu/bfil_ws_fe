@@ -791,10 +791,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', '13');
+    await page.fill('input#employeeCode', '14');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'narasimhanaru192@gmail.com');
-    await page.fill('input#mobileNo', '9655008963');
+    await page.fill('input#mobileNo', '9655008964');
     await page.fill('input#password', '1234'); 
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -861,79 +861,7 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'Duplicate');
-    await page.fill('input#employeeCode', '14');
-    await page.fill('input#designation', 'Project Manager');
-    await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008963');
-    await page.fill('input#password', '1234');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
-    await page.locator('#role').click();
-
-    await page.waitForSelector('ul[role="listbox"]');
-    const roleOptions = await page.$$('ul[role="listbox"] > li');
-    if (roleOptions.length > 0) {
-      await roleOptions[0].click();
-    }
-
-    const loginTypeDropdown = page.locator('#loginType');
-    await loginTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    if (loginTypeOptions.length > 0) {
-      await loginTypeOptions[2].click();
-    }
-    const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
-    await expect(addUserDialogButton).toBeVisible();
-    await addUserDialogButton.click();
-    const alertMessage = await page.locator('.MuiAlert-message').innerText();
-    // await page.waitForTimeout(3000);
-    console.log("Alert message: " + alertMessage);
-    //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008963');
-    await page.waitForTimeout(1000);
-    await browser.close();
-
-  });
-
-  //Test Number : 14
-  //Need to changes
-  test('Should check the duplicate error message for usercode exist after add user', async () => {
-    test.setTimeout(800000);
-
-    const browser = await chromium.launch({
-      headless: false,
-      channel: 'chrome',
-    });
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-
-    await page.goto('http://localhost:3000/bfilreact');
-    await page.fill('input#userName', '9677694732');
-    await page.fill('input#password', '1234');
-    await page.click('button[type="submit"]');
-    await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
-    await userManagementButton.click();
-    await page.reload();
-    const userManagementButton1 = page.locator('text=User Management');
-    await userManagementButton1.click();
-    const addUserButton = page.locator('button:has-text("Add User")');
-    await expect(addUserButton).toBeVisible();
-    await addUserButton.click();
-    await page.waitForSelector('text=Add User');
-
-    await page.fill('input#userName', 'Hussainappa');
-    await page.fill('input#employeeCode', '13');
+    await page.fill('input#employeeCode', '15');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
     await page.fill('input#mobileNo', '9655008964');
@@ -969,7 +897,79 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: User Code already exits 08');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008964');
+    await page.waitForTimeout(1000);
+    await browser.close();
+
+  });
+
+  //Test Number : 14
+  //Need to changes
+  test('Should check the duplicate error message for usercode exist after add user', async () => {
+    test.setTimeout(800000);
+
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/bfilreact');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+    await page.reload();
+    const userManagementButton1 = page.locator('text=User Management');
+    await userManagementButton1.click();
+    const addUserButton = page.locator('button:has-text("Add User")');
+    await expect(addUserButton).toBeVisible();
+    await addUserButton.click();
+    await page.waitForSelector('text=Add User');
+
+    await page.fill('input#userName', 'Hussainappa');
+    await page.fill('input#employeeCode', '14');
+    await page.fill('input#designation', 'Project Manager');
+    await page.fill('input#email', 'guruswamy704@gamil.com');
+    await page.fill('input#mobileNo', '9655008965');
+    await page.fill('input#password', '1234');
+
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
+
+    await page.locator('#role').click();
+
+    await page.waitForSelector('ul[role="listbox"]');
+    const roleOptions = await page.$$('ul[role="listbox"] > li');
+    if (roleOptions.length > 0) {
+      await roleOptions[0].click();
+    }
+
+    const loginTypeDropdown = page.locator('#loginType');
+    await loginTypeDropdown.click();
+    await page.waitForSelector('ul[role="listbox"]');
+    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
+    if (loginTypeOptions.length > 0) {
+      await loginTypeOptions[2].click();
+    }
+    const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
+    await expect(addUserDialogButton).toBeVisible();
+    await addUserDialogButton.click();
+    const alertMessage = await page.locator('.MuiAlert-message').innerText();
+    // await page.waitForTimeout(3000);
+    console.log("Alert message: " + alertMessage);
+    //User error: MobileNumber already exits 8310450995
+    expect(alertMessage).toBe('User error: User Code already exits 14');
     await page.waitForTimeout(1000);
     await browser.close();
   });

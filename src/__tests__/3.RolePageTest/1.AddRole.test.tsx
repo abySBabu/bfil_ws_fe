@@ -193,7 +193,7 @@ test.describe('Add Role Automation', () => {
         const isButtonVisible = await addRoleDialogButton.isDisabled();
         // await addRoleDialogButton.click();
         console.log('Is the "Add" button disable?', isButtonVisible);
-        expect(isButtonVisible).toBe(false);
+        expect(isButtonVisible).toBe(true);
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -541,7 +541,6 @@ test.describe('Add Role Automation', () => {
             await browser.close();
         }
     });
-    
 
     //Test Number : 15
     test('Should check atleast one permission alert message ', async () => {

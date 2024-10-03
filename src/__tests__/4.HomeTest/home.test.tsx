@@ -116,56 +116,43 @@ test.describe('Permission based screen view', () => {
     //Role Name : CRP
     test('Should check CRP role have user management screen negative test cases', async () => {
         test.setTimeout(800000);
-        
         const browser = await chromium.launch({
             headless: false,
             channel: 'chrome',
         });
-        
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        
         // Navigate to the login page and log in
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '8861982062');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
-        
         // Wait for the home page to load
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
-        
         // Reload to ensure elements are present
         await page.reload();
-        
         // Try to locate the 'Role Management' button with a timeout of 5 seconds
         const roleManagementButton = page.locator('role=button[name="Role Management"]');
-        
         try {
             // Wait for the 'Role Management' button to appear
             await roleManagementButton.waitFor({ timeout: 5000 });
             await expect(roleManagementButton).toBeVisible();
             await roleManagementButton.click();
-            
             // If the button is found and clicked, continue with further actions
             const addUserButton = page.locator('button:has-text("Add User")');
             await expect(addUserButton).toBeVisible();
-    
             // Interacting with table rows and icons
             const userRow = page.locator('tr').nth(1);
-            console.log("Testing userRow: " + await userRow.innerText());
-            
+            console.log("Testing userRow: " + await userRow.innerText());      
             const editIcon = userRow.locator('[data-testid="EditIcon"]');
-            await expect(editIcon).toBeVisible();
-            
+            await expect(editIcon).toBeVisible();         
             const blockUser = userRow.locator('[data-testid="PersonRemoveIcon"]');
-            await expect(blockUser).toBeVisible();
-            
+            await expect(blockUser).toBeVisible();   
         } catch (error) {
             // If the button is not found within 5 seconds, throw a fail and log the error
             console.log('Role Management button is not available for this user.');
             throw new Error('Test failed because the Role Management button was not found.');
         }
-        
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -219,8 +206,6 @@ test.describe('Permission based screen view', () => {
         await expect(roleEditIcon).toBeVisible();
         const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
         await expect(deleteIcon).toBeVisible();
-
-
         // const watershedMaster = page.locator('role=button[name="Watershed Master"]');
         // await expect(watershedMaster).toBeVisible();
         // await watershedMaster.click();
@@ -228,32 +213,26 @@ test.describe('Permission based screen view', () => {
         // await expect(wsEditIcon).toBeVisible();
         // const addWSWDialogButton = page.locator('button:has-text("Add Watershed")').nth(0);
         // await expect(addWSWDialogButton).toBeVisible();
-
         const farmerMaster = page.locator('role=button[name="Farmer Master"]');
         await expect(farmerMaster).toBeVisible();
         await farmerMaster.click();
         await page.waitForTimeout(3000);
-
         const farmerEditIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await expect(farmerEditIcon).toBeVisible();
         const addFarmerDialogButton = page.locator('button:has-text("Add Farmer")').nth(0);
         await expect(addFarmerDialogButton).toBeVisible();
-
         const watershedMapping = page.locator('role=button[name="Watershed Mapping"]');
         await expect(watershedMapping).toBeVisible();
         await watershedMapping.click();
         await page.waitForTimeout(3000);
-
         const wsMappingEditIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await expect(wsMappingEditIcon).toBeVisible();
         const addWaterShedDialogButton = page.locator('button:has-text("Add Mapping")').nth(0);
         await expect(addWaterShedDialogButton).toBeVisible();
-
         const watershedActivity = page.locator('role=button[name="Watershed Activity"]');
         await expect(watershedActivity).toBeVisible();
         await watershedActivity.click();
         await page.waitForTimeout(3000);
-
         const wsActivityEditIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
         await expect(wsActivityEditIcon).toBeVisible();
         const wsActivityAddIcon = page.locator('button:has-text("Add Activity")').nth(0);
@@ -263,7 +242,6 @@ test.describe('Permission based screen view', () => {
         console.log('Cannot finding ');
         // throw new Error('Test failed because the Role Management button was not found.');
     }
-    
         await page.waitForTimeout(1000);
         await browser.close();
     });
@@ -316,8 +294,6 @@ test.describe('Permission based screen view', () => {
         await expect(roleEditIcon).toBeVisible();
         const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
         await expect(deleteIcon).toBeVisible();
-
-
         // const watershedMaster = page.locator('role=button[name="Watershed Master"]');
         // await expect(watershedMaster).toBeVisible();
         // await watershedMaster.click();

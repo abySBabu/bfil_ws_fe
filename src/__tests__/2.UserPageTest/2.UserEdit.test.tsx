@@ -614,7 +614,7 @@ test.describe('User Edit Automation', () => {
   });
 
    //Test Number : 10
-   test('Should check the edit icon  ', async () => {
+   test('Should check the edit icon', async () => { 
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -622,25 +622,27 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
+  
     await page.goto('http://localhost:3000/bfilreact');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-
+  
     await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
     await page.waitForTimeout(5000);
-
+  
     const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
+    console.log("Hi, this user row testing: ", await userRow.textContent());
+  
     const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    const isEditIconVisibel = editIcon.isVisible();
-    expect(isEditIconVisibel).toBe(true);
+    const isEditIconVisible = await editIcon.isVisible();  // Await here
+    expect(isEditIconVisible).toBe(true);  // Now it will check after await
     await page.waitForTimeout(1000);
     await browser.close();
   });
-
+  
 });
