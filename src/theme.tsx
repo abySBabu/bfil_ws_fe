@@ -1,4 +1,4 @@
-import { Fade, createTheme  } from '@mui/material';
+import { Fade, createTheme } from '@mui/material';
 import { sd } from './common';
 
 export const tpaTheme = createTheme({
@@ -96,9 +96,8 @@ export const bfilTheme = createTheme({
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' },
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
-                    //'& .MuiTableRow-root:hover': { backgroundColor: sd('--table-bgcolor-body-hover'), cursor: 'pointer' },
+                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' }
                 }
             }
         },
@@ -111,11 +110,8 @@ export const bfilTheme = createTheme({
                 }
             }
         },
-        MuiTableCell: {
-            defaultProps: {
-                component: 'th', scope: 'row'
-            }
-        },
+        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word', height: '40px' } } },
+        MuiTableRow: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word', height: '40px' } } },
         MuiDialog: {
             styleOverrides: {
                 root: {
@@ -146,11 +142,11 @@ export const bfilTheme = createTheme({
                         height: '48px',
                         '& input': { height: '100%', padding: '0px 8px' },
                         '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
-                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
+                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis'), opacity: 0.5 }
                     },
                     '& .MuiInputLabel-root': {
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
-                        '&.Mui-disabled': { color: sd('--textfield-label-dis') }
+                        '&.Mui-disabled': { color: sd('--textfield-label-dis'), opacity: 0.5 }
                     },
                     '& .MuiFormHelperText-root': { color: 'red' }
                 }

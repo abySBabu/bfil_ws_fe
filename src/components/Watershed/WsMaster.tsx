@@ -139,7 +139,7 @@ export const WsMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data) }
-            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
+            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
@@ -282,7 +282,7 @@ export const WsMaster: React.FC = () => {
                     <TableCell>Watershed</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Village</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
+                    {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 

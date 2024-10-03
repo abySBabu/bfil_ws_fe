@@ -151,7 +151,7 @@ export const FarmerMaster: React.FC = () => {
                     <TableCell>Name</TableCell>
                     <TableCell>Aadhar</TableCell>
                     <TableCell>Number</TableCell>
-                    {PerChk('EDIT_Farmer Master') && <TableCell>Actions</TableCell>}
+                    {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 

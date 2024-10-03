@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { serverPath } from "../common";
 
 export async function listWS() {
@@ -22,8 +22,8 @@ export async function idWS(id: any) {
 }
 
 export async function addWS(data: any) {
-    const configs: AxiosRequestConfig = {
-        url: `${serverPath.bfil}ws/wsmaster/addwatershed`,
+    const configs = {
+        url: serverPath.bfil + "wsmaster/addwatershed",
         method: 'post',
         data: data,
         headers: {
