@@ -10,6 +10,7 @@ import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
+import { ListSide } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +28,7 @@ export const Home: React.FC = () => {
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
+    const [sideList, setsideList] = React.useState<any[]>([]);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
 
@@ -66,19 +68,20 @@ export const Home: React.FC = () => {
     };
 
     const sections = [
-        { name: 'Dashboard', permission: 'VIEW_Dashboard', component: <Dashboard /> },
-        { name: 'User Management', permission: 'VIEW_User Management', component: <UserList /> },
-        { name: 'Role Management', permission: 'VIEW_Role Management', component: <RoleList /> },
-        { name: 'Watershed Master', permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-        { name: 'Farmer Master', permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-        { name: 'Watershed Mapping', permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-        { name: 'Watershed Activity', permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-        { name: 'Work Plan', permission: 'VIEW_Work Plan', component: <Workplan /> }
+        { name: sideList[7]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
+        { name: sideList[6]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
+        { name: sideList[5]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
+        { name: sideList[4]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
+        { name: sideList[3]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
+        { name: sideList[2]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
+        { name: sideList[1]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
+        { name: sideList[0]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
     ];
 
     React.useEffect(() => {
         const fetchLoc = async () => {
             try {
+                const resp0 = await ListSide(); if (resp0.status === 'success') { setsideList(resp0.data) }
                 const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
                 const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
                 const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
