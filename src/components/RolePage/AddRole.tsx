@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { permissionByAppID } from './RoleManagement';
 import { permissionByAppId, addRolePermission } from '../../Services/roleService';
+import { ListSide } from '../../Services/dashboardService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 
 type userTypeProps = {
@@ -35,7 +36,9 @@ export default function AddRole(props: userTypeProps) {
     const [modalShow, setModalShow] = useState(props.show);
     let userId = sessionStorage.getItem("userId");
     let companyID = sessionStorage.getItem("companyId");
-    let screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
+    const [screenNameList, setscreenNameList] = React.useState<any[]>([]);
+
+    // let screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
 
     const handleClose = () => {
         setModalShow(false);
@@ -111,7 +114,17 @@ export default function AddRole(props: userTypeProps) {
 
                 if (resp) {
                     let screenPermissionMappingList: ScreenPermissionMapping[] = [];
-                    for (let screenName of screenNameList) {
+                    const resp0 = await ListSide();
+                    let screenameList: any[] = [];
+                    if (resp0.status === 'success') {
+                        let screenlistResp = resp0.data;
+                        let reverseScreenData = screenlistResp.reverse();
+                        reverseScreenData.map((data: any) => {
+                            screenameList.push(data.screenName)
+                        })
+                        setscreenNameList(screenameList);
+                    }
+                    for (let screenName of screenameList) {
 
                         let permissionList = temporaryPermList.filter(x => x.permissionName.includes(screenName) && (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT")));
                         let screenPermissionMapping: ScreenPermissionMapping = {

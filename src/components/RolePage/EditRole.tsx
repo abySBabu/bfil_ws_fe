@@ -9,6 +9,7 @@ import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByR
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../Services/loginService';
+import { ListSide } from '../../Services/dashboardService';
 
 
 type RoleTypeProps = {
@@ -44,7 +45,9 @@ export default function EditRole(props: RoleTypeProps) {
 
     const userId = sessionStorage.getItem("userId");
     const companyID = sessionStorage.getItem("companyId");
-    const screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
+    const [screenNameList, setscreenNameList] = React.useState<any[]>([]);
+
+    // const screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
 
     const handleClose = () => {
         setModalShow(false);
@@ -113,9 +116,9 @@ export default function EditRole(props: RoleTypeProps) {
         if (logoutresp) {
             setOpenDialog(false);
             handleClose();
-            navigate('/')       
-         }
-       
+            navigate('/')
+        }
+
     };
 
     useEffect(() => {
@@ -124,7 +127,6 @@ export default function EditRole(props: RoleTypeProps) {
             try {
                 const applicationID = sessionStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
-                console.log('resp', resp);
                 let temporaryPermList: permissionByAppID[] = resp;
                 if (roleDetails) {
                     const permissionSplitData: string[] | undefined = props.roleDetails?.permissionName.split(',').map(item => item.trim().replace(/\./g, ''));
@@ -138,7 +140,17 @@ export default function EditRole(props: RoleTypeProps) {
                 }
 
                 if (temporaryPermList) {
-                    let screenPermissionMappingList: ScreenPermissionMapping[] = screenNameList.map(screenName => {
+                    const resp0 = await ListSide();
+                    let screenameList: any[] = [];
+                    if (resp0.status === 'success') {
+                        let screenlistResp = resp0.data;
+                        let reverseScreenData = screenlistResp.reverse();
+                        reverseScreenData.map((data: any) => {
+                            screenameList.push(data.screenName)
+                        })
+                        setscreenNameList(screenameList);
+                    }
+                    let screenPermissionMappingList: ScreenPermissionMapping[] = screenameList.map(screenName => {
                         let permissionList = temporaryPermList.filter(x =>
                             x.permissionName.includes(screenName) &&
                             (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT"))
@@ -200,7 +212,7 @@ export default function EditRole(props: RoleTypeProps) {
             <Dialog
                 open={openDialog} maxWidth={'xs'}>
                 <DialogContent sx={{ mt: 2 }}>
-                Screen permission has changed. Please login
+                    Screen permission has changed. Please login
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClosedialog}>Okay</Button>
