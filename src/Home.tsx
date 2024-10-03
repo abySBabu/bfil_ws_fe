@@ -27,6 +27,7 @@ export const Home: React.FC = () => {
     const [hasPermission, setHasPermission] = useState(false);
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
+    const { t } = useTranslation();
     const { i18n } = useTranslation();
 
     useEffect(() => {
@@ -60,16 +61,8 @@ export const Home: React.FC = () => {
     }
 
     const handleClose = async () => {
-        let logoutresp = await logout();
-        if (logoutresp) {
-            setOpenSnackbar(false);
-            navigate('/')
-        }
-    };
-
-    const changeLanguage = (language: string) => {
-        console.log('Selected Language:', language);
-        setLanguageAnchor(null);
+        setOpenSnackbar(false);
+        navigate('/')
     };
 
     const sections = [
@@ -113,10 +106,10 @@ export const Home: React.FC = () => {
                     <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
                     <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
                 </Box>
-                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>Pragat Watershed</Typography>
+                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar src="img" alt={sessionStorage.getItem("userName") as string} onClick={(event) => setavatarAnchor(event.currentTarget)} />
+                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{(sessionStorage.getItem("userName") as string)[0]}</Avatar>
                 </Box>
             </Toolbar>
 
@@ -168,7 +161,7 @@ export const Home: React.FC = () => {
             }
 
             <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
-                <Typography variant='body2'>Copyright - 2024. Pragat Watershed, All Rights Reserved.</Typography>
+                <Typography variant='body2'>{t("p_Home.Pragat_Watershed_Footer")}</Typography>
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
@@ -178,7 +171,7 @@ export const Home: React.FC = () => {
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-                <MenuItem onClick={() => handleLanguageChange('ka')}>Karnataka</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('ka')}>Kannada</MenuItem>
             </Menu>
         </Box>
     )

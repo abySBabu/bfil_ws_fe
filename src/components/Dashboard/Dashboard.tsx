@@ -7,22 +7,26 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
 
-const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '12px' }
+const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
 const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
-const ActivityCard: React.FC<{ activity: string, value: string }> = ({ activity, value }) => (
-    <Grid item xs={6} md={2}><Card sx={actCard}><CardContent sx={{ textAlign: 'center' }}>
-        <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
-        <Typography variant='body2'>{value}</Typography>
-    </CardContent></Card></Grid>
+const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
+    <Grid item xs={6} md={2}>
+        <Card sx={actCard}>
+            <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
+                <Typography variant='body2'>{value} {unit}</Typography>
+            </CardContent>
+        </Card>
+    </Grid>
 )
 
 export const Dashboard: React.FC = () => {
     const [gMod, setgMod] = React.useState("");
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
-    const [supplyList, setsupplyList] = React.useState<{ [key: string]: string }>({});
-    const [demandList, setdemandList] = React.useState<{ [key: string]: string }>({});
+    const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
+    const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -80,10 +84,24 @@ export const Dashboard: React.FC = () => {
             </Card></Grid>
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
-            {Object.entries(supplyList)?.map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
+            {
+                Object.entries(supplyList)?.map(([activity, data], i) => {
+                    const [unit, value] = Object.entries(data)[0];
+                    return (
+                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                    );
+                })
+            }
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Demand Side Interventions</Typography></Grid>
-            {Object.entries(demandList)?.map(([key, value], i) => (<ActivityCard key={i} activity={key} value={value} />))}
+            {
+                Object.entries(demandList)?.map(([activity, data], i) => {
+                    const [unit, value] = Object.entries(data)[0];
+                    return (
+                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                    );
+                })
+            }
         </Grid>
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
