@@ -60,11 +60,8 @@ export const Home: React.FC = () => {
     }
 
     const handleClose = async () => {
-        let logoutresp = await logout();
-        if (logoutresp) {
             setOpenSnackbar(false);
             navigate('/')
-        }
     };
 
     const changeLanguage = (language: string) => {
