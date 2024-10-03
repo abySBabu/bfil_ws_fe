@@ -18,9 +18,11 @@ import UserDisable from './UserDisable';
 import UserEnable from './UserEnable';
 import UserDelete from './UserDelete';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 
 
 export default function UserList() {
+    const { t } = useTranslation();
     const blockedUserOptions = selectOptions.blockedUserOptions;
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -135,10 +137,10 @@ export default function UserList() {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                User Management
+                {t("p_User_Management.ss_User_Management_Header")}
             </Typography>
             <TextField
-                label="Search"
+                label={t("p_User_Management.ss_Search_Label")}
                 fullWidth={false}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -154,7 +156,7 @@ export default function UserList() {
             />
             {PerChk('EDIT_User Management') && (
                 <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add User
+                    {t("p_User_Management.Add_User_Link.Add_User_Link_Text")}
                 </Button>)}
         </Box>
 
@@ -162,13 +164,13 @@ export default function UserList() {
             <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
-                        <TableCell >Name</TableCell>
-                        <TableCell >Mobile Number</TableCell>
-                        <TableCell >Role</TableCell>
-                        <TableCell >Manager Name</TableCell>
-                        <TableCell >Status</TableCell>
+                        <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
+                        <TableCell >{t("p_User_Management.ss_UserList.Mobile_Number")}</TableCell>
+                        <TableCell >{t("p_User_Management.ss_UserList.Role")}</TableCell>
+                        <TableCell >{t("p_User_Management.ss_UserList.Manager_Name")}</TableCell>
+                        <TableCell >{t("p_User_Management.ss_UserList.Status")}</TableCell>
                         {PerChk('EDIT_User Management') && (
-                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }}>{t("p_User_Management.ss_UserList.Action.Action_Text")}</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -210,19 +212,19 @@ export default function UserList() {
                             {PerChk('EDIT_User Management') && (
                                 <TableCell sx={{ textAlign: 'center' }}>
                                     {row.userBlockedFlag === 'N' &&
-                                        <Tooltip title="Edit User">
+                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'N' &&
-                                        <Tooltip title="Block User">
+                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Block_Tooltip.Block_Tooltip_Text")}>
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&
-                                        <Tooltip title="Unblock User">
+                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_Tooltip_Text")}>
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
                                         </Tooltip>}
                                     {row.userBlockedFlag === 'Y' &&
-                                        <Tooltip title="Delete User">
+                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
                                             <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                         </Tooltip>}
                                 </TableCell>
@@ -241,6 +243,7 @@ export default function UserList() {
                             rowsPerPageOptions={[5, 10, 15]}
                             onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
+                            labelRowsPerPage={t("p_User_Management.ss_UserList.Rows_per_page")}
                         />
                     </TableRow>
                 </TableFooter>

@@ -7,6 +7,7 @@ import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 import { getRolesByCompany, createUser } from '../../Services/userService';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { useTranslation } from 'react-i18next';
 
 interface UserFormInput {
     userName: string;
@@ -26,6 +27,7 @@ interface UserTypeOption {
 }
 
 export default function (props: userTypeProps) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
@@ -139,12 +141,11 @@ export default function (props: userTypeProps) {
                 createdByUserId: userId,
                 loginType: loginTypeTemp
             }
-            console.log("adduser.........", userCreatDataOne)
 
             let resp = await createUser(userCreatDataOne);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("User created successfully");
+                setMessage(t("p_User_Management.Add_User_Link.Add_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -170,7 +171,7 @@ export default function (props: userTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>Add User</DialogTitle>
+                <DialogTitle>{t("p_User_Management.Add_User_Link.Add_User_Popup.Add_User_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={4}>
@@ -179,7 +180,7 @@ export default function (props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="userName"
-                                label="Name"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Name")}
                                 autoFocus
                                 {...register('userName', {
                                     // required: 'Name is required',
@@ -202,7 +203,7 @@ export default function (props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="employeeCode"
-                                label="Employee Code"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Employee_Code")}
                                 {...register('employeeCode', {
                                     // required: 'Employee Code is required',
                                     pattern: {
@@ -223,7 +224,7 @@ export default function (props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="designation"
-                                label="Designation"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Designation")}
                                 {...register('designation', {
                                     pattern: {
                                         value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
@@ -245,7 +246,7 @@ export default function (props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="role"
-                                label="Role"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Role")}
                                 {...register('role', {
                                     // required: 'Role Set is required'
                                 })}
@@ -265,7 +266,7 @@ export default function (props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="email"
-                                label="Email"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Email")}
                                 {...register('email', {
                                     // required: 'Email is required',
                                     pattern: {
@@ -288,7 +289,7 @@ export default function (props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="mobileNo"
-                                label="Mobile Number"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Mobile_Number")}
                                 {...register('mobileNo', {
                                     // required: 'Mobile Number is required',
                                     pattern: {
@@ -309,7 +310,7 @@ export default function (props: userTypeProps) {
                                 margin="normal"
                                 required
                                 fullWidth
-                                label="Password"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Password")}
                                 type="password"
                                 id="password"
                                 {...register('password', {
@@ -333,7 +334,7 @@ export default function (props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="manager"
-                                label="Manager"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Select_Manager")}
                                 {...register('manager', {
                                 })}
                                 onChange={(e) => {
@@ -353,7 +354,7 @@ export default function (props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="loginType"
-                                label="Login Type"
+                                label={t("p_User_Management.Add_User_Link.Add_User_Popup.Login_type")}
                                 {...register('loginType', {
                                     // required: 'Login Type is required'
                                 })}
@@ -371,10 +372,10 @@ export default function (props: userTypeProps) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_User_Management.Add_User_Link.Add_User_Popup.Cancel_Button")}</Button>
                     <Button
                         disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.password || !formValues.role || !formValues.userName}
-                        onClick={handleSubmit(addUser)}>Add{loading ? <CircularProgress/> : null}</Button>
+                        onClick={handleSubmit(addUser)}>{t("p_User_Management.Add_User_Link.Add_User_Popup.Add_Button")}{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
