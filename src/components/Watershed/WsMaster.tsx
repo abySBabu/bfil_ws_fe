@@ -1,163 +1,405 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter, Typography,
-    DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
+    MenuItem, InputAdornment, Typography, CircularProgress
 } from "@mui/material";
-import { Add } from '@mui/icons-material';
-import { sd, TPA } from '../../common';
-import { listWS, addWS, editWS } from '../../Services/wsService';
+import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
+import { TPA, PerChk, SnackAlert } from '../../common';
+import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
+import { talukById, panchayatById, VillageById } from '../../Services/locationService';
+import { VillageName } from '../../LocName';
 
-const wsObj = {
+export const wsDef = {
+    wsId: "",
     wsName: "",
     wsDescription: "",
-    stateId: "",
-    districtId: "",
-    talukId: "",
-    grampanchayatId: "",
-    villageId: "",
+    state: {
+        stateId: "1",
+        stateName: "",
+        createdUser: "",
+        updatedUser: "",
+        createdTime: "",
+        updatedTime: ""
+    },
+    district: {
+        districtId: "",
+        districtName: "",
+        stateId: "",
+        createdUser: "",
+        updatedUser: "",
+        createdTime: "",
+        updatedTime: ""
+    },
+    taluk: {
+        talukId: "",
+        talukName: "",
+        districtId: "",
+        createdUser: "",
+        updatedUser: "",
+        createdTime: "",
+        updatedTime: ""
+    },
+    gramPanchayat: {
+        panchayatId: "",
+        panchayatName: "",
+        talukId: "",
+        createdUser: "",
+        updatedUser: "",
+        createdTime: "",
+        updatedTime: ""
+    },
+    village: {
+        villageId: "",
+        villageName: "",
+        grampanchayatId: "",
+        createdUser: "",
+        updatedUser: "",
+        createdTime: "",
+        updatedTime: ""
+    },
     mapLink: ""
 }
 
 export const WsMaster: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
-    const rPP = 10;
-    const tHeads: string[] = ['Watershed', 'Description', 'Location', 'Villages'];
-    const [addObj, setaddObj] = React.useState(wsObj);
-    const [editObj, seteditObj] = React.useState<null | typeof wsObj>(null);
+    const [rPP, setrPP] = React.useState(10);
+    const [wsList, setwsList] = React.useState<typeof wsDef[]>([]);
+    const [wsObj, setwsObj] = React.useState(wsDef);
     const [addM, setaddM] = React.useState(false);
+    const [editM, seteditM] = React.useState(false);
+    const [deleteM, setdeleteM] = React.useState("");
+    const [search, setsearch] = React.useState("");
+    const [alert, setalert] = React.useState("");
+    const [alertClr, setalertClr] = React.useState(false);
+    const [stOps, setstOps] = React.useState<any[]>([]);
+    const [dsOps, setdsOps] = React.useState<any[]>([]);
+    const [tlOps, settlOps] = React.useState<any[]>([]);
+    const [panOps, setpanOps] = React.useState<any[]>([]);
+    const [vilOps, setvilOps] = React.useState<any[]>([]);
+    const [isTouched, setIsTouched] = React.useState({ wsName: false, wsDescription: false });
 
-    const stateCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
-            stateId: e.target.value,
-            districtId: "",
-            talukId: "",
-            grampanchayatId: "",
-            villageId: ""
+    const handleFieldChange = (field: string, value: string) => {
+        setIsTouched((prev) => ({ ...prev, [field]: true }));
+        setwsObj((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.village.villageId
+
+    const wsListF = wsList.filter((w) => {
+        const searchTerm = search?.toLowerCase();
+        return (
+            w.wsName?.toLowerCase().includes(searchTerm) ||
+            w.wsDescription?.toLowerCase().includes(searchTerm) ||
+            VillageName(w.village.villageId)?.toString().toLowerCase().includes(searchTerm)
+        );
+    });
+
+    const wsListP = wsListF.slice(page * rPP, page * rPP + rPP);
+
+    React.useEffect(() => { fetchData() }, [])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (wsObj.district.districtId) {
+                    const resp = await talukById(wsObj.district.districtId);
+                    if (resp.status === 'success') { settlOps(resp.data); }
+                } else { settlOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.district.districtId])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (wsObj.taluk.talukId) {
+                    const resp = await panchayatById(wsObj.taluk.talukId);
+                    if (resp.status === 'success') { setpanOps(resp.data); }
+                } else { setpanOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.taluk.talukId])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (wsObj.gramPanchayat.panchayatId) {
+                    const resp = await VillageById(wsObj.gramPanchayat.panchayatId);
+                    if (resp.status === 'success') { setvilOps(resp.data); }
+                } else { setvilOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [wsObj.gramPanchayat.panchayatId])
+
+    const fetchData = async () => {
+        try {
+            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data) }
+            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string));
+            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+        }
+        catch (error) { console.log(error) }
+    };
+
+    const districtCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setwsObj({
+            ...wsObj,
+            district: { ...wsObj.district, districtId: e.target.value },
+            taluk: { ...wsObj.taluk, talukId: '' },
+            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: '' },
+            village: { ...wsObj.village, villageId: '' }
         })
     }
 
-    const districtCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
-            districtId: e.target.value,
-            talukId: "",
-            grampanchayatId: "",
-            villageId: ""
+    const talukCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setwsObj({
+            ...wsObj,
+            taluk: { ...wsObj.taluk, talukId: e.target.value },
+            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: '' },
+            village: { ...wsObj.village, villageId: '' }
         })
     }
 
-    const talukCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
-            talukId: e.target.value,
-            grampanchayatId: "",
-            villageId: ""
+    const panchayatCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setwsObj({
+            ...wsObj,
+            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: e.target.value },
+            village: { ...wsObj.village, villageId: '' }
         })
     }
 
-    const panchayatCh = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setaddObj({
-            ...addObj,
-            grampanchayatId: e.target.value,
-            villageId: ""
+    const villageCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setwsObj({
+            ...wsObj,
+            village: { ...wsObj.village, villageId: e.target.value }
         })
     }
 
     const WSadd = async () => {
+        setLoading(true);
         try {
-            const defObj = {
-                wsName: "Watershed Name",
-                wsDescription: "fhdfdfhd",
-                stateId: '1',
-                districtId: '2',
-                talukId: '3',
-                grampanchayatId: '4',
-                villageId: '5',
-                mapLink: '6'
+            let AEObj = {
+                wsName: wsObj.wsName,
+                wsDescription: wsObj.wsDescription,
+                stateId: wsObj.state.stateId,
+                districtId: wsObj.district.districtId,
+                talukId: wsObj.taluk.talukId,
+                grampanchayatId: wsObj.gramPanchayat.panchayatId,
+                villageId: wsObj.village.villageId
             }
-            const resp = await addWS(defObj)
-            if (resp) { console.log('Add success') }
+            const resp = await addWS(AEObj)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert("Watershed added");
+            }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
         }
-        catch (error) { console.log(error) }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to add watershed");
+        }
+        setLoading(false);
+        setaddM(false);
     }
 
-    return (<Box sx={{ width: '100%' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', p: 1 }}>
-            <Button onClick={() => setaddM(true)} startIcon={<Add />}>Add WS</Button>
+    const WSedit = async (id: any) => {
+        setLoading(true);
+        try {
+            let AEObj = {
+                wsName: wsObj.wsName,
+                wsDescription: wsObj.wsDescription,
+                stateId: wsObj.state.stateId,
+                districtId: wsObj.district.districtId,
+                talukId: wsObj.taluk.talukId,
+                grampanchayatId: wsObj.gramPanchayat.panchayatId,
+                villageId: wsObj.village.villageId
+            }
+            const resp = await editWS(AEObj, id)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Watershed updated`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update watershed");
+        }
+        setLoading(false);
+        seteditM(false);
+    }
+
+    const WSdelete = async (id: any) => {
+        setLoading(true);
+        try {
+            const resp = await deleteWS(id)
+            if (resp.status === 'success') {
+                fetchData(); setalertClr(true);
+                setalert(`Watershed deleted`);
+            }
+            else {
+                setalertClr(false);
+                setalert(resp.message || "");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to delete watershed");
+        }
+        setLoading(false);
+        setdeleteM('');
+    }
+
+    return (<>
+        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
+            <div>
+                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />} title='Add a new watershed'
+                    onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
+                    sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
+            </div>
         </Box>
 
-        <Table>
+        {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+            No records
+        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
-                    {tHeads.map((t, i) => (<TableCell key={i}>{t}</TableCell>))}
+                    <TableCell>Watershed</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Village</TableCell>
+                    {PerChk('EDIT_Watershed Master') && <TableCell>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
-            <TableBody>
-                <TableRow onClick={() => seteditObj(wsObj)}>
-                    <TableCell>Ganga</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>State, District, Taluk, Panchayat</TableCell>
-                    <TableCell>Villages</TableCell>
+            <TableBody>{wsListP.map((w, i) => (
+                <TableRow key={i}>
+                    <TableCell>{w.wsName}</TableCell>
+                    <TableCell>{w.wsDescription}</TableCell>
+                    <TableCell>{VillageName(w.village.villageId)}</TableCell>
+                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsId); }}><Delete /></IconButton>
+                    </TableCell>}
                 </TableRow>
-            </TableBody>
+            ))}</TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination
-                    count={1}
+                    count={wsListF.length}
                     rowsPerPage={rPP}
                     page={page}
                     onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[]}
-                    labelDisplayedRows={() => ""}
+                    rowsPerPageOptions={[5, 10, 15]}
+                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                     ActionsComponent={TPA}
                 />
             </TableRow></TableFooter>
-        </Table>
+        </Table></TableContainer>}
 
-        <Dialog open={addM} onClose={() => setaddM(false)}>
+        <Dialog open={addM}>
             <DialogTitle>Add New Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><Divider><Typography>Watershed Details</Typography></Divider></Grid>
-                <Grid item xs={12}><TextField label='Watershed' value={addObj.wsName} onChange={(e) => setaddObj({ ...addObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField multiline rows={4} label='Description' value={addObj.wsDescription} onChange={(e) => setaddObj({ ...addObj, wsDescription: e.target.value })} /></Grid>
-                <Grid item xs={12} sx={{ mt: 2 }}><Divider><Typography>Location Details</Typography></Divider></Grid>
-                <Grid item xs={12}><TextField label="Map Link" value={addObj.mapLink} onChange={(e) => setaddObj({ ...addObj, mapLink: e.target.value })} /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={addObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='District' value={addObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='Taluka' value={addObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Villages" value={addObj.villageId} onChange={(e) => setaddObj({ ...addObj, villageId: e.target.value })} /></Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        label="Name"
+                        value={wsObj.wsName}
+                        onChange={(e) => handleFieldChange('wsName', e.target.value)}
+                        helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        required
+                        label="Description"
+                        value={wsObj.wsDescription}
+                        onChange={(e) => handleFieldChange('wsDescription', e.target.value)}
+                        helperText={isTouched.wsDescription && !wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                    />
+                </Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.state.stateId}>
+                    {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
+                    {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
+                    {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
+                    {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
+                    {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                </TextField></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => setaddM(false)}>Cancel</Button>
-                <Button onClick={WSadd}>Add</Button>
+                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
             </DialogActions>
         </Dialog>
 
-        <Dialog open={Boolean(editObj)} onClose={() => seteditObj(null)}>
-            <DialogTitle>Add New Watershed</DialogTitle>
+        <Dialog open={editM}>
+            <DialogTitle>Edit Watershed</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><Divider><Typography>Watershed Details</Typography></Divider></Grid>
-                <Grid item xs={12}><TextField label='Watershed' value={addObj.wsName} onChange={(e) => setaddObj({ ...addObj, wsName: e.target.value })} /></Grid>
-                <Grid item xs={12}><TextField multiline rows={4} label='Description' value={addObj.wsDescription} onChange={(e) => setaddObj({ ...addObj, wsDescription: e.target.value })} /></Grid>
-                <Grid item xs={12} sx={{ mt: 2 }}><Divider><Typography>Location Details</Typography></Divider></Grid>
-                <Grid item xs={12}><TextField label="Map Link" value={addObj.mapLink} onChange={(e) => setaddObj({ ...addObj, mapLink: e.target.value })} /></Grid>
-                <Grid item xs={4}><TextField label='State' disabled value={addObj.stateId} onChange={(e) => stateCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='District' value={addObj.districtId} onChange={(e) => districtCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label='Taluka' value={addObj.talukId} onChange={(e) => talukCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Grampanchayat" value={addObj.grampanchayatId} onChange={(e) => panchayatCh(e)} /></Grid>
-                <Grid item xs={4}><TextField label="Villages" value={addObj.villageId} onChange={(e) => setaddObj({ ...addObj, villageId: e.target.value })} /></Grid>
+                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
+                    onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
+                    helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                /></Grid>
+                <Grid item xs={12}><TextField required label='Description'
+                    value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
+                    helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                /></Grid>
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.state.stateId}>
+                    {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
+                    {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
+                    {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
+                    {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                </TextField></Grid>
+                <Grid item xs={4}><TextField required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
+                    {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                </TextField></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => seteditObj(null)}>Cancel</Button>
-                <Button onClick={WSadd}>Add</Button>
+                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.wsId)} disabled={addCheck || loading}>Update</Button>
             </DialogActions>
         </Dialog>
-    </Box>)
+
+        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+            <DialogTitle>Delete Watershed</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
+            <DialogActions>
+                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>Delete</Button>
+            </DialogActions>
+        </Dialog>
+    </>)
 }

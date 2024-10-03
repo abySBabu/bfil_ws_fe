@@ -2,12 +2,8 @@
     "alert":{
         "txtcolor":{"$value":"#000"},
         "bgcolor":{"$value":"#fcf2e7"},
-        "border":{
-            "brand":{"$value":"1px solid {text.color.special}"},
-            "success":{"$value":"1px solid #999"},
-            "failure":{"$value":"1px solid #000"}
-        },
-        "bradius":{"$value":"{length.3}"},
+        "border":{"$value":"1px solid #000"},
+        "bradius":{"$value":"15px"},
         "zindex":{"$value":"1500"}
     }
 }

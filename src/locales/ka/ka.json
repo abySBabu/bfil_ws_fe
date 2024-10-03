@@ -1,0 +1,59 @@
+{
+    "p_Login": {
+        "User_Name": "UserName",
+        "Password": "Password",
+        "Forgot_Password": "Forgot Password",
+        "Login_Button": "Login"
+    },
+    "p_Home": {
+        "Pragat_Watershed_Header": "Pragat Watershed",
+        "Pragat_Watershed_Footer": "Copyright - 2024. Pragat Watershed, All Rights Reserved.",
+        "SM_BE_Dashboard_Link":"Dashboard",
+        "SM_BE_User_Management_Link":"User Management",
+        "SM_BE_Role_Management_Link":"Role Management",
+        "SM_BE_Watershed_Master_Link":"Watershed Master",
+        "SM_BE_Farmer_Master_Link":"Farmer Master",
+        "SM_BE_Watershed_Mapping_Link":"Watershed Mapping",
+        "SM_BE_Watershed_Activity_Link":"Watershed Activity",
+        "SM_BE_Work_Plan_Link":"Work Plan"
+    },
+    "p_User_Management":{
+        "ss_User_Management_Header":"User Management",
+        "ss_UserList": {
+            "Name": "Name",
+            "Mobile_Number": "Mobile Number",
+            "Role": "Role",
+            "Manager_Name": "Manager Name",
+            "User_Type": "User Type",
+            "Blocked_User": "Blocked User",
+            "Action": "Action",
+            "Add_User_Popup": {
+                "Add_User_Label": "Add User",
+                "Name": "Name",
+                "Employee_Code": "Employee Code",
+                "Designation": "Designation",
+                "Role": "Role",
+                "Email": "Email",
+                "Mobile_Number": "Mobile Number",
+                "Password": "Password",
+                "Select_Manager": "Select Manager For User",
+                "Login_type": "Login Type",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Edit_User_Popup": {
+                "Edit_User_Label": "Edit User",
+                "Name": "Name",
+                "Employee_Code": "Employee Code",
+                "Designation": "Designation",
+                "Role": "Role",
+                "Email": "Email",
+                "Mobile_Number": "Mobile Number",
+                "Select_Manager": "Select Manager For User",
+                "Login_type": "Login Type",
+                "Cancel_Button": "Cancel",
+                "Update_Button": "Update"
+            }
+        }
+    }
+}

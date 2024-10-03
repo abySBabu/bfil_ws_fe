@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Container, Grid, Link, Paper, Avatar, CssBaseline, FormControlLabel, Snackbar, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Avatar } from '@mui/material';
 import { login } from '../../Services/loginService';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { Height } from '@mui/icons-material';
 
 
 interface ILoginFormInput {
@@ -19,7 +19,14 @@ const Login: React.FC = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormInput>();
+    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<ILoginFormInput>({
+        mode: 'onChange',
+        defaultValues: {
+            userName: '',
+            password: '',
+        }
+    });
+    const formValues = watch();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async (value) => {
         setLoading(true);
@@ -39,7 +46,7 @@ const Login: React.FC = () => {
                     setOpenSnackbar(false);
                     setLoading(false);
                     navigate('/home');
-                }, 3000);
+                }, setTimeoutsecs);
             }
 
         } catch (error: any) {
@@ -50,7 +57,7 @@ const Login: React.FC = () => {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
     };
@@ -63,9 +70,8 @@ const Login: React.FC = () => {
                     xs={false}
                     md={8}
                     sx={{
-                        backgroundImage: 'url(/images/loginBg.jpg)',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundImage: `url(${process.env.PUBLIC_URL}/images/loginBg.jpg)`,
+                        backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'left',
                     }}
@@ -80,16 +86,8 @@ const Login: React.FC = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: '#224a59' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign in
-                        </Typography>
+                        <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt='Pragat' style={{ height: '100px', width: '100px', objectFit: 'cover' }} />
                         <Box>
-                            {/* <Typography component="h1" variant="h5">
-                                Sign in
-                            </Typography> */}
                             <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
                                 <TextField
                                     margin="normal"
@@ -105,6 +103,10 @@ const Login: React.FC = () => {
                                             message: 'UserName must only contain alphanumeric characters'
                                         }
                                     })}
+                                    onChange={(e) => {
+                                        register('userName').onChange(e);
+                                        trigger('userName');
+                                    }}
                                     error={!!errors.userName}
                                     helperText={errors.userName ? errors.userName.message : ''}
                                 />
@@ -122,16 +124,21 @@ const Login: React.FC = () => {
                                             message: 'Password must be at least 4 characters',
                                         },
                                     })}
+                                    onChange={(e) => {
+                                        register('password').onChange(e);
+                                        trigger('password');
+                                    }}
                                     error={!!errors.password}
                                     helperText={errors.password ? errors.password.message : ''}
                                 />
                                 <Button
                                     type="submit"
                                     fullWidth
+                                    disabled={loading}
                                     variant="contained"
-                                    sx={{ mt: 3, mb: 2, backgroundColor: '#224a59' }}
+                                    sx={{ mt: 3, mb: 2 }}
                                 >
-                                    Sign In {loading ? <CircularProgress size={24} /> : null}
+                                    Sign In {loading ? <CircularProgress /> : null}
                                 </Button>
 
                                 <Grid container>
@@ -140,18 +147,13 @@ const Login: React.FC = () => {
                                             Forgot password?
                                         </Link>
                                     </Grid>
-                                    <Grid item>
-                                        <Link href="#" variant="body2">
-                                            {"Don't have an account? Sign Up"}
-                                        </Link>
-                                    </Grid>
                                 </Grid>
                             </Box>
                         </Box>
                     </Box>
                 </Grid>
             </Grid>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>

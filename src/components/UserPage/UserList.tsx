@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
-import { TPA } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UserDisable from './UserDisable';
 import UserEnable from './UserEnable';
 import UserDelete from './UserDelete';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 export default function UserList() {
     const blockedUserOptions = selectOptions.blockedUserOptions;
@@ -35,7 +37,17 @@ export default function UserList() {
     const [selectedRow, setSelectedRow] = useState<allUserType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let companyID: any;
+    let userId: any;
+    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
+    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+
+    if (companyIdFromLocalStorage !== null) {
+        companyID = parseInt(companyIdFromLocalStorage);
+    }
+    if (userIdFromLocalStorage !== null) {
+        userId = parseInt(userIdFromLocalStorage);
+    }
 
 
     const handleRowClick = async (row: any) => {
@@ -47,15 +59,20 @@ export default function UserList() {
 
     const formatDate = (timestamp: string | number | Date) => {
         const date = new Date(timestamp);
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    }
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    };
+
 
     const fetchUserData = async () => {
         try {
-            let resp = await usersList(companyId);
+            let resp = await usersList(companyID);
             console.log("getuserData -", resp)
             setuserData(resp);
         } catch (error) {
@@ -116,33 +133,42 @@ export default function UserList() {
         {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
         {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
-        <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '130px' }}>
-                    <TextField
-                        label="Search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                    />
-                </FormControl>
-                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                User Management
+            </Typography>
+            <TextField
+                label="Search"
+                fullWidth={false}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                variant="outlined"
+                size="small"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {PerChk('EDIT_User Management') && (
+                <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                     Add User
-                </Button>
-            </Box >
+                </Button>)}
         </Box>
 
-        {filteredData.length > 0 ? <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer><Table>
+        {filteredData.length > 0 ?
+            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Name</TableCell>
                         <TableCell >Mobile Number</TableCell>
                         <TableCell >Role</TableCell>
                         <TableCell >Manager Name</TableCell>
-                        <TableCell >Block User</TableCell>
-                        <TableCell >Action</TableCell>
+                        <TableCell >Status</TableCell>
+                        {PerChk('EDIT_User Management') && (
+                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -151,19 +177,19 @@ export default function UserList() {
                         : filteredData
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.userName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.mobileNumber}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.userRoleList[0].roleName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.managerName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {(() => {
                                     const option = blockedUserOptions.find(option => option.value === row.userBlockedFlag);
                                     if (option && option.dispalyValue === "Blocked") {
@@ -181,23 +207,26 @@ export default function UserList() {
                                     return '';
                                 })()}
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title="Edit">
-                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
-                                </Tooltip>
-                                {row.userBlockedFlag === 'N' &&
-                                    <Tooltip title="Block User">
-                                        <PersonRemoveIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}></PersonRemoveIcon>
-                                    </Tooltip>}
-                                {row.userBlockedFlag === 'Y' &&
-                                    <Tooltip title="UnBlock User">
-                                        <PersonIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}></PersonIcon>
-                                    </Tooltip>}
-                                {row.userBlockedFlag === 'Y' &&
-                                    <Tooltip title="Delete User">
-                                        <DeleteIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}></DeleteIcon>
-                                    </Tooltip>}
-                            </TableCell>
+                            {PerChk('EDIT_User Management') && (
+                                <TableCell sx={{ textAlign: 'center' }}>
+                                    {row.userBlockedFlag === 'N' &&
+                                        <Tooltip title="Edit User">
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
+                                        </Tooltip>}
+                                    {row.userBlockedFlag === 'N' &&
+                                        <Tooltip title="Block User">
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
+                                        </Tooltip>}
+                                    {row.userBlockedFlag === 'Y' &&
+                                        <Tooltip title="Unblock User">
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
+                                        </Tooltip>}
+                                    {row.userBlockedFlag === 'Y' &&
+                                        <Tooltip title="Delete User">
+                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
+                                        </Tooltip>}
+                                </TableCell>
+                            )}
 
                         </TableRow>
                     ))}
@@ -206,14 +235,16 @@ export default function UserList() {
                     <TableRow>
                         <TablePagination
                             count={filteredData.length}
-                            page={page} rowsPerPage={rowsPerPage}
-                            sx={{ '.MuiTablePagination-displayedRows': { display: 'none' } }}
-                            onPageChange={(e, p) => { setPage(p) }} rowsPerPageOptions={[]}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
                         />
                     </TableRow>
                 </TableFooter>
-            </Table></TableContainer></Paper> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+            </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
 
     </Box>)
 }

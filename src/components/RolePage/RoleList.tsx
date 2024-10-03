@@ -2,25 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
     Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
-    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip
+    TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { getRolesByCompany } from '../../Services/roleService';
-import { TPA } from '../../common';
+import { TPA, PerChk } from '../../common';
 import { rolesByCompanyId } from "./RoleManagement";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonIcon from '@mui/icons-material/Person';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddRole from './AddRole';
+import EditRole from './EditRole';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteRole from './DeleteRole';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 export default function RoleList() {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [showEnableModal, setShowEnableModal] = useState(false);
-    const [showDisableModal, setShowDisableModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [roleData, setRoleData] = useState<rolesByCompanyId[]>([]);
@@ -28,6 +26,7 @@ export default function RoleList() {
     const [searchQuery, setSearchQuery] = useState('');
     const [tableDialog, setTableDialog] = useState(false);
     const [edittableDialog, setEditTableDialog] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<rolesByCompanyId>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -51,8 +50,9 @@ export default function RoleList() {
     const fetchUserData = async () => {
         try {
             let resp = await getRolesByCompany(CompanyId);
-            console.log("getRoleData -", resp)
-            setRoleData(resp);
+            console.log("getRoleData -", resp);
+            let sorData = resp;
+            setRoleData(sorData.reverse());
         } catch (error) {
 
             console.log(error)
@@ -73,20 +73,11 @@ export default function RoleList() {
         fetchUserData();
     };
 
-    function hideDisableModal() {
-        setShowDisableModal(false)
-        fetchUserData();
-    }
-
-    function hideEnableModal() {
-        setShowEnableModal(false)
-        fetchUserData();
-    }
-
     function hideDeleteModal() {
         setShowDeleteModal(false)
         fetchUserData();
-    }
+    };
+
 
 
     const filteredData = roleData.filter(user => {
@@ -102,30 +93,41 @@ export default function RoleList() {
 
     return (<Box>
         {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
-        <Box sx={{ mb: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : null }}>
-                <FormControl sx={{ width: '130px' }}>
-                    <TextField
-                        label="Search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                    />
-                </FormControl>
-                <Button variant="outlined" sx={{ textTransform: 'none', fontWeight: 'bold' }} onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+        {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
+        {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                Role Management
+            </Typography>
+            <TextField
+                label="Search"
+                fullWidth={false}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                variant="outlined"
+                size="small"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {PerChk('EDIT_Role Management') && (
+                <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
                     Add Role
-                </Button>
-            </Box >
+                </Button>)}
         </Box>
 
-        {filteredData.length > 0 ? <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer><Table>
+        {filteredData.length > 0 ?
+            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
                         <TableCell >Role Name</TableCell>
                         <TableCell >Description</TableCell>
-                        <TableCell >Action</TableCell>
+                        {PerChk('EDIT_Role Management') && (
+                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -134,18 +136,21 @@ export default function RoleList() {
                         : filteredData
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell>
                                 {row.roleName}
                             </TableCell>
-                            <TableCell sx={{ textTransform: 'none', color: 'black' }} component="th" scope="row">
+                            <TableCell >
                                 {row.roleDescription}
                             </TableCell>
-                            <TableCell>
-                                <Tooltip title="Edit">
-                                    <EditIcon onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}></EditIcon>
-                                </Tooltip>
-                            </TableCell>
-
+                            {PerChk('EDIT_Role Management') && (
+                                <TableCell sx={{ textAlign: 'center' }}>
+                                    <Tooltip title="Edit Role">
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete Role">
+                                        <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
+                                    </Tooltip>
+                                </TableCell>)}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -153,14 +158,16 @@ export default function RoleList() {
                     <TableRow>
                         <TablePagination
                             count={filteredData.length}
-                            page={page} rowsPerPage={rowsPerPage}
-                            sx={{ '.MuiTablePagination-displayedRows': { display: 'none' } }}
-                            onPageChange={(e, p) => { setPage(p) }} rowsPerPageOptions={[]}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
                         />
                     </TableRow>
                 </TableFooter>
-            </Table></TableContainer></Paper> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+            </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
 
     </Box>)
 }

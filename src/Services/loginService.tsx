@@ -15,12 +15,15 @@ export async function login(data: any) {
         sessionStorage.setItem("refToken", response.data.jwtRefresh);
         sessionStorage.setItem("userId", response.data.user.userId);
         sessionStorage.setItem("userName", response.data.user.userName);
+        sessionStorage.setItem("userNumber", response.data.user.mobileNumber);
         sessionStorage.setItem("userType", response.data.user.userType);
         sessionStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
         sessionStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
         sessionStorage.setItem("totalUser", response.data.totalUser);
         sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
         sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
+        sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
+
 
         return response.data;
         // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);
@@ -36,3 +39,22 @@ export async function login(data: any) {
     }
 
 };
+
+export async function logout() {
+    const configuration = {
+        url: serverPath.authserver + "user-profile-service/logout",
+        method: "post",
+        data: {
+            address: "address",
+            loginId: sessionStorage.getItem("userNumber") || ""
+        }
+    };  
+    try {
+        const response = await axios(configuration); if (response) {
+            sessionStorage.clear();
+            localStorage.clear();
+            return response.data;
+        }
+    }
+    catch (error) { throw (error) }
+}

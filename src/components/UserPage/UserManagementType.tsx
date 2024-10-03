@@ -88,7 +88,7 @@ export const selectOptions = {
         {
             id: 1,
             value: "N",
-            dispalyValue: "--"
+            dispalyValue: "Active"
         },
         {
             id: 2,

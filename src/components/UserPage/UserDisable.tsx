@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import {
     Button, Snackbar, Alert, Dialog, DialogActions,
-    DialogContent, DialogTitle, Container, CircularProgress
+    DialogContent, DialogTitle, Container, CircularProgress, Typography
 } from '@mui/material';
 import { blockUser } from '../../Services/userService';
 import { allUserType } from "./UserManagementType";
+import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 
 
 type userTypeProps = {
@@ -46,7 +47,7 @@ export default function UserDisable(props: userTypeProps) {
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
-                }, 3000);
+                }, setTimeoutsecs);
             }
         } catch (error: any) {
             if (error?.response?.data?.message) {
@@ -56,7 +57,7 @@ export default function UserDisable(props: userTypeProps) {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
-                }, 3000);
+                }, setAutoHideDurationTimeoutsecs);
             }
         }
 
@@ -64,19 +65,19 @@ export default function UserDisable(props: userTypeProps) {
 
     return (
         <Container>
-            <Dialog open={modalShow}>
-                <DialogTitle>Confirmation</DialogTitle>
-                <DialogContent>
-                    Are you sure you want to block {props.userDetails?.userName}
+            <Dialog open={modalShow} maxWidth={'xs'}>
+                <DialogTitle>Block User</DialogTitle>
+                <DialogContent sx={{ mt: 2 }}>
+                   Are you sure you want to Block {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={DisableUser} color="primary">
-                    Block User {loading ? <CircularProgress size={24} /> : null}
+                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={DisableUser} disabled={loading}>
+                        Block{loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+            <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
                     {message}
                 </Alert>

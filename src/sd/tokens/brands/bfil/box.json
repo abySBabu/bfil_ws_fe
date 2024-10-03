@@ -2,6 +2,6 @@
     "card":{
         "txtcolor":{"$value":"#8d272b"},
         "bgcolor":{"$value":"#fff"},
-        "bradius":{"$value":"15px"}
+        "bradius":{"$value":"12px"}
     }
 }
