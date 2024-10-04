@@ -13,6 +13,8 @@ import { listAct, addAct, editAct } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
+import { listWSMap } from '../../Services/wsMappingService';
+import { listWS } from '../../Services/wsService';
 
 export const actDef = {
     activityId: '',
@@ -145,12 +147,23 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
+            const resp0 = await listWSMap();
+            if (resp0.status === 'success') {
+                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId"))) || {}
+                if (found0) {
+                    const wsFil: number[] = found0.watershedId.split(',').map((id: string) => Number(id.trim())) || []
+                    const resp1 = await listAct();
+                    if (resp1.status === 'success') {
+                        const found1: typeof actDef[] = resp1.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
+                        if (found1) { console.log('List--', found1); setactList(found1); }
+                    }
+                }
+            }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
-            setwsOps(JSON.parse(sessionStorage.getItem("WsList") as string))
+            const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
