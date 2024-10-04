@@ -261,7 +261,7 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField required
+                    <Grid item xs={3}><TextField
                         type="number"
                         label={detail.wfsName}
                         value={detail.wfsValue}
