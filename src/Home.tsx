@@ -65,41 +65,41 @@ export const Home: React.FC = () => {
         navigate('/')
     };
 
-    // const sections = [
-    //     { name: sideList[7]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
-    //     { name: sideList[6]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
-    //     { name: sideList[5]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
-    //     { name: sideList[4]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-    //     { name: sideList[3]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-    //     { name: sideList[2]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-    //     { name: sideList[1]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-    //     { name: sideList[0]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
-    // ];
+    const sections = [
+        { name: sideList[7]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
+        { name: sideList[6]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
+        { name: sideList[5]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
+        { name: sideList[4]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
+        { name: sideList[3]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
+        { name: sideList[2]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
+        { name: sideList[1]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
+        { name: sideList[0]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
+    ];
 
-    const sections = sideList
-        .map((sideItem) => {
-            switch (sideItem.screenName) {
-                case 'Dashboard':
-                    return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
-                case 'User Management':
-                    return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
-                case 'Role Management':
-                    return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
-                case 'Watershed Master':
-                    return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
-                case 'Farmer Master':
-                    return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
-                case 'Watershed Mapping':
-                    return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
-                case 'Watershed Activity':
-                    return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
-                case 'Work Plan':
-                    return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
-                default:
-                    return null;
-            }
-        })
-        .filter((section): section is { name: string; permission: string; component: JSX.Element } => section !== null);
+    // const sections = sideList
+    //     .map((sideItem) => {
+    //         switch (sideItem.screenName) {
+    //             case 'Dashboard':
+    //                 return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+    //             case 'User Management':
+    //                 return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+    //             case 'Role Management':
+    //                 return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+    //             case 'Watershed Master':
+    //                 return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+    //             case 'Farmer Master':
+    //                 return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
+    //             case 'Watershed Mapping':
+    //                 return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+    //             case 'Watershed Activity':
+    //                 return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+    //             case 'Work Plan':
+    //                 return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+    //             default:
+    //                 return null;
+    //         }
+    //     })
+    //     .filter((section): section is { name: string; permission: string; component: JSX.Element } => section !== null);
 
     React.useEffect(() => {
         const fetchLoc = async () => {
