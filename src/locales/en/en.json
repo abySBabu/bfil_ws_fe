@@ -2,31 +2,26 @@
     "p_Login": {
         "User_Name": "UserName",
         "Password": "Password",
-        "Forgot_Password": "Forgot Password",
+        "Forgot_Password": "Forgot Password ?",
         "Login_Button": "Login"
     },
     "p_Home": {
         "Pragat_Watershed_Header": "Pragat Watershed",
         "Pragat_Watershed_Footer": "Copyright - 2024. Pragat Watershed, All Rights Reserved.",
-        "SM_BE_Dashboard_Link":"Dashboard",
-        "SM_BE_User_Management_Link":"User Management",
-        "SM_BE_Role_Management_Link":"Role Management",
-        "SM_BE_Watershed_Master_Link":"Watershed Master",
-        "SM_BE_Farmer_Master_Link":"Farmer Master",
-        "SM_BE_Watershed_Mapping_Link":"Watershed Mapping",
-        "SM_BE_Watershed_Activity_Link":"Watershed Activity",
-        "SM_BE_Work_Plan_Link":"Work Plan"
+        "SM_BE_Dashboard_Link": "Dashboard",
+        "SM_BE_User_Management_Link": "User Management",
+        "SM_BE_Role_Management_Link": "Role Management",
+        "SM_BE_Watershed_Master_Link": "Watershed Master",
+        "SM_BE_Farmer_Master_Link": "Farmer Master",
+        "SM_BE_Watershed_Mapping_Link": "Watershed Mapping",
+        "SM_BE_Watershed_Activity_Link": "Watershed Activity",
+        "SM_BE_Work_Plan_Link": "Work Plan"
     },
-    "p_User_Management":{
-        "ss_User_Management_Header":"User Management",
-        "ss_UserList": {
-            "Name": "Name",
-            "Mobile_Number": "Mobile Number",
-            "Role": "Role",
-            "Manager_Name": "Manager Name",
-            "User_Type": "User Type",
-            "Blocked_User": "Blocked User",
-            "Action": "Action",
+    "p_User_Management": {
+        "ss_User_Management_Header": "User Management",
+        "ss_Search_Label": "Search",
+        "Add_User_Link": {
+            "Add_User_Link_Text": "Add User",
             "Add_User_Popup": {
                 "Add_User_Label": "Add User",
                 "Name": "Name",
@@ -41,19 +36,67 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Edit_User_Popup": {
-                "Edit_User_Label": "Edit User",
-                "Name": "Name",
-                "Employee_Code": "Employee Code",
-                "Designation": "Designation",
-                "Role": "Role",
-                "Email": "Email",
-                "Mobile_Number": "Mobile Number",
-                "Select_Manager": "Select Manager For User",
-                "Login_type": "Login Type",
-                "Cancel_Button": "Cancel",
-                "Update_Button": "Update"
-            }
+            "Add_Success_Message": "User created sucessfully"
+        },
+        "ss_UserList": {
+            "Name": "Name",
+            "Mobile_Number": "Mobile Number",
+            "Role": "Role",
+            "Manager_Name": "Manager Name",
+            "Status": "Status",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit User",
+                        "Edit_User_Popup": {
+                            "Edit_User_Label": "Edit User",
+                            "Name": "Name",
+                            "Employee_Code": "Employee Code",
+                            "Designation": "Designation",
+                            "Role": "Role",
+                            "Email": "Email",
+                            "Mobile_Number": "Mobile Number",
+                            "Select_Manager": "Select Manager For User",
+                            "Login_type": "Login Type",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "User updated sucessfully"
+                    },
+                    "Block_Tooltip": {
+                        "Block_Tooltip_Text": "Block User",
+                        "Block_User_Popup": {
+                            "Block_User_Label": "Block User",
+                            "Block_User_Content": "Are you sure you want to block",
+                            "Cancel_Button": "Cancel",
+                            "Block_Button": "Block"
+                        },
+                        "Block_Success_Message": "User blocked sucessfully"
+                    },
+                    "Unblock_Tooltip": {
+                        "Unblock_Tooltip_Text": "Unblock User",
+                        "Unblock_User_Popup": {
+                            "Unblock_User_Label": "Unblock User",
+                            "Unblock_User_Content": "Are you sure you want to unblock",
+                            "Cancel_Button": "Cancel",
+                            "Unblock_Button": "Unblock"
+                        },
+                        "Unblock_Success_Message": "User unblocked sucessfully"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "Delete User",
+                        "Delete_User_Popup": {
+                            "Delete_User_Label": "Delete User",
+                            "Delete_User_Content": "Are you sure you want to delete",
+                            "Cancel_Button": "Cancel",
+                            "Delete_Button": "Delete"
+                        },
+                        "Delete_Success_Message": "User deleted sucessfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
         }
     }
 }

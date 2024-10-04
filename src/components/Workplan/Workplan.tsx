@@ -10,6 +10,7 @@ import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { ListLand, ListInter, ListSupply, ListDemand } from '../../Services/dashboardService';
+import { listWS } from '../../Services/wsService';
 
 const wpDef = {
     planningId: "",
@@ -108,13 +109,10 @@ export const Workplan: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWP();
-            if (resp1.status === 'success' && resp1.data) { setplanList(resp1.data) }
-            const resp3 = await ListInter();
-            if (resp3.status === 'success') { setintOps(resp3.data) }
-            const resp4 = await ListLand();
-            if (resp4.status === 'success') { setlandOps(resp4.data) }
-            setwsOps(JSON.parse(sessionStorage.getItem("WsList") as string))
+            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data) }
+            const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
+            const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
+            const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
         }
         catch (error) { console.log(error) }
     }
@@ -241,7 +239,7 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField required select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })}>
+                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
@@ -263,7 +261,7 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField required
+                    <Grid item xs={3}><TextField
                         type="number"
                         label={detail.wfsName}
                         value={detail.wfsValue}

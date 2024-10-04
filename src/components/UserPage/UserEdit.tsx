@@ -7,9 +7,7 @@ import {
 import { getRolesByCompany, updateUserDetails } from '../../Services/userService';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
-
-
-
+import { useTranslation } from 'react-i18next';
 interface UserFormInput {
     userName: string;
     employeeCode: string;
@@ -35,6 +33,7 @@ type userTypeProps = {
     userList: allUserType[];
 }
 export default function UserForm(props: userTypeProps) {
+    const { t } = useTranslation();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -135,7 +134,7 @@ export default function UserForm(props: userTypeProps) {
             let resp = await updateUserDetails(userCreatDataOne, props.userDetails?.userId);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("User updated successfully");
+                setMessage(t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -168,7 +167,7 @@ export default function UserForm(props: userTypeProps) {
     return (
         <Container>
             <Dialog open={modalShow}>
-                <DialogTitle>Edit User</DialogTitle>
+                <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Edit_User_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={4}>
@@ -177,7 +176,7 @@ export default function UserForm(props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="userName"
-                                label="Name"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Name")}
                                 autoFocus
                                 InputLabelProps={{ shrink: true }}
                                 {...register('userName', {
@@ -203,7 +202,7 @@ export default function UserForm(props: userTypeProps) {
                                 disabled
                                 id="employeeCode"
                                 InputLabelProps={{ shrink: true }}
-                                label="Employee Code"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Employee_Code")}
                                 {...register('employeeCode', {
                                     // required: 'Employee Code is required',
                                 })}
@@ -220,7 +219,7 @@ export default function UserForm(props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="designation"
-                                label="Designation"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Designation")}
                                 InputLabelProps={{ shrink: true }}
                                 {...register('designation', {
                                     pattern: {
@@ -244,7 +243,7 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 disabled
                                 id="email"
-                                label="Email"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Email")}
                                 {...register('email', {
                                     // required: 'Email is required' 
                                 })}
@@ -264,7 +263,7 @@ export default function UserForm(props: userTypeProps) {
                                 disabled
                                 InputLabelProps={{ shrink: true }}
                                 id="mobileNo"
-                                label="Mobile Number"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Mobile_Number")}
                                 {...register('mobileNo', {
                                     // required: 'Mobile Number is required'
                                 })}
@@ -283,7 +282,7 @@ export default function UserForm(props: userTypeProps) {
                                 margin="normal"
                                 fullWidth
                                 id="role"
-                                label="Role"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Role")}
                                 InputLabelProps={{ shrink: true }}
                                 value={watch('role')}
                                 {...register('role', {
@@ -309,7 +308,7 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 value={watch('manager')}
                                 id="manager"
-                                label="Manager"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Select_Manager")}
                                 {...register('manager', {})}
                                 onChange={(e) => {
                                     register('manager').onChange(e);
@@ -332,7 +331,7 @@ export default function UserForm(props: userTypeProps) {
                                 InputLabelProps={{ shrink: true }}
                                 id="loginType"
                                 value={watch('loginType')}
-                                label="Login Type"
+                                label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Login_type")}
                                 {...register('loginType', {
                                     // required: 'Login Type is required'
                                 })}
@@ -351,11 +350,11 @@ export default function UserForm(props: userTypeProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Cancel_Button")}</Button>
                     <Button
                         disabled={loading || !isValid || !formValues.email || !formValues.employeeCode || !formValues.loginType || !formValues.mobileNo || !formValues.role || !formValues.userName}
                         onClick={handleSubmit(addUser)}>
-                        Update {loading ? <CircularProgress/> : null}
+                        {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Update_Button")}{loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

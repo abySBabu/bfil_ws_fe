@@ -6,7 +6,7 @@ import {
 import { blockUser } from '../../Services/userService';
 import { allUserType } from "./UserManagementType";
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
-
+import { useTranslation } from 'react-i18next';
 
 type userTypeProps = {
     show: boolean;
@@ -15,6 +15,7 @@ type userTypeProps = {
     userList: allUserType[];
 }
 export default function UserDelete(props: userTypeProps) {
+    const { t } = useTranslation();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -41,7 +42,7 @@ export default function UserDelete(props: userTypeProps) {
             let resp = await blockUser(blockParams);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("User Deleted successfully");
+                setMessage(t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -66,14 +67,14 @@ export default function UserDelete(props: userTypeProps) {
     return (
         <Container>
             <Dialog open={modalShow} maxWidth={'xs'}>
-                <DialogTitle>Delete User</DialogTitle>
+                <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Delete_User_Label")}</DialogTitle>
                 <DialogContent sx={{ mt: 2 }}>
-                    Are you sure you want to delete {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
+                    {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Delete_User_Content")}{props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}> {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Cancel_Button")}</Button>
                     <Button onClick={DisableUser} disabled={loading}>
-                        Delete {loading ? <CircularProgress /> : null}
+                        {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Delete_Button")} {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

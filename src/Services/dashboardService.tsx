@@ -60,3 +60,13 @@ export async function ListLand() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function ListSide() {
+    const configs = {
+        url: serverPath.bfil + "ws_screen/GetAllScreen",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
