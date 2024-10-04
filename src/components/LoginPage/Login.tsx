@@ -134,7 +134,7 @@ const Login: React.FC = () => {
                                 <Button
                                     type="submit"
                                     fullWidth
-                                    disabled={loading}
+                                    disabled={loading || !formValues.userName || !formValues.password}
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
