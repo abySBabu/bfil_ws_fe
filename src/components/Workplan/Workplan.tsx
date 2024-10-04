@@ -202,7 +202,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
-                    {/* {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>} */}
+                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -213,9 +213,9 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                    {/* {PerChk('EDIT_Work Plan') && <TableCell>
+                    {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>} */}
+                    </TableCell>}
                 </TableRow>
             ))}</TableBody>
 
@@ -287,7 +287,7 @@ export const Workplan: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        {/* <Dialog open={editM}>
+        <Dialog open={editM}>
             <DialogTitle>Edit Plan</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
@@ -342,6 +342,6 @@ export const Workplan: React.FC = () => {
                 <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
                 <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
             </DialogActions>
-        </Dialog> */}
+        </Dialog>
     </>)
 }

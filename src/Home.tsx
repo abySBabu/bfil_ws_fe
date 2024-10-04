@@ -66,14 +66,14 @@ export const Home: React.FC = () => {
     };
 
     const sections = [
-        { name: sideList[7]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
-        { name: sideList[6]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
-        { name: sideList[5]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
-        { name: sideList[4]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-        { name: sideList[3]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-        { name: sideList[2]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-        { name: sideList[1]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-        { name: sideList[0]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
+        { name: sideList[0]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
+        { name: sideList[1]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
+        { name: sideList[2]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
+        { name: sideList[3]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
+        { name: sideList[4]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
+        { name: sideList[5]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
+        { name: sideList[6]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
+        { name: sideList[7]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
     ];
 
     // const sections = sideList
