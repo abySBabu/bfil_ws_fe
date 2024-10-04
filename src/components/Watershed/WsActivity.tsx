@@ -148,6 +148,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
+            console.log("Role--", localStorage.getItem("userRole"))
             const resp0 = await listWSMap();
             if (resp0.status === 'success') {
                 const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId"))) || {}
@@ -397,14 +398,14 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                     <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
                     <Grid item xs={1}><TextField required label='Unit' value={actObj.unit} onChange={(e) => setactObj({ ...actObj, unit: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField required label='Area Treated' value={actObj.areaTreated} onChange={(e) => setactObj({ ...actObj, areaTreated: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField type='number' required label='Area Treated (acres)' value={actObj.areaTreated} onChange={(e) => setactObj({ ...actObj, areaTreated: e.target.value })} /></Grid>
                     {actObj.interventionType !== 'Demand Side Interventions' && <>
                         <Grid item xs={3}><TextField required select label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })}>
                             {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={3}><TextField required label="Water Conserved (litres)" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                        <Grid item xs={3}><TextField type='number' required label="Water Conserved (litres)" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
                     </>}
-                    <Grid item xs={3}><TextField required label="Funds spent (₹)" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField type='number' required label="Funds spent (₹)" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required select label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })}>
                         {fundOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                     </TextField></Grid>
@@ -483,14 +484,14 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                     <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.total} onChange={(e) => setactObj({ ...actObj, total: e.target.value })} /></Grid>
                     <Grid item xs={1}><TextField required label='Unit' value={actObj.unit} onChange={(e) => setactObj({ ...actObj, unit: e.target.value })} /></Grid>
-                    <Grid item xs={3}><TextField required label='Area Treated' value={actObj.areaTreated} onChange={(e) => setactObj({ ...actObj, areaTreated: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField type='number' required label='Area Treated (acres)' value={actObj.areaTreated} onChange={(e) => setactObj({ ...actObj, areaTreated: e.target.value })} /></Grid>
                     {actObj.interventionType !== 'Demand Side Interventions' && <>
                         <Grid item xs={3}><TextField required select label='Land Type' value={actObj.landType} onChange={(e) => setactObj({ ...actObj, landType: e.target.value })}>
                             {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={3}><TextField required label="Water Conserved (litres)" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
+                        <Grid item xs={3}><TextField type='number' required label="Water Conserved (litres)" value={actObj.waterConserved} onChange={(e) => setactObj({ ...actObj, waterConserved: e.target.value })} /></Grid>
                     </>}
-                    <Grid item xs={3}><TextField required label="Funds spent (₹)" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
+                    <Grid item xs={3}><TextField type='number' required label="Funds spent (₹)" value={actObj.amountSpend} onChange={(e) => setactObj({ ...actObj, amountSpend: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required select label="Funds source" value={actObj.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, sourceExpenditure: e.target.value })}>
                         {fundOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                     </TextField></Grid>
