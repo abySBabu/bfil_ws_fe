@@ -130,7 +130,7 @@ test.describe('User Enable Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').filter({ hasText: '0000000000' });
+    const userRow = page.locator('tr').filter({ hasText: '9655008961' });
     // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
     const blockUserIcon = userRow.locator('[data-testid="PersonIcon"]');
     await blockUserIcon.click();

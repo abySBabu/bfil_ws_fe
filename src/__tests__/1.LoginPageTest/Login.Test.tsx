@@ -1,15 +1,15 @@
 import { test, expect, chromium } from '@playwright/test';
 
-test.beforeAll(async () => {
-    global.getComputedStyle = (element: Element) => ({
-        getPropertyValue: (prop: string): string => {
-            if (prop === '--button-bradius') return '4px';
-            if (prop === '--text-color-default') return '#000000';
-            if (prop === '--button-bgcolor-active-brand') return '#1976d2';
-            return '';
-        }
-    }) as any;
-});
+// test.beforeAll(async () => {
+//     global.getComputedStyle = (element: Element) => ({
+//         getPropertyValue: (prop: string): string => {
+//             if (prop === '--button-bradius') return '4px';
+//             if (prop === '--text-color-default') return '#000000';
+//             if (prop === '--button-bgcolor-active-brand') return '#1976d2';
+//             return '';
+//         }
+//     }) as any;
+// });
 // const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 //  afterEach(async () => {
 //     await delay(2000); // Delay for 2 seconds
@@ -242,13 +242,15 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9655008962');
+        await page.fill('input#userName', '9384615413');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        console.log("login Error Message:", alertMessage);
+        console.log("login Error Message:", alertMessage);//
         const blockedPersonErrorMessage = "User error:User disabled.If it's an error,please contact your administrator";
+
+        //"User error: MobileNumber already exits 9655008962";
         expect(alertMessage).toBe(blockedPersonErrorMessage);
         await page.waitForTimeout(1000);
         await browser.close();
@@ -318,5 +320,31 @@ test.describe('Login Screen Automation', () => {
         await page.waitForTimeout(1000);
         await browser.close();
     });
+
+     //Test Number : 10
+     test('Should display validation error messages for not exist', async () => {
+        test.setTimeout(80000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9384615413');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        console.log("login Error Message:", alertMessage);//
+        const blockedPersonErrorMessage =
+        // "User error:User disabled.If it's an error,please contact your administrator";
+
+        "User error: MobileNumber already exits 9655008962";
+        expect(alertMessage).toBe(blockedPersonErrorMessage);
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
 
 });

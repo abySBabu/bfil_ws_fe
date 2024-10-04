@@ -165,7 +165,7 @@ test.describe('User Blocklist Automation', () => {
     await userManagementButton.click();
 
     //   // Find the row containing the specific user name and click the Edit icon
-    const userRow = page.locator('tr').filter({ hasText: '0000000000' });
+    const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     await page.waitForTimeout(5000);
 
     // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element

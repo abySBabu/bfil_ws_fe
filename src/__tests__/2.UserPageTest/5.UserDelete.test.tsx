@@ -132,7 +132,7 @@ test.describe('User Delete Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').filter({ hasText: '0000000000' });
+    const userRow = page.locator('tr').filter({ hasText: '9655008961' });
     // const userRow = page.locator('tr').nth(1);
 
     const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
