@@ -2,11 +2,11 @@
     "p_Login": {
         "User_Name": "ಬಳಕೆದಾರಹೆಸರು",
         "Password": "ಪಾಸ್ವರ್ಡ್",
-        "Forgot_Password": "ಪಾಸ್ವರ್ಡ್ ಮರೆತುಹೋಗಿದೆ ?",
+        "Forgot_Password": "ಪಾಸ್ವರ್ಡ್ ಮರೆತಿರುವಿರಾ?",
         "Login_Button": "ಲಾಗಿನ್ ಮಾಡಿ"
     },
     "p_Home": {
-        "Pragat_Watershed_Header": "ಪ್ರಗಟ್ ಜಲಾನಯನಳ",
+        "Pragat_Watershed_Header": "ಪ್ರಗಟ್ ಜಲಾನಯನ",
         "Pragat_Watershed_Footer": "ಕೃತಿಸ್ವಾಮ್ಯ - 2024. ಪ್ರಗಟ್ ಜಲಾನಯನ, ಎಲ್ಲಾ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.",
         "SM_BE_Dashboard_Link": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
         "SM_BE_User_Management_Link": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
@@ -14,85 +14,128 @@
         "SM_BE_Watershed_Master_Link": "ಜಲಾನಯನ ಮಾಸ್ಟರ್",
         "SM_BE_Farmer_Master_Link": "ರೈತ ಮೇಷ್ಟ್ರು",
         "SM_BE_Watershed_Mapping_Link": "ಜಲಾನಯನ ನಕ್ಷೆ",
-        "SM_BE_Watershed_Activity_Link": "ನೀರುಹಳ್ಳ ಚಟುವಟಿಕೆ",
-        "SM_BE_Work_Plan_Link": "ಕೆಲಸ ಯೋಜನೆ"
+        "SM_BE_Watershed_Activity_Link": "ಜಲಾನಯನ ಚಟುವಟಿಕೆ",
+        "SM_BE_Work_Plan_Link": "ಕೆಲಸದ ಯೋಜನೆ"
+    },
+    "p_Dashboard": {
+        "ss_KeyImpactIndicators_Header": {
+            "KeyImpactIndicators_Header_Text": "Key Impact Indicators",
+            "WatershedAreaTreated_Subheader": {
+                "WatershedAreaTreated_Subheader_Text": "Watershed Area Treated",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Watershed Area Treated",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "WaterConserved_Subheader": {
+                "WaterConserved_Subheader_Text": "Water Conserved",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Water Conserved",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "FarmersImpacted_Subheader": {
+                "FarmersImpacted_Subheader_Text": "Farmers Impacted",
+                "FarmersImpacted_Piechart": {
+                    "Piechart_Header": "Farmers Impacted",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "GovernmentAmountLeveraged_Subheader": {
+                "GovernmentAmountLeveraged_Subheader_Text": "Government Amount Leveraged",
+                "GovernmentAmountLeveraged_Piechart": {
+                    "Piechart_Header": "Government Amount Leveraged",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            }
+        },
+        "ss_SupplySideInterventions_Header_Text": "Supply Side Interventions",
+        "ss_DemandSideInterventions_Header_Text": "Demand Side Interventions"
     },
     "p_User_Management": {
         "ss_User_Management_Header": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
-        "ss_Search_Label": "ಹುಡುಕಿ",
+        "ss_Search_Label": "ಹುಡುಕು",
         "Add_User_Link": {
-            "Add_User_Link_Text": "ಬಳಕೆದಾರ ಸೇರಿಸಿ",
+            "Add_User_Link_Text": "ಬಳಕೆದಾರರನ್ನು ಸೇರಿಸಿ",
             "Add_User_Popup": {
-                "Add_User_Label": "ಬಳಕೆದಾರ ಸೇರಿಸಿ",
+                "Add_User_Label": "ಬಳಕೆದಾರರನ್ನು ಸೇರಿಸಿ",
                 "Name": "ಹೆಸರು",
-                "Employee_Code": "ನೌಕರ ಕೋಡ್",
+                "Employee_Code": "ಉದ್ಯೋಗಿ ಕೋಡ್",
                 "Designation": "ಹುದ್ದೆ",
                 "Role": "ಪಾತ್ರ",
                 "Email": "ಇಮೇಲ್",
                 "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
-                "Password": "ಗುಪ್ತಪದ",
-                "Select_Manager": "ಬಳಕೆದಾರರಿಗೆ ನಿರ್ವಾಹಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+                "Password": "ಪಾಸ್ವರ್ಡ್",
+                "Select_Manager": "ಬಳಕೆದಾರರಿಗಾಗಿ ನಿರ್ವಾಹಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
                 "Login_type": "ಲಾಗಿನ್ ಪ್ರಕಾರ",
                 "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                 "Add_Button": "ಸೇರಿಸಿ"
             },
-            "Add_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+            "Add_Success_Message": "ಬಳಕೆದಾರರನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
         },
         "ss_UserList": {
             "Name": "ಹೆಸರು",
-            "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+            "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್",
             "Role": "ಪಾತ್ರ",
-            "Manager_Name": "ನಿರ್ವಾಹಕರ ಹೆಸರು",
+            "Manager_Name": "ಮ್ಯಾನೇಜರ್ ಹೆಸರು",
             "Status": "ಸ್ಥಿತಿ",
             "Action": {
                 "Action_Text": "ಕ್ರಿಯೆ",
                 "Action_Tooltip": {
                     "Edit_Tooltip": {
-                        "Edit_Tooltip_Text": "ಬಳಕೆದಾರ ತಿದ್ದು",
+                        "Edit_Tooltip_Text": "ಬಳಕೆದಾರರನ್ನು ಸಂಪಾದಿಸಿ",
                         "Edit_User_Popup": {
-                            "Edit_User_Label": "ಬಳಕೆದಾರ ತಿದ್ದು",
+                            "Edit_User_Label": "ಬಳಕೆದಾರರನ್ನು ಸಂಪಾದಿಸಿ",
                             "Name": "ಹೆಸರು",
-                            "Employee_Code": "ನೌಕರ ಕೋಡ್",
+                            "Employee_Code": "ಉದ್ಯೋಗಿ ಕೋಡ್",
                             "Designation": "ಹುದ್ದೆ",
                             "Role": "ಪಾತ್ರ",
                             "Email": "ಇಮೇಲ್",
                             "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
-                            "Select_Manager": "ಬಳಕೆದಾರರಿಗೆ ನಿರ್ವಾಹಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+                            "Select_Manager": "ಬಳಕೆದಾರರಿಗಾಗಿ ನಿರ್ವಾಹಕರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
                             "Login_type": "ಲಾಗಿನ್ ಪ್ರಕಾರ",
                             "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                             "Update_Button": "ನವೀಕರಿಸಿ"
                         },
-                        "Edit_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                        "Edit_Success_Message": "ಬಳಕೆದಾರರನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
                     },
                     "Block_Tooltip": {
-                        "Block_Tooltip_Text": "ಬಳಕೆದಾರ ತಡೆಗಟ್ಟು",
+                        "Block_Tooltip_Text": "ಬಳಕೆದಾರರನ್ನು ನಿರ್ಬಂಧಿಸಿ",
                         "Block_User_Popup": {
-                            "Block_User_Label": "ಬಳಕೆದಾರ ತಡೆಗಟ್ಟು",
-                            "Block_User_Content": "ನೀವು ಈ ಬಳಕೆದಾರನನ್ನು ತಡೆಗಟ್ಟಲು ಬಯಸುವಿರಾ?",
+                            "Block_User_Label": "ಬಳಕೆದಾರರನ್ನು ನಿರ್ಬಂಧಿಸಿ",
+                            "Block_User_Content": "ನೀವು ನಿರ್ಬಂಧಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
                             "Cancel_Button": "ರದ್ದುಮಾಡಿ",
-                            "Block_Button": "ತಡೆಗಟ್ಟು"
+                            "Block_Button": "ನಿರ್ಬಂಧಿಸಿ"
                         },
-                        "Block_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ತಡೆಗಟ್ಟಲಾಗಿದೆ"
+                        "Block_Success_Message": "ಬಳಕೆದಾರರನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ"
                     },
                     "Unblock_Tooltip": {
-                        "Unblock_Tooltip_Text": "ಬಳಕೆದಾರನ ತಡೆಗಟ್ಟುವಿಕೆ ತೆಗೆಯಿರಿ",
+                        "Unblock_Tooltip_Text": "ಬಳಕೆದಾರರನ್ನು ಅನಿರ್ಬಂಧಿಸಿ",
                         "Unblock_User_Popup": {
-                            "Unblock_User_Label": "ಬಳಕೆದಾರನ ತಡೆಗಟ್ಟುವಿಕೆ ತೆಗೆಯಿರಿ",
-                            "Unblock_User_Content": "ನೀವು ಈ ಬಳಕೆದಾರನ ತಡೆಗಟ್ಟುವಿಕೆಯನ್ನು ತೆಗೆದುಹಾಕಲು ಬಯಸುವಿರಾ?",
+                            "Unblock_User_Label": "ಬಳಕೆದಾರರನ್ನು ಅನಿರ್ಬಂಧಿಸಿ",
+                            "Unblock_User_Content": "ನೀವು ಅನಿರ್ಬಂಧಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
                             "Cancel_Button": "ರದ್ದುಮಾಡಿ",
-                            "Unblock_Button": "ತಡೆಗಟ್ಟುವಿಕೆ ತೆಗೆಯಿರಿ"
+                            "Unblock_Button": "ಅನಿರ್ಬಂಧಿಸಿ"
                         },
-                        "Unblock_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ತಡೆಗಟ್ಟುವಿಕೆ ತೆಗೆಯಲ್ಪಟ್ಟಿದೆ"
+                        "Unblock_Success_Message": "ಬಳಕೆದಾರರನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅನಿರ್ಬಂಧಿಸಲಾಗಿದೆ"
                     },
                     "Delete_Tooltip": {
-                        "Delete_Tooltip_Text": "ಬಳಕೆದಾರ ಅಳಿಸಿ",
+                        "Delete_Tooltip_Text": "ಬಳಕೆದಾರರನ್ನು ಅಳಿಸಿ",
                         "Delete_User_Popup": {
-                            "Delete_User_Label": "ಬಳಕೆದಾರ ಅಳಿಸಿ",
-                            "Delete_User_Content": "ನೀವು ಈ ಬಳಕೆದಾರನನ್ನು ಅಳಿಸಲು ಬಯಸುವಿರಾ?",
+                            "Delete_User_Label": "ಬಳಕೆದಾರರನ್ನು ಅಳಿಸಿ",
+                            "Delete_User_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
                             "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                             "Delete_Button": "ಅಳಿಸಿ"
                         },
-                        "Delete_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
+                        "Delete_Success_Message": "ಬಳಕೆದಾರರನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
                     }
                 }
             },
