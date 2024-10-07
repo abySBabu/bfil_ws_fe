@@ -75,7 +75,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to add farmer");
             }
         }
         catch (error) {
@@ -98,7 +98,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to edit farmer");
             }
         }
         catch (error) {
@@ -120,7 +120,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to delete farmer");
             }
         }
         catch (error) {

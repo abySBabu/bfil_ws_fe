@@ -262,7 +262,7 @@ export const WsActivity: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp1.message || "");
+                setalert("Failed to add activity");
             }
         }
         catch (error) {
@@ -283,7 +283,7 @@ export const WsActivity: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp1.message || "");
+                setalert("Failed to update activity");
             }
         }
         catch (error) {
