@@ -70,3 +70,13 @@ export async function ListSide() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function ListDonor() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Component",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
