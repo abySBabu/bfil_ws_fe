@@ -17,6 +17,49 @@
         "SM_BE_Watershed_Activity_Link": "ಜಲಾನಯನ ಚಟುವಟಿಕೆ",
         "SM_BE_Work_Plan_Link": "ಕೆಲಸದ ಯೋಜನೆ"
     },
+    "p_Dashboard": {
+        "ss_KeyImpactIndicators_Header": {
+            "KeyImpactIndicators_Header_Text": "Key Impact Indicators",
+            "WatershedAreaTreated_Subheader": {
+                "WatershedAreaTreated_Subheader_Text": "Watershed Area Treated",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Watershed Area Treated",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "WaterConserved_Subheader": {
+                "WaterConserved_Subheader_Text": "Water Conserved",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Water Conserved",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "FarmersImpacted_Subheader": {
+                "FarmersImpacted_Subheader_Text": "Farmers Impacted",
+                "FarmersImpacted_Piechart": {
+                    "Piechart_Header": "Farmers Impacted",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            },
+            "GovernmentAmountLeveraged_Subheader": {
+                "GovernmentAmountLeveraged_Subheader_Text": "Government Amount Leveraged",
+                "GovernmentAmountLeveraged_Piechart": {
+                    "Piechart_Header": "Government Amount Leveraged",
+                    "Bunding_data": "Bunding",
+                    "Nala Treatment_data": "Nala Treatment",
+                    "Check Dam_data": "Check Dam"
+                }
+            }
+        },
+        "ss_SupplySideInterventions_Header_Text": "Supply Side Interventions",
+        "ss_DemandSideInterventions_Header_Text": "Demand Side Interventions"
+    },
     "p_User_Management": {
         "ss_User_Management_Header": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
         "ss_Search_Label": "ಹುಡುಕು",
