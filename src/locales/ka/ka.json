@@ -19,46 +19,46 @@
     },
     "p_Dashboard": {
         "ss_KeyImpactIndicators_Header": {
-            "KeyImpactIndicators_Header_Text": "Key Impact Indicators",
+            "KeyImpactIndicators_Header_Text": "ಪ್ರಮುಖ ಪ್ರಭಾವದ ಸೂಚಕಗಳು",
             "WatershedAreaTreated_Subheader": {
-                "WatershedAreaTreated_Subheader_Text": "Watershed Area Treated",
+                "WatershedAreaTreated_Subheader_Text": "ಜಲಾನಯನ ಪ್ರದೇಶವನ್ನು ಸಂಸ್ಕರಿಸಲಾಗಿದೆ",
                 "WatershedAreaTreated_Piechart": {
-                    "Piechart_Header": "Watershed Area Treated",
-                    "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "Piechart_Header": "ಜಲಾನಯನ ಪ್ರದೇಶವನ್ನು ಸಂಸ್ಕರಿಸಲಾಗಿದೆ",
+                    "Bunding_data": "ಕಟ್ಟುವಿಕೆ",
+                    "NalaTreatment_data": "ನಾಲಾ ಚಿಕಿತ್ಸೆ",
+                    "CheckDam_data": "ಚೆಕ್ ಡ್ಯಾಂ"
                 }
             },
             "WaterConserved_Subheader": {
-                "WaterConserved_Subheader_Text": "Water Conserved",
+                "WaterConserved_Subheader_Text": "ನೀರನ್ನು ಸಂರಕ್ಷಿಸಲಾಗಿದೆ",
                 "WatershedAreaTreated_Piechart": {
-                    "Piechart_Header": "Water Conserved",
-                    "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "Piechart_Header": "ನೀರನ್ನು ಸಂರಕ್ಷಿಸಲಾಗಿದೆ",
+                    "Bunding_data": "ಕಟ್ಟುವಿಕೆ",
+                    "NalaTreatment_data": "ನಾಲಾ ಚಿಕಿತ್ಸೆ",
+                    "CheckDam_data": "ಚೆಕ್ ಡ್ಯಾಂ"
                 }
             },
             "FarmersImpacted_Subheader": {
-                "FarmersImpacted_Subheader_Text": "Farmers Impacted",
+                "FarmersImpacted_Subheader_Text": "ರೈತರು ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
                 "FarmersImpacted_Piechart": {
-                    "Piechart_Header": "Farmers Impacted",
-                    "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "Piechart_Header": "ರೈತರು ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
+                    "Bunding_data": "ಕಟ್ಟುವಿಕೆ",
+                    "NalaTreatment_data": "ನಾಲಾ ಚಿಕಿತ್ಸೆ",
+                    "CheckDam_data": "ಚೆಕ್ ಡ್ಯಾಂ"
                 }
             },
             "GovernmentAmountLeveraged_Subheader": {
-                "GovernmentAmountLeveraged_Subheader_Text": "Government Amount Leveraged",
+                "GovernmentAmountLeveraged_Subheader_Text": "ಸರ್ಕಾರದ ಹತೋಟಿ ಮೊತ್ತ",
                 "GovernmentAmountLeveraged_Piechart": {
-                    "Piechart_Header": "Government Amount Leveraged",
-                    "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "Piechart_Header": "ಸರ್ಕಾರದ ಹತೋಟಿ ಮೊತ್ತ",
+                    "Bunding_data": "ಕಟ್ಟುವಿಕೆ",
+                    "NalaTreatment_data": "ನಾಲಾ ಚಿಕಿತ್ಸೆ",
+                    "CheckDam_data": "ಚೆಕ್ ಡ್ಯಾಂ"
                 }
             }
         },
-        "ss_SupplySideInterventions_Header_Text": "Supply Side Interventions",
-        "ss_DemandSideInterventions_Header_Text": "Demand Side Interventions"
+        "ss_SupplySideInterventions_Header_Text": "ಸಪ್ಲೈ ಸೈಡ್ ಮಧ್ಯಸ್ಥಿಕೆಗಳು",
+        "ss_DemandSideInterventions_Header_Text": "ಡಿಮ್ಯಾಂಡ್ ಸೈಡ್ ಮಧ್ಯಸ್ಥಿಕೆಗಳು"
     },
     "p_User_Management": {
         "ss_User_Management_Header": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",

@@ -25,8 +25,8 @@
                 "WatershedAreaTreated_Piechart": {
                     "Piechart_Header": "Watershed Area Treated",
                     "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
                 }
             },
             "WaterConserved_Subheader": {
@@ -34,8 +34,8 @@
                 "WatershedAreaTreated_Piechart": {
                     "Piechart_Header": "Water Conserved",
                     "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
                 }
             },
             "FarmersImpacted_Subheader": {
@@ -43,8 +43,8 @@
                 "FarmersImpacted_Piechart": {
                     "Piechart_Header": "Farmers Impacted",
                     "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
                 }
             },
             "GovernmentAmountLeveraged_Subheader": {
@@ -52,8 +52,8 @@
                 "GovernmentAmountLeveraged_Piechart": {
                     "Piechart_Header": "Government Amount Leveraged",
                     "Bunding_data": "Bunding",
-                    "Nala Treatment_data": "Nala Treatment",
-                    "Check Dam_data": "Check Dam"
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
                 }
             }
         },
