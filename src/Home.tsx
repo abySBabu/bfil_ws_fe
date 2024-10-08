@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -16,6 +16,7 @@ import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
+import Check from '@mui/icons-material/Check';
 
 interface SideItem {
     screenName: string;
@@ -52,6 +53,7 @@ export const Home: React.FC = () => {
     }, [setTimeoutsecs, message, tokenExpired])
 
     const handleLanguageChange = (lng: string) => {
+        setLanguageAnchor(null);
         i18n.changeLanguage(lng);
     }
 
@@ -216,8 +218,8 @@ export const Home: React.FC = () => {
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
-                <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-                <MenuItem onClick={() => handleLanguageChange('ka')}>Kannada</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
             </Menu>
         </Box>
     )
