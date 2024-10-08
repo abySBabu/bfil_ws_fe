@@ -27,9 +27,11 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
+
         await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
+        // await page.click('button[type="submit"]');
         const usernameRequiredError = await page.textContent('.MuiFormHelperText-root');
         console.log("Username Error Message:", usernameRequiredError);
         expect(usernameRequiredError).toBe('UserName is required');
@@ -49,8 +51,10 @@ test.describe('Login Screen Automation', () => {
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
         await page.fill('input#password', '');
-        await page.click('button[type="submit"]');
+
+       // await page.click('button[type="submit"]');
         const userPasswordRequiredError = await page.textContent('.MuiFormHelperText-root');
         console.log("UserPassword Error Message:", userPasswordRequiredError);
         expect(userPasswordRequiredError).toBe('Password is required');
@@ -68,9 +72,13 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
+
+        await page.fill('input#password', '1234');
         await page.fill('input#password', '');
-        await page.click('button[type="submit"]');
+
+        // await page.click('button[type="submit"]');
         const userPasswordRequiredError = await page.locator('#password-helper-text').innerText();
         const userNameRequiredError = await page.locator('#userName-helper-text').innerText();
         console.log("UserPassword Error Message:", userPasswordRequiredError);
@@ -93,7 +101,7 @@ test.describe('Login Screen Automation', () => {
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '1234567890');
         await page.fill('input#password', 'ABC');
-        await page.click('button[type="submit"]');
+        // await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
         const passwordLengthError = await page.textContent('.MuiFormHelperText-root');
@@ -115,7 +123,7 @@ test.describe('Login Screen Automation', () => {
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', 'ABC@');
         await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
+        // await page.click('button[type="submit"]');
         const userNameAlphaNumeric = await page.textContent('.MuiFormHelperText-root');
         console.log("userName Error Message:", userNameAlphaNumeric);
         expect(userNameAlphaNumeric).toBe('UserName must only contain alphanumeric characters');
@@ -134,7 +142,7 @@ test.describe('Login Screen Automation', () => {
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '9677694732');
-        await page.fill('input#password', 'Poun@123');
+        await page.fill('input#password', 'Poun@123'); //Invalid password which means doesnt exist in database
         await page.click('button[type="submit"]');
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
         console.log("Incorrect error " + alertMessage);
@@ -168,7 +176,7 @@ test.describe('Login Screen Automation', () => {
         await browser.close();
     });
 
-    //Test Number : 8
+    // Test Number : 8
     test('Should navigate to home page on successful login', async () => {
         test.setTimeout(60000);
         const browser = await chromium.launch({
@@ -178,39 +186,63 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
+
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        console.log("Alertmessage " + alertMessage);
+        console.log("Alert message: " + alertMessage);
         expect(alertMessage).toBe('Login successfully');
-        // /** 
-        //  * Here need to understand locator to place or get the data through id or class 
-        //  * dated on 27/08/2024 added by poun
-        //  * 
-        //  * **/
-        // const sections = [
-        //     'Dashboard',
-        //     'Watershed Master',
-        //     'Watershed Mapping',
-        //     'User Management',
-        //     'Role Management',
-        //     'Watershed Activity'
-        // ];
-
-        // for (const section of sections) {
-        //     const sectionElement = await page.locator(`text=${section}`);
-        //     await expect(sectionElement).toBeVisible();
-        // }
-
+        await page.waitForURL('http://localhost:3000/bfilreact/home');
+        await page.waitForTimeout(5000);
+        // Retrieve section names dynamically from the rendered UI
+        const sections = await page.$$eval('.MuiListItemText-primary', items =>
+            items.map(item => item.textContent ? item.textContent.trim() : '').filter(Boolean)
+        ); console.log("Retrieved sections:", sections);
+        for (const section of sections) {
+            const sectionElement = page.locator(`text=${section}`);
+            await expect(sectionElement).toBeVisible();
+        }
         await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
+     // Test Number : 9
+     test('Should navigate to home page on successful login and screen testing ', async () => {
+        test.setTimeout(60000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
 
-    //Test Number : 9
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+
+        const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        console.log("Alert message: " + alertMessage);
+        expect(alertMessage).toBe('Login successfully');
+        await page.waitForURL('http://localhost:3000/bfilreact/home');
+        // await page.waitForTimeout(5000);
+        // // Retrieve section names dynamically from the rendered UI
+        // const sections = await page.$$eval('.MuiListItemText-primary', items =>
+        //     items.map(item => item.textContent ? item.textContent.trim() : '').filter(Boolean)
+        // ); console.log("Retrieved sections:", sections);
+        // for (const section of sections) {
+        //     const sectionElement = page.locator(`text=${section}`);
+        //     await expect(sectionElement).toBeVisible();
+        // }
+        // await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
+    //Test Number : 10
     test('Should display validation error messages for blocked user', async () => {
         test.setTimeout(80000);
         const browser = await chromium.launch({
@@ -232,7 +264,7 @@ test.describe('Login Screen Automation', () => {
         await browser.close();
     });
 
-    //Test Number : 10
+    //Test Number : 11
     test('Should display validation error messages for deleted user', async () => {
         test.setTimeout(80000);
         const browser = await chromium.launch({
@@ -242,7 +274,7 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9384615413');
+        await page.fill('input#userName', '9884794975');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
@@ -257,7 +289,7 @@ test.describe('Login Screen Automation', () => {
     });
 
 
-    //Test Number : 11
+    //Test Number : 12
     test('Should check button visibility for all field entered', async () => {
         test.setTimeout(80000);
         const browser = await chromium.launch({
@@ -279,7 +311,7 @@ test.describe('Login Screen Automation', () => {
         await browser.close();
     });
 
-    //Test Number : 12
+    //Test Number : 13
     test('Should check button visibility without username value', async () => {
         test.setTimeout(80000);
         const browser = await chromium.launch({
@@ -293,15 +325,16 @@ test.describe('Login Screen Automation', () => {
         await page.fill('input#password', '1234');
 
         const signInButton = page.locator('button[type="submit"]');
-        const isSignInButtonVisible = await signInButton.isVisible();
+        const isSignInButtonVisible = await signInButton.isDisabled();
         console.log("Is sign in button visible :" + isSignInButtonVisible);
-        expect(isSignInButtonVisible).toBe(false); //I am expecting true
+        expect(isSignInButtonVisible).toBe(true); //I am expecting true
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    //Test Number : 13
-    test('should check button visibility without passsword value', async () => {
+    //Test Number : 14
+    //Negative test case
+    test('Negative test case - > Should check button visibility without passsword value', async () => {
         test.setTimeout(80000);
         const browser = await chromium.launch({
             headless: false,
@@ -314,15 +347,17 @@ test.describe('Login Screen Automation', () => {
         await page.fill('input#password', '');
 
         const signInButton = page.locator('button[type="submit"]');
-        const isSignInButtonVisible = await signInButton.isVisible();
-        console.log("Is sign in button visible :" + isSignInButtonVisible);//I am expecting true
-        expect(isSignInButtonVisible).toBe(false);
+        const isSignInButtonVisible = await signInButton.isDisabled();
+        console.log("Is sign in button visible :" + isSignInButtonVisible);//I am expecting false
+        expect(isSignInButtonVisible).toBe(false); //received true
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-     //Test Number : 10
-     test('Should display validation error messages for not exist', async () => {
+
+    //Negative test case
+    //Test Number : 15
+    test('Negative test case -> Should display validation error messages after login', async () => {//error messages for not exist
         test.setTimeout(80000);
         const browser = await chromium.launch({
             headless: false,
@@ -331,20 +366,21 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9384615413');
+        await page.fill('input#userName', '9384615425');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
         console.log("login Error Message:", alertMessage);//
         const blockedPersonErrorMessage =
-        // "User error:User disabled.If it's an error,please contact your administrator";
+        //Received
+            // "User error:User disabled.If it's an error,please contact your administrator";
 
-        "User error: MobileNumber already exits 9655008962";
+            //Expected
+            "User error: MobileNumber already exits 9384615425";
         expect(alertMessage).toBe(blockedPersonErrorMessage);
         await page.waitForTimeout(1000);
         await browser.close();
     });
-
 
 });

@@ -268,4 +268,74 @@ test.describe('Watershed Master Automation', () => {
     });
 
 
+    test('Should click the add icon and check the successful message ', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+        const watershed = page.locator('text=Watershed Master');
+        await watershed.click();
+        await page.waitForSelector('table');
+            const clickAddWs = page.locator('button:has-text("Add Watershed")');
+            await clickAddWs.click();
+           const dialog = await page.locator('div[role="dialog"]');
+        await dialog.getByLabel('Name').fill('Bellari');
+        await dialog.getByLabel('Description').fill('New Description');
+        await dialog.getByLabel('District').click();
+        await page.click('ul[role="listbox"] li:first-child');
+        await dialog.getByLabel('Taluk').click();
+        await page.click('ul[role="listbox"] li:first-child');
+        await dialog.getByLabel('Grampanchayat').click();
+        await page.click('ul[role="listbox"] li:first-child');
+        // await dialog.getByLabel('Village').click();
+        // await page.click('ul[role="listbox"] li:first-child');
+        // await page.waitForTimeout(2000);
+        // await page.click('button:has-text("Add")').nth(1);;
+        // await page.locator('button:has-text("Add")').nth(1);
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        console.log(await addButton.isEnabled());
+        console.log(await addButton.isVisible());
+        console.log(await addButton.isHidden());
+
+        // const isAddButtonVisible = await addButton.isVisible();
+
+        if(await addButton.isEnabled()){
+            await page.locator('button:has-text("Add")').nth(1).click();
+            // Wait for the Snackbar to appear and validate its content
+            const alertMessage = await page.locator('.MuiAlert-message').innerText();
+            // const isAddButtonVisible = await addButton.isVisible();
+            // await addButton.click();
+            // const dialog = await page.locator('div[role="dialog"]');
+            // await dialog.getByLabel('Village').click();
+            // await page.click('ul[role="listbox"] li:first-child');
+    
+            // await page.click('button:has-text("Add")').nth(1);;
+        //    await page.locator('button:has-text("Update")').nth(1).click();
+            // Wait for the Snackbar to appear and validate its content
+            const wsName = await page.locator('div:has-text("Name") input').nth(0).getAttribute('value');
+    
+            await page.click('button:has-text("Update")');
+            // const alertMessage = await page.locator('.MuiAlert-message').innerText();
+            expect(alertMessage).toBe(`Watershed ${wsName}updated`);
+
+        }
+        else{
+            console.log("Add button is still disble ")
+        }
+      
+        await page.waitForTimeout(2000);
+        await browser.close();
+    });
+
+
 });

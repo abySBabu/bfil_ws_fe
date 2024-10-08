@@ -235,7 +235,7 @@ test.describe('Watershed mapping edit automation', () => {
         await browser.close();
     });
 
-    test.only('Should edit Watershed Mapping and show success alert', async () => {
+    test('Should edit Watershed Mapping and show success alert', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -254,7 +254,7 @@ test.describe('Watershed mapping edit automation', () => {
         const userManagementButton = page.locator('text=Watershed Mapping');
         await userManagementButton.click();
         await page.waitForTimeout(5000);
-        const userRow = page.locator('tr').nth(1);
+        const userRow = page.locator('tr').nth(2);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
@@ -266,14 +266,18 @@ test.describe('Watershed mapping edit automation', () => {
         //     await userNameOption[0].click();
         // }
         await page.fill('input#remarks', 'Test Remarks');
-        const wsNameDropdown = page.locator('#ws_name');
-        await wsNameDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]');
-        const watershedOptions = await page.$$('ul[role="listbox"] > li');
- if (watershedOptions.length > 0) {
-            await watershedOptions[0].click(); // Select the first option in the list
-        }
-   
+//         const wsNameDropdown = page.locator('#ws_name');
+//         await wsNameDropdown.click();
+//         await page.waitForSelector('ul[role="listbox"]');
+//         const watershedOptions = await page.$$('ul[role="listbox"] > li');
+//  if (watershedOptions.length > 0) {
+//             await watershedOptions[0].click(); // Select the first option in the list
+//             // await page.click('body'); // Click somewhere outside the dropdown to close it
+//             // const wsNameDropdown2 = page.locator('#ws_name');
+//             // await wsNameDropdown2.click();
+//         }
+
+      
 
         const addButton = page.locator('button:has-text("Update")').nth(0);
         await addButton.click();

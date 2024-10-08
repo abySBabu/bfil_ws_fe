@@ -394,9 +394,8 @@ test.describe('User Edit Automation', () => {
 
   });
 
-
   //Test Number : 7
-  test('should edit user details some fields are empty ', async () => {
+  test('Should edit user details some fields are empty ', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -471,7 +470,7 @@ test.describe('User Edit Automation', () => {
   });
 
   //Test Number : 8
-  test('should edit user details with correct data ', async () => {
+  test('Should edit user details with correct data ', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -497,7 +496,7 @@ test.describe('User Edit Automation', () => {
 
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'User Edited');
-    await page.fill('input#designation', 'Admin');
+    await page.fill('input#designation', 'Program officer');
 
     // const managerTypeDropdown = page.locator('#manager');
     // await managerTypeDropdown.click();
@@ -542,7 +541,7 @@ test.describe('User Edit Automation', () => {
   });
 
   //Test Number : 9
-  test('should edit user details with wrong alert message ', async () => {
+  test('Negative test case -> Should edit user details with wrong alert message ', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -607,7 +606,9 @@ test.describe('User Edit Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User updated successfully');
+    //    expect(alertMessage).toBe('User updated successfully');
+
+    expect(alertMessage).toBe('User updated successfullyy');
     await page.waitForTimeout(1000);
 
     await browser.close();

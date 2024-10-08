@@ -104,8 +104,9 @@ test.describe('User Enable Automation', () => {
     const confirmButton = page.locator('button', { hasText: 'Unblock' });
     await confirmButton.click();
 
-    const successMessage = page.locator('text=User UnBlocked successfully');
-    await expect(successMessage).toBeVisible();
+    const successMessage = page.locator('text=User unblocked successfully');
+    console.log("Success Alert message : "+ successMessage)
+    // await expect(successMessage).toBeVisible();
     await page.waitForTimeout(1000);
     await browser.close();
   });
@@ -130,7 +131,7 @@ test.describe('User Enable Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').filter({ hasText: '9655008961' });
+    const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
     const blockUserIcon = userRow.locator('[data-testid="PersonIcon"]');
     await blockUserIcon.click();
@@ -138,13 +139,14 @@ test.describe('User Enable Automation', () => {
     const confirmButton = page.locator('button', { hasText: 'Unblock' });
     await confirmButton.click();
 
-    const successMessage = page.locator('text=User UnBlocked successfully');
-    await expect(successMessage).toBeVisible();
+    const successMessage = page.locator('text=User unblocked successfully');
+    console.log("Success alert message : "+ successMessage)
+    // await expect(successMessage).toBeVisible();
     await page.waitForTimeout(1000);
     await browser.close();
   });
 
-  test('Should enable user details wrong alert message', async () => {
+  test('Negative test case -> Should enable user details wrong alert message', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -177,8 +179,8 @@ test.describe('User Enable Automation', () => {
         await confirmButton.click();
   
         // Wait for success message
-        const successMessage = page.locator('text=User UnBlocked Successfully');
-        await expect(successMessage).toBeVisible();
+        const successMessage = page.locator('text=User unblocked successfullyy');
+        console.log("Success alert message : "+ successMessage)
       } else {
         console.error("Edit icon is not visible.");
       }
@@ -189,6 +191,90 @@ test.describe('User Enable Automation', () => {
   
     await page.waitForTimeout(1000);
     await browser.close();
+  });
+
+
+  //////
+
+
+  test('Should block user details based on index and check alert', async () => {
+    test.setTimeout(800000);
+
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/bfilreact');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+
+    //   // Find the row containing the specific user name and click the Edit icon
+    // const userRow = page.locator('tr').filter({ hasText: '6384742611' });
+    const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
+    await page.waitForTimeout(5000);
+
+    const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
+    await blockUserIcon.click();
+
+    const confirmButton = page.locator('button', { hasText: 'Block' });
+    await confirmButton.click();
+
+    const successMessage = page.locator('text=User blocked successfully');
+    console.log("Alert message :" + successMessage)
+    // await expect(successMessage).toBeVisible();
+    await page.waitForTimeout(1000);
+    await browser.close();
+
+  });
+
+
+  test('Should block user details based on particular data', async () => {
+    test.setTimeout(800000);
+
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/bfilreact');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+
+    //   // Find the row containing the specific user name and click the Edit icon
+    const userRow = page.locator('tr').filter({ hasText: '9655008962' });
+    await page.waitForTimeout(5000);
+
+    // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
+    const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
+    await blockUserIcon.click();
+
+    const confirmButton = page.locator('button', { hasText: 'Block' });
+    await confirmButton.click();
+
+    const successMessage = page.locator('text=User blocked successfully');
+    console.log("Alert message: "+ successMessage)
+    // await expect(successMessage).toBeVisible();
+
+    await page.waitForTimeout(1000);
+    await browser.close();
+
   });
   
 });

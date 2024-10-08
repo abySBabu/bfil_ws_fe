@@ -183,8 +183,8 @@ test.describe('Farmer add automation', () => {
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy edited'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341989'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887772'); // Invalid Mobile
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341990'); // Invalid Aadhar
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887775'); // Invalid Mobile
         // Click Cancel button
         const addButton = page.locator('button:has-text("Update")');
         await addButton.click();

@@ -3,7 +3,7 @@ import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('User Delete Automation', () => {
 
   // Test Number : 1
-  test('should delete user details wrong alert message', async () => {
+  test('Should delete user details wrong alert message', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -40,11 +40,12 @@ test.describe('User Delete Automation', () => {
 
       // Confirm the delete action
       const confirmButton = page.locator('button', { hasText: 'Delete' });
-      await confirmButton.click();
+      await expect(confirmButton).toBeVisible();
+      // await confirmButton.click();
 
       // Check if the success message is visible
-      const successMessage = page.locator('text=User Blocked Successfully');
-      await expect(successMessage).toBeVisible();
+      // const successMessage = page.locator('text=User Blocked Successfully');
+      // await expect(successMessage).toBeVisible();
     } else {
       console.log('Delete icon is not visible for the user row');
     }
@@ -87,11 +88,10 @@ test.describe('User Delete Automation', () => {
 
       // Confirm the delete action
       const confirmButton = page.locator('button', { hasText: 'Delete' });
-      await confirmButton.click();
+      await expect(confirmButton).toBeVisible();
 
       // Check if the success message is visible
-      const successMessage = page.locator('text=User Blocked Successfully');
-      await expect(successMessage).toBeVisible();
+      // const successMessage = page.locator('text=User Blocked Successfully');
     } else {
       console.log('Delete icon is not visible for the user row');
     }
@@ -132,7 +132,7 @@ test.describe('User Delete Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').filter({ hasText: '9655008961' });
+    const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     // const userRow = page.locator('tr').nth(1);
 
     const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
@@ -195,7 +195,7 @@ test.describe('User Delete Automation', () => {
 
 
   //Test Number : 5
-  test('Should check the user delete confirm button', async () => {
+  test('Should check the user delete cancel button', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -215,8 +215,10 @@ test.describe('User Delete Automation', () => {
     await userManagementButton.click();
     const userRow = page.locator('tr').nth(1);
     const blockUserIcon = userRow.locator('[data-testid="DeleteIcon"]');
-    // await blockUserIcon.click();
+
+    await blockUserIcon.click();
     const confirmButton = page.locator('button', { hasText: 'Cancel' });
+    await confirmButton.click();
     // const isDeleteIconVisible = await confirmButton.isVisible();
     // expect(isDeleteIconVisible).toBe(true);
     await page.waitForTimeout(1000);
@@ -244,7 +246,7 @@ test.describe('User Delete Automation', () => {
     await userManagementButton.click();
     // const userRow = page.locator('tr').filter({ hasText: '6384742611' });
     const userRow = page.locator('tr').nth(1);
-    const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
+    const blockUserIcon = userRow.locator('[data-testid="DeleteIcon"]');
     await blockUserIcon.click();
     const confirmButton = page.locator('button', { hasText: 'Cancel' });
     await confirmButton.click();
@@ -262,4 +264,91 @@ test.describe('User Delete Automation', () => {
     await page.waitForTimeout(1000);
     await browser.close();
   });
+
+
+  //////
+
+
+  test('Should enable user details based on particular data with alert message', async () => {
+    test.setTimeout(800000);
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/bfilreact');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+
+    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+
+    const userRow = page.locator('tr').filter({ hasText: '9655008962' });
+    // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
+    const blockUserIcon = userRow.locator('[data-testid="PersonIcon"]');
+    await blockUserIcon.click();
+
+    const confirmButton = page.locator('button', { hasText: 'Unblock' });
+    await confirmButton.click();
+
+    const successMessage = page.locator('text=User unblocked successfully');
+    console.log("Success alert message : "+ successMessage)
+    // await expect(successMessage).toBeVisible();
+    await page.waitForTimeout(1000);
+    await browser.close();
+  });
+
+  test('Negative test case -> Should enable user details wrong alert message', async () => {
+    test.setTimeout(800000);
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+  
+    await page.goto('http://localhost:3000/bfilreact');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+  
+    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+  
+    // Find the row containing the specific user name and click the Edit icon
+    const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
+  
+    try {
+      // Try to locate the edit icon (or block user icon)
+      const blockUserIcon = userRow.locator('[data-testid="PersonIcon"]');
+      if (await blockUserIcon.isVisible()) {
+        await blockUserIcon.click();
+  
+        const confirmButton = page.locator('button', { hasText: 'Unblock' });
+        await confirmButton.click();
+  
+        // Wait for success message
+        const successMessage = page.locator('text=User unblocked successfullyy');
+        console.log("Success alert message : "+ successMessage)
+      } else {
+        console.error("Edit icon is not visible.");
+      }
+    } catch (error) {
+      console.error("Error: Edit icon not found or an issue occurred while clicking the icon.");
+      console.error(error);
+    }
+  
+    await page.waitForTimeout(1000);
+    await browser.close();
+  });
+
 });

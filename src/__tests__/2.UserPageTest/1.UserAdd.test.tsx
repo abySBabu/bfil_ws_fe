@@ -25,16 +25,16 @@ test.describe('User Management Automation', () => {
     const page: Page = await context.newPage();
 
     await page.goto('http://localhost:3000/bfilreact');
-    await page.fill('input#userName', '8861982062');
+    await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
     await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
     await page.reload();
-    const userManagementButton = page.locator('role=button[name="User Management"]');
+    const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
     await page.reload();
-    const userManagementButton1 = page.locator('role=button[name="User Management"]');
+    const userManagementButton1 = page.locator('text=User Management');
     await userManagementButton1.click();
     const addUserButton = page.locator('button:has-text("Add User")');
     await expect(addUserButton).toBeVisible();
@@ -790,11 +790,11 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    await page.fill('input#userName', 'Hanumanth Roa Tippa');
-    await page.fill('input#employeeCode', 'MY001');//My001
-    await page.fill('input#designation', 'Project Manager');
-    await page.fill('input#email', 'narasimhanaru192@gmail.com');
-    await page.fill('input#mobileNo', '9655008961');
+    await page.fill('input#userName', 'S D Kalyanshetti');
+    await page.fill('input#employeeCode', 'MY005');//My001
+    await page.fill('input#designation', 'Program Officer');
+    await page.fill('input#email', 'myradaglb11@gmail.com');
+    await page.fill('input#mobileNo', '9655008965');
     await page.fill('input#password', '1234'); 
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -860,11 +860,11 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    await page.fill('input#userName', 'Hanumanth Roa Tippa');
-    await page.fill('input#employeeCode', 'MY002');
-    await page.fill('input#designation', 'Project Manager');
-    await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008961');
+    await page.fill('input#userName', 'S D Kalyanshetti');
+    await page.fill('input#employeeCode', 'MY006');
+    await page.fill('input#designation', 'Program Officer');
+    await page.fill('input#email', 'myradaglb11@gmail.com');
+    await page.fill('input#mobileNo', '9655008965');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -897,7 +897,7 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008961');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008965');
     await page.waitForTimeout(1000);
     await browser.close();
 
@@ -932,11 +932,11 @@ test.describe('User Management Automation', () => {
     await addUserButton.click();
     await page.waitForSelector('text=Add User');
 
-    await page.fill('input#userName', 'Hanumanth Roa Tippa');
-    await page.fill('input#employeeCode', 'MY001');
+    await page.fill('input#userName', 'S D Kalyanshetti');
+    await page.fill('input#employeeCode', 'MY005');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008962');
+    await page.fill('input#mobileNo', '9655008966');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -969,7 +969,7 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: User Code already exits MY001');
+    expect(alertMessage).toBe('User error: User Code already exits MY005');
     await page.waitForTimeout(1000);
     await browser.close();
   });

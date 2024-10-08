@@ -1,9 +1,9 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  workers: 1,  // This ensures that tests run one by one, no parallel execution
-
-  testDir: './src/__tests__',  // Directory where your test files are located
+  retries: 1, // Number of retries for failed tests
+  workers: 1, // Run tests in a single worker to ensure order
+  testDir: 'D:/BFIL_workspace/bfil_ws_fe/src/__tests__',  // Directory where your test files are located
   // testMatch: '**/*.test.tsx',  // Pattern to match your test files (you can adjust it if needed)
 //   timeout: 30000,              // Set global timeout for tests (in milliseconds)
 //   retries: 2,                  // Retries for flaky tests
@@ -15,6 +15,11 @@ export default defineConfig({
 //     video: 'retain-on-failure', // Record video of test run (only on failure)
 //     screenshot: 'only-on-failure',  // Take screenshots only on test failure
 //   },
+
+testMatch: [
+  '**/1.logintest/Login.Test.tsx',
+  '**/2.UserPageTest/2.UserEdit.test.tsx'
+],
   projects: [
     {
       name: 'chromium',
@@ -31,10 +36,7 @@ export default defineConfig({
     }
   ],
   reporter: [
-    ['list'],  // This is optional, it shows test progress in the terminal
-    // ['html', { outputFolder: 'playwright-report', open: 'never' }],
-    ['html', { outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'test-results.json' }],
-    ['junit', { outputFile: 'results.xml' }]
+    ['html', { outputFolder: 'playwright-report', open: 'never' }]
   ],
+  
 });

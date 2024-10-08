@@ -19,8 +19,9 @@ test.describe('Permission based screen view', () => {
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
         await page.reload();
         // Ensure the 'Watershed Master' section is visible and clickable
-        
-        const dashBoard = page.locator('role=button[name="Dashboard"]');
+        const dashBoard = page.locator('text=Dash Board');
+
+        // const dashBoard = page.locator('role=button[name="Dash Board"]');
         await expect(dashBoard).toBeVisible();
         await dashBoard.click();
         await page.waitForTimeout(1000);
@@ -82,7 +83,7 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '8861982062');
+        await page.fill('input#userName', '8310450995');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
@@ -92,7 +93,8 @@ test.describe('Permission based screen view', () => {
 
         // const userManagementButton = page.locator('text=Role Management');
         // await userManagementButton.click();
-        const watershedMasterLink = page.locator('role=button[name="User Management"]');
+        // const watershedMasterLink = page.locator('role=button[name="User Management"]');
+        const watershedMasterLink = page.locator('text=User Management');
 
         // const watershedMasterLink = page.locator('text=User Management');
         await expect(watershedMasterLink).toBeVisible();
@@ -124,7 +126,7 @@ test.describe('Permission based screen view', () => {
         const page: Page = await context.newPage();
         // Navigate to the login page and log in
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '8861982062');
+        await page.fill('input#userName', '8310450995');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         // Wait for the home page to load
@@ -176,7 +178,7 @@ test.describe('Permission based screen view', () => {
         await page.reload();
 
         try {
-        const dashboard = page.locator('text=Dashboard');
+        const dashboard = page.locator('text=Dash Board');
         await expect(dashboard).toBeVisible();
         await dashboard.click();
 
@@ -264,7 +266,7 @@ test.describe('Permission based screen view', () => {
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
         await page.reload();
 
-        const dashboard = page.locator('text=Dashboard');
+        const dashboard = page.locator('text=Dash Board');
         await expect(dashboard).toBeVisible();
         await dashboard.click();
 
@@ -356,7 +358,7 @@ test.describe('Permission based screen view', () => {
         await page.reload();
 
         try {
-        const dashboard = page.locator('text=Dashboard');
+        const dashboard = page.locator('text=Dash Board');
         await expect(dashboard).toBeVisible();
         await dashboard.click();
 

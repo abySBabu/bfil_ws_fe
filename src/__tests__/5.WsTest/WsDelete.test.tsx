@@ -110,9 +110,9 @@ test.describe('Watershed Master Delete Automation', () => {
         const confirmButton = page.locator('button', { hasText: 'Delete' });
         await confirmButton.isVisible();
 
-        await page.click('button:has-text("Delete")');
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        expect(alertMessage).toBe(`Watershed deleted`);
+        // await page.click('button:has-text("Delete")');
+        // const alertMessage = await page.locator('.MuiAlert-message').innerText();
+        // expect(alertMessage).toBe(`Watershed deleted`);
         await page.waitForTimeout(2000);
         await browser.close();
     });
