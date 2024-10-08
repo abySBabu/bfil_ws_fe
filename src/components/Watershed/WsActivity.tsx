@@ -4,7 +4,7 @@ import {
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
     MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
-import { Edit, Search, Add } from '@mui/icons-material';
+import { Edit, Search, Add, Info } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
@@ -361,7 +361,7 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
-                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
+                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>{a.activityWorkflowStatus === 'Completed' ? <Info /> : <Edit />}</IconButton>
                 </TableCell>}
             </TableRow>)
             )}</TableBody>
@@ -547,13 +547,14 @@ export const WsActivity: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
-                <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)} disabled={actObj.activityWorkflowStatus === 'Completed'}>{
-                    actObj.activityWorkflowStatus === 'New' ? 'Start'
-                        : actObj.activityWorkflowStatus === 'In Progress' ? 'Finish'
-                            : actObj.activityWorkflowStatus === 'Completed' ? 'Approved'
+                {actObj.activityWorkflowStatus !== 'Completed' && <>
+                    <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>{
+                        actObj.activityWorkflowStatus === 'New' ? 'Start'
+                            : actObj.activityWorkflowStatus === 'In Progress' ? 'Finish'
                                 : 'Approve'
-                }</Button>
+                    }</Button>
+                </>}
             </DialogActions>
         </Dialog>
     </>)
