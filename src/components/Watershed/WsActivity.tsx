@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowAdd, actFlowEdit } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -154,7 +154,7 @@ export const WsActivity: React.FC = () => {
             if (resp0.status === 'success') {
                 const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId"))) || {}
                 if (found0) {
-                    const wsFil: number[] = found0.watershedId.split(',').map((id: string) => Number(id.trim())) || []
+                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim())) || []
                     const resp1 = await listAct();
                     if (resp1.status === 'success') {
                         const found1: typeof actDef[] = resp1.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
@@ -174,6 +174,7 @@ export const WsActivity: React.FC = () => {
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
             const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
+            const resp7 = await actFlowAdd(); if (resp7) { console.log("Flow--", resp7) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -516,6 +517,7 @@ export const WsActivity: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
                 <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                <Button onClick={() => seteditM(false)} disabled={loading}>Approve</Button>
             </DialogActions>
         </Dialog>
     </>)
