@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowAdd, actFlowEdit } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowAdd, actFlowUpdate, actFlowSubmit } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -148,7 +148,6 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            console.log("Role--", localStorage.getItem("userRole"))
             const uRole = localStorage.getItem("userRole") || "";
             const resp0 = await listWSMap();
             if (resp0.status === 'success') {
@@ -159,12 +158,12 @@ export const WsActivity: React.FC = () => {
                     if (resp1.status === 'success') {
                         const found1: typeof actDef[] = resp1.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
                         if (found1) {
-                            if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'Initiated' || x.activityWorkflowStatus === 'Pending')) }
-                            if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 1')) }
-                            if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 2')) }
-                            if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 3')) }
-                            if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 4')) }
-                            if (uRole === 'Chief Manager Head Office') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 5')) }
+                            if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
+                            if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
+                            if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
+                            if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
+                            if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
+                            if (uRole === 'Chief Manager Head Office') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
                         }
                     }
                 }
@@ -174,7 +173,6 @@ export const WsActivity: React.FC = () => {
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
             const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
-            const resp7 = await actFlowAdd(); if (resp7) { console.log("Flow--", resp7) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -290,6 +288,38 @@ export const WsActivity: React.FC = () => {
         catch (error) {
             console.log(error); setalertClr(false);
             setalert("Failed to update activity");
+        }
+        setLoading(false);
+        seteditM(false);
+    }
+
+    const ActFlow = async (status: any, id: any) => {
+        setLoading(true);
+        try {
+            const resp1 = status === 'New' ? await actFlowAdd()
+                : status === 'Verification 6' ? await actFlowSubmit()
+                    : await actFlowUpdate(status)
+            if (resp1) {
+                const stObj = { ...actObj, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(stObj, id);
+                if (resp2) {
+                    fetchData();
+                    setalertClr(true);
+                    setalert(`Updated activity status to ${resp1}`);
+                }
+                else {
+                    setalertClr(false);
+                    setalert("Failed to update work flow status");
+                }
+            }
+            else {
+                setalertClr(false);
+                setalert("Failed to update work flow status");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update work flow status");
         }
         setLoading(false);
         seteditM(false);
@@ -517,7 +547,12 @@ export const WsActivity: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
                 <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
-                <Button onClick={() => seteditM(false)} disabled={loading}>Approve</Button>
+                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)} disabled={actObj.activityWorkflowStatus === 'Completed'}>{
+                    actObj.activityWorkflowStatus === 'New' ? 'Start'
+                        : actObj.activityWorkflowStatus === 'In Progress' ? 'Finish'
+                            : actObj.activityWorkflowStatus === 'Completed' ? 'Approved'
+                                : 'Approve'
+                }</Button>
             </DialogActions>
         </Dialog>
     </>)

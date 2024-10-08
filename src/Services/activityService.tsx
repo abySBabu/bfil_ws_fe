@@ -71,8 +71,8 @@ export async function DashSupply() {
 
 export async function actFlowAdd() {
     const configs = {
-        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity Work Flow/Add/New`,
-        method: 'post',
+        url: `http://172.104.56.206:9061/wf/work-service/work-flow/2/Activity Work Flow/Add/New`,
+        method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
@@ -82,10 +82,23 @@ export async function actFlowAdd() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function actFlowEdit() {
+export async function actFlowUpdate(status: any) {
     const configs = {
-        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity Work Flow/Update/In Progress`,
-        method: 'post',
+        url: `http://172.104.56.206:9061/wf/work-service/work-flow/2/Activity Work Flow/Update/${status}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function actFlowSubmit() {
+    const configs = {
+        url: `http://172.104.56.206:9061/wf/work-service/work-flow/2/Activity Work Flow/Submit/Verification 6`,
+        method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
