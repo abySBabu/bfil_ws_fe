@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
-import { ListLand, ListInter, ListSupply, ListDemand } from '../../Services/dashboardService';
+import { ListLand, ListInter, ListSupply, ListDemand, ListDonor } from '../../Services/dashboardService';
 import { listWS } from '../../Services/wsService';
 
 const wpDef = {
@@ -24,7 +24,7 @@ const wpDef = {
     updatedUser: "",
     unitofMeasurement: "",
     plan: "",
-    value: "",
+    value: 0,
     financialDetails: [
         {
             wfsId: 101,
@@ -110,7 +110,8 @@ export const Workplan: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data) }
-            const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
+            const resp2 = await ListInter(); if (resp2.status === 'success') { setintOps(resp2.data) }
+            const resp3 = await ListDonor(); if (resp3.status === 'success') { setintOps(prevIntOps => [...prevIntOps, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
         }
@@ -148,7 +149,7 @@ export const Workplan: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp1.message || "");
+                setalert("Failed to add plan");
             }
         }
         catch (error) {
@@ -169,7 +170,7 @@ export const Workplan: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp1.message || "");
+                setalert("Failed to update plan");
             }
         }
         catch (error) {
@@ -202,7 +203,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
-                    {/* {PerChk('EDIT_Work Plan') && <TableCell>Actions</TableCell>} */}
+                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>
 
@@ -213,9 +214,9 @@ export const Workplan: React.FC = () => {
                     <TableCell>{w.interventionType_Components}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                    {/* {PerChk('EDIT_Work Plan') && <TableCell>
+                    {PerChk('EDIT_Work Plan') && <TableCell>
                         <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>} */}
+                    </TableCell>}
                 </TableRow>
             ))}</TableBody>
 
@@ -256,23 +257,24 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
 
                 <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
                 <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
                     <Grid item xs={3}><TextField
-                        type="number"
+                        type='number'
                         label={detail.wfsName}
                         value={detail.wfsValue}
                         onChange={(e) =>
                             setplanObj({
                                 ...planObj,
                                 financialDetails: planObj.financialDetails?.map((d, i) =>
-                                    i === index ? { ...d, wfsValue: Number(e.target.value) } : d
+                                    i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
                                 )
                             })
                         }
+                        inputProps={{ min: 0 }}
                     /></Grid>
                     {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
                 </React.Fragment>))}
@@ -287,16 +289,16 @@ export const Workplan: React.FC = () => {
             </DialogActions>
         </Dialog>
 
-        {/* <Dialog open={editM}>
+        <Dialog open={editM}>
             <DialogTitle>Edit Plan</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Year' value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
                 <Grid item xs={3}><TextField required select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })}>
+                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
@@ -304,32 +306,33 @@ export const Workplan: React.FC = () => {
                 </TextField></Grid>
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
+                <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                </TextField></Grid>
                 <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
                 <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
                 <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
                 <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
-                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
-                </TextField></Grid>
 
                 <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: e.target.value })} /></Grid>
+                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
                 <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField required
-                        type="number"
+                    <Grid item xs={3}><TextField
+                        type='number'
                         label={detail.wfsName}
                         value={detail.wfsValue}
                         onChange={(e) =>
                             setplanObj({
                                 ...planObj,
                                 financialDetails: planObj.financialDetails?.map((d, i) =>
-                                    i === index ? { ...d, wfsValue: Number(e.target.value) } : d
+                                    i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
                                 )
                             })
                         }
+                        inputProps={{ min: 0 }}
                     /></Grid>
                     {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
                 </React.Fragment>))}
@@ -342,6 +345,6 @@ export const Workplan: React.FC = () => {
                 <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
                 <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
             </DialogActions>
-        </Dialog> */}
+        </Dialog>
     </>)
 }

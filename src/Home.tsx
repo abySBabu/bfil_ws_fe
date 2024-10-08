@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -16,6 +16,16 @@ import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
+import Check from '@mui/icons-material/Check';
+
+interface SideItem {
+    screenName: string;
+}
+interface Section {
+    name: string;
+    permission: string;
+    component: JSX.Element;
+}
 
 export const Home: React.FC = () => {
     const [message, setMessage] = useState('');
@@ -27,6 +37,7 @@ export const Home: React.FC = () => {
     const [avatarAnchor, setavatarAnchor] = useState<any>(null);
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
     const [sideList, setsideList] = React.useState<any[]>([]);
+    const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
 
@@ -42,6 +53,7 @@ export const Home: React.FC = () => {
     }, [setTimeoutsecs, message, tokenExpired])
 
     const handleLanguageChange = (lng: string) => {
+        setLanguageAnchor(null);
         i18n.changeLanguage(lng);
     }
 
@@ -65,21 +77,62 @@ export const Home: React.FC = () => {
         navigate('/')
     };
 
-    const sections = [
-        { name: sideList[7]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
-        { name: sideList[6]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
-        { name: sideList[5]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
-        { name: sideList[4]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-        { name: sideList[3]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-        { name: sideList[2]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-        { name: sideList[1]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-        { name: sideList[0]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
-    ];
+    // const sections = [
+    //     { name: sideList[0]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
+    //     { name: sideList[1]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
+    //     { name: sideList[2]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
+    //     { name: sideList[3]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
+    //     { name: sideList[4]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
+    //     { name: sideList[5]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
+    //     { name: sideList[6]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
+    //     { name: sideList[7]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
+    // ];
+
 
     React.useEffect(() => {
         const fetchLoc = async () => {
             try {
-                const resp0 = await ListSide(); if (resp0.status === 'success') { setsideList(resp0.data) }
+                const resp0 = await ListSide();
+                if (resp0.status === 'success') {
+                    let sortscreenlist = resp0.data.reverse();
+                    setsideList(sortscreenlist);
+                    const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
+                        switch (sideItem.screenName) {
+                            case 'Dashboard':
+                                return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+                            case 'User Management':
+                                return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+                            case 'Role Management':
+                                return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+                            case 'Watershed Master':
+                                return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+                            case 'Farmer Master':
+                                return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
+                            case 'Watershed Mapping':
+                                return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+                            case 'Watershed Activity':
+                                return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                            case 'Work Plan':
+                                return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                            default:
+                                return null;
+                        }
+                    }).filter((section: Section): section is Section => section !== null);
+
+                    setSections(generatedSections);
+
+
+                    console.log('sec len', generatedSections.length)
+
+                    const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
+                    if (defaultIndex !== -1) {
+                        console.log('defaultIndex', defaultIndex)
+                        setdIndex(defaultIndex);
+                    } else {
+                        setHasPermission(true);
+                        setMessage("You do not have permission to view any sections.");
+                    }
+                }
                 const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
                 const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
                 const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
@@ -91,14 +144,8 @@ export const Home: React.FC = () => {
             }
         }; fetchLoc();
 
-        const defaultIndex = sections.findIndex(section => PerChk(section.permission));
-        if (defaultIndex !== -1) {
-            setdIndex(defaultIndex);
-        } else {
-            setHasPermission(true);
-            setMessage("You do not have permission to view any sections.");
-        }
-    }, []);
+
+    }, [i18n.language]);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
@@ -128,7 +175,7 @@ export const Home: React.FC = () => {
                         </Dialog>
                     }
                     <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
-                        <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections.map((section, index) => (
+                        <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
                                 <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
                                     <ListItemText primary={section.name} />
@@ -138,7 +185,7 @@ export const Home: React.FC = () => {
                     </Box>
 
                     <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
-                        {dIndex !== null && sections[dIndex] && sections[dIndex].component}
+                        {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
                     </Box>
                 </Paper>
             }
@@ -171,8 +218,8 @@ export const Home: React.FC = () => {
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
-                <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-                <MenuItem onClick={() => handleLanguageChange('ka')}>Kannada</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
             </Menu>
         </Box>
     )

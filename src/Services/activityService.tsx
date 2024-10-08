@@ -68,3 +68,16 @@ export async function DashSupply() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function updateFlow() {
+    const configs = {
+        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity`,
+        method: 'post',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}

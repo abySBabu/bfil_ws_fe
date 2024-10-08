@@ -23,6 +23,7 @@ export async function login(data: any) {
         sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
         sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
         sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
+        localStorage.setItem("userRole", response.data.user.userRoleList[0].roleName);
 
 
         return response.data;
@@ -48,7 +49,7 @@ export async function logout() {
             address: "address",
             loginId: sessionStorage.getItem("userNumber") || ""
         }
-    };  
+    };
     try {
         const response = await axios(configuration); if (response) {
             sessionStorage.clear();
