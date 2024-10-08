@@ -141,5 +141,77 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "p_Role_Management": {
+        "ss_Role_Management_Header": "ಪಾತ್ರ ನಿರ್ವಹಣೆ",
+        "ss_Search_Label": "ಹುಡುಕು",
+        "Add_Role_Link": {
+            "Add_Role_Link_Text": "ಪಾತ್ರವನ್ನು ಸೇರಿಸಿ",
+            "Add_Role_Popup": {
+                "Add_Role_Label": "ಪಾತ್ರವನ್ನು ಸೇರಿಸಿ",
+                "Role_Name": "ಪಾತ್ರದ ಹೆಸರು",
+                "Role_Description": "ಪಾತ್ರ ವಿವರಣೆ",
+                "View_Label": "ವೀಕ್ಷಿಸಿ",
+                "Edit_Label": "ಸಂಪಾದಿಸು",
+                "ScreenName_List": {
+                    "Dashboard_Label": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                    "User_Management_Label": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
+                    "Role_Management_Label": "ಪಾತ್ರ ನಿರ್ವಹಣೆ",
+                    "Watershed_Master_Label": "ಜಲಾನಯನ ಮಾಸ್ಟರ್",
+                    "Farmer_Master_Label": "ರೈತ ಮೇಷ್ಟ್ರು",
+                    "Watershed_Mapping_Label": "ಜಲಾನಯನ ನಕ್ಷೆ",
+                    "Watershed_Activity_Label": "ಜಲಾನಯನ ಚಟುವಟಿಕೆ",
+                    "Work_Plan_Label": "ಕೆಲಸದ ಯೋಜನೆ"
+                },
+                "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                "Add_Button": "ಸೇರಿಸಿ"
+            },
+            "Add_Success_Message": "ಪಾತ್ರವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+        },
+        "ss_RoleList": {
+            "Role_Name": "ಪಾತ್ರದ ಹೆಸರು",
+            "Role_Description": "ಪಾತ್ರ ವಿವರಣೆ",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಪಾತ್ರವನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_Role_Popup": {
+                            "Edit_Role_Label": "ಪಾತ್ರವನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Role_Name": "ಪಾತ್ರದ ಹೆಸರು",
+                            "Role_Description": "ಪಾತ್ರ ವಿವರಣೆ",
+                            "View_Label": "ವೀಕ್ಷಿಸಿ",
+                            "Edit_Label": "ಸಂಪಾದಿಸು",
+                            "ScreenName_List": {
+                                "Dashboard_Label": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+                                "User_Management_Label": "ಬಳಕೆದಾರ ನಿರ್ವಹಣೆ",
+                                "Role_Management_Label": "ಪಾತ್ರ ನಿರ್ವಹಣೆ",
+                                "Watershed_Master_Label": "ಜಲಾನಯನ ಮಾಸ್ಟರ್",
+                                "Farmer_Master_Label": "ರೈತ ಮೇಷ್ಟ್ರು",
+                                "Watershed_Mapping_Label": "ಜಲಾನಯನ ನಕ್ಷೆ",
+                                "Watershed_Activity_Label": "ಜಲಾನಯನ ಚಟುವಟಿಕೆ",
+                                "Work_Plan_Label": "ಕೆಲಸದ ಯೋಜನೆ"
+                            },
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ಪಾತ್ರವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+                        "Goback_Login_PopUp_Text": "ಪರದೆಯ ಅನುಮತಿ ಬದಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಮಾಡಿ",
+                        "Goback_Login_PopUp_Button": "ಸರಿ"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "ಪಾತ್ರವನ್ನು ಅಳಿಸಿ",
+                        "Delete_Role_Popup": {
+                            "Delete_Role_Label": "ಪಾತ್ರವನ್ನು ಅಳಿಸಿ",
+                            "Delete_Role_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                            "Delete_Button": "ಅಳಿಸಿ"
+                        },
+                        "Delete_Success_Message": "ಪಾತ್ರವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
+                    }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+        }
     }
 }
