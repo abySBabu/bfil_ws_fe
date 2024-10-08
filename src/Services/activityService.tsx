@@ -69,9 +69,22 @@ export async function DashSupply() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function updateFlow() {
+export async function actFlowAdd() {
     const configs = {
-        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity`,
+        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity Work Flow/Add/New`,
+        method: 'post',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function actFlowEdit() {
+    const configs = {
+        url: serverPath.bfil + `wf/work-service/work-flow/2/Activity Work Flow/Update/In Progress`,
         method: 'post',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
