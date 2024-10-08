@@ -156,7 +156,8 @@ export const WsActivity: React.FC = () => {
                     const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim())) || []
                     const resp1 = await listAct();
                     if (resp1.status === 'success') {
-                        const found1: typeof actDef[] = resp1.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
+                        let sortrespdata = resp1.data.reverse();
+                        const found1: typeof actDef[] = sortrespdata.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
                         if (found1) {
                             if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
                             if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
