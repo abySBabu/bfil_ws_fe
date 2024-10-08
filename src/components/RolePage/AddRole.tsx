@@ -8,6 +8,7 @@ import { permissionByAppID } from './RoleManagement';
 import { permissionByAppId, addRolePermission } from '../../Services/roleService';
 import { ListSide } from '../../Services/dashboardService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
+import { useTranslation } from 'react-i18next';
 
 type userTypeProps = {
     show: boolean;
@@ -27,6 +28,7 @@ interface Response {
     [moduleName: string]: permissionByAppID[];
 }
 export default function AddRole(props: userTypeProps) {
+    const { t } = useTranslation();
     const [selectedPermissions, setSelectedPermissions] = useState<ScreenPermissionMapping[]>([]);
     const [checkedPermissions, setCheckedPermissions] = useState<permissionByAppID[]>([]);
     const [message, setMessage] = useState('');
@@ -215,7 +217,7 @@ export default function AddRole(props: userTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>Add Role</DialogTitle>
+                <DialogTitle>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Role_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={6}>
@@ -224,7 +226,7 @@ export default function AddRole(props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="roleName"
-                                label="Role Name"
+                                label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Name")}
                                 autoFocus
                                 {...register('roleName', {
                                     // required: 'Role Name is required',
@@ -247,7 +249,7 @@ export default function AddRole(props: userTypeProps) {
                                 required
                                 fullWidth
                                 id="roleDesc"
-                                label="Role Description"
+                                label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Description")}
                                 autoFocus
                                 {...register('roleDesc', {
                                     // required: 'Role Description is required',
@@ -274,10 +276,10 @@ export default function AddRole(props: userTypeProps) {
                             }}>
                                 <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    <Typography >View</Typography>
+                                    <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.View_Label")}</Typography>
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <Typography >Edit</Typography>
+                                    <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Edit_Label")}</Typography>
                                 </Grid>
                                 {selectedPermissions.map((screendata, index) => (
 
