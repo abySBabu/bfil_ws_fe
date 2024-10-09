@@ -40,7 +40,7 @@ export default function MappingList() {
     const fetchMapData = async () => {
         try {
             let resp = await listWSMap();
-            setmapData(resp.data);
+            setmapData(resp.data.reverse());
             let userData = await usersList(companyId);
             setUserList(userData);
             const wsDatalist = await listWS();
