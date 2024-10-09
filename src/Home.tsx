@@ -38,6 +38,7 @@ export const Home: React.FC = () => {
     const [languageAnchor, setLanguageAnchor] = useState<any>(null);
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
+    const [uName, setuName] = React.useState('');
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
@@ -95,6 +96,7 @@ export const Home: React.FC = () => {
 
     React.useEffect(() => {
         const fetchLoc = async () => {
+            setuName((sessionStorage.getItem("userName") as string)[0] || '')
             try {
                 const resp0 = await ListSide();
                 if (resp0.status === 'success') {
@@ -147,8 +149,6 @@ export const Home: React.FC = () => {
                 console.log(error);
             }
         }; fetchLoc();
-
-
     }, [i18n.language]);
 
     return (
@@ -161,7 +161,7 @@ export const Home: React.FC = () => {
                 <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{(sessionStorage.getItem("userName") as string)[0] || ''}</Avatar>
+                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
                 </Box>
             </Toolbar>
 

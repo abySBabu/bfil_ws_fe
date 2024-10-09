@@ -82,6 +82,7 @@ export const WsActivity: React.FC = () => {
     const [vilOps, setvilOps] = React.useState<any[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
+    const [viewM, setviewM] = React.useState(false);
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
     const [next, setnext] = React.useState('');
@@ -149,7 +150,6 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            console.log('Role--', localStorage.getItem("userRole"))
             const uRole = localStorage.getItem("userRole")
             const resp0 = await listWSMap();
             if (resp0.status === 'success') {
@@ -376,9 +376,10 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{a.activityWorkflowStatus}</TableCell>
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
-                {PerChk('EDIT_Watershed Activity') && <TableCell>
-                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>{a.activityWorkflowStatus === 'Completed' ? <Info /> : <Edit />}</IconButton>
-                </TableCell>}
+                <TableCell>
+                    {PerChk('EDIT_Watershed Activity') && <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>}
+                    <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Info /></IconButton>
+                </TableCell>
             </TableRow>)
             )}</TableBody>
 
@@ -565,8 +566,70 @@ export const WsActivity: React.FC = () => {
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
                 {actObj.activityWorkflowStatus !== 'Completed' && <>
                     <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
-                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Submit for {next}</Button>
+                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Update & Submit for {next}</Button>
                 </>}
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={viewM} maxWidth='xl'>
+            <DialogTitle>Activity Details</DialogTitle>
+
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                <Grid item xs={3}>Intervention: {actObj.interventionType} </Grid>
+                <Grid item xs={3}>Activity: {actObj.activityName} </Grid>
+                {actObj.activityName === 'Sustainable Practices' && <Grid item xs={3}>Sustainable Practice: {actObj.activityDescription} </Grid>}
+                {actObj.activityName === 'Members Capacitated' ? <>
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><b>Event Name:</b> {actObj.capacitynameEvent} </Grid>
+                    <Grid item xs={3}><b>Event Type:</b> {actObj.capacitytypeEvent} </Grid>
+                    <Grid item xs={3}><b>Event Date:</b> {actObj.eventDate} </Grid>
+                    <Grid item xs={3}><b>Target Group:</b> {actObj.participantsType} </Grid>
+
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><b>State:</b> {actObj.state}</Grid>
+                    <Grid item xs={3}><b>District:</b> {actObj.district} </Grid>
+                    <Grid item xs={3}><b>Taluk:</b> {actObj.taluk} </Grid>
+                    <Grid item xs={3}><b>Panchayat:</b> {actObj.gramPanchayat} </Grid>
+                    <Grid item xs={3}><b>Habitation:</b> {actObj.habitationsCovered}</Grid>
+
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
+                    <Grid item xs={3}><b>Male Participants:</b> {actObj.participantsMale} </Grid>
+                    <Grid item xs={3}><b>Female Participants:</b> {actObj.participantsFemale} </Grid>
+
+                    <Grid item xs={12}><Divider /></Grid>
+                    <Grid item xs={3}><b>Facilitator:</b> {actObj.trainerFacilitator} </Grid>
+                    <Grid item xs={3}><b>Mobilizer:</b> {actObj.mobilizer} </Grid>
+                    <Grid item xs={6}><b>Remarks:</b> {actObj.remarks} </Grid>
+                </> : <>
+                    <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
+                    <Grid item xs={3}><b>Watershed:</b> {actObj.watershedId} </Grid>
+                    <Grid item xs={3}><b>State:</b> {StateName(actObj.state)} </Grid>
+                    <Grid item xs={3}><b>District:</b> {DistrictName(actObj.district)} </Grid>
+                    <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.taluk)} </Grid>
+                    <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.gramPanchayat)} </Grid>
+                    <Grid item xs={3}><b>Village:</b> {VillageName(actObj.village)} </Grid>
+                    <Grid item xs={3}><b>Survey No:</b> {actObj.surveyNo} </Grid>
+
+                    <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                    <Grid item xs={3}><b>Total Value:</b> {actObj.total}  {actObj.unit} </Grid>
+                    <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.areaTreated} </Grid>
+                    {actObj.interventionType !== 'Demand Side Interventions' && <>
+                        <Grid item xs={3}><b>Land Type:</b> {actObj.landType} </Grid>
+                        <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.waterConserved} </Grid>
+                    </>}
+                    <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.amountSpend} </Grid>
+                    <Grid item xs={3}><b>Funds source:</b> {actObj.sourceExpenditure} </Grid>
+
+                    <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                    <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
+                    <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
+                    <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
+                </>}
+            </Grid></DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => setviewM(false)}>Close</Button>
             </DialogActions>
         </Dialog>
     </>)
