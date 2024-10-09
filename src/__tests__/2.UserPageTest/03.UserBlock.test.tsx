@@ -2,9 +2,9 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('User Blocklist Automation', () => {
+  test.describe.configure({ mode: 'serial' });
 
-  
-  test('Should check the block icon ', async () => {
+  test('1.Should check the block icon ', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -35,7 +35,7 @@ test.describe('User Blocklist Automation', () => {
     await browser.close();
   });
 
-  test('should block user details based on index and button check visible', async () => {
+  test('2.Should block user details based on index and button check visible', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -68,7 +68,7 @@ test.describe('User Blocklist Automation', () => {
   });
 
 
-  test('Should block user details based on index', async () => {
+  test('3.Should block user details based on index', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -105,7 +105,7 @@ test.describe('User Blocklist Automation', () => {
 
   });
 
-  test('Should check the confirm popup', async () => {
+  test('4.Should check the confirm popup', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -137,7 +137,7 @@ test.describe('User Blocklist Automation', () => {
 
   });
 
-  test('Should block user cancel button is working fine', async () => {
+  test('5.Should block user cancel button is working fine', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -177,7 +177,7 @@ test.describe('User Blocklist Automation', () => {
   });
 
 
-  test('Should block user details based on index and check alert', async () => {
+  test('6.Should block user details based on index and check alert', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -216,8 +216,7 @@ test.describe('User Blocklist Automation', () => {
 
   });
 
-
-  test('Should block user details based on particular data', async () => {
+  test('7.Should block user details based on particular data', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -236,25 +235,26 @@ test.describe('User Blocklist Automation', () => {
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
-
-    //   // Find the row containing the specific user name and click the Edit icon
+      // Locate the input field for searching by its ID
+      const inputField = page.locator('#\\:r1\\:'); // Escaping the ID
+      // Wait for the input field to be visible
+      await inputField.waitFor({ state: 'visible' });
+      // Clear the input field if necessary
+      await inputField.fill('');
+      await inputField.fill('9655008962');
+    // Find the row containing the specific user name and click the Edit icon
     const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     await page.waitForTimeout(5000);
-
     // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
     const blockUserIcon = userRow.locator('[data-testid="PersonRemoveIcon"]');
     await blockUserIcon.click();
-
     const confirmButton = page.locator('button', { hasText: 'Block' });
     await confirmButton.click();
-
     const successMessage = page.locator('text=User blocked successfully');
-    console.log("Alert message: "+ successMessage)
+    console.log("Alert message: " + successMessage)
     // await expect(successMessage).toBeVisible();
-
     await page.waitForTimeout(1000);
     await browser.close();
-
   });
 
 });

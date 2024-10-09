@@ -1,8 +1,8 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('Role Management Automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     //Test Number : 1
-    test('Should click the edit icon and error message  for role name', async () => {
+    test('01.Should click the edit icon and error message  for role name', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -35,7 +35,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 2
-    test('should check error message for role desc.', async () => {
+    test('02.Should check error message for role desc.', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -69,7 +69,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 3
-    test('Should check alphanumeric for both roleName and roleDescription', async () => {
+    test('03.Should check alphanumeric for both roleName and roleDescription', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -106,7 +106,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 4
-    test('Should check alphanumeric for both roleName, roleDescription and button visible', async () => {
+    test('04.Should check alphanumeric for both roleName, roleDescription and button visible', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -146,7 +146,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 5
-    test('Should check atleast one permission have the role ', async () => {
+    test('05.Should check atleast one permission have the role ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -183,7 +183,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 6
-    test('Should give all permission have the role ', async () => {
+    test('06.Should give all permission have the role ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -229,7 +229,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 7
-    test('Should give view permission only ', async () => {
+    test('07.Should give view permission only ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -271,7 +271,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 8
-    test('Should give edit permission only ', async () => {
+    test('08.Should give edit permission only ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -310,7 +310,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 9
-    test('Should Role name null', async () => {
+    test('09.Should Role name null', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -342,12 +342,12 @@ test.describe('Role Management Automation', () => {
         // await addRoleDialogButton.click();
         console.log('Is the "Edit" button disable?', isButtonVisible);
         expect(isButtonVisible).toBe(true);
-        await page.waitForTimeout(1000);    
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
     //Test Number : 10
-    test('Should Role description null', async () => {
+    test('10.Should Role description null', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -383,7 +383,7 @@ test.describe('Role Management Automation', () => {
     });
 
     //Test Number : 11
-    test('rolename and description both null testing', async () => {
+    test('11.Should rolename and description both null testing', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -422,7 +422,7 @@ test.describe('Role Management Automation', () => {
 
 
     //Test Number : 12
-    test('Should validate the role edit alert message', async () => {
+    test('12.Should validate the role edit alert message', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -468,7 +468,7 @@ test.describe('Role Management Automation', () => {
 
 
     //Test Number : 13
-    test('Should check the edit button visible', async () => {
+    test('13.Should check the edit button visible', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -577,6 +577,4 @@ test.describe('Role Management Automation', () => {
     //     expect(errorMessageForUserName).toBe('Role Name is required');
     //     await browser.close();
     // });
-
-
 });

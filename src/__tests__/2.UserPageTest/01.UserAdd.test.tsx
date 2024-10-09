@@ -1,21 +1,9 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
-// test.beforeAll(async () => {
-//   global.getComputedStyle = (element: Element) => ({
-//     getPropertyValue: (prop: string): string => {
-//       if (prop === '--button-bradius') return '4px';
-//       if (prop === '--text-color-default') return '#000000';
-//       if (prop === '--button-bgcolor-active-brand') return '#1976d2';
-//       return '';
-//     }
-//   }) as any;
-// });
-
-
 test.describe('User Management Automation', () => {
-
+  test.describe.configure({ mode: 'serial' });
   //Test Number : 1
-  test('Add user details with alphanumeric validation', async () => {
+  test('1.Add user details with alphanumeric validation', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -81,10 +69,11 @@ test.describe('User Management Automation', () => {
     await expect(page.locator('#password-helper-text')).toHaveText('Password must be at least 4 characters');
     await page.waitForTimeout(1000);
     await browser.close();
+
   });
 
   //Test Number : 2
-  test('Should check the onchange error for empty fields', async () => {
+  test('2.Should check the onchange error for empty fields', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -158,7 +147,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 3
-  test('Should check the onchange error for userName fields', async () => {
+  test('3.Should check the onchange error for userName fields', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -229,7 +218,7 @@ test.describe('User Management Automation', () => {
 
 
   //Test Number : 4
-  test('Should check the onchange error for employeeCode fields', async () => {
+  test('4.Should check the onchange error for employeeCode fields', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -300,7 +289,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 5
-  test('Should check the onchange error for mail fields', async () => {
+  test('5.Should check the onchange error for mail fields', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -369,7 +358,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 6
-  test('Should check the onchange error for mobile number fields', async () => {
+  test('6.Should check the onchange error for mobile number fields', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -439,7 +428,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 7
-  test('Should check the length of mobile number and password', async () => {
+  test('7.Should check the length of mobile number and password', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -513,7 +502,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 8
-  test('Should check all fields are empty', async () => {
+  test('8.Should check all fields are empty', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -560,7 +549,7 @@ test.describe('User Management Automation', () => {
 
 
   //Test Number : 9
-  test('Should enter numbers for username, employee code, designation and mail', async () => {
+  test('9.Should enter numbers for username, employee code, designation and mail', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -630,7 +619,7 @@ test.describe('User Management Automation', () => {
 
 
   //Test Number : 10
-  test('Should check the important field', async () => {
+  test('10.Should check the important field', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -699,7 +688,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 11
-  test('Should check the miss any dropdown error message', async () => {
+  test('11.Should check the miss any dropdown error message', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -763,7 +752,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 12
-  test('Should check the successful alert message after add user', async () => {
+  test('12.Should check the successful alert message after add user', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -791,10 +780,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY005');//My001
+    await page.fill('input#employeeCode', 'MY008');//My008
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008965');
+    await page.fill('input#mobileNo', '9655008968');
     await page.fill('input#password', '1234'); 
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -833,7 +822,7 @@ test.describe('User Management Automation', () => {
   });
 
   //Test Number : 13
-  test('Should check the mobile number duplicate error message after add user', async () => {
+  test('13.Should check the mobile number duplicate error message after add user', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -861,10 +850,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY006');
+    await page.fill('input#employeeCode', 'MY009');
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008965');
+    await page.fill('input#mobileNo', '9655008968');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -897,7 +886,7 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008965');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008968');
     await page.waitForTimeout(1000);
     await browser.close();
 
@@ -905,7 +894,7 @@ test.describe('User Management Automation', () => {
 
   //Test Number : 14
   //Need to changes
-  test('Should check the duplicate error message for usercode exist after add user', async () => {
+  test('14.Should check the duplicate error message for usercode exist after add user', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -933,10 +922,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY005');
+    await page.fill('input#employeeCode', 'MY008');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008966');
+    await page.fill('input#mobileNo', '9655008969');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -969,13 +958,13 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: User Code already exits MY005');
+    expect(alertMessage).toBe('User error: User Code already exits MY008');
     await page.waitForTimeout(1000);
     await browser.close();
   });
 
   //Test Number : 15
-  test('Should check the useradd button visibility', async () => {
+  test('15.Should check the useradd button visibility', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -1005,6 +994,5 @@ test.describe('User Management Automation', () => {
     await page.waitForTimeout(1000);
     await browser.close();
   });
-
 
 });

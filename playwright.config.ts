@@ -1,9 +1,9 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  retries: 1, // Number of retries for failed tests
-  workers: 1, // Run tests in a single worker to ensure order
-  testDir: 'D:/BFIL_workspace/bfil_ws_fe/src/__tests__',  // Directory where your test files are located
+  retries: 1, 
+  workers: 1, 
+  testDir: 'D:/BFIL_workspace/bfil_ws_fe/src/__tests__', 
   // testMatch: '**/*.test.tsx',  // Pattern to match your test files (you can adjust it if needed)
 //   timeout: 30000,              // Set global timeout for tests (in milliseconds)
 //   retries: 2,                  // Retries for flaky tests
@@ -17,8 +17,9 @@ export default defineConfig({
 //   },
 
 testMatch: [
-  '**/1.logintest/Login.Test.tsx',
-  '**/2.UserPageTest/2.UserEdit.test.tsx'
+  '1.LoginPageTest/Login.Test.tsx', // First test file
+  // '2.UserPageTest/1.UserAdd.test.tsx', // Second test file
+  // You can add more test files here in the order you want
 ],
   projects: [
     {
@@ -28,10 +29,6 @@ testMatch: [
     // {
     //   name: 'firefox',
     //   use: { browserName: 'firefox' },
-    // },
-    // {
-    //   name: 'webkit',
-    //   use: { browserName: 'webkit' },
     // },
     }
   ],

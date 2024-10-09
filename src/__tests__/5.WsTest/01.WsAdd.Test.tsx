@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Watershed Master Automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     // test.only('should click the edit icon in the table row', async () => {
     //     test.setTimeout(800000);
     //     const browser = await chromium.launch({
@@ -46,8 +46,7 @@ test.describe('Watershed Master Automation', () => {
     //     await browser.close();
     // });
 
-
-    test('Should check village dropdown visibility', async () => {
+    test('01.Should check village dropdown visibility', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -110,8 +109,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-
-    test('Should check taluk dropdown visibility', async () => {
+    test('02.Should check taluk dropdown visibility', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -146,7 +144,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-    test('Should check the count of line item', async () => {
+    test('03.Should check the count of line item', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -173,8 +171,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-
-    test('Should check allow alphanumeric data for name', async () => {
+    test('04.Should check allow alphanumeric data for name', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -203,7 +200,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-    test('Should check allow alphanumeric data for description', async () => {
+    test('05.Should check allow alphanumeric data for description', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -232,7 +229,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-    test('Should check empty data for both name and description', async () => {
+    test('06.Should check empty data for both name and description', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -267,8 +264,7 @@ test.describe('Watershed Master Automation', () => {
         await browser.close();
     });
 
-
-    test('Should click the add icon and check the successful message ', async () => {
+    test('07.Should click the add icon and check the successful message ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -286,56 +282,84 @@ test.describe('Watershed Master Automation', () => {
         const watershed = page.locator('text=Watershed Master');
         await watershed.click();
         await page.waitForSelector('table');
-            const clickAddWs = page.locator('button:has-text("Add Watershed")');
-            await clickAddWs.click();
-           const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('Bellari');
+        const clickAddWs = page.locator('button:has-text("Add Watershed")');
+        await clickAddWs.click();
+        const dialog = await page.locator('div[role="dialog"]');
+        await dialog.getByLabel('Name').fill('TestingWatershed1'); //TestingWatershed1
         await dialog.getByLabel('Description').fill('New Description');
         await dialog.getByLabel('District').click();
-        await page.click('ul[role="listbox"] li:first-child');
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
         await dialog.getByLabel('Taluk').click();
-        await page.click('ul[role="listbox"] li:first-child');
+        await page.click('ul[role="listbox"] li:nth-child(10)'); // Selects the 10th taluk
         await dialog.getByLabel('Grampanchayat').click();
-        await page.click('ul[role="listbox"] li:first-child');
-        // await dialog.getByLabel('Village').click();
-        // await page.click('ul[role="listbox"] li:first-child');
-        // await page.waitForTimeout(2000);
-        // await page.click('button:has-text("Add")').nth(1);;
-        // await page.locator('button:has-text("Add")').nth(1);
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
+        await dialog.getByLabel('Village').click();
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
+        await page.waitForTimeout(2000);
+    
         const addButton = page.locator('button:has-text("Add")').nth(1);
         console.log(await addButton.isEnabled());
         console.log(await addButton.isVisible());
         console.log(await addButton.isHidden());
-
-        // const isAddButtonVisible = await addButton.isVisible();
-
-        if(await addButton.isEnabled()){
+        if (await addButton.isEnabled()) {
             await page.locator('button:has-text("Add")').nth(1).click();
-            // Wait for the Snackbar to appear and validate its content
             const alertMessage = await page.locator('.MuiAlert-message').innerText();
-            // const isAddButtonVisible = await addButton.isVisible();
-            // await addButton.click();
-            // const dialog = await page.locator('div[role="dialog"]');
-            // await dialog.getByLabel('Village').click();
-            // await page.click('ul[role="listbox"] li:first-child');
-    
-            // await page.click('button:has-text("Add")').nth(1);;
-        //    await page.locator('button:has-text("Update")').nth(1).click();
-            // Wait for the Snackbar to appear and validate its content
-            const wsName = await page.locator('div:has-text("Name") input').nth(0).getAttribute('value');
-    
-            await page.click('button:has-text("Update")');
-            // const alertMessage = await page.locator('.MuiAlert-message').innerText();
-            expect(alertMessage).toBe(`Watershed ${wsName}updated`);
-
+            expect(alertMessage).toBe(`Watershed added`);
         }
-        else{
+        else {
             console.log("Add button is still disble ")
         }
-      
         await page.waitForTimeout(2000);
         await browser.close();
     });
 
+    test('08.Should click the add icon and check the error message ', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.reload();
+        const watershed = page.locator('text=Watershed Master');
+        await watershed.click();
+        await page.waitForSelector('table');
+        const clickAddWs = page.locator('button:has-text("Add Watershed")');
+        await clickAddWs.click();
+        const dialog = await page.locator('div[role="dialog"]');
+        await dialog.getByLabel('Name').fill('TestingWatershed1');
+        await dialog.getByLabel('Description').fill('New Description');
+        await dialog.getByLabel('District').click();
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
+        await dialog.getByLabel('Taluk').click();
+        await page.click('ul[role="listbox"] li:nth-child(10)'); // Selects the 10th taluk
+        await dialog.getByLabel('Grampanchayat').click();
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
+        await dialog.getByLabel('Village').click();
+        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
+        await page.waitForTimeout(2000);
+    
+        const addButton = page.locator('button:has-text("Add")').nth(1);
+        console.log(await addButton.isEnabled());
+        console.log(await addButton.isVisible());
+        console.log(await addButton.isHidden());
+        if (await addButton.isEnabled()) {
+            await page.locator('button:has-text("Add")').nth(1).click();
+            const alertMessage = await page.locator('.MuiAlert-message').innerText();
+            expect(alertMessage).toBe(`Failed to add watershed`);
+        }
+        else {
+            console.log("Add button is still disble ")
+        }
+        await page.waitForTimeout(2000);
+        await browser.close();
+    });
 
 });

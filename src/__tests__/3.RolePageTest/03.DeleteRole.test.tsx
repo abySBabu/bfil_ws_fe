@@ -2,9 +2,9 @@ import { test, expect, chromium, Page } from '@playwright/test';
 import { execPath } from 'process';
 
 test.describe('Delete Role Automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     //Test Number : 1
-    test('Should delete a role and check the button visible', async () => {
+    test('01.Should delete a role and check the button visible', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -38,7 +38,7 @@ test.describe('Delete Role Automation', () => {
     });
 
     //Test Number : 2
-    test('Should delete a role and check the particular data', async () => {
+    test('02.Should delete a role and check the particular data', async () => {
         test.setTimeout(800000);
 
         const browser = await chromium.launch({
@@ -60,7 +60,13 @@ test.describe('Delete Role Automation', () => {
         await page.waitForTimeout(5000);
 
         await page.waitForSelector('table');
-
+      // Locate the input field for searching by its ID
+      const inputField = page.locator('#\\:r1\\:'); // Escaping the ID
+      // Wait for the input field to be visible
+      await inputField.waitFor({ state: 'visible' });
+      // Clear the input field if necessary
+      await inputField.fill('');
+      await inputField.fill('Testing New Role2');
         const userRow = page.locator('tr').filter({ hasText: 'Testing New Role2' }).first();
         const deleteIcon = userRow.locator('[data-testid="DeleteIcon"]');
         await deleteIcon.click();
@@ -73,7 +79,7 @@ test.describe('Delete Role Automation', () => {
     });
 
     //Test Number : 3
-    test('Should delete a role and check the alert message for incase mapping', async () => {
+    test('03.Should delete a role and check the alert message for incase mapping', async () => {
         test.setTimeout(800000);
 
         const browser = await chromium.launch({
@@ -103,7 +109,7 @@ test.describe('Delete Role Automation', () => {
         await expect(confirmDeleteButton).toBeVisible();
         await confirmDeleteButton.click();
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
-                expect(alertMessage).toBe('Unexpected error');
+        expect(alertMessage).toBe('Unexpected error');
 
         // expect(alertMessage).toBe('User error:This role has been mapped to another user');
         console.log('Alert Message:', alertMessage);
@@ -112,7 +118,7 @@ test.describe('Delete Role Automation', () => {
     });
 
     //Test Number : 4
-    test('Should delete a role and check the alert message', async () => {
+    test('04.Should delete a role and check the alert message', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -155,7 +161,7 @@ test.describe('Delete Role Automation', () => {
     });
 
     //Test Number : 5
-    test('Should check the delete button visibility', async () => {
+    test('05.Should check the delete button visibility', async () => {
         test.setTimeout(800000);
 
         const browser = await chromium.launch({
@@ -178,10 +184,10 @@ test.describe('Delete Role Automation', () => {
 
         await page.waitForSelector('table');
         const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
-        if(await deleteIcon.isVisible()){
-        const isDelteIconVisibility = await deleteIcon.isVisible();
-        expect(isDelteIconVisibility).toBe(true);
-        }else{
+        if (await deleteIcon.isVisible()) {
+            const isDelteIconVisibility = await deleteIcon.isVisible();
+            expect(isDelteIconVisibility).toBe(true);
+        } else {
             console.log("Not visible");
         }
 
@@ -190,7 +196,7 @@ test.describe('Delete Role Automation', () => {
     });
 
     //Test Number : 6
-    test('Should check the confirmation button', async () => {
+    test('06.Should check the confirmation button', async () => {
         test.setTimeout(800000);
 
         const browser = await chromium.launch({

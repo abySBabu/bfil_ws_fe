@@ -1,14 +1,15 @@
+
 import { test, expect, chromium, Page } from '@playwright/test';
 
-test.describe('Farmer add automation', () => {
-
+test.describe('Watershed mapping edit automation', () => {
+    test.describe.configure({ mode: 'serial' });
     // test.beforeEach(async ({ page }) => {
     //     // Navigate to the page containing the dialog
     //     await page.goto('http://localhost:3000'); // Update with your actual URL
     // });
 
     //Test Number : 1
-    test('Should check edit farmer icon visible in farmer screen', async () => {
+    test('01.Should check edit icon visible in watershed mapping', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -23,22 +24,20 @@ test.describe('Farmer add automation', () => {
         await page.waitForTimeout(1000);
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
         await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
         await page.waitForTimeout(5000);
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.isVisible();
-        
-        // const addFarmer = page.locator('button:has-text("Add Farmer")');
-        // await addFarmer.isVisible();
+        // const addWsAddWsMappingIcon = page.locator('button:has-text("Add Mapping")');
+        // await addWsAddWsMappingIcon.isVisible();
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    //Test Number : 2
-    test('Should check edit farmer icon clickable in farmer screen', async () => {
+    test('02.Should check edit icon clickable in watershed mapping', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -53,19 +52,21 @@ test.describe('Farmer add automation', () => {
         await page.waitForTimeout(1000);
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
         await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
         await page.waitForTimeout(5000);
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
+
+        // const addWsAddWsMappingIcon = page.locator('button:has-text("Add Mapping")');
+        // await addWsAddWsMappingIcon.isVisible();
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    //Test Number : 3
-    test('Should click edit farmer icon and edit data farmer screen', async () => {
+    test('03.Should check edit icon and check the username disabled watershed mapping', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -80,22 +81,22 @@ test.describe('Farmer add automation', () => {
         await page.waitForTimeout(1000);
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
         await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
         await page.waitForTimeout(5000);
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.getByRole('textbox', { name: 'Name' }).fill('Test Remarks edited');
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('123456789012');
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9876543210');
-        await page.waitForTimeout(2000);
+        // await page.waitForSelector('dialog');
+        const userNameDropdown = page.locator('#user');
+        await userNameDropdown.isDisabled();
+        await page.fill('input#remarks', 'Test Remarks');
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    test('Should click edit farmer icon and name is empty', async () => {
+    test('04.Should add Watershed Mapping add visible the update button', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -103,37 +104,8 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9677694732');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
-        await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
-        await page.waitForTimeout(5000);
-        const userRow = page.locator('tr').nth(1);
-        console.log("Hi this mapping testing " + userRow);
-        const editIcon = userRow.locator('[data-testid="EditIcon"]');
-        await editIcon.click();
-        await page.getByRole('textbox', { name: 'Name' }).fill(''); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('123'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('98765'); // Invalid Mobile
-        const mobileValidationMessage = await page.getByText('Mobile number should have 10 digits');
-        expect(await mobileValidationMessage.isVisible()).toBeTruthy(); // Validate error message for Mobile
-        await page.waitForTimeout(2000);
-        await browser.close();
-    });
 
-    test('Should click edit farmer icon and update button visible', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
+        // Navigate and log in
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
@@ -141,26 +113,37 @@ test.describe('Farmer add automation', () => {
         await page.waitForTimeout(1000);
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
         await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
+
+        // Open Watershed Mapping
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
         await page.waitForTimeout(5000);
+
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.getByRole('textbox', { name: 'Name' }).fill(''); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('123'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('98765'); // Invalid Mobile
-        // Click Cancel button
+        await page.fill('input#remarks', 'Test Remarks');
+        const wsNameDropdown = page.locator('#ws_name');
+        await wsNameDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]');
+        const watershedOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedOptions.length > 0) {
+            await watershedOptions[1].click();
+        }
+        await page.keyboard.press('Escape');
         const addButton = page.locator('button:has-text("Update")').nth(1);
         await addButton.isVisible();
-        // const mobileValidationMessage = await page.getByText('Mobile number should have 10 digits');
-        // expect(await mobileValidationMessage.isVisible()).toBeTruthy(); // Validate error message for Mobile    await page.waitForTimeout(2000);
-        await page.waitForTimeout(2000);
+        // // Verify alert message
+        // const alertMessage = await page.waitForSelector('div[role="alert"]'); // Adjust the selector for the alert message
+        // const alertText = await alertMessage.innerText();
+        // expect(alertText).toBe('WaterShed mapping created successfully');
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    test('Should edit add farmer icon and successfull alert message ', async () => {
+
+    test('05.Should edit Watershed Mapping add visible the cancel button', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -168,6 +151,8 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
+
+        // Navigate and log in
         await page.goto('http://localhost:3000/bfilreact');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
@@ -175,28 +160,72 @@ test.describe('Farmer add automation', () => {
         await page.waitForTimeout(1000);
         await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
         await page.reload();
-        const FarmerMasterButton = page.locator('text=Farmer Master');
-        await FarmerMasterButton.click();
+
+        // Open Watershed Mapping
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
         await page.waitForTimeout(5000);
+
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
-        await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy edited'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341990'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887775'); // Invalid Mobile
-        // Click Cancel button
-        const addButton = page.locator('button:has-text("Update")');
-        await addButton.click();
-        // Optionally, you can verify if a success message or alert appears
-        const alertMessage = await page.locator('div[role="alert"]'); // Adjust the selector based on your actual implementation
-        if (await alertMessage.isVisible()) {
-            const alertText = await alertMessage.innerText();
-            console.log(alertText);
-            expect(alertText).toBe('Farmer edited'); // Verify success message
+        await page.fill('input#remarks', 'Test Remarks');
+
+        const wsNameDropdown = page.locator('#ws_name');
+        await wsNameDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]');
+        const watershedOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedOptions.length > 0) {
+            await watershedOptions[1].click(); // Select the first option in the list
         }
-        await page.waitForTimeout(2000);
+        await page.keyboard.press('Escape');
+        // Click Add button
+        const addButton = page.locator('button:has-text("Cancel")').nth(1);
+        await addButton.isVisible();
+        await page.waitForTimeout(1000);
         await browser.close();
     });
 
+    test('06.Should edit Watershed Mapping and show success alert', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.reload();
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
+        await page.waitForTimeout(5000);
+        const userRow = page.locator('tr').nth(2);
+        console.log("Hi this mapping testing " + userRow);
+        const editIcon = userRow.locator('[data-testid="EditIcon"]');
+        await editIcon.click();
+
+        await page.fill('input#remarks', 'Test Remarks');
+        const wsNameDropdown = page.locator('#ws_name');
+        await wsNameDropdown.click();
+        await page.waitForSelector('ul[role="listbox"]');
+        const watershedOptions = await page.$$('ul[role="listbox"] > li');
+        if (watershedOptions.length > 0) {
+            await watershedOptions[0].click(); // Select the first option in the list
+        }
+        await page.keyboard.press('Escape');
+        const addButton = page.locator('button:has-text("Update")').nth(0);
+        await addButton.click();
+        const alertMessage = await page.waitForSelector('div[role="alert"]'); // Adjust the selector for the alert message
+        const alertText = await alertMessage.innerText();
+        expect(alertText).toBe('WaterShed mapping updated successfully');
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
 });

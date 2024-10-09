@@ -1,9 +1,9 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Worplan Add Automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     //Test Number : 1
-    test('Should click the add icon button visible', async () => {
+    test('01.Should click the add icon button visible', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -49,7 +49,7 @@ test.describe('Worplan Add Automation', () => {
     });
 
     //Test Number : 2
-    test('Should click the add icon and check all field validation', async () => {
+    test('02.Should click the add icon and check all field validation', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -68,7 +68,7 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
+        // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -95,7 +95,6 @@ test.describe('Worplan Add Automation', () => {
             await landTypeDropdownOptions[0].click();
         }
 
-
         const watershedDropdown = page.locator('label:has-text("Watershed") + *');
         await watershedDropdown.click();
         await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
@@ -103,9 +102,10 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
-        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
+    await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
         await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
@@ -131,7 +131,7 @@ test.describe('Worplan Add Automation', () => {
 
 
     //Test Number : 3
-    test('Should click the add icon and check alert successful message', async () => {
+    test('03.Should click the add icon and check alert successful message', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -150,7 +150,7 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
+        // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -185,7 +185,7 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
@@ -193,7 +193,6 @@ test.describe('Worplan Add Automation', () => {
         await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
         await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
-
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
@@ -205,7 +204,7 @@ test.describe('Worplan Add Automation', () => {
     });
 
     //Test Number : 4
-    test('Should click the add icon and check duplicate data can throw error message', async () => {
+    test('04.Should click the add icon and check duplicate data can throw error message', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -224,7 +223,7 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
+        // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -259,7 +258,7 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
@@ -278,7 +277,7 @@ test.describe('Worplan Add Automation', () => {
 
 
     //Test Number : 5
-    test('Should click the add icon and click the cancel button', async () => {
+    test('05.Should click the add icon and click the cancel button', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -297,7 +296,7 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
+        // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -331,7 +330,7 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
@@ -347,7 +346,7 @@ test.describe('Worplan Add Automation', () => {
 
 
     //Test Number : 6
-    test('Should click the add icon and check year missing , add button visibility', async () => {
+    test('06.Should click the add icon and check year missing , add button visibility', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -366,7 +365,7 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
+        // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         // await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -400,7 +399,7 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
@@ -421,7 +420,7 @@ test.describe('Worplan Add Automation', () => {
     });
 
     //Test Number : 7
-    test('Should click the add icon and check dropdown missing , add button visibility', async () => {
+    test('07.Should click the add icon and check dropdown missing , add button visibility', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -440,7 +439,6 @@ test.describe('Worplan Add Automation', () => {
 
         const userManagementButton = page.locator('text=Work Plan');
         await userManagementButton.click();
-        await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
         // await page.getByRole('textbox', { name: 'Year' }).fill('2024');
@@ -474,7 +472,7 @@ test.describe('Worplan Add Automation', () => {
         if (watershedDropdownOptions.length > 0) {
             await watershedDropdownOptions[0].click();
         }
-        await page.getByRole('textbox', { name: 'Value' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');

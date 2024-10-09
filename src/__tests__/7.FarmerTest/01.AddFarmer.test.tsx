@@ -1,14 +1,14 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Farmer add automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     // test.beforeEach(async ({ page }) => {
     //     // Navigate to the page containing the dialog
     //     await page.goto('http://localhost:3000'); // Update with your actual URL
     // });
 
     //Test Number : 1
-    test('Should check add farmer icon visible in farmer screen', async () => {
+    test('01.Should check add farmer icon visible in farmer screen', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -33,7 +33,7 @@ test.describe('Farmer add automation', () => {
     });
 
     //Test Number : 2
-    test('Should check add farmer icon clickable in farmer screen', async () => {
+    test('02.Should check add farmer icon clickable in farmer screen', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -58,7 +58,7 @@ test.describe('Farmer add automation', () => {
     });
 
     //Test Number : 3
-    test('Should click add farmer icon and add data farmer screen', async () => {
+    test('03.Should click add farmer icon and check the validation', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -79,14 +79,14 @@ test.describe('Farmer add automation', () => {
         const addFarmer = page.locator('button:has-text("Add Farmer")');
         await addFarmer.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Test Remarks');
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('123456789012');
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9876543210');
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('123456789020');
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9876543221');
         await page.waitForTimeout(2000);
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    test('Should click add farmer icon and name is empty', async () => {
+    test('04.Should click add farmer icon and name is empty', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -115,7 +115,7 @@ test.describe('Farmer add automation', () => {
         await browser.close();
     });
 
-    test('Should click add farmer icon and Add button visible', async () => {
+    test('05.Should click add farmer icon and Add button visible', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -147,7 +147,7 @@ test.describe('Farmer add automation', () => {
         await browser.close();
     });
 
-    test('Should click add farmer icon and successfull alert message ', async () => {
+    test('06.Should click add farmer icon and successfull alert message ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -168,8 +168,8 @@ test.describe('Farmer add automation', () => {
         const addFarmer = page.locator('button:has-text("Add Farmer")');
         await addFarmer.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341991'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887776'); // Invalid Mobile
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341951'); // Invalid Aadhar
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887751'); // Invalid Mobile
         // Click Cancel button
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
@@ -178,7 +178,7 @@ test.describe('Farmer add automation', () => {
         if (await alertMessage.isVisible()) {
             const alertText = await alertMessage.innerText();
             console.log(alertText);
-            expect(alertText).toBe('Farmer added successfully'); // Verify success message
+            expect(alertText).toBe('Farmer added'); // Verify success message
         }
         // const mobileValidationMessage = await page.getByText('Mobile number should have 10 digits');
         // expect(await mobileValidationMessage.isVisible()).toBeTruthy(); // Validate error message for Mobile    await page.waitForTimeout(2000);
@@ -186,7 +186,7 @@ test.describe('Farmer add automation', () => {
         await browser.close();
     });
 
-    test('Should click add farmer icon and duplicate error alert message ', async () => {
+    test('07.Should click add farmer icon and duplicate error for number alert message ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -207,8 +207,8 @@ test.describe('Farmer add automation', () => {
         const addFarmer = page.locator('button:has-text("Add Farmer")');
         await addFarmer.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341991'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887777'); // Invalid Mobile
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341951'); // Invalid Aadhar
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887751'); // Invalid Mobile
         // Click Cancel button
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
@@ -217,7 +217,7 @@ test.describe('Farmer add automation', () => {
         if (await alertMessage.isVisible()) {
             const alertText = await alertMessage.innerText();
             console.log(alertText);
-            expect(alertText).toBe('Duplicate Aadhaar number found: 735082341991'); // Verify success message
+            expect(alertText).toBe('Duplicate mobile number found: 9998887751'); // Verify success message
         }
         // const mobileValidationMessage = await page.getByText('Mobile number should have 10 digits');
         // expect(await mobileValidationMessage.isVisible()).toBeTruthy(); // Validate error message for Mobile    await page.waitForTimeout(2000);
@@ -225,7 +225,7 @@ test.describe('Farmer add automation', () => {
         await browser.close();
     });
 
-    test('Should click add farmer icon and fill empty for all field ', async () => {
+    test('08.Should click add farmer icon and fill empty for all field ', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,

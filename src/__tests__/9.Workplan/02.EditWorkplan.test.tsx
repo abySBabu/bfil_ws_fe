@@ -1,7 +1,7 @@
 // import { test, expect, chromium, Page } from '@playwright/test';
 
 // test.describe('Worplan Edit Automation', () => {
-
+    // test.describe.configure({ mode: 'serial' });
 //     //Test Number : 1
 //     test('Should click the edit icon button visible', async () => {
 //         test.setTimeout(800000);

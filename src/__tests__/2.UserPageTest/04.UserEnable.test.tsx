@@ -1,9 +1,9 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('User Enable Automation', () => {
+  test.describe.configure({ mode: 'serial' });
 
-
-  test('Should check the enable button ', async () => {
+  test('01.Should check the enable button ', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -34,7 +34,7 @@ test.describe('User Enable Automation', () => {
     await browser.close();
   });
 
-  test('Should check the user enable confirm button', async () => {
+  test('02.Should check the user enable confirm button', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -75,7 +75,7 @@ test.describe('User Enable Automation', () => {
     await browser.close();
   });
   
-  test('Should enable user details with successful alert message', async () => {
+  test('03.Should enable user details with successful alert message', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -111,7 +111,7 @@ test.describe('User Enable Automation', () => {
     await browser.close();
   });
 
-  test('Should enable user details based on particular data with alert message', async () => {
+  test('04.Should enable user details based on particular data with alert message', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -131,6 +131,14 @@ test.describe('User Enable Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
+      // Locate the input field for searching by its ID
+      const inputField = page.locator('#\\:r1\\:'); // Escaping the ID
+      // Wait for the input field to be visible
+      await inputField.waitFor({ state: 'visible' });
+      // Clear the input field if necessary
+      await inputField.fill('');
+      await inputField.fill('9655008962');
+    
     const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     // const userRow = page.locator('tr').nth(1);  // Selects the second <tr> element
     const blockUserIcon = userRow.locator('[data-testid="PersonIcon"]');
@@ -146,7 +154,7 @@ test.describe('User Enable Automation', () => {
     await browser.close();
   });
 
-  test('Negative test case -> Should enable user details wrong alert message', async () => {
+  test('05.Should enable user details wrong alert message', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -193,11 +201,8 @@ test.describe('User Enable Automation', () => {
     await browser.close();
   });
 
-
   //////
-
-
-  test('Should block user details based on index and check alert', async () => {
+  test('06.Should block user details based on index and check alert', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -236,8 +241,7 @@ test.describe('User Enable Automation', () => {
 
   });
 
-
-  test('Should block user details based on particular data', async () => {
+  test('07.Should block user details based on particular data', async () => {
     test.setTimeout(800000);
 
     const browser = await chromium.launch({
@@ -257,6 +261,14 @@ test.describe('User Enable Automation', () => {
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
 
+      // Locate the input field for searching by its ID
+      const inputField = page.locator('#\\:r1\\:'); // Escaping the ID
+      // Wait for the input field to be visible
+      await inputField.waitFor({ state: 'visible' });
+      // Clear the input field if necessary
+      await inputField.fill('');
+      await inputField.fill('9655008962');
+
     //   // Find the row containing the specific user name and click the Edit icon
     const userRow = page.locator('tr').filter({ hasText: '9655008962' });
     await page.waitForTimeout(5000);
@@ -271,10 +283,8 @@ test.describe('User Enable Automation', () => {
     const successMessage = page.locator('text=User blocked successfully');
     console.log("Alert message: "+ successMessage)
     // await expect(successMessage).toBeVisible();
-
     await page.waitForTimeout(1000);
     await browser.close();
-
   });
   
 });

@@ -1,14 +1,14 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Farmer delete automation', () => {
-
+    test.describe.configure({ mode: 'serial' });
     // test.beforeEach(async ({ page }) => {
     //     // Navigate to the page containing the dialog
     //     await page.goto('http://localhost:3000'); // Update with your actual URL
     // });
 
     //Test Number : 1
-    test('Should check delete farmer icon visible in farmer screen', async () => {
+    test('01.Should check delete farmer icon visible in farmer screen', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -38,7 +38,7 @@ test.describe('Farmer delete automation', () => {
     });
 
     //Test Number : 2
-    test('Should check delete farmer icon and click delete in farmer screen', async () => {
+    test('02.Should check delete farmer icon and click delete cancel button in farmer screen', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -59,7 +59,9 @@ test.describe('Farmer delete automation', () => {
         const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const DeleteIcon = userRow.locator('[data-testid="DeleteIcon"]');
-        await DeleteIcon.isVisible();
+        await DeleteIcon.isVisible()
+        await DeleteIcon.click();
+
         const confirmButton = page.locator('button', { hasText: 'Cancel' });
         await confirmButton.click();
         // const successMessage = page.locator('text=Farmer deleted');
