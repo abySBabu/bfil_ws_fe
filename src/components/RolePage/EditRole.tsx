@@ -10,7 +10,7 @@ import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../Services/loginService';
 import { ListSide } from '../../Services/dashboardService';
-
+import { useTranslation } from 'react-i18next';
 
 type RoleTypeProps = {
     show: boolean;
@@ -31,6 +31,7 @@ interface ScreenPermissionMapping {
 }
 
 export default function EditRole(props: RoleTypeProps) {
+    const { t } = useTranslation();
     const { show, hide, roleDetails } = props;
     const navigate = useNavigate();
 
@@ -222,7 +223,7 @@ export default function EditRole(props: RoleTypeProps) {
                 open={modalShow}
                 onClose={handleClose}
             >
-                <DialogTitle>Edit Role</DialogTitle>
+                <DialogTitle>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Edit_Role_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={6}>
@@ -232,7 +233,7 @@ export default function EditRole(props: RoleTypeProps) {
                                 fullWidth
                                 disabled
                                 id="roleName"
-                                label="Role Name"
+                                label={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Role_Name")}
                                 autoFocus
                                 {...register('roleName', {
                                     // required: 'Role Name is required',
@@ -255,7 +256,7 @@ export default function EditRole(props: RoleTypeProps) {
                                 required
                                 fullWidth
                                 id="roleDesc"
-                                label="Role Description"
+                                label={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Role_Description")}
                                 {...register('roleDesc', {
                                     // required: 'Role Description is required',
                                     pattern: {
@@ -281,10 +282,10 @@ export default function EditRole(props: RoleTypeProps) {
                             }}>
                                 <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    <Typography>View</Typography>
+                                    <Typography>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.View_Label")}</Typography>
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <Typography >Edit</Typography>
+                                    <Typography >{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Edit_Label")}</Typography>
                                 </Grid>
                                 {selectedPermissions.map((screendata, index) => (
                                     <React.Fragment key={index}>
@@ -330,9 +331,9 @@ export default function EditRole(props: RoleTypeProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Cancel_Button")}</Button>
                     <Button onClick={handleSubmit(editRole)} disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc}>
-                        Update {loading ? <CircularProgress /> : null}
+                    {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Update_Button")} {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>
