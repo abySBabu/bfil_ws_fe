@@ -213,5 +213,45 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "p_Watershed_Mapping": {
+        "ss_Watershed_Mapping_Header": "ಜಲಾನಯನ ನಕ್ಷೆ",
+        "ss_Search_Label": "ಹುಡುಕು",
+        "Add_Mapping_Link": {
+            "Add_Mapping_Link_Text": "ಮ್ಯಾಪಿಂಗ್ ಸೇರಿಸಿ",
+            "Add_Mapping_Popup": {
+                "Add_Mapping_Label": "ಮ್ಯಾಪಿಂಗ್ ಸೇರಿಸಿ",
+                "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
+                "Role": "ಪಾತ್ರ",
+                "Remarks": "ಟೀಕೆಗಳು",
+                "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
+                "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                "Add_Button": "ಸೇರಿಸಿ"
+            },
+            "Add_Success_Message": "ಜಲಾನಯನ ಮ್ಯಾಪಿಂಗ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+        },
+        "ss_MappingList": {
+            "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
+            "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಮ್ಯಾಪಿಂಗ್ ಸಂಪಾದಿಸಿ",
+                        "Edit_Mapping_Popup": {
+                            "Edit_Mapping_Label": "ಮ್ಯಾಪಿಂಗ್ ಸಂಪಾದಿಸಿ",
+                            "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
+                            "Role": "ಪಾತ್ರ",
+                            "Remarks": "ಟೀಕೆಗಳು",
+                            "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ಜಲಾನಯನ ಮ್ಯಾಪಿಂಗ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+        }
     }
 }
