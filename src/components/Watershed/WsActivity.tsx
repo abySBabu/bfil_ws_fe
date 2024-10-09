@@ -4,12 +4,12 @@ import {
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
     MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
-import { Edit, Search, Add } from '@mui/icons-material';
+import { Edit, Search, Add, Info } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowAdd, actFlowEdit } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowAdd, actFlowUpdate, actFlowSubmit } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -84,6 +84,7 @@ export const WsActivity: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
+    const [next, setnext] = React.useState('');
 
     const totalP = (actObj.participantsFemale || 0) + (actObj.participantsMale || 0)
 
@@ -148,23 +149,27 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            console.log("Role--", localStorage.getItem("userRole"))
-            const uRole = localStorage.getItem("userRole") || "";
+            console.log('Role--', localStorage.getItem("userRole"))
+            const uRole = localStorage.getItem("userRole")
             const resp0 = await listWSMap();
             if (resp0.status === 'success') {
-                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId"))) || {}
+                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId")))
                 if (found0) {
-                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim())) || []
+                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim()))
                     const resp1 = await listAct();
                     if (resp1.status === 'success') {
-                        const found1: typeof actDef[] = resp1.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
-                        if (found1) {
-                            if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'Initiated' || x.activityWorkflowStatus === 'Pending')) }
-                            if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 1')) }
-                            if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 2')) }
-                            if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 3')) }
-                            if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 4')) }
-                            if (uRole === 'Chief Manager Head Office') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approval 5')) }
+                        const sortrespdata = resp1.data.reverse();
+                        if (uRole === 'Chief Manager Head Office') { setactList(sortrespdata) }
+                        else {
+                            const found1: typeof actDef[] = sortrespdata.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
+                            if (found1) {
+                                if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
+                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
+                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
+                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
+                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
+                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
+                            }
                         }
                     }
                 }
@@ -174,7 +179,6 @@ export const WsActivity: React.FC = () => {
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
             const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
-            const resp7 = await actFlowAdd(); if (resp7) { console.log("Flow--", resp7) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -295,6 +299,49 @@ export const WsActivity: React.FC = () => {
         seteditM(false);
     }
 
+    const ActFlow = async (status: any, id: any) => {
+        try {
+            const resp1 = status === 'New' ? await actFlowAdd()
+                : status === 'Verification 6' ? await actFlowSubmit()
+                    : await actFlowUpdate(status)
+            if (resp1) {
+                const stObj = { ...actObj, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(stObj, id);
+                if (resp2) {
+                    fetchData();
+                    setalertClr(true);
+                    setalert(`Updated activity status to ${resp1}`);
+                }
+                else {
+                    setalertClr(false);
+                    setalert("Failed to update work flow status");
+                }
+            }
+            else {
+                setalertClr(false);
+                setalert("Failed to update work flow status");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update work flow status");
+        }
+        seteditM(false);
+    }
+
+    React.useEffect(() => { ActFlowSet(actObj.activityWorkflowStatus) }, [actObj.activityWorkflowStatus])
+
+    const ActFlowSet = async (status: any) => {
+        try {
+            const resp1 = status === 'New' ? await actFlowAdd()
+                : status === 'Verification 6' ? await actFlowSubmit()
+                    : await actFlowUpdate(status)
+            if (resp1) { setnext(resp1) }
+
+        }
+        catch (error) { console.log(error) }
+    }
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
@@ -330,7 +377,7 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
                 {PerChk('EDIT_Watershed Activity') && <TableCell>
-                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>
+                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>{a.activityWorkflowStatus === 'Completed' ? <Info /> : <Edit />}</IconButton>
                 </TableCell>}
             </TableRow>)
             )}</TableBody>
@@ -516,8 +563,10 @@ export const WsActivity: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
-                <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
-                <Button onClick={() => seteditM(false)} disabled={loading}>Approve</Button>
+                {actObj.activityWorkflowStatus !== 'Completed' && <>
+                    <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Submit for {next}</Button>
+                </>}
             </DialogActions>
         </Dialog>
     </>)

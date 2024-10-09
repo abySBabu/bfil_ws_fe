@@ -141,5 +141,77 @@
             },
             "Rows_per_page": "Rows per page :"
         }
+    },
+    "p_Role_Management": {
+        "ss_Role_Management_Header": "Role Management",
+        "ss_Search_Label": "Search",
+        "Add_Role_Link": {
+            "Add_Role_Link_Text": "Add Role",
+            "Add_Role_Popup": {
+                "Add_Role_Label": "Add Role",
+                "Role_Name": "Role Name",
+                "Role_Description": "Role Description",
+                "View_Label": "View",
+                "Edit_Label": "Edit",
+                "ScreenName_List": {
+                    "Dashboard_Label": "Dashboard",
+                    "User_Management_Label": "User Management",
+                    "Role_Management_Label": "Role Management",
+                    "Watershed_Master_Label": "Watershed Master",
+                    "Farmer_Master_Label": "Farmer Master",
+                    "Watershed_Mapping_Label": "Watershed Mapping",
+                    "Watershed_Activity_Label": "Watershed Activity",
+                    "Work_Plan_Label": "Work Plan"
+                },
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Role created successfully"
+        },
+        "ss_RoleList": {
+            "Role_Name": "Role Name",
+            "Role_Description": "Role Description",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Role",
+                        "Edit_Role_Popup": {
+                            "Edit_Role_Label": "Edit Role",
+                            "Role_Name": "Role Name",
+                            "Role_Description": "Role Description",
+                            "View_Label": "View",
+                            "Edit_Label": "Edit",
+                            "ScreenName_List": {
+                                "Dashboard_Label": "Dashboard",
+                                "User_Management_Label": "User Management",
+                                "Role_Management_Label": "Role Management",
+                                "Watershed_Master_Label": "Watershed Master",
+                                "Farmer_Master_Label": "Farmer Master",
+                                "Watershed_Mapping_Label": "Watershed Mapping",
+                                "Watershed_Activity_Label": "Watershed Activity",
+                                "Work_Plan_Label": "Work Plan"
+                            },
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Role updated successfully",
+                        "Goback_Login_PopUp_Text": "Screen permission has changed. Please login",
+                        "Goback_Login_PopUp_Button": "Okay"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "Delete Role",
+                        "Delete_Role_Popup": {
+                            "Delete_Role_Label": "Delete Role",
+                            "Delete_Role_Content": "Are you sure you want to delete",
+                            "Cancel_Button": "Cancel",
+                            "Delete_Button": "Delete"
+                        },
+                        "Delete_Success_Message": "Role deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
     }
 }

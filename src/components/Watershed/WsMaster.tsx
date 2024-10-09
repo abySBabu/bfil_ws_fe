@@ -138,7 +138,7 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data) }
+            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data.reverse()) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }

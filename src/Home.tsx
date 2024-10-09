@@ -40,6 +40,8 @@ export const Home: React.FC = () => {
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+    sessionStorage.setItem("multiLanguage", "en");
+
 
     useEffect(() => {
         const tokenresult = checkTknExpiry((expired) => {
@@ -53,7 +55,9 @@ export const Home: React.FC = () => {
     }, [setTimeoutsecs, message, tokenExpired])
 
     const handleLanguageChange = (lng: string) => {
+        sessionStorage.setItem("multiLanguage", lng);
         setLanguageAnchor(null);
+        setavatarAnchor(null);
         i18n.changeLanguage(lng);
     }
 
