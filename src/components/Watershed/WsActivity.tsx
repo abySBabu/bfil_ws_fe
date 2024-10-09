@@ -160,7 +160,7 @@ export const WsActivity: React.FC = () => {
                         const sortrespdata = resp1.data.reverse();
                         if (uRole === 'Chief Manager Head Office') { setactList(sortrespdata) }
                         else {
-                            const found1: typeof actDef[] = sortrespdata.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
+                            const found1: typeof actDef[] = sortrespdata.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
                             if (found1) {
                                 if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
                                 if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
