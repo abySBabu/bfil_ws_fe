@@ -15,9 +15,11 @@ import MapEdit from './MapEdit';
 import MapAdd from './MapAdd';
 import { allUserType } from '../UserPage/UserManagementType';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 
 
 export default function MappingList() {
+    const { t } = useTranslation();
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [page, setPage] = React.useState(0);
@@ -108,10 +110,10 @@ export default function MappingList() {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                Watershed Mapping
+                {t("p_Watershed_Mapping.ss_Watershed_Mapping_Header")}
             </Typography>
             <TextField
-                label="Search"
+                label={t("p_Watershed_Mapping.ss_Search_Label")}
                 fullWidth={false}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -127,7 +129,7 @@ export default function MappingList() {
             />
             {PerChk('EDIT_Watershed Mapping') && (
                 <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add Mapping
+                    {t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Link_Text")}
                 </Button>)}
         </Box>
 
@@ -135,11 +137,11 @@ export default function MappingList() {
             <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
-                        <TableCell >Watershed Name</TableCell>
-                        <TableCell >User Name</TableCell>
-                        <TableCell >Remarks</TableCell>
+                        <TableCell >{t("p_Watershed_Mapping.ss_MappingList.Ws_Name")}</TableCell>
+                        <TableCell >{t("p_Watershed_Mapping.ss_MappingList.User_Name")}</TableCell>
+                        <TableCell >{t("p_Watershed_Mapping.ss_MappingList.Remarks")}</TableCell>
                         {PerChk('EDIT_Watershed Mapping') && (
-                            <TableCell sx={{ textAlign: 'center' }} >Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }} >{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Text")}</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -159,7 +161,7 @@ export default function MappingList() {
                             </TableCell>
                             {PerChk('EDIT_Watershed Mapping') && (
                                 <TableCell sx={{ textAlign: 'center' }}>
-                                    <Tooltip title="Edit">
+                                    <Tooltip title={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
                                         <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
                                 </TableCell>)}
@@ -177,6 +179,7 @@ export default function MappingList() {
                             rowsPerPageOptions={[5, 10, 15]}
                             onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
+                            labelRowsPerPage={t("p_Watershed_Mapping.ss_MappingList.Rows_per_page")}
                         />
                     </TableRow>
                 </TableFooter>

@@ -234,6 +234,7 @@
         "ss_MappingList": {
             "Ws_Name": "Watershed Name",
             "User_Name": "User Name",
+            "Remarks": "Remarks",
             "Action": {
                 "Action_Text": "Action",
                 "Action_Tooltip": {

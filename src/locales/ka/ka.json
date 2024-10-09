@@ -233,6 +233,7 @@
         "ss_MappingList": {
             "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
             "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
+            "Remarks": "ಟೀಕೆಗಳು",
             "Action": {
                 "Action_Text": "ಕ್ರಿಯೆ",
                 "Action_Tooltip": {
