@@ -84,7 +84,7 @@ export const TPA = (props: any) => {
 }
 
 export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; success: boolean; }> = ({ alert, setalert, success }) =>
-(<Snackbar open={Boolean(alert)} onClose={setalert} autoHideDuration={3000}>
+(<Snackbar open={Boolean(alert)} onClose={setalert} autoHideDuration={5000}>
     <Alert severity={success ? 'success' : 'error'} sx={{ width: '100%' }}>
         {alert}
     </Alert>

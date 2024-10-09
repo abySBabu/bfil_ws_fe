@@ -84,6 +84,7 @@ export const WsActivity: React.FC = () => {
     const [editM, seteditM] = React.useState(false);
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
+    const [next, setnext] = React.useState('');
 
     const totalP = (actObj.participantsFemale || 0) + (actObj.participantsMale || 0)
 
@@ -299,7 +300,6 @@ export const WsActivity: React.FC = () => {
     }
 
     const ActFlow = async (status: any, id: any) => {
-        setLoading(true);
         try {
             const resp1 = status === 'New' ? await actFlowAdd()
                 : status === 'Verification 6' ? await actFlowSubmit()
@@ -326,8 +326,20 @@ export const WsActivity: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to update work flow status");
         }
-        setLoading(false);
         seteditM(false);
+    }
+
+    React.useEffect(() => { ActFlowSet(actObj.activityWorkflowStatus) }, [actObj.activityWorkflowStatus])
+
+    const ActFlowSet = async (status: any) => {
+        try {
+            const resp1 = status === 'New' ? await actFlowAdd()
+                : status === 'Verification 6' ? await actFlowSubmit()
+                    : await actFlowUpdate(status)
+            if (resp1) { setnext(resp1) }
+
+        }
+        catch (error) { console.log(error) }
     }
 
     return (<>
@@ -553,11 +565,7 @@ export const WsActivity: React.FC = () => {
                 <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
                 {actObj.activityWorkflowStatus !== 'Completed' && <>
                     <Button onClick={() => ActEdit(actObj.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
-                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>{
-                        actObj.activityWorkflowStatus === 'New' ? 'Start'
-                            : actObj.activityWorkflowStatus === 'In Progress' ? 'Finish'
-                                : 'Approve'
-                    }</Button>
+                    <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Submit for {next}</Button>
                 </>}
             </DialogActions>
         </Dialog>
