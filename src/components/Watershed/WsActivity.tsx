@@ -148,23 +148,27 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const uRole = localStorage.getItem("userRole") || "";
+            console.log('Role--', localStorage.getItem("userRole"))
+            const uRole = localStorage.getItem("userRole")
             const resp0 = await listWSMap();
             if (resp0.status === 'success') {
-                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId"))) || {}
+                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId")))
                 if (found0) {
-                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim())) || []
+                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim()))
                     const resp1 = await listAct();
                     if (resp1.status === 'success') {
-                        let sortrespdata = resp1.data.reverse();
-                        const found1: typeof actDef[] = sortrespdata.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
-                        if (found1) {
-                            if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
-                            if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
-                            if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
-                            if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
-                            if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
-                            if (uRole === 'Chief Manager Head Office') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
+                        const sortrespdata = resp1.data.reverse();
+                        if (uRole === 'Chief Manager Head Office') { setactList(sortrespdata) }
+                        else {
+                            const found1: typeof actDef[] = sortrespdata.data.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
+                            if (found1) {
+                                if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
+                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
+                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
+                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
+                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
+                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
+                            }
                         }
                     }
                 }
