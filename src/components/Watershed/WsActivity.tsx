@@ -108,7 +108,6 @@ export const WsActivity: React.FC = () => {
     const demandCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure
     const sustainCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure || !actObj.activityDescription
     const eventCheck = loading || !actObj.capacitynameEvent || !actObj.capacitytypeEvent || !actObj.eventDate || !actObj.participantsType || !actObj.habitationsCovered || totalP <= 0 || !actObj.trainerFacilitator || !actObj.mobilizer || !actObj.remarks
-
     const addCheck = actObj.activityName === 'Members Capacitated' ? eventCheck
         : actObj.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.interventionType === 'Demand Side Interventions' ? demandCheck
@@ -694,14 +693,49 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
+                <Grid item xs={12}><Divider>Remarks History</Divider></Grid>
+                <Grid item xs={12}>
+                    <TableContainer component={Paper}><Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Remark</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Author</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>{actListP.map((a, i) =>
+                        (<TableRow key={i}>
+                            <TableCell>{a.interventionType}</TableCell>
+                            <TableCell>{a.activityName}</TableCell>
+                            <TableCell>{a.activityWorkflowStatus}</TableCell>
+                            <TableCell>{DateTime(a.updatedTime)}</TableCell>
+                        </TableRow>)
+                        )}</TableBody>
+
+                        <TableFooter><TableRow>
+                            <TablePagination
+                                count={actListF.length}
+                                rowsPerPage={rPP}
+                                page={page}
+                                onPageChange={(e, p) => setPage(p)}
+                                rowsPerPageOptions={[5, 10, 15]}
+                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                ActionsComponent={TPA}
+                            />
+                        </TableRow></TableFooter>
+                    </Table></TableContainer>
+                </Grid>
             </Grid></DialogContent>
 
-            <DialogActions>
-                <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '30%' }} />
-                <TextField label='Remarks History' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '30%' }} />
-                <Button onClick={() => setprogM(false)}>Close</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Approve to {next}</Button>
+            <DialogActions sx={{ justifyContent: 'space-between' }}>
+                <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
+                <div>
+                    <Button onClick={() => setprogM(false)}>Close</Button>
+                    {prev && <Button sx={{ mx: '4px' }} onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
+                    {next && <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
+                </div>
             </DialogActions>
         </Dialog>
     </>)
