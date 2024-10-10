@@ -6,7 +6,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import TileLayer from '@arcgis/core/layers/TileLayer';
-import {sd} from '../common';
+import { sd } from '../common';
 
 const EsriMap: React.FC = () => {
     const mapDiv = useRef<HTMLDivElement>(null);
@@ -79,18 +79,16 @@ const EsriMap: React.FC = () => {
             >
                 {/* Zoom In Button */}
                 <IconButton
-                    color="primary"
                     onClick={() => view?.goTo({ zoom: view.zoom + 1 })}
-                    style={{ marginBottom: 10, backgroundColor: 'white' }}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <ZoomInIcon />
                 </IconButton>
 
                 {/* Zoom Out Button */}
                 <IconButton
-                    color="primary"
                     onClick={() => view?.goTo({ zoom: view.zoom - 1 })}
-                    style={{ marginBottom: 10, backgroundColor: 'white' }}
+                    style={{ marginBottom: 10,backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
                 >
                     <ZoomOutIcon />
                 </IconButton>
@@ -105,9 +103,8 @@ const EsriMap: React.FC = () => {
             }}>
                 {/* Fullscreen Button */}
                 <IconButton
-                    color="primary"
                     onClick={toggleFullScreen}
-                    style={{ backgroundColor: 'white' }}
+                    style={{ backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
                 >
                     <FullscreenIcon />
                 </IconButton>
