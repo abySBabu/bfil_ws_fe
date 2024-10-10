@@ -181,11 +181,11 @@ export const WsActivity: React.FC = () => {
                             const found1: typeof actDef[] = sortrespdata.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
                             if (found1) {
                                 if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
-                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
-                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
-                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
-                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
-                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
+                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 1')) }
+                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 2')) }
+                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 3')) }
+                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 4')) }
+                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 5')) }
                             }
                         }
                     }
@@ -527,7 +527,7 @@ export const WsActivity: React.FC = () => {
         </Dialog>
 
         <Dialog open={editM} maxWidth='xl'>
-            <DialogTitle>Edit Activity</DialogTitle>
+            <DialogTitle>Update Activity</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField required select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value, activityName: '' })}>
@@ -768,9 +768,9 @@ export const WsActivity: React.FC = () => {
             <DialogActions sx={{ justifyContent: 'space-between' }}>
                 <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
-                    <Button onClick={() => setprogM(false)}>Close</Button>
-                    {prev && <Button sx={{ mx: '4px' }} onClick={() => ActFlowPrev(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
-                    {next && <Button onClick={() => ActFlowNext(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
+                    <Button sx={{ mx: '2px' }} onClick={() => setprogM(false)}>Close</Button>
+                    {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
+                    {next && <Button sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
                 </div>
             </DialogActions>
         </Dialog>

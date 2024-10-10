@@ -10,15 +10,15 @@ import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 
 
-const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
+const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
-const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
+const actCard = { height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
     <Grid item xs={6} lg={4}>
         <Card sx={actCard}>
             <CardContent sx={{ textAlign: 'center' }}>
-                <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
+                <Typography variant='body1' fontWeight='bold'>{activity}</Typography>
                 <Typography variant='body2'>{value} {unit}</Typography>
             </CardContent>
         </Card>
