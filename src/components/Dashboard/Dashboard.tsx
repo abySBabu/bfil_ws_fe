@@ -87,6 +87,7 @@ export const Dashboard: React.FC = () => {
             {
                 Object.entries(supplyList)?.map(([activity, data], i) => {
                     const [unit, value] = Object.entries(data)[0];
+                    
                     return (
                         <ActivityCard key={i} activity={activity} value={value} unit={unit} />
                     );
