@@ -104,10 +104,15 @@ export const WsActivity: React.FC = () => {
 
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
 
-    const supplyCheck = !actObj.interventionType || !actObj.activityName || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.landType || !actObj.waterConserved || !actObj.amountSpend || !actObj.sourceExpenditure
-    const demandCheck = !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure
-    const sustainCheck = !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure || !actObj.activityDescription
-    const eventCheck = !actObj.capacitynameEvent || !actObj.capacitytypeEvent || !actObj.eventDate || !actObj.participantsType || !actObj.habitationsCovered || totalP <= 0 || !actObj.trainerFacilitator || !actObj.mobilizer || !actObj.remarks
+    const supplyCheck = loading || !actObj.interventionType || !actObj.activityName || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.landType || !actObj.waterConserved || !actObj.amountSpend || !actObj.sourceExpenditure
+    const demandCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure
+    const sustainCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure || !actObj.activityDescription
+    const eventCheck = loading || !actObj.capacitynameEvent || !actObj.capacitytypeEvent || !actObj.eventDate || !actObj.participantsType || !actObj.habitationsCovered || totalP <= 0 || !actObj.trainerFacilitator || !actObj.mobilizer || !actObj.remarks
+
+    const addCheck = actObj.activityName === 'Members Capacitated' ? eventCheck
+        : actObj.activityName === 'Sustainable Practices' ? sustainCheck
+            : actObj.interventionType === 'Demand Side Interventions' ? demandCheck
+                : supplyCheck
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -341,8 +346,10 @@ export const WsActivity: React.FC = () => {
             const resp1 = status === 'New' ? await actFlowAdd()
                 : status === 'Verification 6' ? await actFlowSubmit()
                     : await actFlowUpdate(status)
-            if (resp1) { setnext(resp1) }
+            if (resp1) { setnext(resp1) } else { setnext('') }
 
+            const resp2 = await actFlowAdd()
+            if (resp2) { setprev(resp2) } else { setprev('') }
         }
         catch (error) { console.log(error) }
     }
@@ -484,7 +491,7 @@ export const WsActivity: React.FC = () => {
 
             <DialogActions>
                 <Button onClick={() => setaddM(false)} disabled={loading}>Cancel</Button>
-                <Button onClick={ActAdd} disabled={loading || supplyCheck} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
+                <Button onClick={ActAdd} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
             </DialogActions>
         </Dialog>
 
