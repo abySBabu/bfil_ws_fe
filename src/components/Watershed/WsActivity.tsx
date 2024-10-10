@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowAdd, actFlowUpdate, actFlowSubmit } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -311,9 +311,7 @@ export const WsActivity: React.FC = () => {
 
     const ActFlow = async (status: any, id: any) => {
         try {
-            const resp1 = status === 'New' ? await actFlowAdd()
-                : status === 'Verification 6' ? await actFlowSubmit()
-                    : await actFlowUpdate(status)
+            const resp1 = await actFlowNext(status)
             if (resp1) {
                 const stObj = { ...actObj, activityWorkflowStatus: resp1 }
                 const resp2 = await editAct(stObj, id);
@@ -336,20 +334,18 @@ export const WsActivity: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to update work flow status");
         }
-        seteditM(false);
+        setprogM(false);
     }
 
     React.useEffect(() => { ActFlowSet(actObj.activityWorkflowStatus) }, [actObj.activityWorkflowStatus])
 
     const ActFlowSet = async (status: any) => {
         try {
-            const resp1 = status === 'New' ? await actFlowAdd()
-                : status === 'Verification 6' ? await actFlowSubmit()
-                    : await actFlowUpdate(status)
-            if (resp1) { setnext(resp1) } else { setnext('') }
+            const resp1 = await actFlowNext(status)
+            if (resp1) { setnext(resp1); console.log("Next--", resp1); } else { setnext('') }
 
-            const resp2 = await actFlowAdd()
-            if (resp2) { setprev(resp2) } else { setprev('') }
+            const resp2 = await actFlowPrev(status)
+            if (resp2) { setprev(resp2); console.log("Prev--", resp2); } else { setprev('') }
         }
         catch (error) { console.log(error) }
     }
@@ -701,9 +697,11 @@ export const WsActivity: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions>
+                <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '30%' }} />
+                <TextField label='Remarks History' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '30%' }} />
                 <Button onClick={() => setprogM(false)}>Close</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Return to {prev}</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Submit for {next}</Button>
+                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>
+                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Approve to {next}</Button>
             </DialogActions>
         </Dialog>
     </>)
