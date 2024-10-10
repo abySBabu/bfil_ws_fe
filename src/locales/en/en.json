@@ -15,7 +15,8 @@
         "SM_BE_Farmer_Master_Link": "Farmer Master",
         "SM_BE_Watershed_Mapping_Link": "Watershed Mapping",
         "SM_BE_Watershed_Activity_Link": "Watershed Activity",
-        "SM_BE_Work_Plan_Link": "Work Plan"
+        "SM_BE_Work_Plan_Link": "Work Plan",
+        "SM_BE_Report_Link": "Report"
     },
     "p_Dashboard": {
         "ss_KeyImpactIndicators_Header": {

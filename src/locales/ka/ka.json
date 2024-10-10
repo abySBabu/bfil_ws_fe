@@ -15,7 +15,8 @@
         "SM_BE_Farmer_Master_Link": "ರೈತ ಮೇಷ್ಟ್ರು",
         "SM_BE_Watershed_Mapping_Link": "ಜಲಾನಯನ ನಕ್ಷೆ",
         "SM_BE_Watershed_Activity_Link": "ಜಲಾನಯನ ಚಟುವಟಿಕೆ",
-        "SM_BE_Work_Plan_Link": "ಕೆಲಸದ ಯೋಜನೆ"
+        "SM_BE_Work_Plan_Link": "ಕೆಲಸದ ಯೋಜನೆ",
+        "SM_BE_Report_Link": "ವರದಿ"
     },
     "p_Dashboard": {
         "ss_KeyImpactIndicators_Header": {

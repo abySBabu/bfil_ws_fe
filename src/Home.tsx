@@ -120,6 +120,8 @@ export const Home: React.FC = () => {
                                 return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
                             case 'Work Plan':
                                 return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                            case 'Report':
+                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Workplan /> };
                             default:
                                 return null;
                         }
