@@ -162,7 +162,7 @@ const ReportTable: React.FC = () => {
           {showReport ? 'Show Report' : 'Summary Report'}
         </Button>
             <Button onClick={exportToExcel} disabled={!filteredData.length} sx={{ marginLeft: '10px' }}>
-        <FileDownloadIcon></FileDownloadIcon>
+        <FileDownloadIcon onClick={exportToExcel}></FileDownloadIcon>
         </Button>
         <Button onClick={exportToPDF} disabled={!filteredData.length} sx={{ marginLeft: '10px', marginRight: '10px' }}>
         <PictureAsPdfIcon></PictureAsPdfIcon>

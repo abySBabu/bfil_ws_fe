@@ -87,29 +87,6 @@ export const Dashboard: React.FC = () => {
                 </Box>
             </Card></Grid>
 
-<<<<<<< HEAD
-            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Supply Side Interventions</Typography></Grid>
-            {
-                Object.entries(supplyList)?.map(([activity, data], i) => {
-                    const [unit, value] = Object.entries(data)[0];
-                    
-                    return (
-                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
-                    );
-                })
-            }
-
-            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>Demand Side Interventions</Typography></Grid>
-            {
-                Object.entries(demandList)?.map(([activity, data], i) => {
-                    const [unit, value] = Object.entries(data)[0];
-                    return (
-                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
-                    );
-                })
-            }
-        </Grid>
-=======
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
             <Grid item xs={12} md={8}>
                 <Grid container spacing={1}>
@@ -136,7 +113,6 @@ export const Dashboard: React.FC = () => {
                 <EsriMap />
             </Grid>
         </Grid >
->>>>>>> a85c843e6f849f28c9d0833bf1dde9bea2324bad
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
             <Card sx={{ outline: 'none' }}>
