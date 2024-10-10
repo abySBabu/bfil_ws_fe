@@ -97,21 +97,21 @@ export const Dashboard: React.FC = () => {
                                 <ActivityCard key={i} activity={activity} value={value} unit={unit} />
                             );
                         })
-                    }</Grid>
+                    }
+                    <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
+                    {
+                        Object.entries(demandList)?.map(([activity, data], i) => {
+                            const [unit, value] = Object.entries(data)[0];
+                            return (
+                                <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                            );
+                        })
+                    }
+                </Grid>
             </Grid>
             <Grid item xs={12} md={6}>
                 <EsriMap />
             </Grid>
-
-            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
-            {
-                Object.entries(demandList)?.map(([activity, data], i) => {
-                    const [unit, value] = Object.entries(data)[0];
-                    return (
-                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
-                    );
-                })
-            }
         </Grid >
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
