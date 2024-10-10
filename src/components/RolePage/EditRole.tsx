@@ -145,7 +145,7 @@ export default function EditRole(props: RoleTypeProps) {
                     let screenameList: any[] = [];
                     if (resp0.status === 'success') {
                         let screenlistResp = resp0.data;
-                        let reverseScreenData = screenlistResp.reverse();
+                        let reverseScreenData = screenlistResp;
                         reverseScreenData.map((data: any) => {
                             screenameList.push(data.screenName)
                         })

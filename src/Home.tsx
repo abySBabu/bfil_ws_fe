@@ -100,7 +100,7 @@ export const Home: React.FC = () => {
             try {
                 const resp0 = await ListSide();
                 if (resp0.status === 'success') {
-                    let sortscreenlist = resp0.data.reverse();
+                    let sortscreenlist = resp0.data;
                     setsideList(sortscreenlist);
                     const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
                         switch (sideItem.screenName) {
