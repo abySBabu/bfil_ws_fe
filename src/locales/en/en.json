@@ -15,7 +15,51 @@
         "SM_BE_Farmer_Master_Link": "Farmer Master",
         "SM_BE_Watershed_Mapping_Link": "Watershed Mapping",
         "SM_BE_Watershed_Activity_Link": "Watershed Activity",
-        "SM_BE_Work_Plan_Link": "Work Plan"
+        "SM_BE_Work_Plan_Link": "Work Plan",
+        "SM_BE_Report_Link": "Report"
+    },
+    "p_Dashboard": {
+        "ss_KeyImpactIndicators_Header": {
+            "KeyImpactIndicators_Header_Text": "Key Impact Indicators",
+            "WatershedAreaTreated_Subheader": {
+                "WatershedAreaTreated_Subheader_Text": "Watershed Area Treated",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Watershed Area Treated",
+                    "Bunding_data": "Bunding",
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
+                }
+            },
+            "WaterConserved_Subheader": {
+                "WaterConserved_Subheader_Text": "Water Conserved",
+                "WatershedAreaTreated_Piechart": {
+                    "Piechart_Header": "Water Conserved",
+                    "Bunding_data": "Bunding",
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
+                }
+            },
+            "FarmersImpacted_Subheader": {
+                "FarmersImpacted_Subheader_Text": "Farmers Impacted",
+                "FarmersImpacted_Piechart": {
+                    "Piechart_Header": "Farmers Impacted",
+                    "Bunding_data": "Bunding",
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
+                }
+            },
+            "GovernmentAmountLeveraged_Subheader": {
+                "GovernmentAmountLeveraged_Subheader_Text": "Government Amount Leveraged",
+                "GovernmentAmountLeveraged_Piechart": {
+                    "Piechart_Header": "Government Amount Leveraged",
+                    "Bunding_data": "Bunding",
+                    "NalaTreatment_data": "Nala Treatment",
+                    "CheckDam_data": "Check Dam"
+                }
+            }
+        },
+        "ss_SupplySideInterventions_Header_Text": "Supply Side Interventions",
+        "ss_DemandSideInterventions_Header_Text": "Demand Side Interventions"
     },
     "p_User_Management": {
         "ss_User_Management_Header": "User Management",
@@ -36,7 +80,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "User created sucessfully"
+            "Add_Success_Message": "User created successfully"
         },
         "ss_UserList": {
             "Name": "Name",
@@ -62,7 +106,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "User updated sucessfully"
+                        "Edit_Success_Message": "User updated successfully"
                     },
                     "Block_Tooltip": {
                         "Block_Tooltip_Text": "Block User",
@@ -72,7 +116,7 @@
                             "Cancel_Button": "Cancel",
                             "Block_Button": "Block"
                         },
-                        "Block_Success_Message": "User blocked sucessfully"
+                        "Block_Success_Message": "User blocked successfully"
                     },
                     "Unblock_Tooltip": {
                         "Unblock_Tooltip_Text": "Unblock User",
@@ -82,7 +126,7 @@
                             "Cancel_Button": "Cancel",
                             "Unblock_Button": "Unblock"
                         },
-                        "Unblock_Success_Message": "User unblocked sucessfully"
+                        "Unblock_Success_Message": "User unblocked successfully"
                     },
                     "Delete_Tooltip": {
                         "Delete_Tooltip_Text": "Delete User",
@@ -92,7 +136,120 @@
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
-                        "Delete_Success_Message": "User deleted sucessfully"
+                        "Delete_Success_Message": "User deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
+    },
+    "p_Role_Management": {
+        "ss_Role_Management_Header": "Role Management",
+        "ss_Search_Label": "Search",
+        "Add_Role_Link": {
+            "Add_Role_Link_Text": "Add Role",
+            "Add_Role_Popup": {
+                "Add_Role_Label": "Add Role",
+                "Role_Name": "Role Name",
+                "Role_Description": "Role Description",
+                "View_Label": "View",
+                "Edit_Label": "Edit",
+                "ScreenName_List": {
+                    "Dashboard_Label": "Dashboard",
+                    "User_Management_Label": "User Management",
+                    "Role_Management_Label": "Role Management",
+                    "Watershed_Master_Label": "Watershed Master",
+                    "Farmer_Master_Label": "Farmer Master",
+                    "Watershed_Mapping_Label": "Watershed Mapping",
+                    "Watershed_Activity_Label": "Watershed Activity",
+                    "Work_Plan_Label": "Work Plan"
+                },
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Role created successfully"
+        },
+        "ss_RoleList": {
+            "Role_Name": "Role Name",
+            "Role_Description": "Role Description",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Role",
+                        "Edit_Role_Popup": {
+                            "Edit_Role_Label": "Edit Role",
+                            "Role_Name": "Role Name",
+                            "Role_Description": "Role Description",
+                            "View_Label": "View",
+                            "Edit_Label": "Edit",
+                            "ScreenName_List": {
+                                "Dashboard_Label": "Dashboard",
+                                "User_Management_Label": "User Management",
+                                "Role_Management_Label": "Role Management",
+                                "Watershed_Master_Label": "Watershed Master",
+                                "Farmer_Master_Label": "Farmer Master",
+                                "Watershed_Mapping_Label": "Watershed Mapping",
+                                "Watershed_Activity_Label": "Watershed Activity",
+                                "Work_Plan_Label": "Work Plan"
+                            },
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Role updated successfully",
+                        "Goback_Login_PopUp_Text": "Screen permission has changed. Please login",
+                        "Goback_Login_PopUp_Button": "Okay"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "Delete Role",
+                        "Delete_Role_Popup": {
+                            "Delete_Role_Label": "Delete Role",
+                            "Delete_Role_Content": "Are you sure you want to delete",
+                            "Cancel_Button": "Cancel",
+                            "Delete_Button": "Delete"
+                        },
+                        "Delete_Success_Message": "Role deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
+    },
+    "p_Watershed_Mapping": {
+        "ss_Watershed_Mapping_Header": "Watershed Mapping",
+        "ss_Search_Label": "Search",
+        "Add_Mapping_Link": {
+            "Add_Mapping_Link_Text": "Add Mapping",
+            "Add_Mapping_Popup": {
+                "Add_Mapping_Label": "Add Mapping",
+                "User_Name": "User Name",
+                "Role": "Role",
+                "Remarks": "Remarks",
+                "Ws_Name": "Watershed Name",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Watershed mapping created successfully"
+        },
+        "ss_MappingList": {
+            "Ws_Name": "Watershed Name",
+            "User_Name": "User Name",
+            "Remarks": "Remarks",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Mapping",
+                        "Edit_Mapping_Popup": {
+                            "Edit_Mapping_Label": "Edit Mapping",
+                            "User_Name": "User Name",
+                            "Role": "Role",
+                            "Remarks": "Remarks",
+                            "Ws_Name": "Watershed Name",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Watershed Mapping updated successfully"
                     }
                 }
             },

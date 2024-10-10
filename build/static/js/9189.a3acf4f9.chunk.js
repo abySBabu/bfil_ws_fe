@@ -1,0 +1,52 @@
+"use strict";(self.webpackChunkbfil_ws=self.webpackChunkbfil_ws||[]).push([[9189],{93582:(t,e,n)=>{n.d(e,{a:()=>b,b:()=>M,c:()=>v,f:()=>A,g:()=>y,j:()=>S,n:()=>O});n(81806),n(76460);var r=n(15941),o=n(34761),i=n(20664),c=n(9392),s=n(43047),a=n(55855),l=n(53494),u=n(5568),d=n(95925),h=n(96190),f=n(75762);const m=v();function v(){return(0,a.vt)()}const g=s.e,p=s.e;function b(t,e){return(0,s.c)(e,t)}function M(t){return t[3]}function y(t){return t}function A(t,e,n,r){return(0,a.fA)(t,e,n,r)}function w(t,e,n){if(null==e)return!1;if(!C(t,e,x))return!1;let{t0:r,t1:o}=x;if((r<0||o<r&&o>0)&&(r=o),r<0)return!1;if(n){const{origin:t,direction:o}=e;n[0]=t[0]+o[0]*r,n[1]=t[1]+o[1]*r,n[2]=t[2]+o[2]*r}return!0}const x={t0:0,t1:0};function C(t,e,n){const{origin:r,direction:o}=e,i=_;i[0]=r[0]-t[0],i[1]=r[1]-t[1],i[2]=r[2]-t[2];const c=o[0]*o[0]+o[1]*o[1]+o[2]*o[2];if(0===c)return!1;const s=2*(o[0]*i[0]+o[1]*i[1]+o[2]*i[2]),a=s*s-4*c*(i[0]*i[0]+i[1]*i[1]+i[2]*i[2]-t[3]*t[3]);if(a<0)return!1;const l=Math.sqrt(a);return n.t0=(-s-l)/(2*c),n.t1=(-s+l)/(2*c),!0}const _=(0,c.vt)();function S(t,e){return w(t,e,null)}function P(t,e,n){const r=f.rq.get(),c=f.Rc.get();(0,i.b)(r,e.origin,e.direction);const s=M(t);(0,i.b)(n,r,e.origin),(0,i.j)(n,n,1/(0,i.l)(n)*s);const a=D(t,e.origin),l=(0,h.g7)(e.origin,n);return(0,o.$0)(c,l+a,r),(0,i.h)(n,n,c),n}function H(t,e,n){const r=(0,i.f)(f.rq.get(),e,t),o=(0,i.j)(f.rq.get(),r,t[3]/(0,i.l)(r));return(0,i.g)(n,o,t)}function D(t,e){const n=(0,i.f)(f.rq.get(),e,t),o=(0,i.l)(n),c=M(t),s=c+Math.abs(c-o);return(0,r.XM)(c/s)}const R=(0,c.vt)();function T(t,e,n,o){const c=(0,i.f)(R,e,t);switch(n){case u._.X:{const t=(0,r.jU)(c,R)[2];return(0,i.s)(o,-Math.sin(t),Math.cos(t),0)}case u._.Y:{const t=(0,r.jU)(c,R),e=t[1],n=t[2],s=Math.sin(e);return(0,i.s)(o,-s*Math.cos(n),-s*Math.sin(n),Math.cos(e))}case u._.Z:return(0,i.n)(o,c);default:return}}function q(t,e){const n=(0,i.f)(j,e,t);return(0,i.l)(n)-t[3]}function O(t,e){const n=(0,i.a)(t,e),r=M(t);return n<=r*r}const j=(0,c.vt)(),k=v();Object.freeze(Object.defineProperty({__proto__:null,NullSphere:m,altitudeAt:q,angleToSilhouette:D,axisAt:T,clear:function(t){t[0]=t[1]=t[2]=t[3]=0},closestPoint:function(t,e,n){return w(t,e,n)?n:((0,d.oC)(e,t,n),H(t,n,n))},closestPointOnSilhouette:P,containsPoint:O,copy:b,create:v,distanceToSilhouette:function(t,e){const n=(0,i.f)(f.rq.get(),e,t),r=(0,i.q)(n),o=t[3]*t[3];return Math.sqrt(Math.abs(r-o))},elevate:function(t,e,n){return t!==n&&(n[0]=t[0],n[1]=t[1],n[2]=t[2]),n[3]=t[3]+e,n},equals:p,exactEquals:g,fromCenterAndRadius:function(t,e){return(0,a.fA)(t[0],t[1],t[2],e)},fromRadius:function(t,e){return t[0]=t[1]=t[2]=0,t[3]=e,t},fromValues:A,getCenter:y,getRadius:M,intersectLine:function(t,e,n){const r=(0,d.Cr)(e,n);if(!C(t,r,x))return[];const{origin:o,direction:s}=r,{t0:a,t1:u}=x,h=e=>{const n=(0,c.vt)();return(0,i.r)(n,o,s,e),H(t,n,n)};return Math.abs(a-u)<(0,l.FD)()?[h(a)]:[h(a),h(u)]},intersectRay:w,intersectRayClosestSilhouette:function(t,e,n){if(w(t,e,n))return n;const r=P(t,e,f.rq.get());return(0,i.g)(n,e.origin,(0,i.j)(f.rq.get(),e.direction,(0,i.p)(e.origin,r)/(0,i.l)(e.direction))),n},intersectsRay:S,projectPoint:H,setAltitudeAt:function(t,e,n,r){const o=q(t,e),c=T(t,e,u._.Z,j),s=(0,i.j)(j,c,n-o);return(0,i.g)(r,e,s)},setExtent:function(t,e,n){return t!==n&&b(t,n),n},tmpSphere:k,union:function(t,e){let n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:(0,a.vt)();const r=(0,i.p)(t,e),o=t[3],c=e[3];return r+c<o?((0,s.c)(n,t),n):r+o<c?((0,s.c)(n,e),n):((0,i.o)(n,t,e,(r+c-o)/(2*r)),n[3]=(r+o+c)/2,n)},wrap:function(t){return t}},Symbol.toStringTag,{value:"Module"}))},97467:(t,e,n)=>{n.d(e,{I:()=>o});var r=n(77944);class o{constructor(t){this._allocator=t,this._items=[],this._itemsPtr=0,this._grow()}get(){return 0===this._itemsPtr&&(0,r.d)((()=>this._reset())),this._itemsPtr===this._items.length&&this._grow(),this._items[this._itemsPtr++]}_reset(){const t=Math.min(3*Math.max(8,this._itemsPtr),this._itemsPtr+3*i);this._items.length=Math.min(t,this._items.length),this._itemsPtr=0}_grow(){for(let t=0;t<Math.max(8,Math.min(this._items.length,i));t++)this._items.push(this._allocator())}}const i=1024},95925:(t,e,n)=>{n.d(e,{Cr:()=>l,LV:()=>a,oC:()=>u,vt:()=>c});n(18690);var r=n(97467),o=n(20664),i=n(9392);n(75762);function c(t){return t?s((0,i.o8)(t.origin),(0,i.o8)(t.direction)):s((0,i.vt)(),(0,i.vt)())}function s(t,e){return{origin:t,direction:e}}function a(t,e){const n=d.get();return n.origin=t,n.direction=e,n}function l(t,e){let n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:c();return(0,o.c)(n.origin,t),(0,o.f)(n.direction,e,t),n}function u(t,e,n){const r=(0,o.m)(t.direction,(0,o.f)(n,e,t.origin));return(0,o.g)(n,t.origin,(0,o.j)(n,t.direction,r)),n}const d=new r.I((()=>c()));(0,i.vt)()},51990:(t,e,n)=>{n.d(e,{k5:()=>r});var r;n(15941);!function(t){t[t.Multiply=1]="Multiply",t[t.Ignore=2]="Ignore",t[t.Replace=3]="Replace",t[t.Tint=4]="Tint"}(r||(r={}))},59581:(t,e,n)=>{n.d(e,{A:()=>i});var r=n(51990),o=n(64839);function i(t){t.vertex.code.add(o.H`
+    vec4 decodeSymbolColor(vec4 symbolColor, out int colorMixMode) {
+      float symbolAlpha = 0.0;
+
+      const float maxTint = 85.0;
+      const float maxReplace = 170.0;
+      const float scaleAlpha = 3.0;
+
+      if (symbolColor.a > maxReplace) {
+        colorMixMode = ${o.H.int(r.k5.Multiply)};
+        symbolAlpha = scaleAlpha * (symbolColor.a - maxReplace);
+      } else if (symbolColor.a > maxTint) {
+        colorMixMode = ${o.H.int(r.k5.Replace)};
+        symbolAlpha = scaleAlpha * (symbolColor.a - maxTint);
+      } else if (symbolColor.a > 0.0) {
+        colorMixMode = ${o.H.int(r.k5.Tint)};
+        symbolAlpha = scaleAlpha * symbolColor.a;
+      } else {
+        colorMixMode = ${o.H.int(r.k5.Multiply)};
+        symbolAlpha = 0.0;
+      }
+
+      return vec4(symbolColor.r, symbolColor.g, symbolColor.b, symbolAlpha);
+    }
+  `)}},34981:(t,e,n)=>{var r;function o(t){return t===r.Shadow||t===r.ShadowHighlight||t===r.ShadowExcludeHighlight||t===r.ViewshedShadow}function i(t){return function(t){return function(t){return s(t)||c(t)}(t)||a(t)}(t)||t===r.Normal}function c(t){return t===r.Highlight||t===r.ObjectAndLayerIdColor}function s(t){return t===r.Color}function a(t){return t===r.Depth}n.d(e,{PJ:()=>o,V:()=>r,XY:()=>i}),function(t){t[t.Color=0]="Color",t[t.Depth=1]="Depth",t[t.Normal=2]="Normal",t[t.Shadow=3]="Shadow",t[t.ShadowHighlight=4]="ShadowHighlight",t[t.ShadowExcludeHighlight=5]="ShadowExcludeHighlight",t[t.ViewshedShadow=6]="ViewshedShadow",t[t.Highlight=7]="Highlight",t[t.ObjectAndLayerIdColor=8]="ObjectAndLayerIdColor",t[t.COUNT=9]="COUNT"}(r||(r={}))},59046:(t,e,n)=>{n.d(e,{W:()=>r,Y:()=>s});var r,o=n(4212),i=n(64839),c=n(66470);function s(t,e){switch(e.normalType){case r.Compressed:t.attributes.add(c.r.NORMALCOMPRESSED,"vec2"),t.vertex.code.add(i.H`vec3 decompressNormal(vec2 normal) {
+float z = 1.0 - abs(normal.x) - abs(normal.y);
+return vec3(normal + sign(normal) * min(z, 0.0), z);
+}
+vec3 normalModel() {
+return decompressNormal(normalCompressed);
+}`);break;case r.Attribute:t.attributes.add(c.r.NORMAL,"vec3"),t.vertex.code.add(i.H`vec3 normalModel() {
+return normal;
+}`);break;case r.ScreenDerivative:t.fragment.code.add(i.H`vec3 screenDerivativeNormal(vec3 positionView) {
+return normalize(cross(dFdx(positionView), dFdy(positionView)));
+}`);break;default:(0,o.Xb)(e.normalType);case r.COUNT:case r.Ground:}}!function(t){t[t.Attribute=0]="Attribute",t[t.Compressed=1]="Compressed",t[t.Ground=2]="Ground",t[t.ScreenDerivative=3]="ScreenDerivative",t[t.COUNT=4]="COUNT"}(r||(r={}))},89299:(t,e,n)=>{n.d(e,{u:()=>o});var r=n(64839);function o(t,e){let{code:n}=t;e.doublePrecisionRequiresObfuscation?n.add(r.H`vec3 dpPlusFrc(vec3 a, vec3 b) {
+return mix(a, a + b, vec3(notEqual(b, vec3(0))));
+}
+vec3 dpMinusFrc(vec3 a, vec3 b) {
+return mix(vec3(0), a - b, vec3(notEqual(a, b)));
+}
+vec3 dpAdd(vec3 hiA, vec3 loA, vec3 hiB, vec3 loB) {
+vec3 t1 = dpPlusFrc(hiA, hiB);
+vec3 e = dpMinusFrc(t1, hiA);
+vec3 t2 = dpMinusFrc(hiB, e) + dpMinusFrc(hiA, dpMinusFrc(t1, e)) + loA + loB;
+return t1 + t2;
+}`):n.add(r.H`vec3 dpAdd(vec3 hiA, vec3 loA, vec3 hiB, vec3 loB) {
+vec3 t1 = hiA + hiB;
+vec3 e = t1 - hiA;
+vec3 t2 = ((hiB - e) + (hiA - (t1 - e))) + loA + loB;
+return t1 + t2;
+}`)}},81449:(t,e,n)=>{n(64839)},72468:(t,e,n)=>{n.d(e,{W:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"vec3",o.c.Draw,((n,r,o,i)=>n.setUniform3fv(t,e(r,o,i))))}}},5517:(t,e,n)=>{n.d(e,{t:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"vec3",o.c.Pass,((n,r,o)=>n.setUniform3fv(t,e(r,o))))}}},21390:(t,e,n)=>{n.d(e,{m:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"float",o.c.Pass,((n,r,o)=>n.setUniform1f(t,e(r,o))))}}},42759:(t,e,n)=>{n.d(e,{h:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"mat3",o.c.Draw,((n,r,o)=>n.setUniformMatrix3fv(t,e(r,o))))}}},72106:(t,e,n)=>{n.d(e,{k:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"mat3",o.c.Pass,((n,r,o)=>n.setUniformMatrix3fv(t,e(r,o))))}}},43425:(t,e,n)=>{n.d(e,{X:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"mat4",o.c.Pass,((n,r,o)=>n.setUniformMatrix4fv(t,e(r,o))))}}},27374:(t,e,n)=>{n.d(e,{o:()=>i});var r=n(7223),o=n(24245);class i extends r.n{constructor(t,e){super(t,"sampler2D",o.c.Draw,((n,r,o)=>n.bindTexture(t,e(r,o))))}}},7223:(t,e,n)=>{n.d(e,{n:()=>o});var r=n(24245);class o{constructor(t,e,n,o){let i=arguments.length>4&&void 0!==arguments[4]?arguments[4]:null;if(this.name=t,this.type=e,this.arraySize=i,this.bind={[r.c.Pass]:null,[r.c.Draw]:null},o)switch(n){case r.c.Pass:this.bind[r.c.Pass]=o;break;case r.c.Draw:this.bind[r.c.Draw]=o}}equals(t){return this.type===t.type&&this.name===t.name&&this.arraySize===t.arraySize}}},64839:(t,e,n)=>{n.d(e,{H:()=>o,Y:()=>r});const r=class{};function o(t){let e="";for(let n=0;n<(arguments.length<=1?0:arguments.length-1);n++)e+=t[n]+(n+1<1||arguments.length<=n+1?void 0:arguments[n+1]);return e+=t[t.length-1],e}!function(t){t.int=function(t){return Math.round(t).toString()},t.float=function(t){return t.toPrecision(8)}}(o||(o={}))},24245:(t,e,n)=>{var r;n.d(e,{c:()=>r}),function(t){t[t.Pass=0]="Pass",t[t.Draw=1]="Draw"}(r||(r={}))}}]);
+//# sourceMappingURL=9189.a3acf4f9.chunk.js.map

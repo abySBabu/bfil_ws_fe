@@ -74,7 +74,7 @@ export default function UserDisable(props: userTypeProps) {
                 {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_User_Content")} {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Cancel_Button")}Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Cancel_Button")}</Button>
                     <Button onClick={DisableUser} disabled={loading}>
                     {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_Button")}{loading ? <CircularProgress /> : null}
                     </Button>

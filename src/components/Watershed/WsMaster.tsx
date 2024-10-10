@@ -138,7 +138,7 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data) }
+            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data.reverse()) }
             setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
         }
@@ -198,7 +198,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to add watershed");
             }
         }
         catch (error) {
@@ -228,7 +228,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to update watershed");
             }
         }
         catch (error) {
@@ -249,7 +249,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to delete watershed");
             }
         }
         catch (error) {

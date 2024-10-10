@@ -59,7 +59,7 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data) }
+            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
         }
         catch (error) { console.log(error) }
     };
@@ -75,7 +75,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to add farmer");
             }
         }
         catch (error) {
@@ -98,7 +98,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to edit farmer");
             }
         }
         catch (error) {
@@ -120,7 +120,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(resp.message || "");
+                setalert("Failed to delete farmer");
             }
         }
         catch (error) {
@@ -150,7 +150,7 @@ export const FarmerMaster: React.FC = () => {
                 <TableRow>
                     <TableCell>Name</TableCell>
                     <TableCell>Aadhar</TableCell>
-                    <TableCell>Number</TableCell>
+                    <TableCell>Mobile Number</TableCell>
                     {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
                 </TableRow>
             </TableHead>

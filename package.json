@@ -4,6 +4,7 @@
   "homepage": "/bfilreact",
   "private": true,
   "dependencies": {
+    "@arcgis/core": "^4.30.9",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",

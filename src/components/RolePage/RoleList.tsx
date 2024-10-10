@@ -14,9 +14,11 @@ import EditRole from './EditRole';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteRole from './DeleteRole';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 
 
 export default function RoleList() {
+    const { t } = useTranslation();
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -97,10 +99,10 @@ export default function RoleList() {
         {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                Role Management
+            {t("p_Role_Management.ss_Role_Management_Header")}
             </Typography>
             <TextField
-                label="Search"
+                label={t("p_Role_Management.ss_Search_Label")}
                 fullWidth={false}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -116,7 +118,7 @@ export default function RoleList() {
             />
             {PerChk('EDIT_Role Management') && (
                 <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    Add Role
+                    {t("p_Role_Management.Add_Role_Link.Add_Role_Link_Text")}
                 </Button>)}
         </Box>
 
@@ -124,10 +126,10 @@ export default function RoleList() {
             <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
-                        <TableCell >Role Name</TableCell>
-                        <TableCell >Description</TableCell>
+                        <TableCell >{t("p_Role_Management.ss_RoleList.Role_Name")}</TableCell>
+                        <TableCell >{t("p_Role_Management.ss_RoleList.Role_Description")}</TableCell>
                         {PerChk('EDIT_Role Management') && (
-                            <TableCell sx={{ textAlign: 'center' }}>Action</TableCell>)}
+                            <TableCell sx={{ textAlign: 'center' }}>{t("p_Role_Management.ss_RoleList.Action.Action_Text")}</TableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -144,10 +146,10 @@ export default function RoleList() {
                             </TableCell>
                             {PerChk('EDIT_Role Management') && (
                                 <TableCell sx={{ textAlign: 'center' }}>
-                                    <Tooltip title="Edit Role">
+                                    <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
                                         <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
                                     </Tooltip>
-                                    <Tooltip title="Delete Role">
+                                    <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
                                         <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                     </Tooltip>
                                 </TableCell>)}
@@ -164,6 +166,7 @@ export default function RoleList() {
                             rowsPerPageOptions={[5, 10, 15]}
                             onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
+                            labelRowsPerPage={t("p_Role_Management.ss_RoleList.Rows_per_page")}
                         />
                     </TableRow>
                 </TableFooter>

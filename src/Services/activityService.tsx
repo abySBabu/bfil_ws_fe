@@ -68,3 +68,29 @@ export async function DashSupply() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function actFlowNext(status: any) {
+    const configs = {
+        url: `http://172.104.56.206:9061/wf/work-service/work-flow/2/Activity Work Flow/Submit/${status}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function actFlowPrev(status: any) {
+    const configs = {
+        url: `http://172.104.56.206:9061/wf/work-service/work-flow/2/Activity Work Flow/Reject/${status}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            'Content-Type': 'application/vnd.api+json'
+        }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
