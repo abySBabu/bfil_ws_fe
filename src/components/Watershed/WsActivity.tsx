@@ -58,7 +58,15 @@ export const actDef = {
     trainerFacilitator: '',
     mobilizer: '',
     photoEvent: '',
-    photoattendanceResolution: ''
+    photoattendanceResolution: '',
+    History: [
+        {
+            historyRemarks: '',
+            historyStatus: '',
+            historyCreatedUser: '',
+            historyCreatedTime: ''
+        }
+    ]
 }
 
 export const WsActivity: React.FC = () => {
@@ -308,9 +316,37 @@ export const WsActivity: React.FC = () => {
         seteditM(false);
     }
 
-    const ActFlow = async (status: any, id: any) => {
+    const ActFlowNext = async (status: any, id: any) => {
         try {
             const resp1 = await actFlowNext(status)
+            if (resp1) {
+                const stObj = { ...actObj, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(stObj, id);
+                if (resp2) {
+                    fetchData();
+                    setalertClr(true);
+                    setalert(`Updated activity status to ${resp1}`);
+                }
+                else {
+                    setalertClr(false);
+                    setalert("Failed to update work flow status");
+                }
+            }
+            else {
+                setalertClr(false);
+                setalert("Failed to update work flow status");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update work flow status");
+        }
+        setprogM(false);
+    }
+
+    const ActFlowPrev = async (status: any, id: any) => {
+        try {
+            const resp1 = await actFlowPrev(status)
             if (resp1) {
                 const stObj = { ...actObj, activityWorkflowStatus: resp1 }
                 const resp2 = await editAct(stObj, id);
@@ -641,7 +677,7 @@ export const WsActivity: React.FC = () => {
         <Dialog open={progM} maxWidth='lg'>
             <DialogTitle>Activity Progress</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+            <DialogContent sx={{ maxHeight: '75vh', overflow: 'auto' }}><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><b>Intervention:</b> {actObj.interventionType} </Grid>
                 <Grid item xs={3}><b>Activity:</b> {actObj.activityName} </Grid>
                 {actObj.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.activityDescription} </Grid>}
@@ -700,17 +736,17 @@ export const WsActivity: React.FC = () => {
                             <TableRow>
                                 <TableCell>Remark</TableCell>
                                 <TableCell>Date</TableCell>
-                                <TableCell>Author</TableCell>
-                                <TableCell>Actions</TableCell>
+                                <TableCell>Remark By</TableCell>
+                                <TableCell>Remark On</TableCell>
                             </TableRow>
                         </TableHead>
 
-                        <TableBody>{actListP.map((a, i) =>
+                        <TableBody>{actObj.History?.map((a, i) =>
                         (<TableRow key={i}>
-                            <TableCell>{a.interventionType}</TableCell>
-                            <TableCell>{a.activityName}</TableCell>
-                            <TableCell>{a.activityWorkflowStatus}</TableCell>
-                            <TableCell>{DateTime(a.updatedTime)}</TableCell>
+                            <TableCell>{a.historyRemarks}</TableCell>
+                            <TableCell>{a.historyStatus}</TableCell>
+                            <TableCell>{a.historyCreatedUser}</TableCell>
+                            <TableCell>{DateTime(a.historyCreatedTime)}</TableCell>
                         </TableRow>)
                         )}</TableBody>
 
@@ -733,8 +769,8 @@ export const WsActivity: React.FC = () => {
                 <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
                     <Button onClick={() => setprogM(false)}>Close</Button>
-                    {prev && <Button sx={{ mx: '4px' }} onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
-                    {next && <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
+                    {prev && <Button sx={{ mx: '4px' }} onClick={() => ActFlowPrev(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
+                    {next && <Button onClick={() => ActFlowNext(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
                 </div>
             </DialogActions>
         </Dialog>
