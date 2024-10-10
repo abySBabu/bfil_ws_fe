@@ -15,7 +15,8 @@
         "SM_BE_Farmer_Master_Link": "Farmer Master",
         "SM_BE_Watershed_Mapping_Link": "Watershed Mapping",
         "SM_BE_Watershed_Activity_Link": "Watershed Activity",
-        "SM_BE_Work_Plan_Link": "Work Plan"
+        "SM_BE_Work_Plan_Link": "Work Plan",
+        "SM_BE_Report_Link": "Report"
     },
     "p_Dashboard": {
         "ss_KeyImpactIndicators_Header": {
@@ -208,6 +209,49 @@
                             "Delete_Button": "Delete"
                         },
                         "Delete_Success_Message": "Role deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
+    },
+    "p_Watershed_Mapping": {
+        "ss_Watershed_Mapping_Header": "Watershed Mapping",
+        "ss_Search_Label": "Search",
+        "Add_Mapping_Link": {
+            "Add_Mapping_Link_Text": "Add Mapping",
+            "Add_Mapping_Popup": {
+                "Add_Mapping_Label": "Add Mapping",
+                "User_Name": "User Name",
+                "Role": "Role",
+                "View_Label": "View",
+                "Remarks": "Remarks",
+                "Ws_Name": "Watershed Name",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Watershed mapping created successfully"
+        },
+        "ss_MappingList": {
+            "Ws_Name": "Watershed Name",
+            "User_Name": "User Name",
+            "Remarks": "Remarks",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Mapping",
+                        "Edit_Mapping_Popup": {
+                            "Edit_Mapping_Label": "Edit Mapping",
+                            "User_Name": "User Name",
+                            "Role": "Role",
+                            "View_Label": "View",
+                            "Remarks": "Remarks",
+                            "Ws_Name": "Watershed Name",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Watershed Mapping updated successfully"
                     }
                 }
             },

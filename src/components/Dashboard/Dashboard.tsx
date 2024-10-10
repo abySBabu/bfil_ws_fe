@@ -7,6 +7,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd } from '../../common';
 import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
 import { useTranslation } from 'react-i18next';
+import EsriMap from '../Map';
 
 
 const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
@@ -14,7 +15,7 @@ const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'spa
 const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
-    <Grid item xs={6} md={2}>
+    <Grid item xs={6} lg={4}>
         <Card sx={actCard}>
             <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
@@ -86,15 +87,21 @@ export const Dashboard: React.FC = () => {
                 </Box>
             </Card></Grid>
 
-            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography></Grid>
-            {
-                Object.entries(supplyList)?.map(([activity, data], i) => {
-                    const [unit, value] = Object.entries(data)[0];
-                    return (
-                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
-                    );
-                })
-            }
+            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
+            <Grid item xs={12} md={6}>
+                <Grid container spacing={1}>
+                    {
+                        Object.entries(supplyList)?.map(([activity, data], i) => {
+                            const [unit, value] = Object.entries(data)[0];
+                            return (
+                                <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                            );
+                        })
+                    }</Grid>
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <EsriMap />
+            </Grid>
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
             {
@@ -105,7 +112,7 @@ export const Dashboard: React.FC = () => {
                     );
                 })
             }
-        </Grid>
+        </Grid >
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
             <Card sx={{ outline: 'none' }}>

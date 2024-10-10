@@ -120,7 +120,7 @@ export default function AddRole(props: userTypeProps) {
                     let screenameList: any[] = [];
                     if (resp0.status === 'success') {
                         let screenlistResp = resp0.data;
-                        let reverseScreenData = screenlistResp.reverse();
+                        let reverseScreenData = screenlistResp;
                         reverseScreenData.map((data: any) => {
                             screenameList.push(data.screenName)
                         })
@@ -331,8 +331,8 @@ export default function AddRole(props: userTypeProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
-                    <Button disabled={loading || !isValid || checkedPermissions.length === 0 || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>Add{loading ? <CircularProgress /> : null}</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Cancel_Button")}</Button>
+                    <Button disabled={loading || !isValid || checkedPermissions.length === 0 || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Button")}{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>

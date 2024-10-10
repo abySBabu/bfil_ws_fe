@@ -19,7 +19,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["jest", "node"] // Add this line
+    "types": ["jest", "node"], // Add this line
+    "baseUrl": ".",
+    "paths": {
+      "@arcgis/core/*": ["node_modules/@arcgis/core/*"]
+    }
   },
   "include": [
     "src"
