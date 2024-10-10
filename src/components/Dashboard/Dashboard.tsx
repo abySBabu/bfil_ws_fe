@@ -88,7 +88,7 @@ export const Dashboard: React.FC = () => {
             </Card></Grid>
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={8}>
                 <Grid container spacing={1}>
                     {
                         Object.entries(supplyList)?.map(([activity, data], i) => {
@@ -109,7 +109,7 @@ export const Dashboard: React.FC = () => {
                     }
                 </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
                 <EsriMap />
             </Grid>
         </Grid >
