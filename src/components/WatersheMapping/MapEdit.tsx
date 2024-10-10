@@ -16,6 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
+import { useTranslation } from 'react-i18next';
 
 interface MapFormInput {
     ws_name: number[],
@@ -23,6 +24,7 @@ interface MapFormInput {
     remarks: string
 }
 export default function (props: mapTypeProps) {
+    const { t } = useTranslation();
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [page, setPage] = React.useState(0);
     const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
@@ -198,7 +200,7 @@ export default function (props: mapTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>Edit Watershed Mapping</DialogTitle>
+                <DialogTitle>{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Edit_Mapping_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={6}>
@@ -206,7 +208,7 @@ export default function (props: mapTypeProps) {
                                 select
                                 id="user"
                                 disabled
-                                label="User Name"
+                                label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.User_Name")}
                                 {...register('user', {
                                     // required: 'User Name is required'
                                 })}
@@ -225,14 +227,14 @@ export default function (props: mapTypeProps) {
                         <Grid item xs={6}>
                             <TextField
                                 disabled
-                                label="Role"
+                                label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Role")}
                                 value={selectedRoleName}>
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 id="remarks"
-                                label="Remarks"
+                                label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Remarks")}
                                 InputLabelProps={{ shrink: true }}
                                 {...register('remarks', {
                                     pattern: {
@@ -247,13 +249,13 @@ export default function (props: mapTypeProps) {
                         <Grid item xs={12}>
                             {selectedRoleName === 'Community Resource person' ? <>
                                 <FormControl fullWidth required>
-                                    <InputLabel id="ws_name-label">Watershed Name</InputLabel>
+                                    <InputLabel id="ws_name-label">{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Ws_Name")}</InputLabel>
                                     <Select
                                         labelId="ws_name-label"
                                         id="ws_name"
                                         value={(watch('ws_name') && watch('ws_name')[0]) || ''}
                                         onChange={handleWatershedChange}
-                                        input={<OutlinedInput label="Watershed Name" />}
+                                        input={<OutlinedInput label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Ws_Name")} />}
                                         renderValue={(selected: number) => {
                                             const ws = wsList.find(option => option.wsId === selected);
                                             return ws ? ws.wsName : '';
@@ -269,14 +271,14 @@ export default function (props: mapTypeProps) {
                                 </FormControl>
                             </> : <>
                                 <FormControl fullWidth required>
-                                    <InputLabel id="ws_name-label">Watershed Name</InputLabel>
+                                    <InputLabel id="ws_name-label">{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Ws_Name")}</InputLabel>
                                     <Select
                                         labelId="ws_name-label"
                                         id="ws_name"
                                         multiple
                                         value={watch('ws_name') || []}
                                         onChange={handleWatershedChange}
-                                        input={<OutlinedInput label="Watershed Name" />}
+                                        input={<OutlinedInput label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Ws_Name")} />}
                                         renderValue={(selected: number[]) => selected.map(id => {
                                             const ws = wsList.find(option => option.wsId === id);
                                             return ws ? ws.wsName : '';
@@ -372,8 +374,8 @@ export default function (props: mapTypeProps) {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
-                    <Button disabled={loading || !isValid || selectedWs.length === 0 || !formValues.user} onClick={handleSubmit(editMap)}>Update{loading ? <CircularProgress /> : null}</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Cancel_Button")}</Button>
+                    <Button disabled={loading || !isValid || selectedWs.length === 0 || !formValues.user} onClick={handleSubmit(editMap)}>{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Update_Button")}{loading ? <CircularProgress /> : null}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
