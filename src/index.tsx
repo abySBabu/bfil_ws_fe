@@ -9,9 +9,6 @@ import Login from './components/LoginPage/Login';
 import { Home } from './Home';
 import  './i18n';
 
-import ReportTable from './components/ReportPage/ReportTable';
-
-
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
@@ -20,8 +17,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/report" element={<ReportTable />} />
-                   
                 </Routes>
             </Box></ThemeProvider>
         </Router >

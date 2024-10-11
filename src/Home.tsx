@@ -17,6 +17,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
+import ReportTable from './components/ReportPage/ReportTable';
+
 
 interface SideItem {
     screenName: string;
@@ -121,7 +123,7 @@ export const Home: React.FC = () => {
                             case 'Work Plan':
                                 return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                             case 'Report':
-                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Workplan /> };
+                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <ReportTable /> };
                             default:
                                 return null;
                         }
@@ -142,17 +144,11 @@ export const Home: React.FC = () => {
                     }
                 }
                 const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
-               // console.log(resp1);
                 const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
-               // console.log(resp2);
                 const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
-               //console.log(resp3);
                 const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
-                //console.log(resp4);
                 const resp5 = await listWS(); if (resp5.status === 'success') sessionStorage.setItem("WsList", JSON.stringify(resp5.data));
-                //console.log(resp5);
                 const resp6 = await listVillage(); if (resp6.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp6.data));
-               // console.log(resp6);
             } catch (error) {
                 console.log(error);
             }
@@ -190,7 +186,7 @@ export const Home: React.FC = () => {
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
                                 <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
-                                    <ListItemText primary={section.name}/>
+                                    <ListItemText primary={section.name} />
                                 </ListItemButton>
                             </ListItem>)
                         ))}</List>
