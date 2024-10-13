@@ -3,7 +3,7 @@ import { serverPath } from "../common";
 
 export async function listAct() {
     const configs = {
-        url: serverPath.bfil + "data_capture/getalldataCapture",
+        url: serverPath.bfil + `data_capture/getalldataCapture/${sessionStorage.getItem("userId")}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }

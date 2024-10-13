@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -41,10 +41,19 @@ export const Home: React.FC = () => {
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const [uName, setuName] = React.useState('');
+    const [actCount, setactCount] = React.useState(0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
 
+    const countHeader = (textKey: string, badgeCount: number) => {
+        return (<Box display="flex" alignItems="center" justifyContent="space-between">
+            <Typography variant="body1" sx={{ mr: 1 }}>
+                {t(textKey)}
+            </Typography>
+            <Badge badgeContent={badgeCount} color="primary" overlap="circular" />
+        </Box>)
+    }
 
     useEffect(() => {
         const tokenresult = checkTknExpiry((expired) => {
@@ -102,6 +111,7 @@ export const Home: React.FC = () => {
             try {
                 const resp0 = await ListSide();
                 if (resp0.status === 'success') {
+                    setactCount(resp0.workActivityCount)
                     let sortscreenlist = resp0.data;
                     setsideList(sortscreenlist);
                     const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
@@ -119,7 +129,7 @@ export const Home: React.FC = () => {
                             case 'Watershed Mapping':
                                 return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                             case 'Watershed Activity':
-                                return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
                             case 'Work Plan':
                                 return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                             case 'Report':
