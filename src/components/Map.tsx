@@ -6,6 +6,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import TileLayer from '@arcgis/core/layers/TileLayer';
+import { sd } from '../common';
 
 const EsriMap: React.FC = () => {
     const mapDiv = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ const EsriMap: React.FC = () => {
             });
 
             map.addMany([featureLayer1, featureLayer2]);
-            mapView.ui.components = [];            
+            mapView.ui.components = [];
             setView(mapView);
 
             return () => {
@@ -58,44 +59,52 @@ const EsriMap: React.FC = () => {
     };
 
     return (
-        <Box style={{ height: '50vh', position: 'relative' }}>
+        <Box style={{
+            height: '80vh', position: 'relative', border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+            borderRadius: '4px',
+        }}>
             {/* Map Div */}
             <div ref={mapDiv} style={{ height: '100%' }}></div>
 
             {/* Overlayed Zoom In, Zoom Out, and Fullscreen Buttons */}
             <Box style={{
-                    position: 'absolute',
-                    bottom: 10,
-                    right: 10,
-                    zIndex: 10,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px' // Space between buttons
-                }}
->
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                zIndex: 10,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px' // Space between buttons
+            }}
+            >
                 {/* Zoom In Button */}
                 <IconButton
-                    color="primary"
                     onClick={() => view?.goTo({ zoom: view.zoom + 1 })}
-                    style={{ marginBottom: 10, backgroundColor: 'white' }}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <ZoomInIcon />
                 </IconButton>
 
                 {/* Zoom Out Button */}
                 <IconButton
-                    color="primary"
                     onClick={() => view?.goTo({ zoom: view.zoom - 1 })}
-                    style={{ marginBottom: 10, backgroundColor: 'white' }}
+                    style={{ marginBottom: 10,backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
                 >
                     <ZoomOutIcon />
                 </IconButton>
 
+
+            </Box>
+            <Box style={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                zIndex: 10, // Increased z-index for fullscreen button
+            }}>
                 {/* Fullscreen Button */}
                 <IconButton
-                    color="primary"
                     onClick={toggleFullScreen}
-                    style={{ backgroundColor: 'white' }}
+                    style={{ backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
                 >
                     <FullscreenIcon />
                 </IconButton>

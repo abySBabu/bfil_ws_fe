@@ -63,7 +63,7 @@ export async function ListLand() {
 
 export async function ListSide() {
     const configs = {
-        url: serverPath.bfil + "ws_screen/GetAllScreen",
+        url: serverPath.bfil + `ws_screen/GetAllScreen/${sessionStorage.getItem("userId")}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }

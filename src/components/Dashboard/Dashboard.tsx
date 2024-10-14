@@ -10,15 +10,15 @@ import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 
 
-const keyCard = { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px', position: 'relative', color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
+const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
-const actCard = { height: '80px', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
+const actCard = { height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
     <Grid item xs={6} lg={4}>
         <Card sx={actCard}>
             <CardContent sx={{ textAlign: 'center' }}>
-                <Typography variant='body1' fontWeight='bold' sx={{ mb: 1 }}>{activity}</Typography>
+                <Typography variant='body1' fontWeight='bold'>{activity}</Typography>
                 <Typography variant='body2'>{value} {unit}</Typography>
             </CardContent>
         </Card>
@@ -88,7 +88,7 @@ export const Dashboard: React.FC = () => {
             </Card></Grid>
 
             <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={8}>
                 <Grid container spacing={1}>
                     {
                         Object.entries(supplyList)?.map(([activity, data], i) => {
@@ -97,21 +97,21 @@ export const Dashboard: React.FC = () => {
                                 <ActivityCard key={i} activity={activity} value={value} unit={unit} />
                             );
                         })
-                    }</Grid>
+                    }
+                    <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
+                    {
+                        Object.entries(demandList)?.map(([activity, data], i) => {
+                            const [unit, value] = Object.entries(data)[0];
+                            return (
+                                <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                            );
+                        })
+                    }
+                </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
                 <EsriMap />
             </Grid>
-
-            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
-            {
-                Object.entries(demandList)?.map(([activity, data], i) => {
-                    const [unit, value] = Object.entries(data)[0];
-                    return (
-                        <ActivityCard key={i} activity={activity} value={value} unit={unit} />
-                    );
-                })
-            }
         </Grid >
 
         <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>

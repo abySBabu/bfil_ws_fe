@@ -9,11 +9,10 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowAdd, actFlowUpdate, actFlowSubmit } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 
@@ -58,7 +57,15 @@ export const actDef = {
     trainerFacilitator: '',
     mobilizer: '',
     photoEvent: '',
-    photoattendanceResolution: ''
+    photoattendanceResolution: '',
+    History: [
+        {
+            historyRemarks: '',
+            historyStatus: '',
+            historyCreatedUser: '',
+            historyCreatedTime: ''
+        }
+    ]
 }
 
 export const WsActivity: React.FC = () => {
@@ -108,7 +115,6 @@ export const WsActivity: React.FC = () => {
     const demandCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure
     const sustainCheck = loading || !actObj.interventionType || !actObj.activityId || !actObj.watershedId || !actObj.surveyNo || !actObj.farmerId || !actObj.total || !actObj.amountSpend || !actObj.sourceExpenditure || !actObj.activityDescription
     const eventCheck = loading || !actObj.capacitynameEvent || !actObj.capacitytypeEvent || !actObj.eventDate || !actObj.participantsType || !actObj.habitationsCovered || totalP <= 0 || !actObj.trainerFacilitator || !actObj.mobilizer || !actObj.remarks
-
     const addCheck = actObj.activityName === 'Members Capacitated' ? eventCheck
         : actObj.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.interventionType === 'Demand Side Interventions' ? demandCheck
@@ -160,30 +166,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const uRole = localStorage.getItem("userRole")
-            const resp0 = await listWSMap();
-            if (resp0.status === 'success') {
-                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId")))
-                if (found0) {
-                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim()))
-                    const resp1 = await listAct();
-                    if (resp1.status === 'success') {
-                        const sortrespdata = resp1.data.reverse();
-                        if (uRole === 'Chief Manager Head Office') { setactList(sortrespdata) }
-                        else {
-                            const found1: typeof actDef[] = sortrespdata.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
-                            if (found1) {
-                                if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
-                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 1')) }
-                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 2')) }
-                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 3')) }
-                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 4')) }
-                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Verification 5')) }
-                            }
-                        }
-                    }
-                }
-            }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data.reverse()) }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -309,11 +292,9 @@ export const WsActivity: React.FC = () => {
         seteditM(false);
     }
 
-    const ActFlow = async (status: any, id: any) => {
+    const ActFlowNext = async (status: any, id: any) => {
         try {
-            const resp1 = status === 'New' ? await actFlowAdd()
-                : status === 'Verification 6' ? await actFlowSubmit()
-                    : await actFlowUpdate(status)
+            const resp1 = await actFlowNext(status)
             if (resp1) {
                 const stObj = { ...actObj, activityWorkflowStatus: resp1 }
                 const resp2 = await editAct(stObj, id);
@@ -336,26 +317,52 @@ export const WsActivity: React.FC = () => {
             console.log(error); setalertClr(false);
             setalert("Failed to update work flow status");
         }
-        seteditM(false);
+        setprogM(false);
+    }
+
+    const ActFlowPrev = async (status: any, id: any) => {
+        try {
+            const resp1 = await actFlowPrev(status)
+            if (resp1) {
+                const stObj = { ...actObj, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(stObj, id);
+                if (resp2) {
+                    fetchData();
+                    setalertClr(true);
+                    setalert(`Updated activity status to ${resp1}`);
+                }
+                else {
+                    setalertClr(false);
+                    setalert("Failed to update work flow status");
+                }
+            }
+            else {
+                setalertClr(false);
+                setalert("Failed to update work flow status");
+            }
+        }
+        catch (error) {
+            console.log(error); setalertClr(false);
+            setalert("Failed to update work flow status");
+        }
+        setprogM(false);
     }
 
     React.useEffect(() => { ActFlowSet(actObj.activityWorkflowStatus) }, [actObj.activityWorkflowStatus])
 
     const ActFlowSet = async (status: any) => {
         try {
-            const resp1 = status === 'New' ? await actFlowAdd()
-                : status === 'Verification 6' ? await actFlowSubmit()
-                    : await actFlowUpdate(status)
-            if (resp1) { setnext(resp1) } else { setnext('') }
+            const resp1 = await actFlowNext(status)
+            if (resp1) { setnext(resp1); console.log("Next--", resp1); } else { setnext('') }
 
-            const resp2 = await actFlowAdd()
-            if (resp2) { setprev(resp2) } else { setprev('') }
+            const resp2 = await actFlowPrev(status)
+            if (resp2) { setprev(resp2); console.log("Prev--", resp2); } else { setprev('') }
         }
         catch (error) { console.log(error) }
     }
 
     return (<>
-        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+        <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
@@ -377,7 +384,7 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Status</TableCell>
                     <TableCell>Last Update On</TableCell>
                     <TableCell>Last Update By</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell width='5%'>Actions</TableCell>
                 </TableRow>
             </TableHead>
 
@@ -388,7 +395,7 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{a.activityWorkflowStatus}</TableCell>
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
-                <TableCell>
+                <TableCell width='5%'>
                     {PerChk('EDIT_Watershed Activity') && <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>}
                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Visibility /></IconButton>
                     <IconButton title="Activity approval" onClick={() => { setactObj(a); setprogM(true); }}><Pending /></IconButton>
@@ -448,7 +455,6 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.participantsFemale} onChange={(e) => setactObj({ ...actObj, participantsFemale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
-
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, trainerFacilitator: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.mobilizer} onChange={(e) => setactObj({ ...actObj, mobilizer: e.target.value })} /></Grid>
@@ -496,7 +502,7 @@ export const WsActivity: React.FC = () => {
         </Dialog>
 
         <Dialog open={editM} maxWidth='xl'>
-            <DialogTitle>Edit Activity</DialogTitle>
+            <DialogTitle>Update Activity</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><TextField required select label="Intervention" value={actObj.interventionType} onChange={(e) => setactObj({ ...actObj, interventionType: e.target.value, activityName: '' })}>
@@ -534,7 +540,6 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.participantsFemale} onChange={(e) => setactObj({ ...actObj, participantsFemale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
-
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, trainerFacilitator: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.mobilizer} onChange={(e) => setactObj({ ...actObj, mobilizer: e.target.value })} /></Grid>
@@ -646,7 +651,7 @@ export const WsActivity: React.FC = () => {
         <Dialog open={progM} maxWidth='lg'>
             <DialogTitle>Activity Progress</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+            <DialogContent sx={{ maxHeight: '75vh', overflow: 'auto' }}><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><b>Intervention:</b> {actObj.interventionType} </Grid>
                 <Grid item xs={3}><b>Activity:</b> {actObj.activityName} </Grid>
                 {actObj.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.activityDescription} </Grid>}
@@ -698,12 +703,49 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
+                <Grid item xs={12}><Divider>Remarks History</Divider></Grid>
+                <Grid item xs={12}>
+                    <TableContainer component={Paper}><Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Remark</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Remark By</TableCell>
+                                <TableCell>Remark On</TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>{actObj.History?.map((a, i) =>
+                        (<TableRow key={i}>
+                            <TableCell>{a.historyRemarks}</TableCell>
+                            <TableCell>{a.historyStatus}</TableCell>
+                            <TableCell>{a.historyCreatedUser}</TableCell>
+                            <TableCell>{DateTime(a.historyCreatedTime)}</TableCell>
+                        </TableRow>)
+                        )}</TableBody>
+
+                        <TableFooter><TableRow>
+                            <TablePagination
+                                count={actListF.length}
+                                rowsPerPage={rPP}
+                                page={page}
+                                onPageChange={(e, p) => setPage(p)}
+                                rowsPerPageOptions={[5, 10, 15]}
+                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                ActionsComponent={TPA}
+                            />
+                        </TableRow></TableFooter>
+                    </Table></TableContainer>
+                </Grid>
             </Grid></DialogContent>
 
-            <DialogActions>
-                <Button onClick={() => setprogM(false)}>Close</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Return to {prev}</Button>
-                <Button onClick={() => ActFlow(actObj.activityWorkflowStatus, actObj.activityId)}>Submit for {next}</Button>
+            <DialogActions sx={{ justifyContent: 'space-between' }}>
+                <TextField label='Remarks' value={actObj.remarks} onChange={(e) => setactObj({ ...actObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
+                <div>
+                    <Button sx={{ mx: '2px' }} onClick={() => setprogM(false)}>Close</Button>
+                    {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.activityWorkflowStatus, actObj.activityId)}>Reject to {prev}</Button>}
+                    {next && <Button sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.activityWorkflowStatus, actObj.activityId)}>Send to {next}</Button>}
+                </div>
             </DialogActions>
         </Dialog>
     </>)

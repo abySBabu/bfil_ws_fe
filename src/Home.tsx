@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Link, Snackbar, Alert, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -17,6 +17,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
+import ReportTable from './components/ReportPage/ReportTable';
+
 
 interface SideItem {
     screenName: string;
@@ -43,6 +45,14 @@ export const Home: React.FC = () => {
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
 
+    const countHeader = (textKey: string, badgeCount: number) => {
+        return (<Box display="flex" alignItems="center" justifyContent="space-between">
+            <Typography variant="body1" sx={{ mr: 1 }}>
+                {t(textKey)}
+            </Typography>
+            <Badge badgeContent={badgeCount} color="primary" overlap="circular" />
+        </Box>)
+    }
 
     useEffect(() => {
         const tokenresult = checkTknExpiry((expired) => {
@@ -117,11 +127,11 @@ export const Home: React.FC = () => {
                             case 'Watershed Mapping':
                                 return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                             case 'Watershed Activity':
-                                return { name: t('p_Home.SM_BE_Watershed_Activity_Link'), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', resp0.workActivityCount), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
                             case 'Work Plan':
                                 return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                             case 'Report':
-                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Workplan /> };
+                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <ReportTable /> };
                             default:
                                 return null;
                         }

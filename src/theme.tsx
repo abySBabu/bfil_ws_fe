@@ -7,7 +7,7 @@ export const tpaTheme = createTheme({
             styleOverrides: {
                 root: {
                     color: '#fff',
-                    '&:hover': { color: sd('--button-bgcolor-hover-brand') },
+                    '&:hover': { color: 'var(--button-bgcolor-hover-brand)' },
                     '&.Mui-disabled': { color: '#000', opacity: 0.25 }
                 }
             }
