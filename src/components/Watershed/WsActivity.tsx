@@ -13,7 +13,6 @@ import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Servic
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 
@@ -385,7 +384,7 @@ export const WsActivity: React.FC = () => {
                     <TableCell>Status</TableCell>
                     <TableCell>Last Update On</TableCell>
                     <TableCell>Last Update By</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell width='5%'>Actions</TableCell>
                 </TableRow>
             </TableHead>
 
@@ -396,7 +395,7 @@ export const WsActivity: React.FC = () => {
                 <TableCell>{a.activityWorkflowStatus}</TableCell>
                 <TableCell>{DateTime(a.updatedTime)}</TableCell>
                 <TableCell>{a.updatedUser}</TableCell>
-                <TableCell>
+                <TableCell width='5%'>
                     {PerChk('EDIT_Watershed Activity') && <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>}
                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Visibility /></IconButton>
                     <IconButton title="Activity approval" onClick={() => { setactObj(a); setprogM(true); }}><Pending /></IconButton>
