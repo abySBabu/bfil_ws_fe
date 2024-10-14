@@ -373,8 +373,6 @@ export const WsActivity: React.FC = () => {
         setprogM(false);
     }
 
-    React.useEffect(() => { ActFlowSet(actObj.workActivity.activityWorkflowStatus) }, [actObj.workActivity.activityWorkflowStatus])
-
     const ActFlowSet = async (status: any) => {
         try {
             const resp1 = await actFlowNext(status)
@@ -431,7 +429,7 @@ export const WsActivity: React.FC = () => {
                         (uRole === 'Executive Director' && a.workActivity.activityWorkflowStatus === 'Approver 4') ||
                         (uRole === 'State Project Head' && a.workActivity.activityWorkflowStatus === 'Approver 5') ||
                         (uRole === 'Chief Manager Head Office' && a.workActivity.activityWorkflowStatus === 'Approver 6')
-                    ) && <IconButton title="Activity approval" onClick={() => { setactObj(a); setprogM(true); }}><Pending /></IconButton>}
+                    ) && <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); sethisObj(hisDef); setprogM(true); }}><Pending /></IconButton>}
                 </TableCell>
             </TableRow>)
             )}</TableBody>
