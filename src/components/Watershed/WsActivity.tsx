@@ -455,7 +455,6 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.participantsFemale} onChange={(e) => setactObj({ ...actObj, participantsFemale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
-
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, trainerFacilitator: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.mobilizer} onChange={(e) => setactObj({ ...actObj, mobilizer: e.target.value })} /></Grid>
@@ -541,7 +540,6 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.participantsMale} onChange={(e) => setactObj({ ...actObj, participantsMale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.participantsFemale} onChange={(e) => setactObj({ ...actObj, participantsFemale: parseInt(e.target.value) })} inputProps={{ min: 0 }} /></Grid>
-
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, trainerFacilitator: e.target.value })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.mobilizer} onChange={(e) => setactObj({ ...actObj, mobilizer: e.target.value })} /></Grid>
