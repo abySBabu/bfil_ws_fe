@@ -10,7 +10,7 @@ import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
-import { ListSide } from './Services/dashboardService';
+import { ListSide, ListStatus } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,7 @@ export const Home: React.FC = () => {
             <Typography variant="body1" sx={{ mr: 1 }}>
                 {t(textKey)}
             </Typography>
-            <Badge badgeContent={badgeCount} color="primary" overlap="circular" />
+            <Badge badgeContent={badgeCount} color="warning" overlap="circular" />
         </Box>)
     }
 
@@ -107,48 +107,56 @@ export const Home: React.FC = () => {
     React.useEffect(() => {
         const fetchLoc = async () => {
             setuName((sessionStorage.getItem("userName") as string)[0] || '')
+            const uRole = localStorage.getItem("userRole")
             try {
-                const resp0 = await ListSide();
-                if (resp0.status === 'success') {
-                    let sortscreenlist = resp0.data;
-                    setsideList(sortscreenlist);
-                    const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
-                        switch (sideItem.screenName) {
-                            case 'Dashboard':
-                                return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
-                            case 'User Management':
-                                return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
-                            case 'Role Management':
-                                return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
-                            case 'Watershed Master':
-                                return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
-                            case 'Farmer Master':
-                                return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
-                            case 'Watershed Mapping':
-                                return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
-                            case 'Watershed Activity':
-                                return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', resp0.workActivityCount), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
-                            case 'Work Plan':
-                                return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
-                            case 'Report':
-                                return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <ReportTable /> };
-                            default:
-                                return null;
+                const resp = await ListStatus();
+                if (resp) {
+                    const uStatus: any = resp.data.find((x: any) => x.roleName === uRole)
+                    if (uStatus) {
+                        localStorage.setItem("userStatus", uStatus.workflowstatusName)
+                        const resp0 = await ListSide(uStatus.workflowstatusName);
+                        if (resp0.status === 'success') {
+                            let sortscreenlist = resp0.data;
+                            setsideList(sortscreenlist);
+                            const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
+                                switch (sideItem.screenName) {
+                                    case 'Dashboard':
+                                        return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+                                    case 'User Management':
+                                        return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+                                    case 'Role Management':
+                                        return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+                                    case 'Watershed Master':
+                                        return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+                                    case 'Farmer Master':
+                                        return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
+                                    case 'Watershed Mapping':
+                                        return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+                                    case 'Watershed Activity':
+                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', resp0.workActivityCount), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                    case 'Work Plan':
+                                        return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                                    case 'Report':
+                                        return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <ReportTable /> };
+                                    default:
+                                        return null;
+                                }
+                            }).filter((section: Section): section is Section => section !== null);
+
+                            setSections(generatedSections);
+
+
+                            console.log('sec len', generatedSections.length)
+
+                            const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
+                            if (defaultIndex !== -1) {
+                                console.log('defaultIndex', defaultIndex)
+                                setdIndex(defaultIndex);
+                            } else {
+                                setHasPermission(true);
+                                setMessage("You do not have permission to view any sections.");
+                            }
                         }
-                    }).filter((section: Section): section is Section => section !== null);
-
-                    setSections(generatedSections);
-
-
-                    console.log('sec len', generatedSections.length)
-
-                    const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
-                    if (defaultIndex !== -1) {
-                        console.log('defaultIndex', defaultIndex)
-                        setdIndex(defaultIndex);
-                    } else {
-                        setHasPermission(true);
-                        setMessage("You do not have permission to view any sections.");
                     }
                 }
                 const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));

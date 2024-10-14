@@ -9,7 +9,7 @@ import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByR
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../Services/loginService';
-import { ListSide } from '../../Services/dashboardService';
+import { ListSide, ListStatus } from '../../Services/dashboardService';
 import { useTranslation } from 'react-i18next';
 
 type RoleTypeProps = {
@@ -139,32 +139,40 @@ export default function EditRole(props: RoleTypeProps) {
                     });
                     setCheckedPermissions(tempPermissionList);
                 }
+                const uRole = localStorage.getItem("userRole")
 
                 if (temporaryPermList) {
-                    const resp0 = await ListSide();
-                    let screenameList: any[] = [];
-                    if (resp0.status === 'success') {
-                        let screenlistResp = resp0.data;
-                        let reverseScreenData = screenlistResp;
-                        reverseScreenData.map((data: any) => {
-                            screenameList.push(data.screenName)
-                        })
-                        setscreenNameList(screenameList);
+                    const respStatus = await ListStatus();
+                    if (respStatus) {
+                        const uStatus: any = respStatus.data.find((x: any) => x.roleName === uRole)
+                        if (uStatus) {
+                            localStorage.setItem("userStatus", uStatus.workflowstatusName)
+                            const resp0 = await ListSide(uStatus.workflowstatusName);
+                            let screenameList: any[] = [];
+                            if (resp0.status === 'success') {
+                                let screenlistResp = resp0.data;
+                                let reverseScreenData = screenlistResp;
+                                reverseScreenData.map((data: any) => {
+                                    screenameList.push(data.screenName)
+                                })
+                                setscreenNameList(screenameList);
+                            }
+                            let screenPermissionMappingList: ScreenPermissionMapping[] = screenameList.map(screenName => {
+                                let permissionList = temporaryPermList.filter(x =>
+                                    x.permissionName.includes(screenName) &&
+                                    (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT"))
+                                );
+                                return {
+                                    screenName: screenName,
+                                    permission: permissionList
+                                };
+                            });
+
+                            console.log("screenPermissionMappingList", screenPermissionMappingList);
+                            setSelectedPermissions(screenPermissionMappingList);
+
+                        }
                     }
-                    let screenPermissionMappingList: ScreenPermissionMapping[] = screenameList.map(screenName => {
-                        let permissionList = temporaryPermList.filter(x =>
-                            x.permissionName.includes(screenName) &&
-                            (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT"))
-                        );
-                        return {
-                            screenName: screenName,
-                            permission: permissionList
-                        };
-                    });
-
-                    console.log("screenPermissionMappingList", screenPermissionMappingList);
-                    setSelectedPermissions(screenPermissionMappingList);
-
                 }
             } catch (error) {
                 console.log(error);
@@ -333,7 +341,7 @@ export default function EditRole(props: RoleTypeProps) {
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Cancel_Button")}</Button>
                     <Button onClick={handleSubmit(editRole)} disabled={loading || !isValid || !formValues.roleName || !formValues.roleDesc}>
-                    {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Update_Button")} {loading ? <CircularProgress /> : null}
+                        {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Update_Button")} {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

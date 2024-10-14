@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
-import { ListLand, ListInter, ListSupply, ListDemand, ListDonor } from '../../Services/dashboardService';
+import { ListLand, ListInter, ListDonor, ListPara } from '../../Services/dashboardService';
 import { listWS } from '../../Services/wsService';
 
 const wpDef = {
@@ -18,7 +18,7 @@ const wpDef = {
     watershedId: "",
     interventionType_Components: "",
     activityId: "",
-    activityName:"",
+    activityName: "",
     planlandType: "",
     planRemarks: "",
     createdUser: "",
@@ -92,7 +92,7 @@ export const Workplan: React.FC = () => {
 
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
-    const addCheck = !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityId || !planObj.planlandType || !planObj.watershedId || !planObj.value || !planObj.unitofMeasurement || finTotal <= 0
+    const addCheck = !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityName || !planObj.planlandType || !planObj.watershedId || !planObj.value || !planObj.unitofMeasurement || finTotal <= 0
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -118,18 +118,12 @@ export const Workplan: React.FC = () => {
         catch (error) { console.log(error) }
     }
 
-    const WsSet = async (id: any) => {
-        setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef);
-    }
+    const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef) }
 
     const ActSet = async () => {
         try {
-            if (planObj.interventionType_Components === 'Supply Side Interventions') {
-                const resp1 = await ListSupply();
-                if (resp1) { setactOps(resp1.data) }
-            }
-            else if (planObj.interventionType_Components === 'Demand Side Interventions') {
-                const resp1 = await ListDemand();
+            if (planObj.interventionType_Components) {
+                const resp1 = await ListPara(planObj.interventionType_Components);
                 if (resp1) { setactOps(resp1.data) }
             }
             else {
@@ -200,6 +194,7 @@ export const Workplan: React.FC = () => {
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Year</TableCell>
+                    <TableCell>Intervention/Component</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
@@ -212,6 +207,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{WsName(w.watershedId)}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
+                    <TableCell>{w.activityName}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
@@ -237,11 +233,11 @@ export const Workplan: React.FC = () => {
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
-                <Grid item xs={3}><TextField required select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityName} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityName} onChange={(e) => setplanObj({ ...planObj, activityName: e.target.value })} disabled={actOps?.length <= 0}>
+                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
@@ -295,11 +291,11 @@ export const Workplan: React.FC = () => {
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
                 <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
-                <Grid item xs={3}><TextField required select label="Intervention" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityName} onChange={(e) => setplanObj({ ...planObj, activityName: e.target.value })} disabled={actOps?.length <= 0}>
+                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}

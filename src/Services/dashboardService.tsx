@@ -1,6 +1,16 @@
 import axios from "axios";
 import { serverPath } from "../common";
 
+export async function ListPara(para: any) {
+    const configs = {
+        url: serverPath.bfil + `parameter/getParameterByType?parameterType=${para}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function ListKey() {
     const configs = {
         url: serverPath.bfil + "parameter/getParameterByType?parameterType=Indicators",
@@ -13,7 +23,7 @@ export async function ListKey() {
 
 export async function ListInter() {
     const configs = {
-        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Interventions",
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Interventions",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
@@ -43,7 +53,7 @@ export async function ListDemand() {
 
 export async function ListFund() {
     const configs = {
-        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Fund Source",
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Fund Source",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
@@ -53,7 +63,7 @@ export async function ListFund() {
 
 export async function ListLand() {
     const configs = {
-        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Land Type",
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Land Type",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
@@ -61,9 +71,19 @@ export async function ListLand() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function ListSide() {
+export async function ListSide(status: any) {
     const configs = {
-        url: serverPath.bfil + `ws_screen/GetAllScreen/${sessionStorage.getItem("userId")}`,
+        url: serverPath.bfil + `ws_screen/GetAllScreen/${sessionStorage.getItem("userId")}/${status}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function ListStatus() {
+    const configs = {
+        url: serverPath.bfil + `status_mapping/getAllMappingStatus`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
@@ -73,10 +93,11 @@ export async function ListSide() {
 
 export async function ListDonor() {
     const configs = {
-        url: serverPath.bfil + "parameter/getParameterByType?parameterType=Component",
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Component",
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+

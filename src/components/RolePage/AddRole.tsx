@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { permissionByAppID } from './RoleManagement';
 import { permissionByAppId, addRolePermission } from '../../Services/roleService';
-import { ListSide } from '../../Services/dashboardService';
+import { ListSide, ListStatus } from '../../Services/dashboardService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useTranslation } from 'react-i18next';
 
@@ -113,31 +113,39 @@ export default function AddRole(props: userTypeProps) {
                 let resp = await permissionByAppId(applicationID);
                 console.log('resp', resp);
                 let temporaryPermList: permissionByAppID[] = resp;
+                const uRole = localStorage.getItem("userRole")
 
                 if (resp) {
                     let screenPermissionMappingList: ScreenPermissionMapping[] = [];
-                    const resp0 = await ListSide();
-                    let screenameList: any[] = [];
-                    if (resp0.status === 'success') {
-                        let screenlistResp = resp0.data;
-                        let reverseScreenData = screenlistResp;
-                        reverseScreenData.map((data: any) => {
-                            screenameList.push(data.screenName)
-                        })
-                        setscreenNameList(screenameList);
-                    }
-                    for (let screenName of screenameList) {
+                    const respStatus = await ListStatus();
+                    if (respStatus) {
+                        const uStatus: any = respStatus.data.find((x: any) => x.roleName === uRole)
+                        if (uStatus) {
+                            localStorage.setItem("userStatus", uStatus.workflowstatusName)
+                            const resp0 = await ListSide(uStatus.workflowstatusName);
+                            let screenameList: any[] = [];
+                            if (resp0.status === 'success') {
+                                let screenlistResp = resp0.data;
+                                let reverseScreenData = screenlistResp;
+                                reverseScreenData.map((data: any) => {
+                                    screenameList.push(data.screenName)
+                                })
+                                setscreenNameList(screenameList);
+                            }
+                            for (let screenName of screenameList) {
 
-                        let permissionList = temporaryPermList.filter(x => x.permissionName.includes(screenName) && (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT")));
-                        let screenPermissionMapping: ScreenPermissionMapping = {
-                            screenName: screenName,
-                            permission: permissionList
-                        };
-                        screenPermissionMappingList.push(screenPermissionMapping);
+                                let permissionList = temporaryPermList.filter(x => x.permissionName.includes(screenName) && (x.permissionName.startsWith("VIEW") || x.permissionName.startsWith("EDIT")));
+                                let screenPermissionMapping: ScreenPermissionMapping = {
+                                    screenName: screenName,
+                                    permission: permissionList
+                                };
+                                screenPermissionMappingList.push(screenPermissionMapping);
 
+                            }
+                            console.log("screenPermissionMappingList", screenPermissionMappingList)
+                            setSelectedPermissions(screenPermissionMappingList);
+                        }
                     }
-                    console.log("screenPermissionMappingList", screenPermissionMappingList)
-                    setSelectedPermissions(screenPermissionMappingList);
                 }
             } catch (error) {
                 console.log(error);
