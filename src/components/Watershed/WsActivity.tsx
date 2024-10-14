@@ -726,40 +726,31 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
-                <Grid item xs={12}><Divider>Remarks History</Divider></Grid>
-                <Grid item xs={12}>
-                    <TableContainer component={Paper}><Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Remark</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Remark By</TableCell>
-                                <TableCell>Remark On</TableCell>
-                            </TableRow>
-                        </TableHead>
+                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
+                <Grid item xs={12}>{
+                    actObj.history?.length > 0 ?
+                        <TableContainer component={Paper} sx={{ height: '400' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Remark</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Remark By</TableCell>
+                                    <TableCell>Remark On</TableCell>
+                                </TableRow>
+                            </TableHead>
 
-                        <TableBody>{actObj.history?.map((a, i) =>
-                        (<TableRow key={i}>
-                            <TableCell>{a.remarks}</TableCell>
-                            <TableCell>{a.activityWorkflowStatus}</TableCell>
-                            <TableCell>{a.createdUser}</TableCell>
-                            <TableCell>{DateTime(a.createdTime)}</TableCell>
-                        </TableRow>)
-                        )}</TableBody>
-
-                        <TableFooter><TableRow>
-                            <TablePagination
-                                count={actListF.length}
-                                rowsPerPage={rPP}
-                                page={page}
-                                onPageChange={(e, p) => setPage(p)}
-                                rowsPerPageOptions={[5, 10, 15]}
-                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                                ActionsComponent={TPA}
-                            />
-                        </TableRow></TableFooter>
-                    </Table></TableContainer>
-                </Grid>
+                            <TableBody>{actObj.history?.map((a, i) =>
+                            (<TableRow key={i}>
+                                <TableCell>{a.remarks}</TableCell>
+                                <TableCell>{a.activityWorkflowStatus}</TableCell>
+                                <TableCell>{a.createdUser}</TableCell>
+                                <TableCell>{DateTime(a.createdTime)}</TableCell>
+                            </TableRow>)
+                            )}</TableBody>
+                        </Table></TableContainer>
+                        :
+                        <Typography>No history to show</Typography>
+                }</Grid>
             </Grid></DialogContent>
 
             <DialogActions sx={{ justifyContent: 'space-between' }}>
