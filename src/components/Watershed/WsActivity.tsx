@@ -275,8 +275,41 @@ export const WsActivity: React.FC = () => {
 
     const ActAdd = async () => {
         setLoading(true);
+        const addObj = {
+            "activityName": actObj.workActivity.activityName,
+            "userId": sessionStorage.getItem("userId"),
+            "activityDescription": actObj.workActivity.activityDescription,
+            "activityWorkflowStatus": actObj.workActivity.activityWorkflowStatus,
+            "interventionType": actObj.workActivity.interventionType,
+            "watershedId": actObj.workActivity.watershedId,
+            "farmerId": actObj.workActivity.farmerId,
+            "remarks": actObj.workActivity.remarks,
+            "createdUser": sessionStorage.getItem("userId"),
+            "surveyNo": actObj.workActivity.surveyNo,
+            "landType": actObj.workActivity.landType,
+            "areaTreated": parseInt(actObj.workActivity.areaTreated),
+            "total": parseInt(actObj.workActivity.total),
+            "unit": actObj.workActivity.unit,
+            "waterConserved": parseInt(actObj.workActivity.waterConserved),
+            "amountSpend": actObj.workActivity.amountSpend,
+            "sourceExpenditure": actObj.workActivity.sourceExpenditure,
+            "capacitytypeEvent": actObj.workActivity.capacitytypeEvent,
+            "participantsType": actObj.workActivity.participantsType,
+            "capacitynameEvent": actObj.workActivity.capacitynameEvent,
+            "habitationsCovered": actObj.workActivity.habitationsCovered,
+            "state": actObj.workActivity.state,
+            "district": actObj.workActivity.district,
+            "taluk": actObj.workActivity.taluk,
+            "gramPanchayat": actObj.workActivity.gramPanchayat,
+            "village": actObj.workActivity.village,
+            "eventDate": actObj.workActivity.eventDate,
+            "participantsMale": actObj.workActivity.participantsMale,
+            "participantsFemale": actObj.workActivity.participantsFemale,
+            "trainerFacilitator": actObj.workActivity.trainerFacilitator,
+            "mobilizer": actObj.workActivity.mobilizer
+        }
         try {
-            const resp1 = await addAct(actObj.workActivity)
+            const resp1 = await addAct(addObj) //actObj.workActivity
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
@@ -317,11 +350,10 @@ export const WsActivity: React.FC = () => {
 
     const ActFlowNext = async (status: any, id: any) => {
         try {
-            sethisObj({ ...hisObj, activityWorkflowStatus: next })
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.history, hisObj] }
-                const resp2 = await editAct(stObj, id);
+                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
@@ -346,11 +378,10 @@ export const WsActivity: React.FC = () => {
 
     const ActFlowPrev = async (status: any, id: any) => {
         try {
-            sethisObj({ ...hisObj, activityWorkflowStatus: prev })
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.history, hisObj] }
-                const resp2 = await editAct(stObj, id);
+                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1 }
+                const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
