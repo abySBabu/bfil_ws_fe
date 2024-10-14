@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
-import { ListLand, ListInter, ListSupply, ListDemand, ListDonor } from '../../Services/dashboardService';
+import { ListLand, ListInter, ListDonor, ListPara } from '../../Services/dashboardService';
 import { listWS } from '../../Services/wsService';
 
 const wpDef = {
@@ -18,7 +18,7 @@ const wpDef = {
     watershedId: "",
     interventionType_Components: "",
     activityId: "",
-    activityName:"",
+    activityName: "",
     planlandType: "",
     planRemarks: "",
     createdUser: "",
@@ -118,18 +118,12 @@ export const Workplan: React.FC = () => {
         catch (error) { console.log(error) }
     }
 
-    const WsSet = async (id: any) => {
-        setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef);
-    }
+    const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef) }
 
     const ActSet = async () => {
         try {
-            if (planObj.interventionType_Components === 'Supply Side Interventions') {
-                const resp1 = await ListSupply();
-                if (resp1) { setactOps(resp1.data) }
-            }
-            else if (planObj.interventionType_Components === 'Demand Side Interventions') {
-                const resp1 = await ListDemand();
+            if (planObj.interventionType_Components) {
+                const resp1 = await ListPara(planObj.interventionType_Components);
                 if (resp1) { setactOps(resp1.data) }
             }
             else {

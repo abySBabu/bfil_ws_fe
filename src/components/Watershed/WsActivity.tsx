@@ -276,7 +276,7 @@ export const WsActivity: React.FC = () => {
     const ActAdd = async () => {
         setLoading(true);
         try {
-            const resp1 = await addAct(actObj)
+            const resp1 = await addAct(actObj.workActivity)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
@@ -297,7 +297,7 @@ export const WsActivity: React.FC = () => {
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct(actObj, id)
+            const resp1 = await editAct(actObj.workActivity, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
@@ -764,7 +764,7 @@ export const WsActivity: React.FC = () => {
             <DialogActions sx={{ justifyContent: 'space-between' }}>
                 <TextField label='Remarks' value={hisObj.remarks} onChange={(e) => sethisObj({ ...hisObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
-                    <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); setprev(''); setnext(''); }}>Close</Button>
+                    <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
                     {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
                     {next && <Button sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
                 </div>

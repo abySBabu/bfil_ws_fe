@@ -1,6 +1,16 @@
 import axios from "axios";
 import { serverPath } from "../common";
 
+export async function ListPara(para: any) {
+    const configs = {
+        url: serverPath.bfil + `parameter/getParameterByType?parameterType=${para}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function ListKey() {
     const configs = {
         url: serverPath.bfil + "parameter/getParameterByType?parameterType=Indicators",
