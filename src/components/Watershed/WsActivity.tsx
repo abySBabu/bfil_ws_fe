@@ -60,21 +60,21 @@ export const actDef = {
         photoEvent: '',
         photoattendanceResolution: '',
     },
-    History: [
+    history: [
         {
-            historyRemarks: '',
-            historyStatus: '',
-            historyCreatedUser: '',
-            historyCreatedTime: ''
+            remarks: '',
+            activityWorkflowStatus: '',
+            createdUser: '',
+            createdTime: ''
         }
     ]
 }
 
 const hisDef = {
-    historyRemarks: '',
-    historyStatus: '',
-    historyCreatedUser: sessionStorage.getItem("userName") as string,
-    historyCreatedTime: new Date().toISOString()
+    remarks: '',
+    activityWorkflowStatus: '',
+    createdUser: sessionStorage.getItem("userName") as string,
+    createdTime: new Date().toISOString()
 }
 
 export const WsActivity: React.FC = () => {
@@ -315,10 +315,10 @@ export const WsActivity: React.FC = () => {
 
     const ActFlowNext = async (status: any, id: any) => {
         try {
-            sethisObj({ ...hisObj, historyStatus: next })
+            sethisObj({ ...hisObj, activityWorkflowStatus: next })
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.History, hisObj] }
+                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.history, hisObj] }
                 const resp2 = await editAct(stObj, id);
                 if (resp2) {
                     fetchData();
@@ -344,10 +344,10 @@ export const WsActivity: React.FC = () => {
 
     const ActFlowPrev = async (status: any, id: any) => {
         try {
-            sethisObj({ ...hisObj, historyStatus: prev })
+            sethisObj({ ...hisObj, activityWorkflowStatus: prev })
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.History, hisObj] }
+                const stObj = { ...actObj, workActivity: { ...actObj.workActivity, activityWorkflowStatus: resp1 }, History: [...actObj.history, hisObj] }
                 const resp2 = await editAct(stObj, id);
                 if (resp2) {
                     fetchData();
@@ -732,18 +732,18 @@ export const WsActivity: React.FC = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Remark</TableCell>
-                                <TableCell>Date</TableCell>
+                                <TableCell>Status</TableCell>
                                 <TableCell>Remark By</TableCell>
                                 <TableCell>Remark On</TableCell>
                             </TableRow>
                         </TableHead>
 
-                        <TableBody>{actObj.History?.map((a, i) =>
+                        <TableBody>{actObj.history?.map((a, i) =>
                         (<TableRow key={i}>
-                            <TableCell>{a.historyRemarks}</TableCell>
-                            <TableCell>{a.historyStatus}</TableCell>
-                            <TableCell>{a.historyCreatedUser}</TableCell>
-                            <TableCell>{DateTime(a.historyCreatedTime)}</TableCell>
+                            <TableCell>{a.remarks}</TableCell>
+                            <TableCell>{a.activityWorkflowStatus}</TableCell>
+                            <TableCell>{a.createdUser}</TableCell>
+                            <TableCell>{DateTime(a.createdTime)}</TableCell>
                         </TableRow>)
                         )}</TableBody>
 
@@ -763,7 +763,7 @@ export const WsActivity: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions sx={{ justifyContent: 'space-between' }}>
-                <TextField label='Remarks' value={hisObj.historyRemarks} onChange={(e) => sethisObj({ ...hisObj, historyRemarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
+                <TextField label='Remarks' value={hisObj.remarks} onChange={(e) => sethisObj({ ...hisObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
                     <Button sx={{ mx: '2px' }} onClick={() => setprogM(false)}>Close</Button>
                     {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
