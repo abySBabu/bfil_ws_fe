@@ -83,7 +83,7 @@ export const WsActivity: React.FC = () => {
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
     const [actObj, setactObj] = React.useState(actDef);
-    const [hisObj, sethisObj] = React.useState(hisDef);
+    const [rmk, setrmk] = React.useState("");
     const [actList, setactList] = React.useState<typeof actDef[]>([]);
     const [actOps, setactOps] = React.useState<any[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
@@ -353,7 +353,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1 }
+                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -381,7 +381,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1 }
+                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -456,7 +456,7 @@ export const WsActivity: React.FC = () => {
                     {(
                         (uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                         (a.workActivity.activityWorkflowStatus === uStatus)
-                    ) && <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); sethisObj(hisDef); setprogM(true); }}><Pending /></IconButton>}
+                    ) && <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}><Pending /></IconButton>}
                 </TableCell>
             </TableRow>)
             )}</TableBody>
@@ -789,7 +789,7 @@ export const WsActivity: React.FC = () => {
             </Grid></DialogContent>
 
             <DialogActions sx={{ justifyContent: 'space-between' }}>
-                <TextField label='Remarks' value={hisObj.remarks} onChange={(e) => sethisObj({ ...hisObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
+                <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
                     <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
                     {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
