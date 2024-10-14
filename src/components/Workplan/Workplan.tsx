@@ -194,6 +194,7 @@ export const Workplan: React.FC = () => {
                 <TableRow>
                     <TableCell>Watershed</TableCell>
                     <TableCell>Year</TableCell>
+                    <TableCell>Intervention/Component</TableCell>
                     <TableCell>Activity</TableCell>
                     <TableCell>Physical</TableCell>
                     <TableCell>Financial</TableCell>
@@ -206,6 +207,7 @@ export const Workplan: React.FC = () => {
                     <TableCell>{WsName(w.watershedId)}</TableCell>
                     <TableCell>{w.planningYear}</TableCell>
                     <TableCell>{w.interventionType_Components}</TableCell>
+                    <TableCell>{w.activityName}</TableCell>
                     <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                     <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
                     {PerChk('EDIT_Work Plan') && <TableCell>
@@ -292,8 +294,8 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityName} onChange={(e) => setplanObj({ ...planObj, activityName: e.target.value })} disabled={actOps?.length <= 0}>
+                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
