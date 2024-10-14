@@ -146,7 +146,7 @@ const ReportTable: React.FC = () => {
       </Typography>
 
       <Box display="flex" alignItems="center" justifyContent="end" mb={5} marginLeft={10}>
-        <label style={{ fontSize: '18px', marginRight: '16px' }}>
+        <label style={{ fontSize: '18px', marginRight: '20px' }}>
           Financial Year:
           <input
             type="number"
@@ -158,15 +158,15 @@ const ReportTable: React.FC = () => {
             }}
           /></label>
 
-        <Button onClick={handleReportSummary} sx={{ mr: 2 }}>
+        <Button onClick={handleReportSummary} sx={{ mr: 2,width:'150px'}}>
           {showReport ? 'Show Report' : 'Summary Report'}
         </Button>
-            <Button onClick={exportToExcel} disabled={!filteredData.length} sx={{ marginLeft: '10px' }}>
-        <FileDownloadIcon onClick={exportToExcel}></FileDownloadIcon>
-        </Button>
-        <Button onClick={exportToPDF} disabled={!filteredData.length} sx={{ marginLeft: '10px', marginRight: '10px' }}>
-        <PictureAsPdfIcon></PictureAsPdfIcon>
-        </Button>
+            
+        <FileDownloadIcon onClick={exportToExcel}  sx={{marginRight: '10px'}}></FileDownloadIcon>
+       
+
+        <PictureAsPdfIcon onClick={exportToPDF} sx={{ marginLeft: '10px', marginRight: '30px' }}></PictureAsPdfIcon>
+       
       </Box>
       <div style={{ marginBottom: '20px' }} ref={contentRef}> 
       <h1 className="pdf-title">Funds Disbursement Year on Year.</h1>
@@ -183,7 +183,7 @@ const ReportTable: React.FC = () => {
           <TableCell align="center" sx={{ width: '80px', ...commonCellStyles }}>Components</TableCell>
           <TableCell sx={{ width: '100px', ...commonCellStyles }} align="center">Activities</TableCell>
           {wfsNames.map((wfsName) => (
-            <TableCell key={wfsName} align="center" sx={{ width: '30px', ...commonCellStyles }}>
+            <TableCell key={wfsName} align="center" sx={{ width: '100px', ...commonCellStyles }}>
               {wfsName}
             </TableCell>
           ))}
@@ -210,7 +210,7 @@ const ReportTable: React.FC = () => {
                     {activityName}
                   </TableCell>
                   {wfsNames.map((name) => (
-                    <TableCell key={name} align="center" sx={{ ...commonCellStyles }}>
+                    <TableCell key={name} align="center" sx={{ ...commonCellStyles, width: '100px'}}>
                       {financialSums[name].toFixed(2)}
                     </TableCell>
                   ))}
