@@ -15,7 +15,7 @@ const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirect
 const actCard = { height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
 
 const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
-    <Grid item xs={6} lg={4}>
+    <Grid item xs={6} lg={3}>
         <Card sx={actCard}>
             <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant='body1' fontWeight='bold'>{activity}</Typography>
