@@ -130,6 +130,8 @@ export const WsActivity: React.FC = () => {
             : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
                 : supplyCheck
 
+    const uRole = localStorage.getItem("userRole");
+
     React.useEffect(() => { fetchData() }, [])
 
     React.useEffect(() => { FmrSet(actObj.workActivity.farmerId) }, [actObj.workActivity.farmerId])
@@ -421,7 +423,15 @@ export const WsActivity: React.FC = () => {
                 <TableCell width='5%'>
                     {PerChk('EDIT_Watershed Activity') && <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>}
                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Visibility /></IconButton>
-                    <IconButton title="Activity approval" onClick={() => { setactObj(a); setprogM(true); }}><Pending /></IconButton>
+                    {(
+                        (uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
+                        (uRole === 'Project Manager' && a.workActivity.activityWorkflowStatus === 'Approver 1') ||
+                        (uRole === 'Program Officer' && a.workActivity.activityWorkflowStatus === 'Approver 2') ||
+                        (uRole === 'Lead Agency' && a.workActivity.activityWorkflowStatus === 'Approver 3') ||
+                        (uRole === 'Executive Director' && a.workActivity.activityWorkflowStatus === 'Approver 4') ||
+                        (uRole === 'State Project Head' && a.workActivity.activityWorkflowStatus === 'Approver 5') ||
+                        (uRole === 'Chief Manager Head Office' && a.workActivity.activityWorkflowStatus === 'Approver 6')
+                    ) && <IconButton title="Activity approval" onClick={() => { setactObj(a); setprogM(true); }}><Pending /></IconButton>}
                 </TableCell>
             </TableRow>)
             )}</TableBody>
@@ -756,7 +766,7 @@ export const WsActivity: React.FC = () => {
             <DialogActions sx={{ justifyContent: 'space-between' }}>
                 <TextField label='Remarks' value={hisObj.remarks} onChange={(e) => sethisObj({ ...hisObj, remarks: e.target.value })} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
-                    <Button sx={{ mx: '2px' }} onClick={() => setprogM(false)}>Close</Button>
+                    <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); setprev(''); setnext(''); }}>Close</Button>
                     {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
                     {next && <Button sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
                 </div>
