@@ -780,10 +780,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY008');//My008
+    await page.fill('input#employeeCode', 'MY009');//My008
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008968');
+    await page.fill('input#mobileNo', '9655008969');
     await page.fill('input#password', '1234'); 
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -850,10 +850,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY009');
+    await page.fill('input#employeeCode', 'MY010');
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008968');
+    await page.fill('input#mobileNo', '9655008969');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -886,7 +886,7 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008968');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008969');
     await page.waitForTimeout(1000);
     await browser.close();
 
@@ -922,10 +922,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY008');
+    await page.fill('input#employeeCode', 'MY009');
     await page.fill('input#designation', 'Project Manager');
     await page.fill('input#email', 'guruswamy704@gamil.com');
-    await page.fill('input#mobileNo', '9655008969');
+    await page.fill('input#mobileNo', '9655008970');
     await page.fill('input#password', '1234');
 
     // const managerTypeDropdown = page.locator('#manager');
@@ -958,7 +958,7 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: User Code already exits MY008');
+    expect(alertMessage).toBe('User error: User Code already exits MY009');
     await page.waitForTimeout(1000);
     await browser.close();
   });

@@ -285,7 +285,7 @@ test.describe('Watershed Master Automation', () => {
         const clickAddWs = page.locator('button:has-text("Add Watershed")');
         await clickAddWs.click();
         const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('TestingWatershed1'); //TestingWatershed1
+        await dialog.getByLabel('Name').fill('TestingWatershed2'); //TestingWatershed1
         await dialog.getByLabel('Description').fill('New Description');
         await dialog.getByLabel('District').click();
         await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
@@ -334,7 +334,7 @@ test.describe('Watershed Master Automation', () => {
         const clickAddWs = page.locator('button:has-text("Add Watershed")');
         await clickAddWs.click();
         const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('TestingWatershed1');
+        await dialog.getByLabel('Name').fill('TestingWatershed2');
         await dialog.getByLabel('Description').fill('New Description');
         await dialog.getByLabel('District').click();
         await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
