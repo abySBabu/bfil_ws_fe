@@ -192,7 +192,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await listFarmer();
             if (resp1.status === 'success') {
-                setfmrObj(resp1.data.workActivity.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
+                setfmrObj(resp1.data.find((x: typeof fmrDef) => x.wsfarmerId === id) || fmrDef)
             }
         }
         catch (error) { console.log(error) }
