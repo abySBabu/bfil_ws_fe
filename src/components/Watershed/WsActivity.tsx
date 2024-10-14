@@ -131,6 +131,7 @@ export const WsActivity: React.FC = () => {
                 : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
+    const uStatus = localStorage.getItem("userStatus");
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -454,12 +455,7 @@ export const WsActivity: React.FC = () => {
                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Visibility /></IconButton>
                     {(
                         (uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
-                        (uRole === 'Project Manager' && a.workActivity.activityWorkflowStatus === 'Approver 1') ||
-                        (uRole === 'Program Officer' && a.workActivity.activityWorkflowStatus === 'Approver 2') ||
-                        (uRole === 'Lead Agency' && a.workActivity.activityWorkflowStatus === 'Approver 3') ||
-                        (uRole === 'Executive Director' && a.workActivity.activityWorkflowStatus === 'Approver 4') ||
-                        (uRole === 'State Project Head' && a.workActivity.activityWorkflowStatus === 'Approver 5') ||
-                        (uRole === 'Chief Manager Head Office' && a.workActivity.activityWorkflowStatus === 'Approver 6')
+                        (a.workActivity.activityWorkflowStatus === uStatus)
                     ) && <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); sethisObj(hisDef); setprogM(true); }}><Pending /></IconButton>}
                 </TableCell>
             </TableRow>)
