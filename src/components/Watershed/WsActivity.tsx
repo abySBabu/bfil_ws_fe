@@ -767,18 +767,18 @@ export const WsActivity: React.FC = () => {
                         <TableContainer component={Paper} sx={{ height: '400' }}><Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Remark</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Remark By</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark By</TableCell>
                                     <TableCell>Remark On</TableCell>
                                 </TableRow>
                             </TableHead>
 
                             <TableBody>{actObj.history?.map((a, i) =>
                             (<TableRow key={i}>
-                                <TableCell>{a.remarks}</TableCell>
-                                <TableCell>{a.activityWorkflowStatus}</TableCell>
-                                <TableCell>{a.createdUser}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell>{DateTime(a.createdTime)}</TableCell>
                             </TableRow>)
                             )}</TableBody>
