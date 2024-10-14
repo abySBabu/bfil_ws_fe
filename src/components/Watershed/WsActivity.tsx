@@ -167,30 +167,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const uRole = localStorage.getItem("userRole")
-            const resp0 = await listWSMap();
-            if (resp0.status === 'success') {
-                const found0: any = resp0.data.find((x: any) => x.userId === Number(sessionStorage.getItem("userId")))
-                if (found0) {
-                    const wsFil: number[] = found0.watershedId?.split(',').map((id: string) => Number(id.trim()))
-                    const resp1 = await listAct();
-                    if (resp1.status === 'success') {
-                        const sortrespdata = resp1.data.reverse();
-                        if (uRole === 'Chief Manager Head Office') { setactList(sortrespdata) }
-                        else {
-                            const found1: typeof actDef[] = sortrespdata.filter((x: typeof actDef) => wsFil.includes(Number(x.watershedId)));
-                            if (found1) {
-                                if (uRole === 'Community Resource person') { setactList(found1.filter((x: typeof actDef) => (x.activityWorkflowStatus === 'New' || x.activityWorkflowStatus === 'In Progress'))) }
-                                if (uRole === 'Project Manager') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 1')) }
-                                if (uRole === 'Program Officer') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 2')) }
-                                if (uRole === 'Lead Agency') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 3')) }
-                                if (uRole === 'Executive Director') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 4')) }
-                                if (uRole === 'State Project Head') { setactList(found1.filter((x: typeof actDef) => x.activityWorkflowStatus === 'Approver 5')) }
-                            }
-                        }
-                    }
-                }
-            }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data.reverse()) }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -386,7 +363,7 @@ export const WsActivity: React.FC = () => {
     }
 
     return (<>
-        <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+        <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
