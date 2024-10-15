@@ -160,12 +160,12 @@ export const Home: React.FC = () => {
                         }
                     }
                 }
-                const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
-                const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
-                const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
-                const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
-                const resp5 = await listWS(); if (resp5.status === 'success') sessionStorage.setItem("WsList", JSON.stringify(resp5.data));
-                const resp6 = await listVillage(); if (resp6.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp6.data));
+                const resp1 = await listState(); if (resp1.status === 'success') localStorage.setItem("StateList", JSON.stringify(resp1.data));
+                const resp2 = await listDistrict(); if (resp2.status === 'success') localStorage.setItem("DistrictList", JSON.stringify(resp2.data));
+                const resp3 = await listTaluk(); if (resp3.status === 'success') localStorage.setItem("TalukList", JSON.stringify(resp3.data));
+                const resp4 = await listPanchayat(); if (resp4.status === 'success') localStorage.setItem("PanList", JSON.stringify(resp4.data));
+                const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
+                const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
             } catch (error) {
                 console.log(error);
             }

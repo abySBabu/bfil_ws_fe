@@ -1,6 +1,6 @@
 export const StateName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("StateList")) || null;
+        const list = JSON.parse(localStorage.getItem("StateList")) || null;
         if (list) {
             const obj = list.find(x => x.stateId === id);
             return obj ? obj.stateName : id;
@@ -12,7 +12,7 @@ export const StateName = (id) => {
 
 export const DistrictName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("DistrictList")) || null;
+        const list = JSON.parse(localStorage.getItem("DistrictList")) || null;
         if (list) {
             const obj = list.find(x => x.districtId === id);
             return obj ? obj.districtName : id;
@@ -24,7 +24,7 @@ export const DistrictName = (id) => {
 
 export const TalukName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("TalukList")) || null;
+        const list = JSON.parse(localStorage.getItem("TalukList")) || null;
         if (list) {
             const obj = list.find(x => x.talukId === id);
             return obj ? obj.talukName : id;
@@ -36,7 +36,7 @@ export const TalukName = (id) => {
 
 export const PanName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("PanList")) || null;
+        const list = JSON.parse(localStorage.getItem("PanList")) || null;
         if (list) {
             const obj = list.find(x => x.panchayatId === id);
             return obj ? obj.panchayatName : id;
@@ -48,7 +48,7 @@ export const PanName = (id) => {
 
 export const WsName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("WsList")) || null;
+        const list = JSON.parse(localStorage.getItem("WsList")) || null;
         if (list) {
             const obj = list.find(x => x.wsId === id);
             return obj ? obj.wsName : id;
@@ -60,7 +60,7 @@ export const WsName = (id) => {
 
 export const VillageName = (id) => {
     if (id !== null && id !== undefined) {
-        const list = JSON.parse(sessionStorage.getItem("VillageList")) || null;
+        const list = JSON.parse(localStorage.getItem("VillageList")) || null;
         if (list) {
             const obj = list.find(x => x.villageId === id);
             return obj ? obj.villageName : id;
