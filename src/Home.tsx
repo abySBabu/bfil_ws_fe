@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -18,7 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
 import ReportTable from './components/ReportPage/ReportTable';
-
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 interface SideItem {
     screenName: string;
@@ -237,18 +238,30 @@ export const Home: React.FC = () => {
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem><Box>
-                    <Typography variant='body2' fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
-                    <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
-                </Box></MenuItem>
+                <Typography sx={{ padding: '8px 16px', fontWeight: 'bold' }}>{sessionStorage.getItem("userName") || 'Name'} - {localStorage.getItem("userRole") || 'Role'}</Typography>
                 <Divider />
-                <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
+                <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+                    <AccordionSummary
+                        expandIcon={<ArrowDropDownIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                    >
+                        <Typography>Language</Typography>
+                    </AccordionSummary>
+                    <Divider />
+                    <AccordionDetails>
+                        <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
+                        <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
+                    </AccordionDetails>
+                    <Divider />
+                </Accordion>
+                {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
-            <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
+            {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
                 <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
-            </Menu>
+            </Menu> */}
         </Box>
     )
 }
