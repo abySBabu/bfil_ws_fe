@@ -443,23 +443,40 @@ export const WsActivity: React.FC = () => {
                 </TableRow>
             </TableHead>
 
-            <TableBody>{actListP.map((a, i) =>
-            (<TableRow key={i}>
-                <TableCell>{a.workActivity.interventionType}</TableCell>
-                <TableCell>{a.workActivity.activityName}</TableCell>
-                <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
-                <TableCell>{a.workActivity.updatedUser}</TableCell>
-                <TableCell width='5%'>
-                    {PerChk('EDIT_Watershed Activity') && <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>}
-                    <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}><Visibility /></IconButton>
-                    {(
-                        (uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
-                        (a.workActivity.activityWorkflowStatus === uStatus)
-                    ) && <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}><Pending /></IconButton>}
-                </TableCell>
-            </TableRow>)
-            )}</TableBody>
+            <TableBody>
+                {actListP
+                    .sort((a, b) => {
+                        if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
+                        if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+                        return 0;
+                    })
+                    .map((a, i) => (
+                        <TableRow key={i}>
+                            <TableCell>{a.workActivity.interventionType}</TableCell>
+                            <TableCell>{a.workActivity.activityName}</TableCell>
+                            <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
+                            <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
+                            <TableCell>{a.workActivity.updatedUser}</TableCell>
+                            <TableCell width='5%'>
+                                {PerChk('EDIT_Watershed Activity') && (
+                                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>
+                                        <Edit />
+                                    </IconButton>
+                                )}
+                                <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
+                                    <Visibility />
+                                </IconButton>
+                                {(uRole === 'Community Resource person' &&
+                                    (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
+                                    (a.workActivity.activityWorkflowStatus === uStatus) ? (
+                                    <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}>
+                                        <Pending />
+                                    </IconButton>
+                                ) : null}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+            </TableBody>
 
             <TableFooter><TableRow>
                 <TablePagination
@@ -567,7 +584,7 @@ export const WsActivity: React.FC = () => {
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><TextField required label='Sustainable Practice' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>}
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
@@ -792,8 +809,8 @@ export const WsActivity: React.FC = () => {
                 <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
                     <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
-                    {prev && <Button sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
-                    {next && <Button sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
+                    {prev && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
+                    {next && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
                 </div>
             </DialogActions>
         </Dialog>
