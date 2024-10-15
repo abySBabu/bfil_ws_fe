@@ -51,7 +51,7 @@ export const Home: React.FC = () => {
             <Typography variant="body1" sx={{ mr: 1 }}>
                 {t(textKey)}
             </Typography>
-            <Badge badgeContent={badgeCount} overlap="circular" />
+            <Badge badgeContent={badgeCount} color='primary' overlap="circular" />
         </Box>)
     }
 
