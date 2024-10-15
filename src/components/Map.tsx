@@ -60,7 +60,7 @@ const EsriMap: React.FC = () => {
 
     return (
         <Box style={{
-            height: '80vh', position: 'relative', border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+            height: '44vh', position: 'relative', border: `2px solid ${sd('--button-bgcolor-disabled')}`,
             borderRadius: '4px',
         }}>
             {/* Map Div */}
