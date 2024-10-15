@@ -110,7 +110,7 @@ export const bfilTheme = createTheme({
                 }
             }
         },
-        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word' } } },
+        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word' } }, defaultProps: { align: 'center' } },
         MuiTableRow: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word' } } },
         MuiDialog: {
             styleOverrides: {

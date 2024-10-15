@@ -27,8 +27,8 @@ export async function addWP(data: any) {
 
 export async function editWP(data: any, id: any) {
     const configs = {
-        url: serverPath.bfil + `wsmaster/updateWsById/${id}`,
-        method: 'post',
+        url: serverPath.bfil + `workplan/updateWorkPlan/${id}`,
+        method: 'put',
         data: data,
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
