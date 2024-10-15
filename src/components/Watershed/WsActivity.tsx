@@ -178,8 +178,9 @@ export const WsActivity: React.FC = () => {
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
             const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
-            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
-            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+            //Edited by lakshmi - sessionstorage to localstorage
+            setstOps(JSON.parse(localStorage.getItem("StateList") as string))
+            setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
     };
@@ -196,7 +197,8 @@ export const WsActivity: React.FC = () => {
 
     const WsSet = async (id: any) => {
         try {
-            const resp1 = JSON.parse(sessionStorage.getItem("WsList") as string)
+            //Edited by lakshmi - sessionstorage to localstorage
+            const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
             if (resp1) {
                 const found: typeof wsDef = resp1.find((x: typeof wsDef) => x.wsId === id) || wsDef
                 setactObj({
