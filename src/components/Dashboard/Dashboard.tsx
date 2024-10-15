@@ -32,16 +32,32 @@ export const Dashboard: React.FC = () => {
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
 
-    React.useEffect(() => { fetchData() }, [])
+    React.useEffect(() => {
 
-    const fetchData = async () => {
-        try {
-            const resp1 = await DashKey(); if (resp1) { setkeyList(resp1) }
-            const resp2 = await DashSupply(); if (resp2) { setsupplyList(resp2) }
-            const resp3 = await DashDemand(); if (resp3) { setdemandList(resp3) }
+        const fetchData = async () => {
+            try {
+                const resp1 = await DashKey();
+                if (resp1) {
+                    setkeyList(resp1)
+                }
+                const resp2 = await DashSupply();
+                if (resp2) {
+                    //Edited by lakshmi- fetch resp.data
+                    setsupplyList(resp2.data)
+                }
+                const resp3 = await DashDemand();
+                if (resp3) {
+                    //Edited by lakshmi- fetch resp.data
+                    setdemandList(resp3.data)
+                }
+            }
+            catch (error) { console.log(error) }
         }
-        catch (error) { console.log(error) }
-    }
+
+        fetchData()
+    }, [])
+
+
 
     return (<>
         <Grid container spacing={1}>

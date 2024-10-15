@@ -137,8 +137,8 @@ export default function MappingList() {
             <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
                 <TableHead>
                     <TableRow sx={{ alignItems: 'center' }}>
-                        <TableCell >{t("p_Watershed_Mapping.ss_MappingList.Ws_Name")}</TableCell>
                         <TableCell >{t("p_Watershed_Mapping.ss_MappingList.User_Name")}</TableCell>
+                        <TableCell >{t("p_Watershed_Mapping.ss_MappingList.Ws_Name")}</TableCell>
                         <TableCell >{t("p_Watershed_Mapping.ss_MappingList.Remarks")}</TableCell>
                         {PerChk('EDIT_Watershed Mapping') && (
                             <TableCell sx={{ textAlign: 'center' }} >{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Text")}</TableCell>)}
@@ -151,10 +151,10 @@ export default function MappingList() {
                     ).map((row, id) => (
                         <TableRow key={id} onClick={() => handleRowClick(row)}>
                             <TableCell>
-                                {fetchWsData(row.watershedId)}
+                                {fetchUserData(row.userId)}
                             </TableCell>
                             <TableCell >
-                                {fetchUserData(row.userId)}
+                                {fetchWsData(row.watershedId)}
                             </TableCell>
                             <TableCell >
                                 {row.remarks}

@@ -139,8 +139,9 @@ export const WsMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data.reverse()) }
-            setstOps(JSON.parse(sessionStorage.getItem("StateList") as string))
-            setdsOps(JSON.parse(sessionStorage.getItem("DistrictList") as string))
+            //Edited by lakshmi- change sessionstorage to localstorage
+            setstOps(JSON.parse(localStorage.getItem("StateList") as string))
+            setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
     };
