@@ -13,7 +13,7 @@ import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Servic
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { listWS } from '../../Services/wsService';
+import { listWS, listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 
 export const actDef = {
@@ -177,7 +177,7 @@ export const WsActivity: React.FC = () => {
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
-            const resp6 = await listWS(); if (resp6.status === 'success') { setwsOps(resp6.data) }
+            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data) }
             //Edited by lakshmi - sessionstorage to localstorage
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
