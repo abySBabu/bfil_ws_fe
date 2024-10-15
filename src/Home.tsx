@@ -50,7 +50,7 @@ export const Home: React.FC = () => {
             <Typography variant="body1" sx={{ mr: 1 }}>
                 {t(textKey)}
             </Typography>
-            <Badge badgeContent={badgeCount} color="warning" overlap="circular" />
+            <Badge badgeContent={badgeCount} overlap="circular" />
         </Box>)
     }
 
@@ -237,9 +237,13 @@ export const Home: React.FC = () => {
             </Box>
 
             <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={logOut}>Logout</MenuItem>
+                <MenuItem><Box>
+                    <Typography variant='body2' fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
+                    <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+                </Box></MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
+                <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
             <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>

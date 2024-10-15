@@ -70,13 +70,6 @@ export const actDef = {
     ]
 }
 
-const hisDef = {
-    remarks: '',
-    activityWorkflowStatus: '',
-    createdUser: sessionStorage.getItem("userName") as string,
-    createdTime: new Date().toISOString()
-}
-
 export const WsActivity: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -434,8 +427,9 @@ export const WsActivity: React.FC = () => {
         </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
             <TableHead>
                 <TableRow>
-                    <TableCell>Intervention</TableCell>
                     <TableCell>Activity</TableCell>
+                    <TableCell>Watershed</TableCell>
+                    <TableCell>Survey No.</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Last Update On</TableCell>
                     <TableCell>Last Update By</TableCell>
@@ -452,20 +446,21 @@ export const WsActivity: React.FC = () => {
                     })
                     .map((a, i) => (
                         <TableRow key={i}>
-                            <TableCell>{a.workActivity.interventionType}</TableCell>
                             <TableCell>{a.workActivity.activityName}</TableCell>
+                            <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
+                            <TableCell>{a.workActivity.surveyNo}</TableCell>
                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
                             <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
                             <TableCell>{a.workActivity.updatedUser}</TableCell>
                             <TableCell width='5%'>
+                                <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
+                                    <Visibility />
+                                </IconButton>
                                 {PerChk('EDIT_Watershed Activity') && (
                                     <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>
                                         <Edit />
                                     </IconButton>
                                 )}
-                                <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
-                                    <Visibility />
-                                </IconButton>
                                 {(uRole === 'Community Resource person' &&
                                     (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                     (a.workActivity.activityWorkflowStatus === uStatus) ? (
@@ -668,6 +663,8 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType} </Grid>
                 <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName} </Grid>
                 {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription} </Grid>}
+                <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus} </Grid>
+
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent} </Grid>
@@ -716,6 +713,32 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
+
+                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
+                <Grid item xs={12}>{
+                    actObj.history?.length > 0 ?
+                        <TableContainer component={Paper} sx={{ height: '100%' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark By</TableCell>
+                                    <TableCell>Remark On</TableCell>
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>{actObj.history?.map((a, i) =>
+                            (<TableRow key={i}>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
+                                <TableCell>{DateTime(a.createdTime)}</TableCell>
+                            </TableRow>)
+                            )}</TableBody>
+                        </Table></TableContainer>
+                        :
+                        <Typography>No history to show</Typography>
+                }</Grid>
             </Grid></DialogContent>
 
             <DialogActions>
@@ -728,8 +751,10 @@ export const WsActivity: React.FC = () => {
 
             <DialogContent sx={{ maxHeight: '75vh', overflow: 'auto' }}><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType} </Grid>
-                <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName} </Grid>
+                <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName}</Grid>
                 {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription} </Grid>}
+                <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus} </Grid>
+
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent} </Grid>
@@ -778,6 +803,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
+
                 <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
@@ -805,7 +831,7 @@ export const WsActivity: React.FC = () => {
                 }</Grid>
             </Grid></DialogContent>
 
-            <DialogActions sx={{ justifyContent: 'space-between' }}>
+            <DialogActions sx={{ justifyContent: 'space-between', p: '12px' }}>
                 <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
                 <div>
                     <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
