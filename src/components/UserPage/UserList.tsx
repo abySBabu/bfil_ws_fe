@@ -19,9 +19,11 @@ import UserEnable from './UserEnable';
 import UserDelete from './UserDelete';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 export default function UserList() {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
     const blockedUserOptions = selectOptions.blockedUserOptions;
     const [showAddModal, setShowAddModal] = useState(false);
@@ -77,6 +79,7 @@ export default function UserList() {
             let resp = await usersList(companyID);
             console.log("getuserData -", resp)
             setuserData(resp);
+            setLoadingResponse(false);
         } catch (error) {
 
             console.log(error)
@@ -129,125 +132,136 @@ export default function UserList() {
     });
 
     return (<Box>
-        {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
-        {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={userData} /> : null}
-        {showDisableModal ? <UserDisable show={true} hide={hideDisableModal} userDetails={selectedRow} userList={userData} /> : null}
-        {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
-        {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
-
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                {t("p_User_Management.ss_User_Management_Header")}
-            </Typography>
-            <TextField
-                label={t("p_User_Management.ss_Search_Label")}
-                fullWidth={false}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                variant="outlined"
-                size="small"
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    ),
+        {loadingResponse ?
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', // Ensure it takes up the full height
                 }}
-            />
-            {PerChk('EDIT_User Management') && (
-                <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                    {t("p_User_Management.Add_User_Link.Add_User_Link_Text")}
-                </Button>)}
-        </Box>
+            >
+                <CircularProgress size={80} />
+            </Box> : <>
+                {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
+                {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={userData} /> : null}
+                {showDisableModal ? <UserDisable show={true} hide={hideDisableModal} userDetails={selectedRow} userList={userData} /> : null}
+                {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
+                {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
-        {filteredData.length > 0 ?
-            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
-                <TableHead>
-                    <TableRow sx={{ alignItems: 'center' }}>
-                        <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
-                        <TableCell >{t("p_User_Management.ss_UserList.Mobile_Number")}</TableCell>
-                        <TableCell >{t("p_User_Management.ss_UserList.Role")}</TableCell>
-                        <TableCell >{t("p_User_Management.ss_UserList.Manager_Name")}</TableCell>
-                        <TableCell >{t("p_User_Management.ss_UserList.Status")}</TableCell>
-                        {PerChk('EDIT_User Management') && (
-                            <TableCell sx={{ textAlign: 'center' }}>{t("p_User_Management.ss_UserList.Action.Action_Text")}</TableCell>)}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {(rowsPerPage > 0
-                        ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : filteredData
-                    ).map((row, id) => (
-                        <TableRow key={id} onClick={() => handleRowClick(row)}>
-                            <TableCell>
-                                {row.userName}
-                            </TableCell>
-                            <TableCell>
-                                {row.mobileNumber}
-                            </TableCell>
-                            <TableCell>
-                                {row.userRoleList[0].roleName}
-                            </TableCell>
-                            <TableCell>
-                                {row.managerName}
-                            </TableCell>
-                            <TableCell>
-                                {(() => {
-                                    const option = blockedUserOptions.find(option => option.value === row.userBlockedFlag);
-                                    if (option && option.dispalyValue === "Blocked") {
-                                        const formattedDate = row.updatedTimestamp ? formatDate(row.updatedTimestamp) : '';
-                                        return (
-                                            <>
-                                                {option.dispalyValue}
-                                                <br />
-                                                {formattedDate}
-                                            </>
-                                        );
-                                    } else if (option) {
-                                        return option.dispalyValue;
-                                    }
-                                    return '';
-                                })()}
-                            </TableCell>
-                            {PerChk('EDIT_User Management') && (
-                                <TableCell sx={{ textAlign: 'center' }}>
-                                    {row.userBlockedFlag === 'N' &&
-                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
-                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
-                                        </Tooltip>}
-                                    {row.userBlockedFlag === 'N' &&
-                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Block_Tooltip.Block_Tooltip_Text")}>
-                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
-                                        </Tooltip>}
-                                    {row.userBlockedFlag === 'Y' &&
-                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_Tooltip_Text")}>
-                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
-                                        </Tooltip>}
-                                    {row.userBlockedFlag === 'Y' &&
-                                        <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
-                                            <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
-                                        </Tooltip>}
-                                </TableCell>
-                            )}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                        {t("p_User_Management.ss_User_Management_Header")}
+                    </Typography>
+                    <TextField
+                        label={t("p_User_Management.ss_Search_Label")}
+                        fullWidth={false}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    {PerChk('EDIT_User Management') && (
+                        <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
+                            {t("p_User_Management.Add_User_Link.Add_User_Link_Text")}
+                        </Button>)}
+                </Box>
 
-                        </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            count={filteredData.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={(e, p) => setPage(p)}
-                            rowsPerPageOptions={[5, 10, 15]}
-                            onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
-                            ActionsComponent={TPA}
-                            labelRowsPerPage={t("p_User_Management.ss_UserList.Rows_per_page")}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+                {filteredData.length > 0 ?
+                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+                        <TableHead>
+                            <TableRow sx={{ alignItems: 'center' }}>
+                                <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
+                                <TableCell >{t("p_User_Management.ss_UserList.Mobile_Number")}</TableCell>
+                                <TableCell >{t("p_User_Management.ss_UserList.Role")}</TableCell>
+                                <TableCell >{t("p_User_Management.ss_UserList.Manager_Name")}</TableCell>
+                                <TableCell >{t("p_User_Management.ss_UserList.Status")}</TableCell>
+                                {PerChk('EDIT_User Management') && (
+                                    <TableCell sx={{ textAlign: 'center' }}>{t("p_User_Management.ss_UserList.Action.Action_Text")}</TableCell>)}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {(rowsPerPage > 0
+                                ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : filteredData
+                            ).map((row, id) => (
+                                <TableRow key={id} onClick={() => handleRowClick(row)}>
+                                    <TableCell>
+                                        {row.userName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.mobileNumber}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.userRoleList[0].roleName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.managerName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {(() => {
+                                            const option = blockedUserOptions.find(option => option.value === row.userBlockedFlag);
+                                            if (option && option.dispalyValue === "Blocked") {
+                                                const formattedDate = row.updatedTimestamp ? formatDate(row.updatedTimestamp) : '';
+                                                return (
+                                                    <>
+                                                        {option.dispalyValue}
+                                                        <br />
+                                                        {formattedDate}
+                                                    </>
+                                                );
+                                            } else if (option) {
+                                                return option.dispalyValue;
+                                            }
+                                            return '';
+                                        })()}
+                                    </TableCell>
+                                    {PerChk('EDIT_User Management') && (
+                                        <TableCell sx={{ textAlign: 'center' }}>
+                                            {row.userBlockedFlag === 'N' &&
+                                                <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
+                                                </Tooltip>}
+                                            {row.userBlockedFlag === 'N' &&
+                                                <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Block_Tooltip.Block_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDisableModal(true) }}><PersonRemoveIcon /></IconButton>
+                                                </Tooltip>}
+                                            {row.userBlockedFlag === 'Y' &&
+                                                <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEnableModal(true) }}><PersonIcon /></IconButton>
+                                                </Tooltip>}
+                                            {row.userBlockedFlag === 'Y' &&
+                                                <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
+                                                </Tooltip>}
+                                        </TableCell>
+                                    )}
 
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    count={filteredData.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={(e, p) => setPage(p)}
+                                    rowsPerPageOptions={[5, 10, 15]}
+                                    onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
+                                    ActionsComponent={TPA}
+                                    labelRowsPerPage={t("p_User_Management.ss_UserList.Rows_per_page")}
+                                />
+                            </TableRow>
+                        </TableFooter>
+                    </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+            </>}
     </Box>)
 }
