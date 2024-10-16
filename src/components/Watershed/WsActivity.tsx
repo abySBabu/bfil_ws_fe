@@ -49,9 +49,9 @@ export const actDef = {
         gramPanchayat: '',
         village: '',
         createdTime: '',
-        createdUser: sessionStorage.getItem("userName") as string,
+        createdUser: sessionStorage.getItem("userId") as string,
         updatedTime: '',
-        updatedUser: sessionStorage.getItem("userName") as string,
+        updatedUser: sessionStorage.getItem("userId") as string,
         eventDate: '',
         participantsMale: 0,
         participantsFemale: 0,
@@ -349,7 +349,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk }
+                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userId") as string }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -377,7 +377,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk }
+                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userId") as string }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -719,7 +719,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
-                        <TableContainer component={Paper} sx={{ height: '100%' }}><Table>
+                        <TableContainer component={Paper} sx={{ maxHeight:'100%' }}><Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
@@ -751,7 +751,7 @@ export const WsActivity: React.FC = () => {
         <Dialog open={progM} maxWidth='lg'>
             <DialogTitle>Activity Progress</DialogTitle>
 
-            <DialogContent sx={{ maxHeight: '75vh', overflow: 'auto' }}><Grid container spacing={2} sx={{ my: 1 }}>
+            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType} </Grid>
                 <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName}</Grid>
                 {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription} </Grid>}
@@ -809,7 +809,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
-                        <TableContainer component={Paper} sx={{ height: '400' }}><Table>
+                        <TableContainer component={Paper} sx={{ maxHeight:'100%' }}><Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
