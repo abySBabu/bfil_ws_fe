@@ -115,9 +115,10 @@ export const WsActivity: React.FC = () => {
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
 
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
-    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityId || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
-    const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityId || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
+    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
+    const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
+    
     const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
         : actObj.workActivity.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
