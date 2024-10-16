@@ -13,7 +13,7 @@ import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Servic
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { listWS, listWSbyUserId } from '../../Services/wsService';
+import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 
 export const actDef = {
@@ -49,9 +49,9 @@ export const actDef = {
         gramPanchayat: '',
         village: '',
         createdTime: '',
-        createdUser: sessionStorage.getItem("userId") as string,
+        createdUser: sessionStorage.getItem("userName") as string,
         updatedTime: '',
-        updatedUser: sessionStorage.getItem("userId") as string,
+        updatedUser: sessionStorage.getItem("userName") as string,
         eventDate: '',
         participantsMale: 0,
         participantsFemale: 0,
@@ -104,7 +104,8 @@ export const WsActivity: React.FC = () => {
     const actListF = actList.filter((a) => {
         const searchTerm = search?.toLowerCase();
         return (
-            a.workActivity.interventionType?.toLowerCase().includes(searchTerm) ||
+            a.workActivity.surveyNo?.toLowerCase().includes(searchTerm) ||
+            WsName(a.workActivity.watershedId)?.toLowerCase().includes(searchTerm) ||
             a.workActivity.activityName?.toLowerCase().includes(searchTerm) ||
             a.workActivity.activityWorkflowStatus?.toLowerCase().includes(searchTerm) ||
             DateTime(a.workActivity.updatedTime)?.toLowerCase().includes(searchTerm) ||
@@ -112,17 +113,17 @@ export const WsActivity: React.FC = () => {
         );
     });
 
-    const actListP = actListF.slice(page * rPP, page * rPP + rPP);
-
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
     const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
 
-    const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
+    /* const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
         : actObj.workActivity.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
-                : supplyCheck
+                : supplyCheck */
+
+    const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
@@ -281,7 +282,7 @@ export const WsActivity: React.FC = () => {
             "watershedId": actObj.workActivity.watershedId,
             "farmerId": actObj.workActivity.farmerId,
             "remarks": actObj.workActivity.remarks,
-            "createdUser": sessionStorage.getItem("userId"),
+            "createdUser": sessionStorage.getItem("userName"),
             "surveyNo": actObj.workActivity.surveyNo,
             "landType": actObj.workActivity.landType,
             "areaTreated": parseInt(actObj.workActivity.areaTreated),
@@ -349,7 +350,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userId") as string }
+                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -377,7 +378,7 @@ export const WsActivity: React.FC = () => {
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userId") as string }
+                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -524,9 +525,9 @@ export const WsActivity: React.FC = () => {
                     </TextField></Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
-                    <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.workActivity.participantsMale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsMale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.workActivity.participantsFemale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsFemale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
+                    <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.workActivity.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, trainerFacilitator: e.target.value } })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
@@ -609,9 +610,9 @@ export const WsActivity: React.FC = () => {
                     </TextField></Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
-                    <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Male Participants' value={actObj.workActivity.participantsMale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsMale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
                     <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.workActivity.participantsFemale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsFemale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
+                    <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><TextField required label='Facilitator' value={actObj.workActivity.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, trainerFacilitator: e.target.value } })} /></Grid>
                     <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
@@ -682,9 +683,9 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Habitation:</b> {VillageName(actObj.workActivity.habitationsCovered)}</Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
-                    <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
                     <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale} </Grid>
                     <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale} </Grid>
+                    <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator} </Grid>
@@ -719,7 +720,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
-                        <TableContainer component={Paper} sx={{ maxHeight:'100%' }}><Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
@@ -772,9 +773,9 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Habitation:</b> {VillageName(actObj.workActivity.habitationsCovered)}</Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
-                    <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
                     <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale} </Grid>
                     <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale} </Grid>
+                    <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator} </Grid>
@@ -809,7 +810,7 @@ export const WsActivity: React.FC = () => {
                 <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
-                        <TableContainer component={Paper} sx={{ maxHeight:'100%' }}><Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
