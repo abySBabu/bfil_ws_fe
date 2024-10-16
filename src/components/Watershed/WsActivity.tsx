@@ -118,7 +118,7 @@ export const WsActivity: React.FC = () => {
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
     const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
-    
+
     const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
         : actObj.workActivity.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
@@ -732,7 +732,7 @@ export const WsActivity: React.FC = () => {
 
                             <TableBody>{actObj.history?.map((a, i) =>
                             (<TableRow key={i}>
-                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell>{DateTime(a.createdTime)}</TableCell>
@@ -822,7 +822,7 @@ export const WsActivity: React.FC = () => {
 
                             <TableBody>{actObj.history?.map((a, i) =>
                             (<TableRow key={i}>
-                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell>{DateTime(a.createdTime)}</TableCell>
