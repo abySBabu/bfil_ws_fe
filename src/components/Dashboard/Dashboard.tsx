@@ -37,7 +37,7 @@ export const Dashboard: React.FC = () => {
         const fetchData = async () => {
             try {
                 const resp1 = await DashKey();
-                if (resp1.status === 'success') {
+                if (resp1) {
                     setkeyList(resp1)
                 }
                 const resp2 = await DashSupply();
