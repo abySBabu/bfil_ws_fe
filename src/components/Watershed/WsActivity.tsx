@@ -4,7 +4,7 @@ import {
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
     MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
-import { Edit, Search, Add, Visibility, Pending } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
@@ -354,6 +354,8 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
+                    const actCount = Number(localStorage.getItem("actCount") as string)
+                    localStorage.setItem("actCount", (actCount - 1).toString());
                 }
                 else {
                     setalertClr(false);
@@ -463,7 +465,7 @@ export const WsActivity: React.FC = () => {
                                 (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                 (a.workActivity.activityWorkflowStatus === uStatus) ? (
                                 <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}>
-                                    <Pending />
+                                    <PlayArrow />
                                 </IconButton>
                             ) : null}
                         </TableCell>
@@ -713,7 +715,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
 
-                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
+                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
                         <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
@@ -721,8 +723,9 @@ export const WsActivity: React.FC = () => {
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark By</TableCell>
-                                    <TableCell>Remark On</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
+                                    <TableCell>Images</TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -731,7 +734,8 @@ export const WsActivity: React.FC = () => {
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
-                                <TableCell>{DateTime(a.createdTime)}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
+                                <TableCell />
                             </TableRow>)
                             )}</TableBody>
                         </Table></TableContainer>
@@ -803,7 +807,7 @@ export const WsActivity: React.FC = () => {
                     <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                 </>}
 
-                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Remarks History</b></Divider></Grid>
+                <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
                 <Grid item xs={12}>{
                     actObj.history?.length > 0 ?
                         <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
@@ -811,8 +815,9 @@ export const WsActivity: React.FC = () => {
                                 <TableRow>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
                                     <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>Remark By</TableCell>
-                                    <TableCell>Remark On</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
+                                    <TableCell>Images</TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -821,7 +826,8 @@ export const WsActivity: React.FC = () => {
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
-                                <TableCell>{DateTime(a.createdTime)}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
+                                <TableCell />
                             </TableRow>)
                             )}</TableBody>
                         </Table></TableContainer>
