@@ -118,12 +118,10 @@ export const WsActivity: React.FC = () => {
     const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
 
-    /* const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
+    const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
         : actObj.workActivity.activityName === 'Sustainable Practices' ? sustainCheck
             : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
-                : supplyCheck */
-
-    const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck : supplyCheck
+                : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
@@ -384,6 +382,8 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
+                    const actCount = Number(localStorage.getItem("actCount") as string)
+                    localStorage.setItem("actCount", (actCount - 1).toString());
                 }
                 else {
                     setalertClr(false);
@@ -458,11 +458,7 @@ export const WsActivity: React.FC = () => {
                             <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
                                 <Visibility />
                             </IconButton>
-                            {PerChk('EDIT_Watershed Activity') && (
-                                <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>
-                                    <Edit />
-                                </IconButton>
-                            )}
+                            {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}><Edit /></IconButton>)}
                             {(uRole === 'Community Resource person' &&
                                 (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                 (a.workActivity.activityWorkflowStatus === uStatus) ? (

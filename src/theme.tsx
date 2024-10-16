@@ -89,7 +89,7 @@ export const bfilTheme = createTheme({
                 root: {
                     position: 'sticky', top: 0, zIndex: 1,
                     '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
-                    '& .MuiTableCell-root': { fontWeight: 'bold', color: sd('--text-color-default'), textTransform: 'none', fontSize: '105%' }
+                    '& .MuiTableCell-root': { fontWeight: 'bold', color: sd('--text-color-default'), textTransform: 'none', /* textAlign: 'center' */ }
                 }
             }
         },
