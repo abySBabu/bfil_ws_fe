@@ -441,40 +441,39 @@ export const WsActivity: React.FC = () => {
             </TableHead>
 
             <TableBody>
-                {actListP
-                    .sort((a, b) => {
-                        if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
-                        if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
-                        return 0;
-                    })
-                    .map((a, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{a.workActivity.activityName}</TableCell>
-                            <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
-                            <TableCell>{a.workActivity.surveyNo}</TableCell>
-                            <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                            <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
-                            <TableCell>{a.workActivity.updatedUser}</TableCell>
-                            <TableCell width='5%'>
-                                <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
-                                    <Visibility />
+                {actListF.sort((a, b) => {
+                    if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
+                    if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+                    return 0;
+                }).slice(page * rPP, page * rPP + rPP).map((a, i) => (
+                    <TableRow key={i}>
+                        <TableCell>{a.workActivity.activityName}</TableCell>
+                        <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
+                        <TableCell>{a.workActivity.surveyNo}</TableCell>
+                        <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
+                        <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
+                        <TableCell>{a.workActivity.updatedUser}</TableCell>
+                        <TableCell width='5%'>
+                            <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
+                                <Visibility />
+                            </IconButton>
+                            {PerChk('EDIT_Watershed Activity') && (
+                                <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>
+                                    <Edit />
                                 </IconButton>
-                                {PerChk('EDIT_Watershed Activity') && (
-                                    <IconButton title="Edit activity" onClick={() => { setactObj(a); seteditM(true); }}>
-                                        <Edit />
-                                    </IconButton>
-                                )}
-                                {(uRole === 'Community Resource person' &&
-                                    (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
-                                    (a.workActivity.activityWorkflowStatus === uStatus) ? (
-                                    <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}>
-                                        <Pending />
-                                    </IconButton>
-                                ) : null}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                            )}
+                            {(uRole === 'Community Resource person' &&
+                                (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
+                                (a.workActivity.activityWorkflowStatus === uStatus) ? (
+                                <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}>
+                                    <Pending />
+                                </IconButton>
+                            ) : null}
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
+
 
             <TableFooter><TableRow>
                 <TablePagination
