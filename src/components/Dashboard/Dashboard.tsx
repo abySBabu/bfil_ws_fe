@@ -37,16 +37,16 @@ export const Dashboard: React.FC = () => {
         const fetchData = async () => {
             try {
                 const resp1 = await DashKey();
-                if (resp1) {
+                if (resp1.status === 'success') {
                     setkeyList(resp1)
                 }
                 const resp2 = await DashSupply();
-                if (resp2) {
+                if (resp2.status === 'success') {
                     //Edited by lakshmi- fetch resp.data
                     setsupplyList(resp2.data)
                 }
                 const resp3 = await DashDemand();
-                if (resp3) {
+                if (resp3.status === 'success') {
                     //Edited by lakshmi- fetch resp.data
                     setdemandList(resp3.data)
                 }
