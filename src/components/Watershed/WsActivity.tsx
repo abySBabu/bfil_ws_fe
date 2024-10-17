@@ -4,7 +4,7 @@ import {
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
     MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
-import { Edit, Search, Add, Visibility, PlayArrow } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
@@ -327,7 +327,7 @@ export const WsActivity: React.FC = () => {
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct(actObj.workActivity, id)
+            const resp1 = await editAct({ ...actObj.workActivity, remarks: '' }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
@@ -852,8 +852,8 @@ export const WsActivity: React.FC = () => {
                         <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
                         <div>
                             <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
-                            {prev && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
-                            {next && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
+                            {prev && <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
+                            {next && <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
                         </div>
                     </DialogActions>
                 </Dialog>
