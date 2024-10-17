@@ -1,5 +1,4 @@
 import { Fade, createTheme } from '@mui/material';
-import { sd } from './common';
 
 export const tpaTheme = createTheme({
     components: {
@@ -16,18 +15,18 @@ export const tpaTheme = createTheme({
 })
 
 export const bfilTheme = createTheme({
-    typography: { fontFamily: sd('--text-font') },
+    typography: { fontFamily: 'var(--text-font)' },
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--button-bradius'), color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none', minWidth: '100px',
-                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') },
+                    borderRadius: 'var(--button-bradius)', color: 'var(--text-color-default)', backgroundColor: 'var(--button-bgcolor-active-brand)', textTransform: 'none', minWidth: '100px',
+                    '&:hover': { backgroundColor: 'var(--button-bgcolor-hover-brand)' },
+                    '&.Mui-disabled': { color: 'var(--text-color-disabled)', backgroundColor: 'var(--button-bgcolor-disabled)' },
                     '&.MuiButton-outlined': {
-                        borderColor: sd('--button-bgcolor-active-brand'),
-                        '&:hover': { borderColor: sd('--button-bgcolor-hover-brand') },
-                        '&.Mui-disabled': { borderColor: sd('--button-bgcolor-disabled') }
+                        borderColor: 'var(--button-bgcolor-active-brand)',
+                        '&:hover': { borderColor: 'var(--button-bgcolor-hover-brand)' },
+                        '&.Mui-disabled': { borderColor: 'var(--button-bgcolor-disabled)' }
                     }
                 }
             },
@@ -38,28 +37,28 @@ export const bfilTheme = createTheme({
         MuiIconButton: {
             styleOverrides: {
                 root: {
-                    color: sd('--button-bgcolor-active-brand'),
-                    '&:hover': { color: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--button-bgcolor-disabled') }
+                    color: 'var(--button-bgcolor-active-brand)',
+                    '&:hover': { color: 'var(--button-bgcolor-hover-brand)' },
+                    '&.Mui-disabled': { color: 'var(--button-bgcolor-disabled)' }
                 }
             }
         },
         MuiAvatar: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--button-bradius'), color: sd('--text-color-special'), backgroundColor: '#fff',
-                    '&:hover': { backgroundColor: sd('--button-bgcolor-hover-brand'), cursor: 'pointer' },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                    borderRadius: 'var(--button-bradius)', color: 'var(--text-color-special)', backgroundColor: '#fff',
+                    '&:hover': { backgroundColor: 'var(--button-bgcolor-hover-brand)', cursor: 'pointer' },
+                    '&.Mui-disabled': { color: 'var(--text-color-disabled)', backgroundColor: 'var(--button-bgcolor-disabled)' }
                 }
             }
         },
         MuiFab: {
             styleOverrides: {
                 root: {
-                    position: 'fixed', bottom: sd('--button-corner'), right: sd('--button-corner'),
-                    color: sd('--text-color-default'), backgroundColor: sd('--button-bgcolor-active-brand'), textTransform: 'none',
-                    '&:hover': { color: sd('--text-color-hover'), backgroundColor: sd('--button-bgcolor-hover-brand') },
-                    '&.Mui-disabled': { color: sd('--text-color-disabled'), backgroundColor: sd('--button-bgcolor-disabled') }
+                    position: 'fixed', bottom: 'var(--button-corner)', right: 'var(--button-corner)',
+                    color: 'var(--text-color-default)', backgroundColor: 'var(--button-bgcolor-active-brand)', textTransform: 'none',
+                    '&:hover': { color: 'var(--text-color-hover)', backgroundColor: 'var(--button-bgcolor-hover-brand)' },
+                    '&.Mui-disabled': { color: 'var(--text-color-disabled)', backgroundColor: 'var(--button-bgcolor-disabled)' }
                 }
             }
         },
@@ -77,8 +76,8 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-checked': {
-                        color: sd('--button-bgcolor-active-brand'),
-                        '&:hover': { color: sd('--button-bgcolor-active-brand') }
+                        color: 'var(--button-bgcolor-active-brand)',
+                        '&:hover': { color: 'var(--button-bgcolor-active-brand)' }
                     },
                     '&:hover': { color: '#000' }
                 }
@@ -88,16 +87,16 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     position: 'sticky', top: 0, zIndex: 1,
-                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
-                    '& .MuiTableCell-root': { fontWeight: 'bold', color: sd('--text-color-default'), textTransform: 'none', /* textAlign: 'center' */ }
+                    '& .MuiTableRow-root': { backgroundColor: 'var(--table-bgcolor-head)' },
+                    '& .MuiTableCell-root': { fontWeight: 'bold', color: 'var(--text-color-default)' }
                 }
             }
         },
         MuiTableBody: {
             styleOverrides: {
                 root: {
-                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-body-default') },
-                    '& .MuiTableCell-root': { color: sd('--text-color-hover'), textTransform: 'none' }
+                    '& .MuiTableRow-root': { backgroundColor: 'var(--table-bgcolor-body-default)' },
+                    '& .MuiTableCell-root': { color: 'var(--text-color-hover)' }
                 }
             }
         },
@@ -105,8 +104,8 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     position: 'sticky', bottom: 0, zIndex: 1,
-                    '& .MuiTableRow-root': { backgroundColor: sd('--table-bgcolor-head') },
-                    '& .MuiTableCell-root': { color: sd('--text-color-default'), textTransform: 'none' }
+                    '& .MuiTableRow-root': { backgroundColor: 'var(--table-bgcolor-head)' },
+                    '& .MuiTableCell-root': { color: 'var(--text-color-default)' }
                 }
             }
         },
@@ -115,10 +114,10 @@ export const bfilTheme = createTheme({
         MuiDialog: {
             styleOverrides: {
                 root: {
-                    backdropFilter: sd('--modal-backdrop'),
+                    backdropFilter: 'var(--modal-backdrop)',
                 },
                 paper: {
-                    borderRadius: sd('--modal-bradius')
+                    borderRadius: 'var(--modal-bradius)'
                 }
             },
             defaultProps: {
@@ -129,9 +128,9 @@ export const bfilTheme = createTheme({
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    padding: sd('--modal-padding'),
-                    color: sd('--text-color-default'),
-                    backgroundColor: sd('--text-color-special')
+                    padding: 'var(--modal-padding)',
+                    color: 'var(--text-color-default)',
+                    backgroundColor: 'var(--text-color-special)'
                 }
             }
         },
@@ -141,12 +140,12 @@ export const bfilTheme = createTheme({
                     '& .MuiOutlinedInput-root': {
                         height: '48px',
                         '& input': { height: '100%', padding: '0px 8px' },
-                        '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
-                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis'), opacity: 0.5 }
+                        '&.Mui-focused fieldset': { border: 'var(--textfield-border-sel)' },
+                        '&.Mui-disabled fieldset': { border: 'var(--textfield-border-dis)', opacity: 0.5 }
                     },
                     '& .MuiInputLabel-root': {
-                        '&.Mui-focused': { color: sd('--textfield-label-sel') },
-                        '&.Mui-disabled': { color: sd('--textfield-label-dis'), opacity: 0.5 }
+                        '&.Mui-focused': { color: 'var(--textfield-label-sel)' },
+                        '&.Mui-disabled': { color: 'var(--textfield-label-dis)', opacity: 0.5 }
                     },
                     '& .MuiFormHelperText-root': { color: 'red' }
                 }
@@ -161,12 +160,12 @@ export const bfilTheme = createTheme({
                     '& .MuiOutlinedInput-root': {
                         height: '48px',
                         '& .MuiSelect-select': { height: '100%', padding: '0px 8px' },
-                        '&.Mui-focused fieldset': { border: sd('--textfield-border-sel') },
-                        '&.Mui-disabled fieldset': { border: sd('--textfield-border-dis') }
+                        '&.Mui-focused fieldset': { border: 'var(--textfield-border-sel)' },
+                        '&.Mui-disabled fieldset': { border: 'var(--textfield-border-dis)' }
                     },
                     '& .MuiInputLabel-root': {
-                        '&.Mui-focused': { color: sd('--textfield-label-sel') },
-                        '&.Mui-disabled': { color: sd('--textfield-label-dis') }
+                        '&.Mui-focused': { color: 'var(--textfield-label-sel)' },
+                        '&.Mui-disabled': { color: 'var(--textfield-label-dis)' }
                     }
                 }
             }
@@ -175,8 +174,8 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
-                        backgroundColor: sd('--page-nav-bgcolor-sel'),
-                        '&:hover': { backgroundColor: sd('--page-nav-bgcolor-sel') }
+                        backgroundColor: 'var(--page-nav-bgcolor-sel)',
+                        '&:hover': { backgroundColor: 'var(--page-nav-bgcolor-sel)' }
                     }
                 }
             }
@@ -185,14 +184,14 @@ export const bfilTheme = createTheme({
             styleOverrides: {
                 root: {
                     textTransform: 'none',
-                    fontFamily: sd('--text-font')
+                    fontFamily: 'var(--text-font)'
                 }
             }
         },
         MuiSnackbar: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--alert-bradius'),
+                    borderRadius: 'var(--alert-bradius)',
                     minWidth: '30%'
                 }
             },
@@ -204,7 +203,7 @@ export const bfilTheme = createTheme({
         MuiAlert: {
             styleOverrides: {
                 root: {
-                    borderRadius: sd('--alert-bradius'),
+                    borderRadius: 'var(--alert-bradius)',
                     width: '100%'
                 }
             },
@@ -215,8 +214,8 @@ export const bfilTheme = createTheme({
         MuiLink: {
             styleOverrides: {
                 root: {
-                    color: sd('--text-color-link'),
-                    cursor: sd('--text-styles-pointer')
+                    color: 'var(--text-color-link)',
+                    cursor: 'var(--text-styles-pointer)'
                 }
             },
             defaultProps: { underline: 'hover' }
