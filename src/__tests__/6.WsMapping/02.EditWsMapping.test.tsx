@@ -206,7 +206,7 @@ test.describe('Watershed mapping edit automation', () => {
         const userManagementButton = page.locator('text=Watershed Mapping');
         await userManagementButton.click();
         await page.waitForTimeout(5000);
-        const userRow = page.locator('tr').nth(2);
+        const userRow = page.locator('tr').nth(1);
         console.log("Hi this mapping testing " + userRow);
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await editIcon.click();
@@ -228,4 +228,49 @@ test.describe('Watershed mapping edit automation', () => {
         await page.waitForTimeout(1000);
         await browser.close();
     });
+
+
+    //Negative Test Cases
+    test('Should edit Watershed Mapping edit and check the remarks field', async () => {
+        test.setTimeout(800000);
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.reload();
+        const userManagementButton = page.locator('text=Watershed Mapping');
+        await userManagementButton.click();
+        await page.waitForTimeout(5000);
+        const userRow = page.locator('tr').nth(1);
+        console.log("Hi this mapping testing " + userRow);
+        const editIcon = userRow.locator('[data-testid="EditIcon"]');
+        await editIcon.click();
+
+        await page.fill('input#remarks', 'Test RemarksAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        // const wsNameDropdown = page.locator('#ws_name');
+        // await wsNameDropdown.click();
+        // await page.waitForSelector('ul[role="listbox"]');
+        // const watershedOptions = await page.$$('ul[role="listbox"] > li');
+        // if (watershedOptions.length > 0) {
+        //     await watershedOptions[0].click(); // Select the first option in the list
+        // }
+        // await page.keyboard.press('Escape');
+        const addButton = page.locator('button:has-text("Update")').nth(0);
+        await addButton.click();
+        const alertMessage = await page.locator('div[role="alert"]'); // Adjust the selector based on your actual implementation
+        const alertText = await alertMessage.innerText();
+        expect(alertText).toBe('WaterShed mapping updated successfully');
+        await page.waitForTimeout(1000);
+        await browser.close();
+    });
+
 });

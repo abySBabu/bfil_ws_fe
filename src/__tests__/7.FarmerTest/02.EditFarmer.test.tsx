@@ -235,4 +235,96 @@ test.describe('Farmer add automation', () => {
         await browser.close();
     });
 
+
+
+    test('Check null values in line items and handle pagination', async () => {
+        test.setTimeout(800000);
+    
+        const browser = await chromium.launch({
+            headless: false,
+            channel: 'chrome',
+        });
+    
+        const context = await browser.newContext();
+        const page: Page = await context.newPage();
+    
+        // Navigate and log in
+        await page.goto('http://localhost:3000/bfilreact');
+        await page.fill('input#userName', '9677694732');
+        await page.fill('input#password', '1234');
+        await page.click('button[type="submit"]');
+        await page.waitForTimeout(1000);
+        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.reload();
+    
+        // Navigate to "Farmer Master"
+        const FarmerMasterButton = page.locator('text=Farmer Master');
+        await FarmerMasterButton.click();
+        await page.waitForTimeout(5000);
+    
+        // Function to check for null/empty rows and log the index
+        async function checkTableRowsForNulls() {
+            const rows = page.locator('tr'); // All rows in the table
+            const rowCount = await rows.count(); // Get the total number of rows
+    
+            for (let i = 1; i < rowCount; i++) { // Start from 1 to skip the header row
+                const row = rows.nth(i);
+                const columns = row.locator('td'); // All columns in the row
+                const columnCount = await columns.count(); // Number of columns in the row
+                
+                let isEmptyRow = false;
+                
+                // Loop through each column
+                for (let j = 0; j < columnCount; j++) {
+                    const cellValue = await columns.nth(j).textContent();
+    console.log("Printing :"+ cellValue);
+                    if (cellValue === null || cellValue.trim() === '') {
+                        console.log(`Row ${i}, Column ${j} contains a null or empty value.`);
+                        isEmptyRow = true;
+                    }
+                }
+    
+                // If a row contains any null values, return the index and stop checking
+                if (isEmptyRow) {
+                    console.log(`Row ${i} is null or empty.`);
+                    return i;
+                }
+            }
+            return -1; // Return -1 if no null rows were found
+        }
+    
+        // Main loop to check all pages
+        let hasNextPage = true;
+    
+        while (hasNextPage) {
+            // Check the current page for null values
+            const nullRowIndex = await checkTableRowsForNulls();
+    
+            // If a null row is found, perform any required action here
+            if (nullRowIndex !== -1) {
+                console.log(`Null row found at index: ${nullRowIndex}`);
+                // Example: Click the edit button if needed
+                const editButton = page.locator(`tr:nth-child(${nullRowIndex + 1}) td:last-child button[title="Edit farmer"]`);
+                await editButton.click();
+                break; // Stop further pagination if necessary
+            }
+    
+            // Check if the "Next Page" button is visible and enabled for pagination
+            const nextButton = page.locator('.MuiTablePagination-actions button[aria-label="Next Page"]');
+            const isNextVisible = await nextButton.isVisible();
+            const isNextEnabled = await nextButton.isEnabled();
+    
+            if (isNextVisible && isNextEnabled) {
+                await nextButton.click(); // Move to the next page
+                await page.waitForTimeout(2000); // Wait for the page to load
+            } else {
+                hasNextPage = false; // No more pages to check
+            }
+        }
+    
+        await browser.close();
+    });
+    
+
+
 });
