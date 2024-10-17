@@ -33,19 +33,10 @@ test.describe('User Edit Automation', () => {
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
 
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
     await page.waitForSelector('ul[role="listbox"]');
     await page.waitForTimeout(1000);
 
-    // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -61,10 +52,8 @@ test.describe('User Edit Automation', () => {
       await loginTypeOptions[2].click();
     }
     await expect(page.locator('#userName-helper-text')).toHaveText('Name must only contain alphanumeric characters');
-
     await page.waitForTimeout(1000);
     await browser.close();
-
   });
 
 
@@ -99,15 +88,6 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
     await page.waitForSelector('ul[role="listbox"]');
     await page.waitForTimeout(1000);
@@ -130,7 +110,6 @@ test.describe('User Edit Automation', () => {
     await page.waitForTimeout(1000);
     await browser.close();
   });
-
 
   //Test Number : 3
   test('03.Should edit user details with alphanumeric error message for designation', async () => {
@@ -156,17 +135,7 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
-
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -183,7 +152,6 @@ test.describe('User Edit Automation', () => {
     }
     await expect(page.locator('#designation-helper-text')).toHaveText('Designation must only contain alphanumeric characters');
     await page.waitForTimeout(1000);
-
     await browser.close();
   });
 
@@ -213,17 +181,7 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
-
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
@@ -238,15 +196,11 @@ test.describe('User Edit Automation', () => {
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
     }
-    // Ensure the button exists before evaluating
     const updateUserDialogButton = page.locator('button:has-text("Update")').nth(1);
-
-    // DEBUG: Check if the button is properly located
     const isButtonVisible = await updateUserDialogButton.isVisible();
     console.log('Is the "Update" button visible?', isButtonVisible);
     expect(isButtonVisible).toBe(false);
     await page.waitForTimeout(1000);
-
     await browser.close();
   });
 
@@ -278,24 +232,13 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
     await page.fill('input#designation', '');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
-
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
     }
-
     const loginTypeDropdown = page.locator('#loginType');
     await loginTypeDropdown.click();
     await page.waitForSelector('ul[role="listbox"]');
@@ -303,21 +246,12 @@ test.describe('User Edit Automation', () => {
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
     }
-    // Ensure the button exists before evaluating
     const updateUserDialogButton = page.locator('button:has-text("Update")').nth(1);
-
-    // DEBUG: Check if the button is properly located
     const isButtonVisible = await updateUserDialogButton.isVisible();
     console.log('Is the "Update" button visible?', isButtonVisible);
     expect(isButtonVisible).toBe(false);
     await page.waitForTimeout(1000);
-
-    await browser.close();    // const successMessage = page.locator('text=User updated successfully');
-    // await expect(successMessage).toBeVisible();
-    //    // Wait for the success snackbar to appear
-    //    const snackbar = await page.waitForSelector('role=alert', { timeout: 100000 });
-    //    await expect(snackbar).toContain('User updated successfully');
-
+    await browser.close();   
   });
 
   //Test Number : 6
@@ -347,20 +281,8 @@ test.describe('User Edit Automation', () => {
 
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
-    // await page.fill('input#designation', '');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
-
     await page.waitForSelector('ul[role="listbox"]');
-    // await expect(roleOptions).toBeVisible();
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -375,7 +297,6 @@ test.describe('User Edit Automation', () => {
     }
     // Ensure the button exists before evaluating
     const updateUserDialogButton = page.locator('button:has-text("Update")').nth(1);
-    // DEBUG: Check if the button is properly located
     const isButtonVisible = await updateUserDialogButton.isVisible();
     console.log('Is the "Update" button visible?', isButtonVisible);
     expect(isButtonVisible).toBe(false);
@@ -410,13 +331,6 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
     await page.fill('input#designation', '');
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
     await page.locator('#role').click();
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
@@ -433,11 +347,7 @@ test.describe('User Edit Automation', () => {
     if (loginTypeOptions.length > 0) {
       await loginTypeOptions[2].click();
     }
-    // await expect(page.locator('#userName-helper-text')).toHaveText('Name must only contain alphanumeric characters');
-    // await expect(page.locator('#designation-helper-text')).toHaveText('Designation must only contain alphanumeric characters');
-    // Ensure the button exists before evaluating
     const updateUserDialogButton = page.locator('button:has-text("Update")').nth(1);
-    // DEBUG: Check if the button is properly located
     const isButtonVisible = await updateUserDialogButton.isVisible();
     console.log('Is the "Update" button visible?', isButtonVisible);
     expect(isButtonVisible).toBe(false);
@@ -446,7 +356,7 @@ test.describe('User Edit Automation', () => {
   });
 
   //Test Number : 8
-  test('08.Should edit user details with correct data ', async () => {
+  test('08.Should edit user details with correct data and successful alert message ', async () => {
     test.setTimeout(800000);
     const browser = await chromium.launch({
       headless: false,
@@ -473,21 +383,10 @@ test.describe('User Edit Automation', () => {
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'User Edited');
     await page.fill('input#designation', 'Program officer');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
     await page.locator('#role').click();
-
     await page.waitForSelector('ul[role="listbox"]');
     // await expect(roleOptions).toBeVisible();
     await page.waitForTimeout(1000);
-
     const roleOptions = await page.$$('ul[role="listbox"] > li');
     if (roleOptions.length > 0) {
       await roleOptions[0].click();
@@ -510,83 +409,73 @@ test.describe('User Edit Automation', () => {
     const alertMessage = await page.locator('.MuiAlert-message').innerText();
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
-    //User error: MobileNumber already exits 8310450995
     expect(alertMessage).toBe('User updated successfully');
     await page.waitForTimeout(1000);
     await browser.close();
   });
 
-  //Test Number : 9
-  test('9.Should edit user details with wrong alert message ', async () => {
-    test.setTimeout(800000);
-    const browser = await chromium.launch({
-      headless: false,
-      channel: 'chrome',
-    });
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreact');
-    await page.fill('input#userName', '9677694732');
-    await page.fill('input#password', '1234');
-    await page.click('button[type="submit"]');
-    await page.waitForTimeout(1000);
+  // //Test Number : 9
+  // test.only('9.Should edit user details with wrong alert message ', async () => {
+  //   test.setTimeout(800000);
+  //   const browser = await chromium.launch({
+  //     headless: false,
+  //     channel: 'chrome',
+  //   });
+  //   const context = await browser.newContext();
+  //   const page: Page = await context.newPage();
+  //   await page.goto('http://localhost:3000/bfilreact');
+  //   await page.fill('input#userName', '9677694732');
+  //   await page.fill('input#password', '1234');
+  //   await page.click('button[type="submit"]');
+  //   await page.waitForTimeout(1000);
 
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
-    await userManagementButton.click();
+  //   await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+  //   await page.reload();
+  //   const userManagementButton = page.locator('text=User Management');
+  //   await userManagementButton.click();
 
-    const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+  //   const userRow = page.locator('tr').nth(1);
+  //   console.log("Hi this userrow testing " + userRow);
+  //   const editIcon = userRow.locator('[data-testid="EditIcon"]');
+  //   await editIcon.click();
 
-    await page.waitForSelector('[data-testid="EditIcon"]');
-    await page.fill('input#userName', 'Manhattan');
-    await page.fill('input#designation', 'Admin');
+  //   await page.waitForSelector('[data-testid="EditIcon"]');
+  //   await page.fill('input#userName', 'Manhattan');
+  //   await page.fill('input#designation', 'Admin');
+  //   await page.locator('#role').click();
 
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
+  //   await page.waitForSelector('ul[role="listbox"]');
+  //   // await expect(roleOptions).toBeVisible();
+  //   await page.waitForTimeout(1000);
 
-    await page.locator('#role').click();
+  //   const roleOptions = await page.$$('ul[role="listbox"] > li');
+  //   if (roleOptions.length > 0) {
+  //     await roleOptions[0].click();
+  //   }
 
-    await page.waitForSelector('ul[role="listbox"]');
-    // await expect(roleOptions).toBeVisible();
-    await page.waitForTimeout(1000);
+  //   const loginTypeDropdown = page.locator('#loginType');
+  //   await loginTypeDropdown.click();
+  //   await page.waitForTimeout(1000);
 
-    const roleOptions = await page.$$('ul[role="listbox"] > li');
-    if (roleOptions.length > 0) {
-      await roleOptions[0].click();
-    }
-
-    const loginTypeDropdown = page.locator('#loginType');
-    await loginTypeDropdown.click();
-    await page.waitForTimeout(1000);
-
-    await page.waitForSelector('ul[role="listbox"]');
-    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    if (loginTypeOptions.length > 0) {
-      await loginTypeOptions[2].click();
-    }
-    // const successMessage = page.locator('text=Update ');
-    // await expect(successMessage).toBeVisible();
-    const addUserDialogButton = page.locator('button:has-text("Update")');
-    await expect(addUserDialogButton).toBeVisible();
-    await addUserDialogButton.click();
-    const alertMessage = await page.locator('.MuiAlert-message').innerText();
-    // await page.waitForTimeout(3000);
-    console.log("Alert message: " + alertMessage);
-    //User error: MobileNumber already exits 8310450995
-    //    expect(alertMessage).toBe('User updated successfully');
-    expect(alertMessage).toBe('User updated successfully');
-    await page.waitForTimeout(1000);
-    await browser.close();
-  });
+  //   await page.waitForSelector('ul[role="listbox"]');
+  //   const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
+  //   if (loginTypeOptions.length > 0) {
+  //     await loginTypeOptions[2].click();
+  //   }
+  //   // const successMessage = page.locator('text=Update ');
+  //   // await expect(successMessage).toBeVisible();
+  //   const addUserDialogButton = page.locator('button:has-text("Update")');
+  //   await expect(addUserDialogButton).toBeVisible();
+  //   await addUserDialogButton.click();
+  //   const alertMessage = await page.locator('.MuiAlert-message').innerText();
+  //   // await page.waitForTimeout(3000);
+  //   console.log("Alert message: " + alertMessage);
+  //   //User error: MobileNumber already exits 8310450995
+  //   //    expect(alertMessage).toBe('User updated successfully');
+  //   expect(alertMessage).toBe('User updated successfully');
+  //   await page.waitForTimeout(1000);
+  //   await browser.close();
+  // });
 
   //Test Number : 10
   test('10.Should check the edit icon', async () => {

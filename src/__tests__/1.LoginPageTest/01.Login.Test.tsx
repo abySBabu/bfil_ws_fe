@@ -351,7 +351,7 @@ test.describe('Login Screen Automation', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreact');
-        await page.fill('input#userName', '9384615425'); //deleted data 
+        await page.fill('input#userName', '0000000001'); //deleted data 
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 

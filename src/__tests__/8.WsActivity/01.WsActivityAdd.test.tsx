@@ -24,6 +24,7 @@ test.describe('Watershed Activity Add Automation', () => {
         const userManagementButton = page.locator('text=Watershed Activity');
         await userManagementButton.click();
         await page.waitForTimeout(5000);
+        
         const addIcon = await page.locator('button:has-text("Add Activity")');
         await addIcon.click();
         const interventionDropdown = page.locator('label:has-text("Intervention") + *');
