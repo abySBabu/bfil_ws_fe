@@ -62,6 +62,7 @@ export const wsDef = {
 }
 
 export const WsMaster: React.FC = () => {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -138,7 +139,9 @@ export const WsMaster: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWS(); if (resp1.status === 'success') { setwsList(resp1.data.reverse()) }
+            const resp1 = await listWS(); if (resp1.status === 'success') {
+                setwsList(resp1.data.reverse()); setLoadingResponse(false);
+            }
             //Edited by lakshmi- change sessionstorage to localstorage
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
@@ -263,144 +266,156 @@ export const WsMaster: React.FC = () => {
 
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+        {loadingResponse ?
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', // Ensure it takes up the full height
+                }}
+            >
+                <CircularProgress size={80} />
+            </Box> : <>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
-            <div>
-                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
-                    onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
-                    sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
-            </div>
-        </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
+                    <div>
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                        {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
+                            onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
+                            sx={{ height: '100%', ml: '4px' }}>Add Watershed</Button>)}
+                    </div>
+                </Box>
 
-        {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-            No records
-        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Watershed</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Village</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
-                </TableRow>
-            </TableHead>
+                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                    No records
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Watershed</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Village</TableCell>
+                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
+                        </TableRow>
+                    </TableHead>
 
-            <TableBody>{wsListP.map((w, i) => (
-                <TableRow key={i}>
-                    <TableCell>{w.wsName}</TableCell>
-                    <TableCell>{w.wsDescription}</TableCell>
-                    <TableCell>{VillageName(w.village.villageId)}</TableCell>
-                    {PerChk('EDIT_Watershed Master') && <TableCell>
-                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
-                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsId); }}><Delete /></IconButton>
-                    </TableCell>}
-                </TableRow>
-            ))}</TableBody>
+                    <TableBody>{wsListP.map((w, i) => (
+                        <TableRow key={i}>
+                            <TableCell>{w.wsName}</TableCell>
+                            <TableCell>{w.wsDescription}</TableCell>
+                            <TableCell>{VillageName(w.village.villageId)}</TableCell>
+                            {PerChk('EDIT_Watershed Master') && <TableCell>
+                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsId); }}><Delete /></IconButton>
+                            </TableCell>}
+                        </TableRow>
+                    ))}</TableBody>
 
-            <TableFooter><TableRow>
-                <TablePagination
-                    count={wsListF.length}
-                    rowsPerPage={rPP}
-                    page={page}
-                    onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[5, 10, 15]}
-                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                    ActionsComponent={TPA}
-                />
-            </TableRow></TableFooter>
-        </Table></TableContainer>}
+                    <TableFooter><TableRow>
+                        <TablePagination
+                            count={wsListF.length}
+                            rowsPerPage={rPP}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                            ActionsComponent={TPA}
+                        />
+                    </TableRow></TableFooter>
+                </Table></TableContainer>}
 
-        <Dialog open={addM}>
-            <DialogTitle>Add New Watershed</DialogTitle>
+                <Dialog open={addM}>
+                    <DialogTitle>Add New Watershed</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        label="Name"
-                        value={wsObj.wsName}
-                        onChange={(e) => handleFieldChange('wsName', e.target.value)}
-                        helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        label="Description"
-                        value={wsObj.wsDescription}
-                        onChange={(e) => handleFieldChange('wsDescription', e.target.value)}
-                        helperText={isTouched.wsDescription && !wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
-                    />
-                </Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.state.stateId}>
-                    {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
-                    {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
-                    {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
-                    {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
-                    {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                </TextField></Grid>
-            </Grid></DialogContent>
+                    <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label="Name"
+                                value={wsObj.wsName}
+                                onChange={(e) => handleFieldChange('wsName', e.target.value)}
+                                helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label="Description"
+                                value={wsObj.wsDescription}
+                                onChange={(e) => handleFieldChange('wsDescription', e.target.value)}
+                                helperText={isTouched.wsDescription && !wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.state.stateId}>
+                            {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
+                            {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
+                            {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
+                            {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
+                            {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                        </TextField></Grid>
+                    </Grid></DialogContent>
 
-            <DialogActions>
-                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
-            </DialogActions>
-        </Dialog>
+                    <DialogActions>
+                        <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
+                    </DialogActions>
+                </Dialog>
 
-        <Dialog open={editM}>
-            <DialogTitle>Edit Watershed</DialogTitle>
+                <Dialog open={editM}>
+                    <DialogTitle>Edit Watershed</DialogTitle>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
-                    onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
-                    helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
-                /></Grid>
-                <Grid item xs={12}><TextField required label='Description'
-                    value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
-                    helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
-                /></Grid>
-                <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField select label='State' disabled value={wsObj.state.stateId}>
-                    {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
-                    {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
-                    {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
-                    {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={4}><TextField required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
-                    {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                </TextField></Grid>
-            </Grid></DialogContent>
+                    <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                        <Grid item xs={12}><TextField required label='Name' value={wsObj.wsName}
+                            onChange={(e) => setwsObj({ ...wsObj, wsName: e.target.value })}
+                            helperText={!wsObj.wsName ? 'Watershed name cannot be empty' : ''}
+                        /></Grid>
+                        <Grid item xs={12}><TextField required label='Description'
+                            value={wsObj.wsDescription} onChange={(e) => setwsObj({ ...wsObj, wsDescription: e.target.value })}
+                            helperText={!wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
+                        /></Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={4}><TextField select label='State' disabled value={wsObj.state.stateId}>
+                            {stOps.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
+                            {dsOps.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
+                            {tlOps.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
+                            {panOps.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
+                            {vilOps.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                        </TextField></Grid>
+                    </Grid></DialogContent>
 
-            <DialogActions>
-                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.wsId)} disabled={addCheck || loading}>Update</Button>
-            </DialogActions>
-        </Dialog>
+                    <DialogActions>
+                        <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.wsId)} disabled={addCheck || loading}>Update</Button>
+                    </DialogActions>
+                </Dialog>
 
-        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-            <DialogTitle>Delete Watershed</DialogTitle>
-            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
-            <DialogActions>
-                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>Delete</Button>
-            </DialogActions>
-        </Dialog>
+                <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+                    <DialogTitle>Delete Watershed</DialogTitle>
+                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>Delete</Button>
+                    </DialogActions>
+                </Dialog>
+            </>}
     </>)
 }
