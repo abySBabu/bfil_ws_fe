@@ -28,6 +28,7 @@ interface Response {
     [moduleName: string]: permissionByAppID[];
 }
 export default function AddRole(props: userTypeProps) {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
     const [selectedPermissions, setSelectedPermissions] = useState<ScreenPermissionMapping[]>([]);
     const [checkedPermissions, setCheckedPermissions] = useState<permissionByAppID[]>([]);
@@ -131,6 +132,7 @@ export default function AddRole(props: userTypeProps) {
                                     screenameList.push(data.screenName)
                                 })
                                 setscreenNameList(screenameList);
+                                setLoadingResponse(false);
                             }
                             for (let screenName of screenameList) {
 
@@ -225,123 +227,135 @@ export default function AddRole(props: userTypeProps) {
             <Dialog
                 open={modalShow}
             >
-                <DialogTitle>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Role_Label")}</DialogTitle>
-                <DialogContent>
-                    <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={6}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="roleName"
-                                label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Name")}
-                                autoFocus
-                                {...register('roleName', {
-                                    // required: 'Role Name is required',
-                                    pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
-                                        message: 'Role Name must only contain alphanumeric characters'
-                                    }
-                                })}
-                                onChange={(e) => {
-                                    register('roleName').onChange(e);
-                                    trigger('roleName');
-                                }}
-                                error={!!errors.roleName}
-                                helperText={errors.roleName ? errors.roleName.message : ''}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="roleDesc"
-                                label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Description")}
-                                autoFocus
-                                {...register('roleDesc', {
-                                    // required: 'Role Description is required',
-                                    pattern: {
-                                        value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
-                                        message: 'Role Description must only contain alphanumeric characters'
-                                    }
-                                })}
-                                onChange={(e) => {
-                                    register('roleDesc').onChange(e);
-                                    trigger('roleDesc');
-                                }}
-                                error={!!errors.roleDesc}
-                                helperText={errors.roleDesc ? errors.roleDesc.message : ''}
-                            />
-                        </Grid>
-                        {/* <Card sx={{ marginTop: '3%', padding: '2%' }}> */}
-                        <Grid item xs={12}>
-                            <Box component={Grid} container spacing={1} sx={{
-                                border: `2px solid ${sd('--button-bgcolor-disabled')}`,
-                                borderRadius: '4px',
-                                maxHeight: '400px',
-                                overflowY: 'auto',
-                            }}>
-                                <Grid item xs={4}></Grid>
-                                <Grid item xs={4}>
-                                    <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.View_Label")}</Typography>
+                {loadingResponse ?
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100vh', // Ensure it takes up the full height
+                        }}
+                    >
+                        <CircularProgress size={80} />
+                    </Box> : <>
+                        <DialogTitle>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Role_Label")}</DialogTitle>
+                        <DialogContent>
+                            <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="roleName"
+                                        label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Name")}
+                                        autoFocus
+                                        {...register('roleName', {
+                                            // required: 'Role Name is required',
+                                            pattern: {
+                                                value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
+                                                message: 'Role Name must only contain alphanumeric characters'
+                                            }
+                                        })}
+                                        onChange={(e) => {
+                                            register('roleName').onChange(e);
+                                            trigger('roleName');
+                                        }}
+                                        error={!!errors.roleName}
+                                        helperText={errors.roleName ? errors.roleName.message : ''}
+                                    />
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Edit_Label")}</Typography>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="roleDesc"
+                                        label={t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Role_Description")}
+                                        autoFocus
+                                        {...register('roleDesc', {
+                                            // required: 'Role Description is required',
+                                            pattern: {
+                                                value: /^[A-Za-z0-9]+([ '-][A-Za-z0-9]+)*$/,
+                                                message: 'Role Description must only contain alphanumeric characters'
+                                            }
+                                        })}
+                                        onChange={(e) => {
+                                            register('roleDesc').onChange(e);
+                                            trigger('roleDesc');
+                                        }}
+                                        error={!!errors.roleDesc}
+                                        helperText={errors.roleDesc ? errors.roleDesc.message : ''}
+                                    />
                                 </Grid>
-                                {selectedPermissions.map((screendata, index) => (
-
-                                    <React.Fragment key={index}>
+                                {/* <Card sx={{ marginTop: '3%', padding: '2%' }}> */}
+                                <Grid item xs={12}>
+                                    <Box component={Grid} container spacing={1} sx={{
+                                        border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+                                        borderRadius: '4px',
+                                        maxHeight: '400px',
+                                        overflowY: 'auto',
+                                    }}>
+                                        <Grid item xs={4}></Grid>
                                         <Grid item xs={4}>
-                                            <Typography sx={{ fontWeight: 'bold' }} >{screendata.screenName}</Typography>
+                                            <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.View_Label")}</Typography>
                                         </Grid>
-                                        {screendata.permission
-                                            .filter(perm => perm.permissionName.startsWith("VIEW"))
-                                            .map((perm: permissionByAppID) => (
-                                                <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={4}>
-                                                        <Checkbox
-                                                            checked={checkedPermissions.includes(perm)}
-                                                            onChange={handleCheckboxChange(perm, false)}
-                                                        />
-                                                    </Grid>
-                                                </React.Fragment>
-                                            ))}
-                                        {/* Filter and map EDIT permissions */}
-                                        {screendata.permission
-                                            .filter(perm => perm.permissionName.startsWith("EDIT"))
-                                            .map((perm: permissionByAppID) => (
-                                                <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={4}>
-                                                        <Checkbox
-                                                            checked={checkedPermissions.includes(perm)}
-                                                            onChange={handleCheckboxChange(perm, true)}
-                                                        />
-                                                    </Grid>
-                                                </React.Fragment>
-                                            ))}
-                                        {screendata.permission
-                                            .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
-                                            .map((perm: permissionByAppID) => (
-                                                <React.Fragment key={perm.permissionId}>
-                                                    <Grid item xs={4}>
-                                                        <Checkbox
-                                                            onChange={handleCheckboxChange(perm, false)}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                </React.Fragment>
-                                            ))}
-                                    </React.Fragment>))}
+                                        <Grid item xs={4}>
+                                            <Typography >{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Edit_Label")}</Typography>
+                                        </Grid>
+                                        {selectedPermissions.map((screendata, index) => (
+
+                                            <React.Fragment key={index}>
+                                                <Grid item xs={4}>
+                                                    <Typography sx={{ fontWeight: 'bold' }} >{screendata.screenName}</Typography>
+                                                </Grid>
+                                                {screendata.permission
+                                                    .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                                    .map((perm: permissionByAppID) => (
+                                                        <React.Fragment key={perm.permissionId}>
+                                                            <Grid item xs={4}>
+                                                                <Checkbox
+                                                                    checked={checkedPermissions.includes(perm)}
+                                                                    onChange={handleCheckboxChange(perm, false)}
+                                                                />
+                                                            </Grid>
+                                                        </React.Fragment>
+                                                    ))}
+                                                {/* Filter and map EDIT permissions */}
+                                                {screendata.permission
+                                                    .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                                    .map((perm: permissionByAppID) => (
+                                                        <React.Fragment key={perm.permissionId}>
+                                                            <Grid item xs={4}>
+                                                                <Checkbox
+                                                                    checked={checkedPermissions.includes(perm)}
+                                                                    onChange={handleCheckboxChange(perm, true)}
+                                                                />
+                                                            </Grid>
+                                                        </React.Fragment>
+                                                    ))}
+                                                {screendata.permission
+                                                    .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
+                                                    .map((perm: permissionByAppID) => (
+                                                        <React.Fragment key={perm.permissionId}>
+                                                            <Grid item xs={4}>
+                                                                <Checkbox
+                                                                    onChange={handleCheckboxChange(perm, false)}
+                                                                    disabled
+                                                                />
+                                                            </Grid>
+                                                        </React.Fragment>
+                                                    ))}
+                                            </React.Fragment>))}
+                                    </Box>
+                                    {/* </Card> */}
+                                </Grid>
                             </Box>
-                            {/* </Card> */}
-                        </Grid>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Cancel_Button")}</Button>
-                    <Button disabled={loading || !isValid || checkedPermissions.length === 0 || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Button")}{loading ? <CircularProgress /> : null}</Button>
-                </DialogActions>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Cancel_Button")}</Button>
+                            <Button disabled={loading || !isValid || checkedPermissions.length === 0 || !formValues.roleName || !formValues.roleDesc} onClick={handleSubmit(addRole)}>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Button")}{loading ? <CircularProgress /> : null}</Button>
+                        </DialogActions>
+                    </>}
             </Dialog>
             <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
                 <Alert
