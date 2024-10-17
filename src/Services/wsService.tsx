@@ -1,6 +1,16 @@
 import axios from "axios";
 import { serverPath } from "../common";
 
+export async function listWSbyUserId() {
+    const configs = {
+        url: serverPath.bfil + `wsmaster/getWatershedByUser/${sessionStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function listWS() {
     const configs = {
         url: serverPath.bfil + "wsmaster/getallwatershed",

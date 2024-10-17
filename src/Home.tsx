@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -18,7 +18,9 @@ import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
 import ReportTable from './components/ReportPage/ReportTable';
-
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface SideItem {
     screenName: string;
@@ -30,6 +32,7 @@ interface Section {
 }
 
 export const Home: React.FC = () => {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [message, setMessage] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [tokenExpired, setTokenExpired] = useState(false);
@@ -41,6 +44,7 @@ export const Home: React.FC = () => {
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const [uName, setuName] = React.useState('');
+    const [actCount, setActCount] = useState(Number(localStorage.getItem("actCount") as string) || 0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
@@ -50,7 +54,7 @@ export const Home: React.FC = () => {
             <Typography variant="body1" sx={{ mr: 1 }}>
                 {t(textKey)}
             </Typography>
-            <Badge badgeContent={badgeCount} color="warning" overlap="circular" />
+            <Badge badgeContent={badgeCount} overlap="circular" sx={{ '& .MuiBadge-badge': { backgroundColor: '#fff', color: '#000' } }} />
         </Box>)
     }
 
@@ -116,6 +120,8 @@ export const Home: React.FC = () => {
                         localStorage.setItem("userStatus", uStatus.workflowstatusName)
                         const resp0 = await ListSide(uStatus.workflowstatusName);
                         if (resp0.status === 'success') {
+                            localStorage.setItem("actCount", resp0.workActivityCount)
+                            setActCount(Number(localStorage.getItem("actCount") as string) || 0);
                             let sortscreenlist = resp0.data;
                             setsideList(sortscreenlist);
                             const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
@@ -133,7 +139,7 @@ export const Home: React.FC = () => {
                                     case 'Watershed Mapping':
                                         return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                                     case 'Watershed Activity':
-                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', resp0.workActivityCount), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', Number(localStorage.getItem("actCount") as string)), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
                                     case 'Work Plan':
                                         return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                                     case 'Report':
@@ -144,10 +150,7 @@ export const Home: React.FC = () => {
                             }).filter((section: Section): section is Section => section !== null);
 
                             setSections(generatedSections);
-
-
-                            console.log('sec len', generatedSections.length)
-
+                            setLoadingResponse(false);
                             const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
                             if (defaultIndex !== -1) {
                                 console.log('defaultIndex', defaultIndex)
@@ -159,92 +162,122 @@ export const Home: React.FC = () => {
                         }
                     }
                 }
-                const resp1 = await listState(); if (resp1.status === 'success') sessionStorage.setItem("StateList", JSON.stringify(resp1.data));
-                const resp2 = await listDistrict(); if (resp2.status === 'success') sessionStorage.setItem("DistrictList", JSON.stringify(resp2.data));
-                const resp3 = await listTaluk(); if (resp3.status === 'success') sessionStorage.setItem("TalukList", JSON.stringify(resp3.data));
-                const resp4 = await listPanchayat(); if (resp4.status === 'success') sessionStorage.setItem("PanList", JSON.stringify(resp4.data));
-                const resp5 = await listWS(); if (resp5.status === 'success') sessionStorage.setItem("WsList", JSON.stringify(resp5.data));
-                const resp6 = await listVillage(); if (resp6.status === 'success') sessionStorage.setItem("VillageList", JSON.stringify(resp6.data));
+                const resp1 = await listState(); if (resp1.status === 'success') localStorage.setItem("StateList", JSON.stringify(resp1.data));
+                const resp2 = await listDistrict(); if (resp2.status === 'success') localStorage.setItem("DistrictList", JSON.stringify(resp2.data));
+                const resp3 = await listTaluk(); if (resp3.status === 'success') localStorage.setItem("TalukList", JSON.stringify(resp3.data));
+                const resp4 = await listPanchayat(); if (resp4.status === 'success') localStorage.setItem("PanList", JSON.stringify(resp4.data));
+                const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
+                const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
             } catch (error) {
                 console.log(error);
             }
         }; fetchLoc();
-    }, [i18n.language]);
+    }, [i18n.language, actCount]);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
-                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
-                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
-                </Box>
-                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
-                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
-                </Box>
-            </Toolbar>
-
-            {!hasPermission &&
-                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
-                    {tokenExpired &&
-                        <Dialog
-                            open={openSnackbar} maxWidth={'xs'}>
-                            <DialogContent sx={{ mt: 2 }}>
-                                {message}
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Okay</Button>
-                            </DialogActions>
-                        </Dialog>
+        <div>
+            {loadingResponse ?
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100vh', // Ensure it takes up the full height
                     }
-                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
-                        <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
-                            PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
-                                <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
-                                    <ListItemText primary={section.name} />
-                                </ListItemButton>
-                            </ListItem>)
-                        ))}</List>
-                    </Box>
-
-                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
-                        {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
-                    </Box>
-                </Paper>
-            }
-            {hasPermission &&
-                <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
-                    {tokenExpired &&
-                        <Dialog
-                            open={openSnackbar} maxWidth={'xs'}>
-                            <DialogContent sx={{ mt: 2 }}>
-                                {message}
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Okay</Button>
-                            </DialogActions>
-                        </Dialog>
                     }
-                    <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                        You do not have permission to view any sections.
-                    </Typography>
-                </Paper>
-            }
+                >
+                    <CircularProgress size={80} />
+                </Box > : <>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
+                        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
+                            <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
+                                <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
+                                <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+                            </Box>
+                            <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
+                            <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
+                                <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
+                                <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
+                            </Box>
+                        </Toolbar>
 
-            <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
-                <Typography variant='body2'>{t("p_Home.Pragat_Watershed_Footer")}</Typography>
-            </Box>
+                        {!hasPermission &&
+                            <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
+                                {tokenExpired &&
+                                    <Dialog
+                                        open={openSnackbar} maxWidth={'xs'}>
+                                        <DialogContent sx={{ mt: 2 }}>
+                                            {message}
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleClose}>Okay</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                }
+                                <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                                    <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
+                                        PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
+                                            <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                                                <ListItemText primary={section.name} />
+                                            </ListItemButton>
+                                        </ListItem>)
+                                    ))}</List>
+                                </Box>
 
-            <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                <MenuItem onClick={logOut}>Logout</MenuItem>
-                <Divider />
-                <MenuItem onClick={handleLanguageClick}>Language</MenuItem>
-            </Menu>
-            <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
+                                <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+                                    {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
+                                </Box>
+                            </Paper>
+                        }
+                        {hasPermission &&
+                            <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
+                                {tokenExpired &&
+                                    <Dialog
+                                        open={openSnackbar} maxWidth={'xs'}>
+                                        <DialogContent sx={{ mt: 2 }}>
+                                            {message}
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleClose}>Okay</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                }
+                                <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                                    You do not have permission to view any sections.
+                                </Typography>
+                            </Paper>
+                        }
+
+                        <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
+                            <Typography variant='body2'>{t("p_Home.Pragat_Watershed_Footer")}</Typography>
+                        </Box>
+
+                        <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
+                            <Typography sx={{ padding: '8px 16px', fontWeight: 'bold' }}>{sessionStorage.getItem("userName") || 'Name'} - {localStorage.getItem("userRole") || 'Role'}</Typography>
+                            <Divider />
+                            <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+                                <AccordionSummary
+                                    expandIcon={<ArrowDropDownIcon />}
+                                    aria-controls="panel1-content"
+                                    id="panel1-header"
+                                >
+                                    <Typography>Language</Typography>
+                                </AccordionSummary>
+                                <Divider />
+                                <AccordionDetails>
+                                    <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
+                                    <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
+                                </AccordionDetails>
+                                <Divider />
+                            </Accordion>
+                            {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
+                            <MenuItem onClick={logOut}>Logout</MenuItem>
+                        </Menu>
+                        {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
                 <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
-            </Menu>
-        </Box>
+            </Menu> */}
+                    </Box>
+                </>}</div>
     )
 }

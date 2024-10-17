@@ -21,6 +21,7 @@ export const fmrDef = {
 }
 
 export const FarmerMaster: React.FC = () => {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -59,7 +60,7 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
+            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); setLoadingResponse(false); }
         }
         catch (error) { console.log(error) }
     };
@@ -133,145 +134,156 @@ export const FarmerMaster: React.FC = () => {
 
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
+        {loadingResponse ?
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', // Ensure it takes up the full height
+                }}
+            >
+                <CircularProgress size={80} />
+            </Box> : <>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
+                    <div>
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                        {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
+                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
+                    </div>
+                </Box>
+                {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                    No records
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Aadhar</TableCell>
+                            <TableCell>Mobile Number</TableCell>
+                            {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
+                        </TableRow>
+                    </TableHead>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
-            <div>
-                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
-                    onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
-            </div>
-        </Box>
-        {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-            No records
-        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Aadhar</TableCell>
-                    <TableCell>Mobile Number</TableCell>
-                    {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
-                </TableRow>
-            </TableHead>
+                    <TableBody>{fmrListP.map((w, i) => (
+                        <TableRow key={i}>
+                            <TableCell>{w.wsfarmerName}</TableCell>
+                            <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
+                            <TableCell>{w.mobileNumber}</TableCell>
+                            {PerChk('EDIT_Farmer Master') && <TableCell>
+                                <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                            </TableCell>}
+                        </TableRow>
+                    ))}</TableBody>
 
-            <TableBody>{fmrListP.map((w, i) => (
-                <TableRow key={i}>
-                    <TableCell>{w.wsfarmerName}</TableCell>
-                    <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
-                    <TableCell>{w.mobileNumber}</TableCell>
-                    {PerChk('EDIT_Farmer Master') && <TableCell>
-                        <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                        <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
-                    </TableCell>}
-                </TableRow>
-            ))}</TableBody>
+                    <TableFooter><TableRow>
+                        <TablePagination
+                            count={fmrListF.length}
+                            rowsPerPage={rPP}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                            ActionsComponent={TPA}
+                        />
+                    </TableRow></TableFooter>
+                </Table></TableContainer>}
 
-            <TableFooter><TableRow>
-                <TablePagination
-                    count={fmrListF.length}
-                    rowsPerPage={rPP}
-                    page={page}
-                    onPageChange={(e, p) => setPage(p)}
-                    rowsPerPageOptions={[5, 10, 15]}
-                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                    ActionsComponent={TPA}
-                />
-            </TableRow></TableFooter>
-        </Table></TableContainer>}
+                <Dialog open={addM} maxWidth='sm'>
+                    <DialogTitle>Add New Farmer</DialogTitle>
 
-        <Dialog open={addM} maxWidth='sm'>
-            <DialogTitle>Add New Farmer</DialogTitle>
+                    <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label="Name"
+                                value={fmrObj.wsfarmerName}
+                                onChange={(e) => handleFieldChange('wsfarmerName', e.target.value, (value) => /^[A-Za-z\s]*$/.test(value))}
+                                helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                required
+                                label="Aadhar"
+                                value={fmrObj.adharNumber}
+                                onChange={(e) => handleFieldChange('adharNumber', e.target.value, (value) => /^\d{0,12}$/.test(value))}
+                                inputProps={{ maxLength: 12 }}
+                                type="tel"
+                                helperText={isTouched.adharNumber && fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                required
+                                label="Mobile"
+                                value={fmrObj.mobileNumber}
+                                onChange={(e) => handleFieldChange('mobileNumber', e.target.value, (value) => /^\d{0,10}$/.test(value))}
+                                inputProps={{ maxLength: 10 }}
+                                type="tel"
+                                helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
+                            />
+                        </Grid>
+                    </Grid></DialogContent>
 
-            <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        label="Name"
-                        value={fmrObj.wsfarmerName}
-                        onChange={(e) => handleFieldChange('wsfarmerName', e.target.value, (value) => /^[A-Za-z\s]*$/.test(value))}
-                        helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        required
-                        label="Aadhar"
-                        value={fmrObj.adharNumber}
-                        onChange={(e) => handleFieldChange('adharNumber', e.target.value, (value) => /^\d{0,12}$/.test(value))}
-                        inputProps={{ maxLength: 12 }}
-                        type="tel"
-                        helperText={isTouched.adharNumber && fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        required
-                        label="Mobile"
-                        value={fmrObj.mobileNumber}
-                        onChange={(e) => handleFieldChange('mobileNumber', e.target.value, (value) => /^\d{0,10}$/.test(value))}
-                        inputProps={{ maxLength: 10 }}
-                        type="tel"
-                        helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
-                    />
-                </Grid>
-            </Grid></DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck || loading}>Add</Button>
+                    </DialogActions>
+                </Dialog>
 
-            <DialogActions>
-                <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck || loading}>Add</Button>
-            </DialogActions>
-        </Dialog>
+                <Dialog open={editM} maxWidth='sm'>
+                    <DialogTitle>Edit farmer</DialogTitle>
 
-        <Dialog open={editM} maxWidth='sm'>
-            <DialogTitle>Edit farmer</DialogTitle>
+                    <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
+                        <Grid item xs={12}><TextField
+                            required
+                            label="Name"
+                            value={fmrObj.wsfarmerName}
+                            onChange={(e) => {
+                                const regex = /^[A-Za-z\s]*$/;
+                                if (regex.test(e.target.value)) {
+                                    setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
+                                }
+                            }}
+                            helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
+                        /></Grid>
+                        <Grid item xs={6}><TextField
+                            required
+                            label="Aadhar"
+                            value={fmrObj.adharNumber}
+                            onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
+                            inputProps={{ maxLength: 12 }}
+                            type="tel"
+                            helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
+                        /></Grid>
+                        <Grid item xs={6}><TextField
+                            required
+                            label="Mobile"
+                            value={fmrObj.mobileNumber}
+                            onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
+                            inputProps={{ maxLength: 10 }}
+                            type="tel"
+                            helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
+                        /></Grid>
+                    </Grid></DialogContent>
 
-            <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}><TextField
-                    required
-                    label="Name"
-                    value={fmrObj.wsfarmerName}
-                    onChange={(e) => {
-                        const regex = /^[A-Za-z\s]*$/;
-                        if (regex.test(e.target.value)) {
-                            setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
-                        }
-                    }}
-                    helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
-                /></Grid>
-                <Grid item xs={6}><TextField
-                    required
-                    label="Aadhar"
-                    value={fmrObj.adharNumber}
-                    onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
-                    inputProps={{ maxLength: 12 }}
-                    type="tel"
-                    helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
-                /></Grid>
-                <Grid item xs={6}><TextField
-                    required
-                    label="Mobile"
-                    value={fmrObj.mobileNumber}
-                    onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
-                    inputProps={{ maxLength: 10 }}
-                    type="tel"
-                    helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
-                /></Grid>
-            </Grid></DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck || loading}>Update</Button>
+                    </DialogActions>
+                </Dialog>
 
-            <DialogActions>
-                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck || loading}>Update</Button>
-            </DialogActions>
-        </Dialog>
-
-        <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-            <DialogTitle>Delete farmer</DialogTitle>
-            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
-            <DialogActions>
-                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>
-            </DialogActions>
-        </Dialog>
+                <Dialog open={Boolean(deleteM)} maxWidth='xs'>
+                    <DialogTitle>Delete farmer</DialogTitle>
+                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>
+                    </DialogActions>
+                </Dialog>
+            </>}
     </>)
 }

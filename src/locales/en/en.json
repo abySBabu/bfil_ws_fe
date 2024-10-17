@@ -232,8 +232,8 @@
             "Add_Success_Message": "Watershed mapping created successfully"
         },
         "ss_MappingList": {
-            "Ws_Name": "Watershed Name",
-            "User_Name": "User Name",
+            "Ws_Name": "Watershed",
+            "User_Name": "User",
             "Remarks": "Remarks",
             "Action": {
                 "Action_Text": "Action",

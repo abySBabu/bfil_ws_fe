@@ -8,10 +8,14 @@ import { tpaTheme } from './theme';
 
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
+<<<<<<< HEAD
 export const serverPath = { authserver: "http://localhost:8086/auth/", bfil: "http://localhost:8080/bfil/" }
 // export const serverPath = { authserver: "http://192.168.1.2:8086/auth/", bfil: "http://192.168.1.2:8080/bfil/" }
 // export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
 // export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
+=======
+export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
+>>>>>>> refs/heads/dev
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
     const permList = sessionStorage.getItem('permList');
@@ -31,7 +35,7 @@ export const pBtn = { backgroundColor: 'var(--button-bgcolor-active-positive)', 
 export const nBtn = { backgroundColor: 'var(--button-bgcolor-active-negative)', '&:hover': { backgroundColor: 'var(--button-bgcolor-hover-negative)' } }
 
 export const TPA = (props: any) => {
-    const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props;
+    const { count, page, rowsPerPage, onPageChange } = props;
 
     const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         onPageChange(event, 0);
