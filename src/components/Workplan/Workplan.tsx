@@ -61,6 +61,7 @@ const wpDef = {
 }
 
 export const Workplan: React.FC = () => {
+    const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -109,7 +110,7 @@ export const Workplan: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()) }
+            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); setLoadingResponse(false); }
             const resp2 = await ListInter(); const resp3 = await ListDonor();
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -178,169 +179,182 @@ export const Workplan: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
-            <div>
-                <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                    InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
-            </div>
-        </Box>
+        {loadingResponse ?
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh', // Ensure it takes up the full height
+                }}
+            >
+                <CircularProgress size={80} />
+            </Box> : <>
 
-        {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-            No records
-        </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Watershed</TableCell>
-                    <TableCell>Year</TableCell>
-                    <TableCell>Intervention/Component</TableCell>
-                    <TableCell>Activity</TableCell>
-                    <TableCell>Physical</TableCell>
-                    <TableCell>Financial</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
-                </TableRow>
-            </TableHead>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
+                    <div>
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
+                        {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
+                    </div>
+                </Box>
 
-            <TableBody>{planListP.map((w, i) => (
-                <TableRow key={i}>
-                    <TableCell>{WsName(w.watershedId)}</TableCell>
-                    <TableCell>{w.planningYear}</TableCell>
-                    <TableCell>{w.interventionType_Components}</TableCell>
-                    <TableCell>{w.activityName}</TableCell>
-                    <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                    <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                    {PerChk('EDIT_Work Plan') && <TableCell>
-                        <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                    </TableCell>}
-                </TableRow>
-            ))}</TableBody>
+                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                    No records
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Watershed</TableCell>
+                            <TableCell>Year</TableCell>
+                            <TableCell>Intervention/Component</TableCell>
+                            <TableCell>Activity</TableCell>
+                            <TableCell>Physical</TableCell>
+                            <TableCell>Financial</TableCell>
+                            {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
+                        </TableRow>
+                    </TableHead>
 
-            <TableFooter><TableRow><TablePagination
-                count={planListF.length}
-                rowsPerPage={rPP}
-                page={page}
-                onPageChange={(e, p) => setPage(p)}
-                rowsPerPageOptions={[5, 10, 15]}
-                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                ActionsComponent={TPA}
-            /></TableRow></TableFooter>
-        </Table></TableContainer>}
+                    <TableBody>{planListP.map((w, i) => (
+                        <TableRow key={i}>
+                            <TableCell>{WsName(w.watershedId)}</TableCell>
+                            <TableCell>{w.planningYear}</TableCell>
+                            <TableCell>{w.interventionType_Components}</TableCell>
+                            <TableCell>{w.activityName}</TableCell>
+                            <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
+                            <TableCell>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
+                            {PerChk('EDIT_Work Plan') && <TableCell>
+                                <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
+                            </TableCell>}
+                        </TableRow>
+                    ))}</TableBody>
 
-        <Dialog open={addM}>
-            <DialogTitle>Add Plan</DialogTitle>
+                    <TableFooter><TableRow><TablePagination
+                        count={planListF.length}
+                        rowsPerPage={rPP}
+                        page={page}
+                        onPageChange={(e, p) => setPage(p)}
+                        rowsPerPageOptions={[5, 10, 15]}
+                        onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                        ActionsComponent={TPA}
+                    /></TableRow></TableFooter>
+                </Table></TableContainer>}
 
-            <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
-                <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
-                <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
-                <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
-                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
-                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid>
+                <Dialog open={addM}>
+                    <DialogTitle>Add Plan</DialogTitle>
 
-                <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
-                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
+                    <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
+                        <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
+                        <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
+                        <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                            {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
+                            {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
+                            {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        </TextField></Grid>
 
-                <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                        <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
+                        <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                            {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
 
-                <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
-                {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField
-                        type='number'
-                        label={detail.wfsName}
-                        value={detail.wfsValue}
-                        onChange={(e) =>
-                            setplanObj({
-                                ...planObj,
-                                financialDetails: planObj.financialDetails?.map((d, i) =>
-                                    i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
-                                )
-                            })
-                        }
-                        inputProps={{ min: 0 }}
-                    /></Grid>
-                    {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
-                </React.Fragment>))}
+                        <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
+                        <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
+                        <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
-                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField required label="Total" value={finTotal} disabled /></Grid>
-            </Grid></DialogContent>
+                        <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
+                        {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
+                            <Grid item xs={3}><TextField
+                                type='number'
+                                label={detail.wfsName}
+                                value={detail.wfsValue}
+                                onChange={(e) =>
+                                    setplanObj({
+                                        ...planObj,
+                                        financialDetails: planObj.financialDetails?.map((d, i) =>
+                                            i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
+                                        )
+                                    })
+                                }
+                                inputProps={{ min: 0 }}
+                            /></Grid>
+                            {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
+                        </React.Fragment>))}
 
-            <DialogActions>
-                <Button onClick={() => { setaddM(false); }} disabled={loading}>Close</Button>
-                <Button onClick={PlanAdd} disabled={loading || addCheck} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
-            </DialogActions>
-        </Dialog>
+                        <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
+                        <Grid item xs={3}><TextField required label="Total" value={finTotal} disabled /></Grid>
+                    </Grid></DialogContent>
 
-        <Dialog open={editM}>
-            <DialogTitle>Edit Plan</DialogTitle>
+                    <DialogActions>
+                        <Button onClick={() => { setaddM(false); }} disabled={loading}>Close</Button>
+                        <Button onClick={PlanAdd} disabled={loading || addCheck} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
+                    </DialogActions>
+                </Dialog>
 
-            <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
-                <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
-                <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
-                <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
-                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
-                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid>
+                <Dialog open={editM}>
+                    <DialogTitle>Edit Plan</DialogTitle>
 
-                <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
-                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
+                    <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
+                        <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
+                        <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^\d{0,4}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 4 }} type="tel" /></Grid>
+                        <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                            {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
+                            {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
+                            {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        </TextField></Grid>
 
-                <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                        <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
+                        <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                            {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
+                        <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
 
-                <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
-                {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField
-                        type='number'
-                        label={detail.wfsName}
-                        value={detail.wfsValue}
-                        onChange={(e) =>
-                            setplanObj({
-                                ...planObj,
-                                financialDetails: planObj.financialDetails?.map((d, i) =>
-                                    i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
-                                )
-                            })
-                        }
-                        inputProps={{ min: 0 }}
-                    /></Grid>
-                    {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
-                </React.Fragment>))}
+                        <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
+                        <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
+                        <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
-                <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField required label="Total" value={finTotal} disabled /></Grid>
-            </Grid></DialogContent>
+                        <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
+                        {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
+                            <Grid item xs={3}><TextField
+                                type='number'
+                                label={detail.wfsName}
+                                value={detail.wfsValue}
+                                onChange={(e) =>
+                                    setplanObj({
+                                        ...planObj,
+                                        financialDetails: planObj.financialDetails?.map((d, i) =>
+                                            i === index ? { ...d, wfsValue: parseInt(e.target.value) } : d
+                                        )
+                                    })
+                                }
+                                inputProps={{ min: 0 }}
+                            /></Grid>
+                            {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
+                        </React.Fragment>))}
 
-            <DialogActions>
-                <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
-                <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
-            </DialogActions>
-        </Dialog>
+                        <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
+                        <Grid item xs={3}><TextField required label="Total" value={finTotal} disabled /></Grid>
+                    </Grid></DialogContent>
+
+                    <DialogActions>
+                        <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
+                        <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={loading}>Update</Button>
+                    </DialogActions>
+                </Dialog>
+            </>}
     </>)
 }
