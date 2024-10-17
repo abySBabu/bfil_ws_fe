@@ -83,6 +83,7 @@ export const Home: React.FC = () => {
     const logOut = async () => {
         try {
             let logoutresp = await logout();
+            handleLanguageChange('en');
             if (logoutresp) {
                 navigate('/');
             }
