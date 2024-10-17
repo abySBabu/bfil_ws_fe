@@ -110,13 +110,14 @@ export const Workplan: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); setLoadingResponse(false); }
+            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); }
             const resp2 = await ListInter(); const resp3 = await ListDonor();
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
         }
         catch (error) { console.log(error) }
+        setLoadingResponse(false); 
     }
 
     const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef) }

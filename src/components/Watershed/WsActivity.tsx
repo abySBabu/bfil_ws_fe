@@ -173,7 +173,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data); setLoadingResponse(false); }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data); }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -184,6 +184,7 @@ export const WsActivity: React.FC = () => {
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
+        setLoadingResponse(false);
     };
 
     const FmrSet = async (id: any) => {
