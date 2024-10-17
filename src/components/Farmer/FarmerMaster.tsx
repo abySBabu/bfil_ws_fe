@@ -60,9 +60,10 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); setLoadingResponse(false); }
+            if (resp1.status === 'success') { setfmrList(resp1.data.reverse());  }
         }
         catch (error) { console.log(error) }
+        setLoadingResponse(false);
     };
 
     const fmrAdd = async () => {

@@ -45,7 +45,6 @@ export default function MappingList() {
         try {
             let resp = await listWSMap();
             setmapData(resp.data.reverse());
-            setLoadingResponse(false);
             let userData = await usersList(companyId);
             setUserList(userData);
             const wsDatalist = await listWS();
@@ -53,9 +52,9 @@ export default function MappingList() {
                 setWsList(wsDatalist.data);
             }
         } catch (error) {
-
             console.log(error)
         }
+        setLoadingResponse(false);
     };
 
     useEffect(() => {

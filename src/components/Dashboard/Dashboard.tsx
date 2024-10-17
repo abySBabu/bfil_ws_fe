@@ -41,7 +41,6 @@ export const Dashboard: React.FC = () => {
                 const resp1 = await DashKey();
                 if (resp1) {
                     setkeyList(resp1);
-                    setLoadingResponse(false);
                 }
                 const resp2 = await DashSupply();
                 if (resp2.status === 'success') {
@@ -55,6 +54,7 @@ export const Dashboard: React.FC = () => {
                 }
             }
             catch (error) { console.log(error) }
+            setLoadingResponse(false);
         }
 
         fetchData()

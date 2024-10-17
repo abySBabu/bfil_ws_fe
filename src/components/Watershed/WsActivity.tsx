@@ -4,7 +4,7 @@ import {
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography,
     MenuItem, IconButton, InputAdornment, CircularProgress
 } from "@mui/material";
-import { Edit, Search, Add, Visibility, PlayArrow } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
@@ -173,7 +173,7 @@ export const WsActivity: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data); setLoadingResponse(false); }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data); }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -184,6 +184,7 @@ export const WsActivity: React.FC = () => {
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
+        setLoadingResponse(false);
     };
 
     const FmrSet = async (id: any) => {
@@ -327,7 +328,7 @@ export const WsActivity: React.FC = () => {
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct(actObj.workActivity, id)
+            const resp1 = await editAct({ ...actObj.workActivity, remarks: '' }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
@@ -852,8 +853,8 @@ export const WsActivity: React.FC = () => {
                         <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
                         <div>
                             <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
-                            {prev && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
-                            {next && <Button disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
+                            {prev && <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
+                            {next && <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
                         </div>
                     </DialogActions>
                 </Dialog>

@@ -132,7 +132,6 @@ export default function AddRole(props: userTypeProps) {
                                     screenameList.push(data.screenName)
                                 })
                                 setscreenNameList(screenameList);
-                                setLoadingResponse(false);
                             }
                             for (let screenName of screenameList) {
 
@@ -152,6 +151,7 @@ export default function AddRole(props: userTypeProps) {
             } catch (error) {
                 console.log(error);
             }
+            setLoadingResponse(false);
         };
         fetchData();
     }, [props.show])

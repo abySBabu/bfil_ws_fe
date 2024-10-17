@@ -140,13 +140,14 @@ export const WsMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listWS(); if (resp1.status === 'success') {
-                setwsList(resp1.data.reverse()); setLoadingResponse(false);
+                setwsList(resp1.data.reverse());
             }
             //Edited by lakshmi- change sessionstorage to localstorage
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
+        setLoadingResponse(false);
     };
 
     const districtCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

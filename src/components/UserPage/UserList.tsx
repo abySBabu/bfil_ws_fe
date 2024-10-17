@@ -79,11 +79,10 @@ export default function UserList() {
             let resp = await usersList(companyID);
             console.log("getuserData -", resp)
             setuserData(resp);
-            setLoadingResponse(false);
         } catch (error) {
-
             console.log(error)
         }
+        setLoadingResponse(false);
     };
 
     useEffect(() => {
