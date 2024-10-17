@@ -57,11 +57,10 @@ export default function RoleList() {
             console.log("getRoleData -", resp);
             let sorData = resp;
             setRoleData(sorData.reverse());
-            setLoadingResponse(false);
         } catch (error) {
-
             console.log(error)
         }
+        setLoadingResponse(false);
     };
 
     useEffect(() => {

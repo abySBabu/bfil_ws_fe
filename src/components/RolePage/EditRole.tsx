@@ -171,13 +171,13 @@ export default function EditRole(props: RoleTypeProps) {
 
                             console.log("screenPermissionMappingList", screenPermissionMappingList);
                             setSelectedPermissions(screenPermissionMappingList);
-                            setLoadingResponse(false);
                         }
                     }
                 }
             } catch (error) {
                 console.log(error);
             }
+            setLoadingResponse(false);
         };
         fetchData();
     }, [show, roleDetails, reset]);
