@@ -7,18 +7,19 @@ import './index.css';
 import { bfilTheme } from './theme';
 import Login from './components/LoginPage/Login';
 import { Home } from './Home';
-import  './i18n';
+import './i18n';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <Router basename='/bfilreact'>
-            <ThemeProvider theme={bfilTheme}><Box sx={{ m: '-8px' }}>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/home" element={<Home />} />
-                </Routes>
-            </Box></ThemeProvider>
-        </Router >
+        {/* <Router basename='/bfilreact'> */}
+        <Router basename='/bfilreacttest'>
+                <ThemeProvider theme={bfilTheme}><Box sx={{ m: '-8px' }}>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/home" element={<Home />} />
+                    </Routes>
+                </Box></ThemeProvider>
+            </Router >
     </React.StrictMode>
 )

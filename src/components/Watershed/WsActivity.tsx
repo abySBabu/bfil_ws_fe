@@ -674,53 +674,53 @@ export const WsActivity: React.FC = () => {
                     <DialogTitle>Activity Details</DialogTitle>
 
                     <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType} </Grid>
-                        <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName} </Grid>
-                        {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription} </Grid>}
-                        <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus} </Grid>
+                        <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType}</Grid>
+                        <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName}</Grid>
+                        {actObj.workActivity.activityName === 'Sustainable Practices' ? <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription}</Grid> : <Grid item xs={3} />}
+                        <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus}</Grid>
 
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent} </Grid>
-                            <Grid item xs={3}><b>Event Type:</b> {actObj.workActivity.capacitytypeEvent} </Grid>
-                            <Grid item xs={3}><b>Event Date:</b> {actObj.workActivity.eventDate} </Grid>
-                            <Grid item xs={3}><b>Target Group:</b> {actObj.workActivity.participantsType} </Grid>
+                            <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent}</Grid>
+                            <Grid item xs={3}><b>Event Type:</b> {actObj.workActivity.capacitytypeEvent}</Grid>
+                            <Grid item xs={3}><b>Event Date:</b> {actObj.workActivity.eventDate}</Grid>
+                            <Grid item xs={3}><b>Target Group:</b> {actObj.workActivity.participantsType}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
-                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)} </Grid>
-                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)} </Grid>
-                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)} </Grid>
+                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
+                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
+                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
                             <Grid item xs={3}><b>Habitation:</b> {VillageName(actObj.workActivity.habitationsCovered)}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale} </Grid>
-                            <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale} </Grid>
-                            <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
+                            <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale}</Grid>
+                            <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale}</Grid>
+                            <Grid item xs={3}><b>Total Participants:</b> {totalP}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator} </Grid>
-                            <Grid item xs={3}><b>Mobilizer:</b> {actObj.workActivity.mobilizer} </Grid>
-                            <Grid item xs={6}><b>Remarks:</b> {actObj.workActivity.remarks} </Grid>
+                            <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator}</Grid>
+                            <Grid item xs={3}><b>Mobilizer:</b> {actObj.workActivity.mobilizer}</Grid>
+                            <Grid item xs={6}><b>Remarks:</b> {actObj.workActivity.remarks}</Grid>
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                            <Grid item xs={3}><b>Watershed:</b> {WsName(actObj.workActivity.watershedId)} </Grid>
-                            <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)} </Grid>
-                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)} </Grid>
-                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)} </Grid>
-                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)} </Grid>
-                            <Grid item xs={3}><b>Village:</b> {VillageName(actObj.workActivity.village)} </Grid>
-                            <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo} </Grid>
+                            <Grid item xs={3}><b>Watershed:</b> {WsName(actObj.workActivity.watershedId)}</Grid>
+                            <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
+                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
+                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
+                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
+                            <Grid item xs={3}><b>Village:</b> {VillageName(actObj.workActivity.village)}</Grid>
+                            <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
-                            <Grid item xs={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit} </Grid>
-                            <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated} </Grid>
+                            <Grid item xs={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit}</Grid>
+                            <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated}</Grid>
                             {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
-                                <Grid item xs={3}><b>Land Type:</b> {actObj.workActivity.landType} </Grid>
-                                <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved} </Grid>
+                                <Grid item xs={3}><b>Land Type:</b> {actObj.workActivity.landType}</Grid>
+                                <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved}</Grid>
                             </>}
-                            <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.workActivity.amountSpend} </Grid>
-                            <Grid item xs={3}><b>Funds source:</b> {actObj.workActivity.sourceExpenditure} </Grid>
+                            <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.workActivity.amountSpend}</Grid>
+                            <Grid item xs={3}><b>Funds source:</b> {actObj.workActivity.sourceExpenditure}</Grid>
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
@@ -766,53 +766,53 @@ export const WsActivity: React.FC = () => {
                     <DialogTitle>Activity Progress</DialogTitle>
 
                     <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType} </Grid>
+                        <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType}</Grid>
                         <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName}</Grid>
-                        {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription} </Grid>}
-                        <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus} </Grid>
+                        {actObj.workActivity.activityName === 'Sustainable Practices' ? <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription}</Grid> : <Grid item xs={3} />}
+                        <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus}</Grid>
 
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent} </Grid>
-                            <Grid item xs={3}><b>Event Type:</b> {actObj.workActivity.capacitytypeEvent} </Grid>
-                            <Grid item xs={3}><b>Event Date:</b> {actObj.workActivity.eventDate} </Grid>
-                            <Grid item xs={3}><b>Target Group:</b> {actObj.workActivity.participantsType} </Grid>
+                            <Grid item xs={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent}</Grid>
+                            <Grid item xs={3}><b>Event Type:</b> {actObj.workActivity.capacitytypeEvent}</Grid>
+                            <Grid item xs={3}><b>Event Date:</b> {actObj.workActivity.eventDate}</Grid>
+                            <Grid item xs={3}><b>Target Group:</b> {actObj.workActivity.participantsType}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
-                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)} </Grid>
-                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)} </Grid>
-                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)} </Grid>
+                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
+                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
+                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
                             <Grid item xs={3}><b>Habitation:</b> {VillageName(actObj.workActivity.habitationsCovered)}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale} </Grid>
-                            <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale} </Grid>
-                            <Grid item xs={3}><b>Total Participants:</b> {totalP} </Grid>
+                            <Grid item xs={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale}</Grid>
+                            <Grid item xs={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale}</Grid>
+                            <Grid item xs={3}><b>Total Participants:</b> {totalP}</Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator} </Grid>
-                            <Grid item xs={3}><b>Mobilizer:</b> {actObj.workActivity.mobilizer} </Grid>
-                            <Grid item xs={6}><b>Remarks:</b> {actObj.workActivity.remarks} </Grid>
+                            <Grid item xs={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator}</Grid>
+                            <Grid item xs={3}><b>Mobilizer:</b> {actObj.workActivity.mobilizer}</Grid>
+                            <Grid item xs={6}><b>Remarks:</b> {actObj.workActivity.remarks}</Grid>
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                            <Grid item xs={3}><b>Watershed:</b> {WsName(actObj.workActivity.watershedId)} </Grid>
-                            <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)} </Grid>
-                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)} </Grid>
-                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)} </Grid>
-                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)} </Grid>
-                            <Grid item xs={3}><b>Village:</b> {VillageName(actObj.workActivity.village)} </Grid>
-                            <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo} </Grid>
+                            <Grid item xs={3}><b>Watershed:</b> {WsName(actObj.workActivity.watershedId)}</Grid>
+                            <Grid item xs={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
+                            <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
+                            <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
+                            <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
+                            <Grid item xs={3}><b>Village:</b> {VillageName(actObj.workActivity.village)}</Grid>
+                            <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
-                            <Grid item xs={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit} </Grid>
-                            <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated} </Grid>
+                            <Grid item xs={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit}</Grid>
+                            <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated}</Grid>
                             {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
-                                <Grid item xs={3}><b>Land Type:</b> {actObj.workActivity.landType} </Grid>
-                                <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved} </Grid>
+                                <Grid item xs={3}><b>Land Type:</b> {actObj.workActivity.landType}</Grid>
+                                <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved}</Grid>
                             </>}
-                            <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.workActivity.amountSpend} </Grid>
-                            <Grid item xs={3}><b>Funds source:</b> {actObj.workActivity.sourceExpenditure} </Grid>
+                            <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.workActivity.amountSpend}</Grid>
+                            <Grid item xs={3}><b>Funds source:</b> {actObj.workActivity.sourceExpenditure}</Grid>
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
