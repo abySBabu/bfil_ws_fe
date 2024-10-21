@@ -307,14 +307,14 @@ export const WsActivity: React.FC = () => {
             "mobilizer": actObj.workActivity.mobilizer
         }
         try {
-            const resp1 = await addAct(addObj) //actObj.workActivity
+            const resp1 = await addAct(addObj)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add activity");
+                setalert(("Failed: " + resp1.message) || "Failed to add activity");
             }
         }
         catch (error) {
@@ -335,7 +335,7 @@ export const WsActivity: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to update activity");
+                setalert(("Failed: " + resp1.message) || "Failed to update activity");
             }
         }
         catch (error) {
@@ -361,7 +361,7 @@ export const WsActivity: React.FC = () => {
                 }
                 else {
                     setalertClr(false);
-                    setalert("Failed to update work flow status");
+                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
                 }
             }
             else {
@@ -391,7 +391,7 @@ export const WsActivity: React.FC = () => {
                 }
                 else {
                     setalertClr(false);
-                    setalert("Failed to update work flow status");
+                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
                 }
             }
             else {
