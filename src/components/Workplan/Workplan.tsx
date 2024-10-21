@@ -145,7 +145,7 @@ export const Workplan: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add plan");
+                setalert(("Failed: " + resp1.message) || "Failed to add plan");
             }
         }
         catch (error) {
@@ -167,7 +167,7 @@ export const Workplan: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to update plan");
+                setalert(("Failed: " + resp1.message) || "Failed to update plan");
             }
         }
         catch (error) {
