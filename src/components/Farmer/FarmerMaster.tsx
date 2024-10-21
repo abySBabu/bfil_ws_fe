@@ -252,6 +252,7 @@ export const FarmerMaster: React.FC = () => {
                             helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                         /></Grid>
                         <Grid item xs={6}><TextField
+                            disabled
                             required
                             label="Aadhar"
                             value={fmrObj.adharNumber}
