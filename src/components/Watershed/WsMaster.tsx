@@ -203,7 +203,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add watershed");
+                setalert(("Failed: " + resp.message) || "Failed to add watershed");
             }
         }
         catch (error) {
@@ -233,7 +233,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to update watershed");
+                setalert(("Failed: " + resp.message) || "Failed to update watershed");
             }
         }
         catch (error) {
@@ -254,7 +254,7 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to delete watershed");
+                setalert(("Failed: " + resp.message) || "Failed to delete watershed");
             }
         }
         catch (error) {
