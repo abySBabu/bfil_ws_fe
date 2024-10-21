@@ -255,7 +255,10 @@ export const Home: React.FC = () => {
                         </Box>
 
                         <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                            <Typography sx={{ padding: '8px 16px', fontWeight: 'bold' }}>{sessionStorage.getItem("userName") || 'Name'} - {localStorage.getItem("userRole") || 'Role'}</Typography>
+                            <Box sx={{ padding: '8px 16px' }}>
+                                <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
+                                <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+                            </Box>
                             <Divider />
                             <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
                                 <AccordionSummary

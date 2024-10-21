@@ -60,7 +60,7 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse());  }
+            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); }
         }
         catch (error) { console.log(error) }
         setLoadingResponse(false);
@@ -77,7 +77,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add farmer");
+                setalert(("Failed: " + resp.message) || "Failed to add farmer");
             }
         }
         catch (error) {
@@ -100,7 +100,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to edit farmer");
+                setalert(("Failed: " + resp.message) || "Failed to edit farmer");
             }
         }
         catch (error) {
@@ -122,7 +122,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to delete farmer");
+                setalert(("Failed: " + resp.message) || "Failed to delete farmer");
             }
         }
         catch (error) {
@@ -141,7 +141,7 @@ export const FarmerMaster: React.FC = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
+                    height: '100vh'
                 }}
             >
                 <CircularProgress size={80} />
