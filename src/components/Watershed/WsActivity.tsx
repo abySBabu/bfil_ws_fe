@@ -545,8 +545,26 @@ export const WsActivity: React.FC = () => {
                             <Grid item xs={3}><TextField required disabled label='Taluk' value={TalukName(actObj.workActivity.taluk)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Panchayat' value={PanName(actObj.workActivity.gramPanchayat)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Village' value={VillageName(actObj.workActivity.village)} /></Grid>
-                            <Grid item xs={3}><TextField required type='number' label='Survey No.' value={actObj.workActivity.surveyNo} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, surveyNo: e.target.value } })} /></Grid>
-
+                            <Grid item xs={3}>
+                                <TextField
+                                    required
+                                    type="text"
+                                    label="Survey No."
+                                    value={actObj.workActivity.surveyNo}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const validValue = value.replace(/[^0-9, ]/g, '');
+                                        setactObj({
+                                            ...actObj,
+                                            workActivity: {
+                                                ...actObj.workActivity,
+                                                surveyNo: validValue
+                                            }
+                                        });
+                                    }}
+                                    inputProps={{ pattern: "[0-9, ]*" }}
+                                />
+                            </Grid>
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                             <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
                             <Grid item xs={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
@@ -630,8 +648,26 @@ export const WsActivity: React.FC = () => {
                             <Grid item xs={3}><TextField required disabled label='Taluk' value={TalukName(actObj.workActivity.taluk)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Panchayat' value={PanName(actObj.workActivity.gramPanchayat)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Village' value={VillageName(actObj.workActivity.village)} /></Grid>
-                            <Grid item xs={3}><TextField required type='number' label='Survey No.' value={actObj.workActivity.surveyNo} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, surveyNo: e.target.value } })} /></Grid>
-
+                            <Grid item xs={3}>
+                                <TextField
+                                    required
+                                    type="text" 
+                                    label="Survey No."
+                                    value={actObj.workActivity.surveyNo}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const validValue = value.replace(/[^0-9, ]/g, '');
+                                        setactObj({
+                                            ...actObj,
+                                            workActivity: {
+                                                ...actObj.workActivity,
+                                                surveyNo: validValue
+                                            }
+                                        });
+                                    }}
+                                    inputProps={{ pattern: "[0-9, ]*" }}
+                                />
+                            </Grid>
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                             <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
                             <Grid item xs={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>

@@ -10,14 +10,11 @@ import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
-const actCard = { height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }
-
-const ActivityCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
+const ActCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
     <Grid item xs={6} lg={3}>
-        <Card sx={actCard}>
+        <Card sx={{ height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }}>
             <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant='body1' fontWeight='bold'>{activity}</Typography>
                 <Typography variant='body2'>{value} {unit}</Typography>
@@ -35,7 +32,6 @@ export const Dashboard: React.FC = () => {
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
 
     React.useEffect(() => {
-
         const fetchData = async () => {
             try {
                 const resp1 = await DashKey();
@@ -55,25 +51,13 @@ export const Dashboard: React.FC = () => {
             }
             catch (error) { console.log(error) }
             setLoadingResponse(false);
-        }
-
-        fetchData()
+        }; fetchData();
     }, [])
-
-
 
     return (<>
         <div>
             {loadingResponse ?
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100%',
-                    }
-                    }
-                >
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <CircularProgress size={80} />
                 </Box > : <>
                     <Grid container spacing={1}>
@@ -126,7 +110,7 @@ export const Dashboard: React.FC = () => {
                                     Object.entries(supplyList)?.map(([activity, data], i) => {
                                         const [unit, value] = Object.entries(data)[0];
                                         return (
-                                            <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
                                         );
                                     })
                                 }
@@ -135,7 +119,7 @@ export const Dashboard: React.FC = () => {
                                     Object.entries(demandList)?.map(([activity, data], i) => {
                                         const [unit, value] = Object.entries(data)[0];
                                         return (
-                                            <ActivityCard key={i} activity={activity} value={value} unit={unit} />
+                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
                                         );
                                     })
                                 }
