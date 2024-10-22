@@ -423,19 +423,19 @@ export const WsActivity: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />}
-                            onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
+                        {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} sx={{ height: '48px', ml: '4px' }}
+                            onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} >Add Activity</Button>)}
                     </div>
                 </Box>
 
                 {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Activity</TableCell>
@@ -477,7 +477,6 @@ export const WsActivity: React.FC = () => {
                             </TableRow>
                         ))}
                     </TableBody>
-
 
                     <TableFooter><TableRow>
                         <TablePagination
@@ -651,7 +650,7 @@ export const WsActivity: React.FC = () => {
                             <Grid item xs={3}>
                                 <TextField
                                     required
-                                    type="text" 
+                                    type="text"
                                     label="Survey No."
                                     value={actObj.workActivity.surveyNo}
                                     onChange={(e) => {

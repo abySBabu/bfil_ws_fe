@@ -186,18 +186,18 @@ export const Workplan: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Plan</Button>}
+                        {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '48px', ml: '4px' }}>Add Plan</Button>}
                     </div>
                 </Box>
 
                 {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Watershed</TableCell>
