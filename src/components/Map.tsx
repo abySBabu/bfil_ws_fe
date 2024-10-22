@@ -14,10 +14,13 @@ import VectorSource from 'ol/source/Vector';
 import KML from 'ol/format/KML';
 import { defaults } from 'ol/control/defaults';
 import { defaults as interactionDefaults } from 'ol/interaction/defaults';
+import { sd } from '../common';
+
 
 const EsriMap: React.FC = () => {
     const mapDiv = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<Map | null>(null);
+    const [view, setView] = useState<View | null>(null);
 
     useEffect(() => {
         if (mapDiv.current) {
@@ -38,24 +41,46 @@ const EsriMap: React.FC = () => {
                 }),
             });
 
+            const mapView = new View({
+                center: fromLonLat([75.9218, 14.4644]),
+                zoom: 7,
+            });
+
             const olMap = new Map({
                 target: mapDiv.current,
                 layers: [layer1, rasterLayer, kmlLayer],
-                view: new View({
-                    center: fromLonLat([75.9218, 14.4644]),
-                    zoom: 7,
-                }),
-                controls: defaults(),
+                view: mapView,
+                controls: [],
                 interactions: interactionDefaults({}),
             });
 
             setMap(olMap);
+            setView(mapView);
 
             return () => {
-                olMap.setTarget(undefined); 
+                olMap.setTarget(undefined);
             };
         }
     }, []);
+
+    const handleZoomIn = () => {
+        if (view) {
+            const zoom = view.getZoom();
+            if (zoom !== undefined) {
+                view.setZoom(zoom + 1);
+            }
+        }
+    };
+
+    // Zoom out function
+    const handleZoomOut = () => {
+        if (view) {
+            const zoom = view.getZoom();
+            if (zoom !== undefined) {
+                view.setZoom(zoom - 1);
+            }
+        }
+    };
 
     // Full-screen toggle function
     const toggleFullScreen = () => {
@@ -89,6 +114,20 @@ const EsriMap: React.FC = () => {
                 gap: '10px'
             }}>
                 {/* Zoom In Button */}
+                <IconButton
+                    onClick={handleZoomIn}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
+                >
+                    <ZoomInIcon />
+                </IconButton>
+
+                {/* Zoom Out Button */}
+                <IconButton
+                    onClick={handleZoomOut}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
+                >
+                    <ZoomOutIcon />
+                </IconButton>
             </Box>
 
             <Box style={{
@@ -100,7 +139,7 @@ const EsriMap: React.FC = () => {
                 {/* Fullscreen Button */}
                 <IconButton
                     onClick={toggleFullScreen}
-                    style={{ backgroundColor: 'lightblue' }}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <FullscreenIcon />
                 </IconButton>
