@@ -44,7 +44,6 @@ export const Home: React.FC = () => {
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const [uName, setuName] = React.useState('');
-    const [actCount, setActCount] = useState(Number(localStorage.getItem("actCount") as string) || 0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
@@ -122,7 +121,6 @@ export const Home: React.FC = () => {
                         const resp0 = await ListSide(uStatus.workflowstatusName);
                         if (resp0.status === 'success') {
                             localStorage.setItem("actCount", resp0.workActivityCount)
-                            setActCount(Number(localStorage.getItem("actCount") as string) || 0);
                             let sortscreenlist = resp0.data;
                             setsideList(sortscreenlist);
                             const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
@@ -174,115 +172,101 @@ export const Home: React.FC = () => {
             setLoadingResponse(false);
 
         }; fetchLoc();
-    }, [i18n.language, actCount]);
+    }, [i18n.language]);
 
-    return (
-        <div>
-            {loadingResponse ?
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100vh', // Ensure it takes up the full height
-                    }
-                    }
+    return (<>
+        {loadingResponse ? <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh', // Ensure it takes up the full height
+            }}
+        >
+            <CircularProgress size={80} />
+        </Box > : <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
+                    <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
+                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+                </Box>
+                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
+                    <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
+                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
+                </Box>
+            </Toolbar>
+
+            {!hasPermission &&
+                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'hidden' }}>
+                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                        <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
+                            PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
+                                <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                                    <ListItemText primary={section.name} />
+                                </ListItemButton>
+                            </ListItem>)
+                        ))}</List>
+                    </Box>
+
+                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+                        {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
+                    </Box>
+                </Paper>
+            }
+
+            {hasPermission &&
+                <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
+                    <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                        You do not have permission to view any sections.
+                    </Typography>
+                </Paper>
+            }
+
+            <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '4%' }}>
+                <Typography variant='body2' sx={{ color: sd('--page-foot-txtcolor') }}>
+                    {t("p_Home.Pragat_Watershed_Footer")}
+                </Typography>
+            </Box>
+        </Box>}
+
+        {tokenExpired && <Dialog
+            open={openSnackbar} maxWidth={'xs'}>
+            <DialogContent sx={{ mt: 2 }}>
+                {message}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>Okay</Button>
+            </DialogActions>
+        </Dialog>}
+
+        <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
+            <Box sx={{ padding: '8px 16px' }}>
+                <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
+                <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+            </Box>
+            <Divider />
+            <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+                <AccordionSummary
+                    expandIcon={<ArrowDropDownIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
                 >
-                    <CircularProgress size={80} />
-                </Box > : <>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), minHeight: '100vh' }}>
-                        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
-                            <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                                <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
-                                <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
-                            </Box>
-                            <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
-                            <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                                <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
-                                <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
-                            </Box>
-                        </Toolbar>
-
-                        {!hasPermission &&
-                            <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1 }}>
-                                {tokenExpired &&
-                                    <Dialog
-                                        open={openSnackbar} maxWidth={'xs'}>
-                                        <DialogContent sx={{ mt: 2 }}>
-                                            {message}
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={handleClose}>Okay</Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                }
-                                <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
-                                    <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
-                                        PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
-                                            <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
-                                                <ListItemText primary={section.name} />
-                                            </ListItemButton>
-                                        </ListItem>)
-                                    ))}</List>
-                                </Box>
-
-                                <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
-                                    {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
-                                </Box>
-                            </Paper>
-                        }
-                        {hasPermission &&
-                            <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
-                                {tokenExpired &&
-                                    <Dialog
-                                        open={openSnackbar} maxWidth={'xs'}>
-                                        <DialogContent sx={{ mt: 2 }}>
-                                            {message}
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={handleClose}>Okay</Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                }
-                                <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                                    You do not have permission to view any sections.
-                                </Typography>
-                            </Paper>
-                        }
-
-                        <Box component='footer' sx={{ textAlign: 'center', color: sd('--page-foot-txtcolor'), height: '4%', mt: '4px' }}>
-                            <Typography variant='body2'>{t("p_Home.Pragat_Watershed_Footer")}</Typography>
-                        </Box>
-
-                        <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
-                            <Box sx={{ padding: '8px 16px' }}>
-                                <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
-                                <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
-                            </Box>
-                            <Divider />
-                            <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
-                                <AccordionSummary
-                                    expandIcon={<ArrowDropDownIcon />}
-                                    aria-controls="panel1-content"
-                                    id="panel1-header"
-                                >
-                                    <Typography>Language</Typography>
-                                </AccordionSummary>
-                                <Divider />
-                                <AccordionDetails>
-                                    <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
-                                    <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
-                                </AccordionDetails>
-                                <Divider />
-                            </Accordion>
-                            {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
-                            <MenuItem onClick={logOut}>Logout</MenuItem>
-                        </Menu>
-                        {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
+                    <Typography>Language</Typography>
+                </AccordionSummary>
+                <Divider />
+                <AccordionDetails>
+                    <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
+                    <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
+                </AccordionDetails>
+                <Divider />
+            </Accordion>
+            {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
+            <MenuItem onClick={logOut}>Logout</MenuItem>
+        </Menu>
+        {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
                 <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
-            </Menu> */}
-                    </Box>
-                </>}</div>
-    )
+        </Menu> */}
+    </>)
 }

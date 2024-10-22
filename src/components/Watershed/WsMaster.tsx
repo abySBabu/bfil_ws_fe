@@ -268,7 +268,7 @@ export const WsMaster: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
         {loadingResponse ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>

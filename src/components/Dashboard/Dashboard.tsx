@@ -70,7 +70,7 @@ export const Dashboard: React.FC = () => {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        height: '100vh', // Ensure it takes up the full height
+                        height: '100%',
                     }
                     }
                 >

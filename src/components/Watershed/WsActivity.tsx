@@ -420,17 +420,9 @@ export const WsActivity: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ?
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
-                }}
-            >
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
                     <div>
