@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -50,10 +50,8 @@ export const Home: React.FC = () => {
 
     const countHeader = (textKey: string, badgeCount: number) => {
         return (<Box display="flex" alignItems="center" justifyContent="space-between">
-            <Typography variant="body1" sx={{ mr: 1 }}>
-                {t(textKey)}
-            </Typography>
-            <Badge badgeContent={badgeCount} overlap="circular" sx={{ '& .MuiBadge-badge': { backgroundColor: '#fff', color: '#000' } }} />
+            <Typography>{t(textKey)}</Typography>
+            <Badge badgeContent={badgeCount} overlap="circular" sx={{ '& .MuiBadge-badge': { backgroundColor: '#fff', color: sd('--text-color-special') } }} />
         </Box>)
     }
 
@@ -246,6 +244,7 @@ export const Home: React.FC = () => {
                 <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
             </Box>
             <Divider />
+            <MenuItem component={Link} href="/bfilreacttest/profile">My Profile</MenuItem>
             <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
                 <AccordionSummary
                     expandIcon={<ArrowDropDownIcon />}

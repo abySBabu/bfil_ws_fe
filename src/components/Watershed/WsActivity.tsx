@@ -853,7 +853,7 @@ export const WsActivity: React.FC = () => {
                                 <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
+                                            <TableCell sx={{ borderRight: '1px solid black' }} width='50%'>Remark</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
