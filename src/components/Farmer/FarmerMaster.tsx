@@ -60,7 +60,7 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse());  }
+            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); }
         }
         catch (error) { console.log(error) }
         setLoadingResponse(false);
@@ -77,7 +77,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add farmer");
+                setalert(("Failed: " + resp.message) || "Failed to add farmer");
             }
         }
         catch (error) {
@@ -100,7 +100,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to edit farmer");
+                setalert(("Failed: " + resp.message) || "Failed to edit farmer");
             }
         }
         catch (error) {
@@ -122,7 +122,7 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to delete farmer");
+                setalert(("Failed: " + resp.message) || "Failed to delete farmer");
             }
         }
         catch (error) {
@@ -136,28 +136,21 @@ export const FarmerMaster: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
         {loadingResponse ?
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
-                }}
-            >
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '100%' }}
+                        {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
                             onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
                     </div>
                 </Box>
                 {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
@@ -252,6 +245,7 @@ export const FarmerMaster: React.FC = () => {
                             helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                         /></Grid>
                         <Grid item xs={6}><TextField
+                            disabled
                             required
                             label="Aadhar"
                             value={fmrObj.adharNumber}

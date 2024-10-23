@@ -3,53 +3,90 @@ import { Box, IconButton } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import Map from '@arcgis/core/Map';
-import MapView from '@arcgis/core/views/MapView';
-import TileLayer from '@arcgis/core/layers/TileLayer';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import ImageTile from 'ol/source/ImageTile';
+import { fromLonLat } from 'ol/proj';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import KML from 'ol/format/KML';
+import { defaults } from 'ol/control/defaults';
+import { defaults as interactionDefaults } from 'ol/interaction/defaults';
 import { sd } from '../common';
+
 
 const EsriMap: React.FC = () => {
     const mapDiv = useRef<HTMLDivElement>(null);
-    const [view, setView] = useState<MapView | null>(null);
+    const [map, setMap] = useState<Map | null>(null);
+    const [view, setView] = useState<View | null>(null);
 
     useEffect(() => {
         if (mapDiv.current) {
-            const map = new Map({
-                basemap: 'topo-vector',
+            const layer1 = new TileLayer({
+                source: new OSM(),
             });
 
-            const mapView = new MapView({
-                container: mapDiv.current,
-                map: map,
-                center: [76.8343, 17.3297],
-                zoom: 8,
+            const kmlLayer = new VectorLayer({
+                source: new VectorSource({
+                    url: 'http://139.162.45.53:9091/TA2/2024/10/18/1729256165530Kalaburagi3.kml',
+                    format: new KML(),
+                }),
             });
 
-            const featureLayer1 = new TileLayer({
-                url: 'https://kgis.ksrsac.in/kgismaps1/rest/services/NR_V2/Watershed/MapServer/4'
+            const rasterLayer = new TileLayer({
+                source: new ImageTile({
+                    url: 'https://kgis.ksrsac.in/kgismaps2/rest/services/CadastralData_Admin/Cached_CadastralData_Admin/MapServer/tile/{z}/{y}/{x}',
+                }),
             });
 
-            const featureLayer2 = new TileLayer({
-                url: 'https://kgis.ksrsac.in/kgismaps2/rest/services/Boundaries/Admin_Cached/MapServer/1'
+            const mapView = new View({
+                center: fromLonLat([75.9218, 14.4644]),
+                zoom: 7,
             });
 
-            map.addMany([featureLayer1, featureLayer2]);
-            mapView.ui.components = [];
+            const olMap = new Map({
+                target: mapDiv.current,
+                layers: [layer1, rasterLayer, kmlLayer],
+                view: mapView,
+                controls: [],
+                interactions: interactionDefaults({}),
+            });
+
+            setMap(olMap);
             setView(mapView);
 
             return () => {
-                if (mapView) {
-                    mapView.destroy();
-                }
+                olMap.setTarget(undefined);
             };
         }
     }, []);
+
+    const handleZoomIn = () => {
+        if (view) {
+            const zoom = view.getZoom();
+            if (zoom !== undefined) {
+                view.setZoom(zoom + 1);
+            }
+        }
+    };
+
+    // Zoom out function
+    const handleZoomOut = () => {
+        if (view) {
+            const zoom = view.getZoom();
+            if (zoom !== undefined) {
+                view.setZoom(zoom - 1);
+            }
+        }
+    };
 
     // Full-screen toggle function
     const toggleFullScreen = () => {
         if (mapDiv.current) {
             if (!document.fullscreenElement) {
-                mapDiv.current.requestFullscreen().catch((err) => {
+                mapDiv.current.requestFullscreen().catch(err => {
                     console.error(`Error attempting to enable full-screen mode: ${err.message}`);
                 });
             } else {
@@ -60,7 +97,7 @@ const EsriMap: React.FC = () => {
 
     return (
         <Box style={{
-            height: '44vh', position: 'relative', border: `2px solid ${sd('--button-bgcolor-disabled')}`,
+            height: '44vh', position: 'relative', border: '2px solid gray',
             borderRadius: '4px',
         }}>
             {/* Map Div */}
@@ -74,12 +111,11 @@ const EsriMap: React.FC = () => {
                 zIndex: 10,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px' // Space between buttons
-            }}
-            >
+                gap: '10px'
+            }}>
                 {/* Zoom In Button */}
                 <IconButton
-                    onClick={() => view?.goTo({ zoom: view.zoom + 1 })}
+                    onClick={handleZoomIn}
                     style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <ZoomInIcon />
@@ -87,24 +123,23 @@ const EsriMap: React.FC = () => {
 
                 {/* Zoom Out Button */}
                 <IconButton
-                    onClick={() => view?.goTo({ zoom: view.zoom - 1 })}
-                    style={{ marginBottom: 10,backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
+                    onClick={handleZoomOut}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <ZoomOutIcon />
                 </IconButton>
-
-
             </Box>
+
             <Box style={{
                 position: 'absolute',
                 top: 10,
                 right: 10,
-                zIndex: 10, // Increased z-index for fullscreen button
+                zIndex: 10,
             }}>
                 {/* Fullscreen Button */}
                 <IconButton
                     onClick={toggleFullScreen}
-                    style={{ backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default')  }}
+                    style={{ marginBottom: 10, backgroundColor: sd('--button-bgcolor-active-brand'), color: sd('--text-color-default') }}
                 >
                     <FullscreenIcon />
                 </IconButton>

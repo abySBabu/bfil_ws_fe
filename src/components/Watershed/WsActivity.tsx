@@ -307,14 +307,14 @@ export const WsActivity: React.FC = () => {
             "mobilizer": actObj.workActivity.mobilizer
         }
         try {
-            const resp1 = await addAct(addObj) //actObj.workActivity
+            const resp1 = await addAct(addObj)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
             }
             else {
                 setalertClr(false);
-                setalert("Failed to add activity");
+                setalert(("Failed: " + resp1.message) || "Failed to add activity");
             }
         }
         catch (error) {
@@ -335,7 +335,7 @@ export const WsActivity: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert("Failed to update activity");
+                setalert(("Failed: " + resp1.message) || "Failed to update activity");
             }
         }
         catch (error) {
@@ -361,7 +361,7 @@ export const WsActivity: React.FC = () => {
                 }
                 else {
                     setalertClr(false);
-                    setalert("Failed to update work flow status");
+                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
                 }
             }
             else {
@@ -391,7 +391,7 @@ export const WsActivity: React.FC = () => {
                 }
                 else {
                     setalertClr(false);
-                    setalert("Failed to update work flow status");
+                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
                 }
             }
             else {
@@ -420,30 +420,22 @@ export const WsActivity: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ?
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
-                }}
-            >
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />}
-                            onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} sx={{ height: '100%', ml: '4px' }}>Add Activity</Button>)}
+                        {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} sx={{ height: '48px', ml: '4px' }}
+                            onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setaddM(true); }} >Add Activity</Button>)}
                     </div>
                 </Box>
 
                 {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '75vh' }}><Table>
+                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Activity</TableCell>
@@ -485,7 +477,6 @@ export const WsActivity: React.FC = () => {
                             </TableRow>
                         ))}
                     </TableBody>
-
 
                     <TableFooter><TableRow>
                         <TablePagination
@@ -553,8 +544,26 @@ export const WsActivity: React.FC = () => {
                             <Grid item xs={3}><TextField required disabled label='Taluk' value={TalukName(actObj.workActivity.taluk)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Panchayat' value={PanName(actObj.workActivity.gramPanchayat)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Village' value={VillageName(actObj.workActivity.village)} /></Grid>
-                            <Grid item xs={3}><TextField required type='number' label='Survey No.' value={actObj.workActivity.surveyNo} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, surveyNo: e.target.value } })} /></Grid>
-
+                            <Grid item xs={3}>
+                                <TextField
+                                    required
+                                    type="text"
+                                    label="Survey No."
+                                    value={actObj.workActivity.surveyNo}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const validValue = value.replace(/[^0-9, ]/g, '');
+                                        setactObj({
+                                            ...actObj,
+                                            workActivity: {
+                                                ...actObj.workActivity,
+                                                surveyNo: validValue
+                                            }
+                                        });
+                                    }}
+                                    inputProps={{ pattern: "[0-9, ]*" }}
+                                />
+                            </Grid>
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                             <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
                             <Grid item xs={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
@@ -638,8 +647,26 @@ export const WsActivity: React.FC = () => {
                             <Grid item xs={3}><TextField required disabled label='Taluk' value={TalukName(actObj.workActivity.taluk)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Panchayat' value={PanName(actObj.workActivity.gramPanchayat)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Village' value={VillageName(actObj.workActivity.village)} /></Grid>
-                            <Grid item xs={3}><TextField required type='number' label='Survey No.' value={actObj.workActivity.surveyNo} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, surveyNo: e.target.value } })} /></Grid>
-
+                            <Grid item xs={3}>
+                                <TextField
+                                    required
+                                    type="text"
+                                    label="Survey No."
+                                    value={actObj.workActivity.surveyNo}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const validValue = value.replace(/[^0-9, ]/g, '');
+                                        setactObj({
+                                            ...actObj,
+                                            workActivity: {
+                                                ...actObj.workActivity,
+                                                surveyNo: validValue
+                                            }
+                                        });
+                                    }}
+                                    inputProps={{ pattern: "[0-9, ]*" }}
+                                />
+                            </Grid>
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
                             <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
                             <Grid item xs={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
@@ -666,7 +693,7 @@ export const WsActivity: React.FC = () => {
 
                     <DialogActions>
                         <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
-                        <Button onClick={() => ActEdit(actObj.workActivity.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                        <Button onClick={() => ActEdit(actObj.workActivity.activityId)} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
                     </DialogActions>
                 </Dialog>
 
@@ -826,7 +853,7 @@ export const WsActivity: React.FC = () => {
                                 <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
+                                            <TableCell sx={{ borderRight: '1px solid black' }} width='50%'>Remark</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
                                             <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
