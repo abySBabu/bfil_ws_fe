@@ -165,10 +165,10 @@ export default function MappingList() {
                                     <TableCell>
                                         {fetchUserData(row.userId)}
                                     </TableCell>
-                                    <TableCell >
+                                    <TableCell sx={{textWrap:'wrap', width:'50%'}}>
                                         {fetchWsData(row.watershedId)}
                                     </TableCell>
-                                    <TableCell >
+                                    <TableCell sx={{textWrap:'wrap', width:'30%'}} >
                                         {row.remarks}
                                     </TableCell>
                                     {PerChk('EDIT_Watershed Mapping') && (
