@@ -18,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="/home" element={<Home />} />
+                        <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                 </Box></ThemeProvider>
             </Router >
