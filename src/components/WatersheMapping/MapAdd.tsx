@@ -82,7 +82,16 @@ export default function (props: mapTypeProps) {
                     });
 
                     // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
-                    setUserList(sorteduserList);
+                    const filteredUserList = sorteduserList.filter((user) => {
+                        const isCRP = user.userRoleList[0].roleName === 'Community Resource person';
+
+                        const isInMapList = props.mapList.some((mapItem) => mapItem.userId === user.userId);
+
+                        return !(isCRP && isInMapList);
+                    });
+                    const sortedUserList = filteredUserList.sort((a, b) => a.userName.localeCompare(b.userName));
+
+                    setUserList(sortedUserList);
                 }
             } catch (error) {
                 console.log(error)
