@@ -693,7 +693,7 @@ export const WsActivity: React.FC = () => {
 
                     <DialogActions>
                         <Button onClick={() => seteditM(false)} disabled={loading}>Cancel</Button>
-                        <Button onClick={() => ActEdit(actObj.workActivity.activityId)} disabled={loading} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                        <Button onClick={() => ActEdit(actObj.workActivity.activityId)} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
                     </DialogActions>
                 </Dialog>
 
