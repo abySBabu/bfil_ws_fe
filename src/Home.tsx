@@ -44,6 +44,7 @@ export const Home: React.FC = () => {
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const [uName, setuName] = React.useState('');
+    const [actCount, setactCount] = useState(0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
@@ -118,7 +119,7 @@ export const Home: React.FC = () => {
                         localStorage.setItem("userStatus", uStatus.workflowstatusName)
                         const resp0 = await ListSide(uStatus.workflowstatusName);
                         if (resp0.status === 'success') {
-                            localStorage.setItem("actCount", resp0.workActivityCount)
+                            setactCount(resp0.workActivityCount)
                             let sortscreenlist = resp0.data;
                             setsideList(sortscreenlist);
                             const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
@@ -136,7 +137,7 @@ export const Home: React.FC = () => {
                                     case 'Watershed Mapping':
                                         return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                                     case 'Watershed Activity':
-                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', Number(localStorage.getItem("actCount") as string)), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
                                     case 'Work Plan':
                                         return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                                     case 'Report':

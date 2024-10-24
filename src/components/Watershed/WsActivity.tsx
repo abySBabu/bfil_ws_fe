@@ -70,7 +70,7 @@ export const actDef = {
     ]
 }
 
-export const WsActivity: React.FC = () => {
+export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatch<React.SetStateAction<number>>; }> = ({ actCount, setactCount }) => {
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -356,8 +356,7 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    const actCount = Number(localStorage.getItem("actCount") as string)
-                    localStorage.setItem("actCount", (actCount - 1).toString());
+                    setactCount(actCount - 1);
                 }
                 else {
                     setalertClr(false);
@@ -386,8 +385,7 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    const actCount = Number(localStorage.getItem("actCount") as string)
-                    localStorage.setItem("actCount", (actCount - 1).toString());
+                    setactCount(actCount - 1);
                 }
                 else {
                     setalertClr(false);

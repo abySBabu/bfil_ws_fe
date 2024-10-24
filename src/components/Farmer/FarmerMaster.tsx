@@ -73,17 +73,17 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Farmer added");
+                setalert("Beneficiary added");
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to add farmer");
+                setalert(("Failed: " + resp.message) || "Failed to add beneficiary");
             }
         }
         catch (error) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to add farmer");
+            setalert("Failed to add beneficiary");
         }
         setLoading(false);
         setaddM(false);
@@ -96,17 +96,17 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Farmer edited");
+                setalert("Beneficiary edited");
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to edit farmer");
+                setalert(("Failed: " + resp.message) || "Failed to edit beneficiary");
             }
         }
         catch (error) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to edit farmer");
+            setalert("Failed to edit beneficiary");
         }
         setLoading(false);
         seteditM(false);
@@ -118,16 +118,16 @@ export const FarmerMaster: React.FC = () => {
             const resp = await deleteFarmer(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Farmer deleted`);
+                setalert(`Beneficiary deleted`);
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to delete farmer");
+                setalert(("Failed: " + resp.message) || "Failed to delete beneficiary");
             }
         }
         catch (error) {
             console.log(error); setalertClr(false);
-            setalert("Failed to delete farmer");
+            setalert("Failed to delete beneficiary");
         }
         setLoading(false);
         setdeleteM('');
@@ -140,12 +140,12 @@ export const FarmerMaster: React.FC = () => {
                 <CircularProgress size={80} />
             </Box> : <>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
-                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
+                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
                     </div>
                 </Box>
                 {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
@@ -166,8 +166,8 @@ export const FarmerMaster: React.FC = () => {
                             <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                             <TableCell>{w.mobileNumber}</TableCell>
                             {PerChk('EDIT_Farmer Master') && <TableCell>
-                                <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                                <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
                     ))}</TableBody>
@@ -186,7 +186,7 @@ export const FarmerMaster: React.FC = () => {
                 </Table></TableContainer>}
 
                 <Dialog open={addM} maxWidth='sm'>
-                    <DialogTitle>Add New Farmer</DialogTitle>
+                    <DialogTitle>Add New Beneficiary</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12}>
@@ -229,7 +229,7 @@ export const FarmerMaster: React.FC = () => {
                 </Dialog>
 
                 <Dialog open={editM} maxWidth='sm'>
-                    <DialogTitle>Edit farmer</DialogTitle>
+                    <DialogTitle>Edit beneficiary</DialogTitle>
 
                     <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                         <Grid item xs={12}><TextField
@@ -272,8 +272,8 @@ export const FarmerMaster: React.FC = () => {
                 </Dialog>
 
                 <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-                    <DialogTitle>Delete farmer</DialogTitle>
-                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
+                    <DialogTitle>Delete beneficiary</DialogTitle>
+                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this beneficiary?</DialogContent>
                     <DialogActions>
                         <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
                         <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>
