@@ -13,7 +13,7 @@ import './i18n';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         {/* <Router basename='/bfilreact'> */}
-        <Router basename='/bfilreacttest'>
+        <Router basename='/bfilreactdev'>
             <ThemeProvider theme={bfilTheme}><Box sx={{ m: '-8px' }}>
                 <Routes>
                     <Route path="/" element={<Login />} />
