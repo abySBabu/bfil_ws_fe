@@ -132,7 +132,7 @@ export const Home: React.FC = () => {
                                         return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
                                     case 'Watershed Master':
                                         return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
-                                    case 'Farmer Master':
+                                    case 'Beneficiary Master':
                                         return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
                                     case 'Watershed Mapping':
                                         return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
