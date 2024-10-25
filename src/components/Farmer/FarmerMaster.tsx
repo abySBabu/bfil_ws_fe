@@ -268,8 +268,8 @@ export const FarmerMaster: React.FC = () => {
                     </TableRow></TableFooter>
                 </Table></TableContainer>}
 
-                <Dialog open={addM} maxWidth='sm'>
-                    <DialogTitle>Add New Beneficiary</DialogTitle>
+                <Dialog open={addM || editM}>
+                    <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12}>
@@ -303,7 +303,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
-                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
                         <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
                             {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                         </TextField></Grid>
@@ -322,67 +322,9 @@ export const FarmerMaster: React.FC = () => {
                     </Grid></DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
-                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck || loading}>Add</Button>
-                    </DialogActions>
-                </Dialog>
-
-                <Dialog open={editM} maxWidth='sm'>
-                    <DialogTitle>Edit beneficiary</DialogTitle>
-
-                    <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={12}><TextField
-                            required
-                            label="Name"
-                            value={fmrObj.wsfarmerName}
-                            onChange={(e) => {
-                                const regex = /^[A-Za-z\s]*$/;
-                                if (regex.test(e.target.value)) {
-                                    setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
-                                }
-                            }}
-                            helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
-                        /></Grid>
-                        <Grid item xs={6}><TextField
-                            disabled
-                            required
-                            label="Aadhar"
-                            value={fmrObj.adharNumber}
-                            onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
-                            inputProps={{ maxLength: 12 }}
-                            type="tel"
-                            helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
-                        /></Grid>
-                        <Grid item xs={6}><TextField
-                            required
-                            label="Mobile"
-                            value={fmrObj.mobileNumber}
-                            onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
-                            inputProps={{ maxLength: 10 }}
-                            type="tel"
-                            helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
-                        /></Grid>
-                        <Grid item xs={12}><Divider /></Grid>
-                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
-                            {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
-                        </TextField></Grid>
-                        <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
-                            {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
-                        </TextField></Grid>
-                        <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
-                            {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
-                        </TextField></Grid>
-                        <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={fmrObj.panchayat} onChange={(e) => panchayatCh(e.target.value)}>
-                            {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
-                        </TextField></Grid>
-                        <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
-                            {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                        </TextField></Grid>
-                    </Grid></DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
-                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck || loading}>Update</Button>
+                        <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Cancel</Button>
+                        {addM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck}>Add</Button>}
+                        {editM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>}
                     </DialogActions>
                 </Dialog>
 
