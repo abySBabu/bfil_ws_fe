@@ -2,22 +2,28 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
-    InputAdornment, Typography, CircularProgress
+    InputAdornment, Typography, CircularProgress, MenuItem, Divider
 } from "@mui/material";
 import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
+import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 
 export const fmrDef = {
     wsfarmerId: "",
     adharNumber: "",
     mobileNumber: "",
     wsfarmerName: "",
+    state: "1",
+    district: "",
+    taluk: "",
+    panchayat: "",
+    village: "",
+    remarks: "",
     createdUser: "",
+    createTime: "",
     updatedUser: "",
     updatedTime: "",
-    remarks: "",
-    createTime: ""
 }
 
 export const FarmerMaster: React.FC = () => {
@@ -34,6 +40,11 @@ export const FarmerMaster: React.FC = () => {
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+    const [stOps, setstOps] = React.useState<any[]>([]);
+    const [dsOps, setdsOps] = React.useState<any[]>([]);
+    const [tlOps, settlOps] = React.useState<any[]>([]);
+    const [panOps, setpanOps] = React.useState<any[]>([]);
+    const [vilOps, setvilOps] = React.useState<any[]>([]);
 
     const handleFieldChange = (field: string, value: string, validator: (value: string) => boolean) => {
         setIsTouched((prev) => ({ ...prev, [field]: true }));
@@ -57,14 +68,86 @@ export const FarmerMaster: React.FC = () => {
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.district) {
+                    const resp = await talukById(fmrObj.district);
+                    if (resp.status === 'success') { settlOps(resp.data); }
+                } else { settlOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.district])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.taluk) {
+                    const resp = await panchayatById(fmrObj.taluk);
+                    if (resp.status === 'success') { setpanOps(resp.data); }
+                } else { setpanOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.taluk])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.panchayat) {
+                    const resp = await VillageById(fmrObj.panchayat);
+                    if (resp.status === 'success') { setvilOps(resp.data); }
+                } else { setvilOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.panchayat])
+
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
             if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); }
+            setstOps(JSON.parse(localStorage.getItem("StateList") as string))
+            setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
         setLoadingResponse(false);
     };
+
+    const districtCh = (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            district: e,
+            taluk: '',
+            panchayat: '',
+            village: ''
+        })
+    }
+
+    const talukCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            taluk: e,
+            panchayat: '',
+            village: ''
+        })
+    }
+
+    const panchayatCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            panchayat: e,
+            village: ''
+        })
+    }
+
+    const villageCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            village: e
+        })
+    }
 
     const fmrAdd = async () => {
         setLoading(true);
@@ -220,6 +303,22 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                            {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                            {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                            {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={fmrObj.panchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                            {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                            {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                        </TextField></Grid>
                     </Grid></DialogContent>
 
                     <DialogActions>
@@ -263,6 +362,22 @@ export const FarmerMaster: React.FC = () => {
                             type="tel"
                             helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                         /></Grid>
+                        <Grid item xs={12}><Divider /></Grid>
+                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                            {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                            {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                            {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={fmrObj.panchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                            {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                            {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                        </TextField></Grid>
                     </Grid></DialogContent>
 
                     <DialogActions>
