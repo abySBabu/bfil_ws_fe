@@ -227,7 +227,7 @@ export const FarmerMaster: React.FC = () => {
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
+                        {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
                             onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
                     </div>
                 </Box>
@@ -239,7 +239,7 @@ export const FarmerMaster: React.FC = () => {
                             <TableCell>Name</TableCell>
                             <TableCell>Aadhar</TableCell>
                             <TableCell>Mobile Number</TableCell>
-                            {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
                         </TableRow>
                     </TableHead>
 
@@ -248,7 +248,7 @@ export const FarmerMaster: React.FC = () => {
                             <TableCell>{w.wsfarmerName}</TableCell>
                             <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                             <TableCell>{w.mobileNumber}</TableCell>
-                            {PerChk('EDIT_Farmer Master') && <TableCell>
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell>
                                 <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
                                 <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                             </TableCell>}
