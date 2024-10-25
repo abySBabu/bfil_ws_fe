@@ -186,12 +186,16 @@ export const Home: React.FC = () => {
         </Box > : <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height="100%" />
                     <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='100%' />
-                </Box>
-                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
-                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
                     <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height='100%' />
+                </Box>
+                <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor'), textAlign: 'center' }}>
+                        {t("p_Home.Pragat_Watershed_Header")}
+                    </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
+                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height="100%" />
                     <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
                 </Box>
             </Toolbar>
@@ -245,7 +249,7 @@ export const Home: React.FC = () => {
                 <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
             </Box>
             <Divider />
-            <MenuItem component={Link} href="/bfilreacttest/profile">My Profile</MenuItem>
+            <MenuItem component={Link} href="profile">My Profile</MenuItem>
             <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
                 <AccordionSummary
                     expandIcon={<ArrowDropDownIcon />}
