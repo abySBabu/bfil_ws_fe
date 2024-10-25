@@ -11,54 +11,24 @@ import { talukById, panchayatById, VillageById } from '../../Services/locationSe
 import { VillageName } from '../../LocName';
 
 export const wsDef = {
-    wsId: "",
-    wsName: "",
-    wsDescription: "",
-    state: {
-        stateId: "1",
-        stateName: "",
-        createdUser: "",
-        updatedUser: "",
-        createdTime: "",
-        updatedTime: ""
-    },
-    district: {
-        districtId: "",
-        districtName: "",
-        stateId: "",
-        createdUser: "",
-        updatedUser: "",
-        createdTime: "",
-        updatedTime: ""
-    },
-    taluk: {
-        talukId: "",
-        talukName: "",
-        districtId: "",
-        createdUser: "",
-        updatedUser: "",
-        createdTime: "",
-        updatedTime: ""
-    },
-    gramPanchayat: {
-        panchayatId: "",
-        panchayatName: "",
-        talukId: "",
-        createdUser: "",
-        updatedUser: "",
-        createdTime: "",
-        updatedTime: ""
-    },
-    village: {
-        villageId: "",
-        villageName: "",
-        grampanchayatId: "",
-        createdUser: "",
-        updatedUser: "",
-        createdTime: "",
-        updatedTime: ""
-    },
-    mapLink: ""
+    watershedId: '',
+    wsName: '',
+    wsDescription: '',
+    stateId: '1',
+    stateName: '',
+    districtId: '',
+    districtName: '',
+    talukId: '',
+    talukName: '',
+    gramPanchayatId: '',
+    gramPanchayatName: '',
+    villageId: [''],
+    villages: [
+        {
+            villageName: '',
+            villageId: ''
+        }
+    ]
 }
 
 export const WsMaster: React.FC = () => {
@@ -86,14 +56,13 @@ export const WsMaster: React.FC = () => {
         setwsObj((prev) => ({ ...prev, [field]: value }));
     };
 
-    const addCheck = !wsObj.wsName || !wsObj.wsDescription || !wsObj.village.villageId
+    const addCheck = !wsObj.wsName || !wsObj.wsDescription
 
     const wsListF = wsList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
             w.wsName?.toLowerCase().includes(searchTerm) ||
-            w.wsDescription?.toLowerCase().includes(searchTerm) ||
-            VillageName(w.village.villageId)?.toString().toLowerCase().includes(searchTerm)
+            w.wsDescription?.toLowerCase().includes(searchTerm)
         );
     });
 
@@ -104,45 +73,44 @@ export const WsMaster: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                if (wsObj.district.districtId) {
-                    const resp = await talukById(wsObj.district.districtId);
+                if (wsObj.districtId) {
+                    const resp = await talukById(wsObj.districtId);
                     if (resp.status === 'success') { settlOps(resp.data); }
                 } else { settlOps([]); }
             }
             catch (error) { console.log(error) }
         })();
-    }, [wsObj.district.districtId])
+    }, [wsObj.districtId])
 
     React.useEffect(() => {
         (async () => {
             try {
-                if (wsObj.taluk.talukId) {
-                    const resp = await panchayatById(wsObj.taluk.talukId);
+                if (wsObj.talukId) {
+                    const resp = await panchayatById(wsObj.talukId);
                     if (resp.status === 'success') { setpanOps(resp.data); }
                 } else { setpanOps([]); }
             }
             catch (error) { console.log(error) }
         })();
-    }, [wsObj.taluk.talukId])
+    }, [wsObj.talukId])
 
     React.useEffect(() => {
         (async () => {
             try {
-                if (wsObj.gramPanchayat.panchayatId) {
-                    const resp = await VillageById(wsObj.gramPanchayat.panchayatId);
+                if (wsObj.gramPanchayatId) {
+                    const resp = await VillageById(wsObj.gramPanchayatId);
                     if (resp.status === 'success') { setvilOps(resp.data); }
                 } else { setvilOps([]); }
             }
             catch (error) { console.log(error) }
         })();
-    }, [wsObj.gramPanchayat.panchayatId])
+    }, [wsObj.gramPanchayatId])
 
     const fetchData = async () => {
         try {
             const resp1 = await listWS(); if (resp1.status === 'success') {
                 setwsList(resp1.data.reverse());
             }
-            //Edited by lakshmi- change sessionstorage to localstorage
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
@@ -150,53 +118,50 @@ export const WsMaster: React.FC = () => {
         setLoadingResponse(false);
     };
 
-    const districtCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const districtCh = async (e: any) => {
         setwsObj({
             ...wsObj,
-            district: { ...wsObj.district, districtId: e.target.value },
-            taluk: { ...wsObj.taluk, talukId: '' },
-            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: '' },
-            village: { ...wsObj.village, villageId: '' }
+            districtId: e,
+            talukId: '',
+            gramPanchayatId: '',
+            villages: []
         })
     }
 
-    const talukCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const talukCh = async (e: any) => {
         setwsObj({
             ...wsObj,
-            taluk: { ...wsObj.taluk, talukId: e.target.value },
-            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: '' },
-            village: { ...wsObj.village, villageId: '' }
+            districtId: e,
+            talukId: '',
+            gramPanchayatId: '',
+            villages: []
         })
     }
 
-    const panchayatCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const panchayatCh = async (e: any) => {
         setwsObj({
             ...wsObj,
-            gramPanchayat: { ...wsObj.gramPanchayat, panchayatId: e.target.value },
-            village: { ...wsObj.village, villageId: '' }
+            districtId: e,
+            talukId: '',
+            gramPanchayatId: '',
+            villages: []
         })
     }
 
-    const villageCh = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const villageCh = async (e: any) => {
         setwsObj({
             ...wsObj,
-            village: { ...wsObj.village, villageId: e.target.value }
+            districtId: e,
+            talukId: '',
+            gramPanchayatId: '',
+            villages: []
         })
     }
 
     const WSadd = async () => {
         setLoading(true);
         try {
-            let AEObj = {
-                wsName: wsObj.wsName,
-                wsDescription: wsObj.wsDescription,
-                stateId: wsObj.state.stateId,
-                districtId: wsObj.district.districtId,
-                talukId: wsObj.taluk.talukId,
-                grampanchayatId: wsObj.gramPanchayat.panchayatId,
-                villageId: wsObj.village.villageId
-            }
-            const resp = await addWS(AEObj)
+            const resp = await addWS(wsObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
@@ -217,16 +182,7 @@ export const WsMaster: React.FC = () => {
     const WSedit = async (id: any) => {
         setLoading(true);
         try {
-            let AEObj = {
-                wsName: wsObj.wsName,
-                wsDescription: wsObj.wsDescription,
-                stateId: wsObj.state.stateId,
-                districtId: wsObj.district.districtId,
-                talukId: wsObj.taluk.talukId,
-                grampanchayatId: wsObj.gramPanchayat.panchayatId,
-                villageId: wsObj.village.villageId
-            }
-            const resp = await editWS(AEObj, id)
+            const resp = await editWS(wsObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed updated`);
@@ -298,10 +254,10 @@ export const WsMaster: React.FC = () => {
                         <TableRow key={i}>
                             <TableCell>{w.wsName}</TableCell>
                             <TableCell>{w.wsDescription}</TableCell>
-                            <TableCell>{VillageName(w.village.villageId)}</TableCell>
+                            <TableCell>{VillageName(w.villageId)}</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell>
                                 <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.wsId); }}><Delete /></IconButton>
+                                <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
                     ))}</TableBody>
@@ -343,19 +299,19 @@ export const WsMaster: React.FC = () => {
                     />
                 </Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.state.stateId}>
+                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.stateId}>
                     {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={wsObj.district.districtId} onChange={(e) => districtCh(e)}>
+                <Grid item xs={4}><TextField required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
                     {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={wsObj.taluk.talukId} onChange={(e) => talukCh(e)}>
+                <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
                     {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={wsObj.gramPanchayat.panchayatId} onChange={(e) => panchayatCh(e)}>
+                <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={wsObj.village.villageId} onChange={(e) => villageCh(e)}>
+                <Grid item xs={4}><TextField required select label="Village" value={wsObj.villages} onChange={(e) => villageCh(e.target.value)}>
                     {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
             </Grid></DialogContent>
@@ -363,7 +319,7 @@ export const WsMaster: React.FC = () => {
             <DialogActions>
                 <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Cancel</Button>
                 {addM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
-                    : editM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.wsId)} disabled={addCheck || loading}>Update</Button>
+                    : editM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.watershedId)} disabled={addCheck || loading}>Update</Button>
                         : null}
             </DialogActions>
         </Dialog>
