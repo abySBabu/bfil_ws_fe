@@ -18,7 +18,7 @@ export const fmrDef = {
     "state": '1',
     "district": '',
     "taluk": '',
-    "gramPanchayat": '',
+    "grampanchayat": '',
     "village": '',
     "relationalIdentifiers": '',
     "identifierName": '',
@@ -93,14 +93,14 @@ export const FarmerMaster: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                if (fmrObj.gramPanchayat) {
-                    const resp = await VillageById(fmrObj.gramPanchayat);
+                if (fmrObj.grampanchayat) {
+                    const resp = await VillageById(fmrObj.grampanchayat);
                     if (resp.status === 'success') { setvilOps(resp.data); }
                 } else { setvilOps([]); }
             }
             catch (error) { console.log(error) }
         })();
-    }, [fmrObj.gramPanchayat])
+    }, [fmrObj.grampanchayat])
 
     const fetchData = async () => {
         try {
@@ -118,7 +118,7 @@ export const FarmerMaster: React.FC = () => {
             ...fmrObj,
             district: e,
             taluk: '',
-            gramPanchayat: '',
+            grampanchayat: '',
             village: ''
         })
     }
@@ -127,7 +127,7 @@ export const FarmerMaster: React.FC = () => {
         setfmrObj({
             ...fmrObj,
             taluk: e,
-            gramPanchayat: '',
+            grampanchayat: '',
             village: ''
         })
     }
@@ -135,7 +135,7 @@ export const FarmerMaster: React.FC = () => {
     const panchayatCh = async (e: any) => {
         setfmrObj({
             ...fmrObj,
-            gramPanchayat: e,
+            grampanchayat: e,
             village: ''
         })
     }
@@ -304,6 +304,14 @@ export const FarmerMaster: React.FC = () => {
                                 onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                label="Remarks"
+                                value={fmrObj.remarks}
+                                onChange={(e) => setfmrObj({ ...fmrObj, remarks: e.target.value })}
+                            />
+                        </Grid>
                         <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
                         <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
                             {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
@@ -314,7 +322,7 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                             {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.grampanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                             {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                         </TextField></Grid>
                         <Grid item xs={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>

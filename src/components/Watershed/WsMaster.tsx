@@ -23,12 +23,7 @@ export const wsDef = {
     talukName: '',
     gramPanchayatId: '',
     gramPanchayatName: '',
-    villages: [
-        {
-            villageName: '',
-            villageId: ''
-        }
-    ]
+    villages: ['']
 }
 
 export const WsMaster: React.FC = () => {
@@ -228,8 +223,6 @@ export const WsMaster: React.FC = () => {
         setdeleteM('');
     }
 
-
-
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
         {loadingResponse ?
@@ -263,7 +256,7 @@ export const WsMaster: React.FC = () => {
                             <TableCell>{w.wsName}</TableCell>
                             <TableCell>{w.wsDescription}</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell>
-                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages); seteditM(true); }}><Edit /></IconButton>
                                 <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
