@@ -16,12 +16,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -41,12 +41,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -66,12 +66,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -94,12 +94,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -123,12 +123,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -155,12 +155,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -168,8 +168,8 @@ test.describe('Farmer add automation', () => {
         const addFarmer = page.locator('button:has-text("Add Farmer")');
         await addFarmer.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341952'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887752'); // Invalid Mobile
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341953'); // Invalid Aadhar
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887753'); // Invalid Mobile
         // Click Cancel button
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
@@ -194,12 +194,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();
@@ -207,8 +207,8 @@ test.describe('Farmer add automation', () => {
         const addFarmer = page.locator('button:has-text("Add Farmer")');
         await addFarmer.click();
         await page.getByRole('textbox', { name: 'Name' }).fill('Alluri reddy'); // Empty name
-        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341953'); // Invalid Aadhar
-        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887752'); // Invalid Mobile
+        await page.getByRole('textbox', { name: 'Aadhar' }).fill('735082341954'); // Invalid Aadhar
+        await page.getByRole('textbox', { name: 'Mobile' }).fill('9998887753'); // Invalid Mobile
         // Click Cancel button
         const addButton = page.locator('button:has-text("Add")').nth(1);
         await addButton.click();
@@ -217,7 +217,7 @@ test.describe('Farmer add automation', () => {
         if (await alertMessage.isVisible()) {
             const alertText = await alertMessage.innerText();
             console.log(alertText);
-            expect(alertText).toBe('Duplicate mobile number found: 9998887752'); // Verify success message
+            expect(alertText).toBe('Duplicate mobile number found: 9998887753'); // Verify success message
         }
         // const mobileValidationMessage = await page.getByText('Mobile number should have 10 digits');
         // expect(await mobileValidationMessage.isVisible()).toBeTruthy(); // Validate error message for Mobile    await page.waitForTimeout(2000);
@@ -233,12 +233,12 @@ test.describe('Farmer add automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const FarmerMasterButton = page.locator('text=Farmer Master');
         await FarmerMasterButton.click();

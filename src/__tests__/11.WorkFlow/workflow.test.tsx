@@ -1,5 +1,6 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('Watershed Activity Entire workflow automation', () => {
+    test.describe.configure({ mode: 'serial' });
 
     test('1.Should click the add icon and check all field validation then check the sucess alert message', async () => {
         test.setTimeout(800000);
@@ -7,6 +8,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
             headless: false,
             channel: 'chrome',
         });
+        //Added new script
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreacttest');
@@ -52,7 +54,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
             }
 
             const surveyNumber = page.locator('label:has-text("Survey No.") + div input');
-            await surveyNumber.fill('5577');
+            await surveyNumber.fill('5588');
 
             const totalValueField = page.locator('label:has-text("Total Value") + div input');
             await totalValueField.fill('50000');
@@ -150,7 +152,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 await watershedDropdownOptions[0].click();
             }
             const surveyNumber = page.locator('label:has-text("Survey No.") + div input');
-            await surveyNumber.fill('5577');
+            await surveyNumber.fill('5588');
             const totalValueField = page.locator('label:has-text("Total Value") + div input');
             await totalValueField.fill('50000');
             const unit = page.locator('label:has-text("Unit") + div input');
@@ -280,7 +282,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 if (inputId !== null) {
                     const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                     const inputField = await page.locator(`#${escapedInputId}`);
-                    await inputField.fill('5577');
+                    await inputField.fill('5588');
 
                     // Optional: Verify the value entered
                     const enteredValue = await inputField.inputValue();
@@ -497,7 +499,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 if (inputId !== null) {
                     const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                     const inputField = await page.locator(`#${escapedInputId}`);
-                    await inputField.fill('5577');
+                    await inputField.fill('5588');
 
                     // Optional: Verify the value entered
                     const enteredValue = await inputField.inputValue();
@@ -583,12 +585,12 @@ test.describe('Watershed Activity Entire workflow automation', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreacttest');
+    //     await page.goto('http://localhost:3000/bfilreacttesttest');
     //     await page.fill('input#userName', '6384742626'); // Test user 2
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+    //     await page.waitForURL('http://localhost:3000/bfilreacttesttest/home', { timeout: 600000 });
     //     await page.reload();
 
     //     const watershedActivity = page.locator('text=Watershed Activity');
@@ -770,7 +772,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 if (inputId !== null) {
                     const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                     const inputField = await page.locator(`#${escapedInputId}`);
-                    await inputField.fill('5577');
+                    await inputField.fill('5588');
 
                     // Optional: Verify the value entered
                     const enteredValue = await inputField.inputValue();
@@ -1010,7 +1012,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 if (inputId !== null) {
                     const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                     const inputField = await page.locator(`#${escapedInputId}`);
-                    await inputField.fill('5577');
+                    await inputField.fill('5588');
 
                     // Optional: Verify the value entered
                     const enteredValue = await inputField.inputValue();
@@ -1247,7 +1249,7 @@ test.describe('Watershed Activity Entire workflow automation', () => {
                 if (inputId !== null) {
                     const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                     const inputField = await page.locator(`#${escapedInputId}`);
-                    await inputField.fill('5577');
+                    await inputField.fill('5588');
 
                     // Optional: Verify the value entered
                     const enteredValue = await inputField.inputValue();
@@ -1488,7 +1490,7 @@ test('10. Should click the watershed activity and check the line items then send
             if (inputId !== null) {
                 const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                 const inputField = await page.locator(`#${escapedInputId}`);
-                await inputField.fill('5577');
+                await inputField.fill('5588');
 
                 // Optional: Verify the value entered
                 const enteredValue = await inputField.inputValue();
@@ -1727,7 +1729,7 @@ test('11. Should click the watershed activity and check the line items then send
             if (inputId !== null) {
                 const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                 const inputField = await page.locator(`#${escapedInputId}`);
-                await inputField.fill('5577');
+                await inputField.fill('5588');
 
                 // Optional: Verify the value entered
                 const enteredValue = await inputField.inputValue();
@@ -1967,7 +1969,7 @@ test('12. Should click the watershed activity and check the line items then send
             if (inputId !== null) {
                 const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                 const inputField = await page.locator(`#${escapedInputId}`);
-                await inputField.fill('5577');
+                await inputField.fill('5588');
 
                 // Optional: Verify the value entered
                 const enteredValue = await inputField.inputValue();
@@ -2208,7 +2210,7 @@ test('13. Should click the watershed activity and check the line items then send
             if (inputId !== null) {
                 const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                 const inputField = await page.locator(`#${escapedInputId}`);
-                await inputField.fill('5577');
+                await inputField.fill('5588');
 
                 // Optional: Verify the value entered
                 const enteredValue = await inputField.inputValue();
@@ -2449,7 +2451,7 @@ test('14. Should click the watershed activity and check the line items then send
             if (inputId !== null) {
                 const escapedInputId = inputId.replace(/(:|\.|\[|\]|,|=|#|@)/g, '\\$1');
                 const inputField = await page.locator(`#${escapedInputId}`);
-                await inputField.fill('5577');
+                await inputField.fill('5588');
 
                 // Optional: Verify the value entered
                 const enteredValue = await inputField.inputValue();

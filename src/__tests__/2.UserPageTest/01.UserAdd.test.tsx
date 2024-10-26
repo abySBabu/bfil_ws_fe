@@ -12,12 +12,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -74,12 +74,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -140,12 +140,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -211,12 +211,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -273,12 +273,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -334,12 +334,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -403,12 +403,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -478,12 +478,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -525,12 +525,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -595,12 +595,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -654,12 +654,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -710,12 +710,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -728,10 +728,10 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY009');//My008
+    await page.fill('input#employeeCode', 'MY010');//My0010
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008969');
+    await page.fill('input#mobileNo', '9655008970');
     await page.fill('input#password', '1234'); 
 
     await page.locator('#role').click();
@@ -772,12 +772,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();
@@ -790,81 +790,9 @@ test.describe('User Management Automation', () => {
     await page.waitForSelector('text=Add User');
 
     await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY010');
+    await page.fill('input#employeeCode', 'MY011');
     await page.fill('input#designation', 'Program Officer');
     await page.fill('input#email', 'myradaglb11@gmail.com');
-    await page.fill('input#mobileNo', '9655008969');
-    await page.fill('input#password', '1234');
-
-    // const managerTypeDropdown = page.locator('#manager');
-    // await managerTypeDropdown.click();
-    // await page.waitForSelector('ul[role="listbox"]');
-    // const managerOptions = await page.$$('ul[role="listbox"] > li');
-    // if (managerOptions.length > 0) {
-    //   await managerOptions[0].click();
-    // }
-
-    await page.locator('#role').click();
-
-    await page.waitForSelector('ul[role="listbox"]');
-    const roleOptions = await page.$$('ul[role="listbox"] > li');
-    if (roleOptions.length > 0) {
-      await roleOptions[0].click();
-    }
-
-    const loginTypeDropdown = page.locator('#loginType');
-    await loginTypeDropdown.click();
-    await page.waitForSelector('ul[role="listbox"]');
-    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    if (loginTypeOptions.length > 0) {
-      await loginTypeOptions[2].click();
-    }
-    const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
-    await expect(addUserDialogButton).toBeVisible();
-    await addUserDialogButton.click();
-    const alertMessage = await page.locator('.MuiAlert-message').innerText();
-    // await page.waitForTimeout(3000);
-    console.log("Alert message: " + alertMessage);
-    //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008969');
-    await page.waitForTimeout(1000);
-    await browser.close();
-
-  });
-
-  //Test Number : 14
-  //Need to changes
-  test('14.Should check the duplicate error message for usercode exist after add user', async () => {
-    test.setTimeout(800000);
-
-    const browser = await chromium.launch({
-      headless: false,
-      channel: 'chrome',
-    });
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-
-    await page.goto('http://localhost:3000/bfilreact');
-    await page.fill('input#userName', '9677694732');
-    await page.fill('input#password', '1234');
-    await page.click('button[type="submit"]');
-    await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
-    await userManagementButton.click();
-    await page.reload();
-    const userManagementButton1 = page.locator('text=User Management');
-    await userManagementButton1.click();
-    const addUserButton = page.locator('button:has-text("Add User")');
-    await expect(addUserButton).toBeVisible();
-    await addUserButton.click();
-    await page.waitForSelector('text=Add User');
-
-    await page.fill('input#userName', 'S D Kalyanshetti');
-    await page.fill('input#employeeCode', 'MY009');
-    await page.fill('input#designation', 'Project Manager');
-    await page.fill('input#email', 'guruswamy704@gamil.com');
     await page.fill('input#mobileNo', '9655008970');
     await page.fill('input#password', '1234');
 
@@ -898,7 +826,79 @@ test.describe('User Management Automation', () => {
     // await page.waitForTimeout(3000);
     console.log("Alert message: " + alertMessage);
     //User error: MobileNumber already exits 8310450995
-    expect(alertMessage).toBe('User error: User Code already exits MY009');
+    expect(alertMessage).toBe('User error: MobileNumber already exits 9655008970');
+    await page.waitForTimeout(1000);
+    await browser.close();
+
+  });
+
+  //Test Number : 14
+  //Need to changes
+  test('14.Should check the duplicate error message for usercode exist after add user', async () => {
+    test.setTimeout(800000);
+
+    const browser = await chromium.launch({
+      headless: false,
+      channel: 'chrome',
+    });
+    const context = await browser.newContext();
+    const page: Page = await context.newPage();
+
+    await page.goto('http://localhost:3000/bfilreacttest');
+    await page.fill('input#userName', '9677694732');
+    await page.fill('input#password', '1234');
+    await page.click('button[type="submit"]');
+    await page.waitForTimeout(1000);
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
+    await page.reload();
+    const userManagementButton = page.locator('text=User Management');
+    await userManagementButton.click();
+    await page.reload();
+    const userManagementButton1 = page.locator('text=User Management');
+    await userManagementButton1.click();
+    const addUserButton = page.locator('button:has-text("Add User")');
+    await expect(addUserButton).toBeVisible();
+    await addUserButton.click();
+    await page.waitForSelector('text=Add User');
+
+    await page.fill('input#userName', 'S D Kalyanshetti');
+    await page.fill('input#employeeCode', 'MY010');
+    await page.fill('input#designation', 'Project Manager');
+    await page.fill('input#email', 'guruswamy704@gamil.com');
+    await page.fill('input#mobileNo', '9655008971');
+    await page.fill('input#password', '1234');
+
+    // const managerTypeDropdown = page.locator('#manager');
+    // await managerTypeDropdown.click();
+    // await page.waitForSelector('ul[role="listbox"]');
+    // const managerOptions = await page.$$('ul[role="listbox"] > li');
+    // if (managerOptions.length > 0) {
+    //   await managerOptions[0].click();
+    // }
+
+    await page.locator('#role').click();
+
+    await page.waitForSelector('ul[role="listbox"]');
+    const roleOptions = await page.$$('ul[role="listbox"] > li');
+    if (roleOptions.length > 0) {
+      await roleOptions[0].click();
+    }
+
+    const loginTypeDropdown = page.locator('#loginType');
+    await loginTypeDropdown.click();
+    await page.waitForSelector('ul[role="listbox"]');
+    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
+    if (loginTypeOptions.length > 0) {
+      await loginTypeOptions[2].click();
+    }
+    const addUserDialogButton = page.locator('button:has-text("Add")').nth(1);
+    await expect(addUserDialogButton).toBeVisible();
+    await addUserDialogButton.click();
+    const alertMessage = await page.locator('.MuiAlert-message').innerText();
+    // await page.waitForTimeout(3000);
+    console.log("Alert message: " + alertMessage);
+    //User error: MobileNumber already exits 8310450995
+    expect(alertMessage).toBe('User error: User Code already exits MY010');
     await page.waitForTimeout(1000);
     await browser.close();
   });
@@ -914,12 +914,12 @@ test.describe('User Management Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreact');
+    await page.goto('http://localhost:3000/bfilreacttest');
     await page.fill('input#userName', '9677694732');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
     await page.reload();
     const userManagementButton = page.locator('text=User Management');
     await userManagementButton.click();

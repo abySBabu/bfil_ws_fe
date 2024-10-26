@@ -12,13 +12,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await page.waitForTimeout(2000);
@@ -47,13 +47,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await roleManagementButton.click();
@@ -88,13 +88,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await roleManagementButton.click();
@@ -126,13 +126,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await roleManagementButton.click();
@@ -170,13 +170,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await roleManagementButton.click();
@@ -205,13 +205,13 @@ test.describe('Delete Role Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
 
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const roleManagementButton = page.locator('text=Role Management');
         await roleManagementButton.click();

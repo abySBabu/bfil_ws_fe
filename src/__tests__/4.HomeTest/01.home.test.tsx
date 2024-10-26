@@ -11,12 +11,12 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         // Ensure the 'Watershed Master' section is visible and clickable
         const dashBoard = page.locator('text=Dash Board');
@@ -37,12 +37,12 @@ test.describe('Permission based screen view', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreact');
+    //     await page.goto('http://localhost:3000/bfilreacttest');
     //     await page.fill('input#userName', '9677694777');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
     //     await page.reload();
     //     // Ensure the 'Watershed Master' section is visible and clickable
     //     const watershedMasterLink = page.locator('text=User Management');
@@ -60,7 +60,7 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694777');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -82,12 +82,12 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '8310450995');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         // Ensure the 'Watershed Master' section is visible and clickable
 
@@ -125,12 +125,12 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         // Navigate to the login page and log in
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '8310450995');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         // Wait for the home page to load
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         // Reload to ensure elements are present
         await page.reload();
         // Try to locate the 'Role Management' button with a timeout of 5 seconds
@@ -169,12 +169,12 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
 
         try {
@@ -258,12 +258,12 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
 
         const dashboard = page.locator('text=Dash Board');
@@ -342,12 +342,12 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
 
         try {

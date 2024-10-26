@@ -10,12 +10,12 @@ test.describe('Watershed Master Automation', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreact');
+    //     await page.goto('http://localhost:3000/bfilreacttest');
     //     await page.fill('input#userName', '9677694732');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
     //     await page.reload();
     //     const userManagementButton = page.locator('text=Watershed Master');
     //     await userManagementButton.click();
@@ -54,12 +54,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -117,12 +117,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -152,12 +152,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -179,12 +179,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -208,12 +208,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -237,12 +237,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Master');
         await userManagementButton.click();
@@ -272,12 +272,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const watershed = page.locator('text=Watershed Master');
         await watershed.click();
@@ -285,7 +285,7 @@ test.describe('Watershed Master Automation', () => {
         const clickAddWs = page.locator('button:has-text("Add Watershed")');
         await clickAddWs.click();
         const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('TestingWatershed2'); //TestingWatershed1
+        await dialog.getByLabel('Name').fill('TestingWatershed3'); //TestingWatershed1
         await dialog.getByLabel('Description').fill('New Description');
         await dialog.getByLabel('District').click();
         await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
@@ -321,12 +321,12 @@ test.describe('Watershed Master Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 600000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
         await page.reload();
         const watershed = page.locator('text=Watershed Master');
         await watershed.click();
@@ -334,7 +334,7 @@ test.describe('Watershed Master Automation', () => {
         const clickAddWs = page.locator('button:has-text("Add Watershed")');
         await clickAddWs.click();
         const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('TestingWatershed2');
+        await dialog.getByLabel('Name').fill('TestingWatershed3');
         await dialog.getByLabel('Description').fill('New Description');
         await dialog.getByLabel('District').click();
         await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district

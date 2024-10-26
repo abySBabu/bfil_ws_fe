@@ -17,12 +17,12 @@ test.describe('Watershed mapping automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         const userManagementButton = page.locator('text=Watershed Mapping');
         await userManagementButton.click();
@@ -43,14 +43,14 @@ test.describe('Watershed mapping automation', () => {
         const page: Page = await context.newPage();
 
         // Navigate to the application and log in
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
         // Wait for the home page to load
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
         // Click on 'Watershed Mapping' button
         const userManagementButton = page.locator('text=Watershed Mapping');
@@ -96,12 +96,12 @@ test.describe('Watershed mapping automation', () => {
         const page: Page = await context.newPage();
 
         // Navigate and log in
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
 
         // Open Watershed Mapping
@@ -147,12 +147,12 @@ test.describe('Watershed mapping automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
 
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
         await page.reload();
 
         const userManagementButton = page.locator('text=Watershed Mapping');

@@ -13,7 +13,7 @@ test.describe('Check Browser History Automation', () => {
         const page = await context.newPage();
 
         // Navigate to the login page
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         // Fill in the login form and submit
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
@@ -21,7 +21,7 @@ test.describe('Check Browser History Automation', () => {
 
         // Wait for navigation to the home page
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreact/home', { timeout: 60000 });
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 60000 });
 
         // Reload the page to ensure it is fully loaded
         await page.reload();
@@ -39,7 +39,7 @@ test.describe('Check Browser History Automation', () => {
         await page.goBack();
 
         // Assert that the URL is now the dashboard URL, not the login page
-        await expect(page).toHaveURL('http://localhost:3000/bfilreact/home');
+        await expect(page).toHaveURL('http://localhost:3000/bfilreacttest/home');
 
         // Close the browser
         await browser.close();

@@ -12,7 +12,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
@@ -32,7 +32,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
         await page.fill('input#password', '');
@@ -52,7 +52,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
@@ -76,7 +76,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '1234567890');
         await page.fill('input#password', 'ABC');
         await page.waitForTimeout(1000);
@@ -96,7 +96,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', 'ABC@');
         await page.fill('input#password', '1234');
         const userNameAlphaNumeric = await page.textContent('.MuiFormHelperText-root');
@@ -115,7 +115,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', 'Poun@123');
         await page.click('button[type="submit"]');
@@ -135,7 +135,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '1234567890');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -156,7 +156,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
 
         // Fill login form and submit
         await page.fill('input#userName', '9677694732');
@@ -169,7 +169,7 @@ test.describe('Login Screen Automation', () => {
         expect(alertMessage).toBe('Login successfully');
 
         // Wait for navigation to the home page
-        await page.waitForURL('http://localhost:3000/bfilreact/home');
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home');
 
         // Wait briefly for the sections to load
         await page.waitForTimeout(5000);
@@ -207,7 +207,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
 
         await page.fill('input#userName', '9677694732');
         await page.fill('input#password', '1234');
@@ -216,7 +216,7 @@ test.describe('Login Screen Automation', () => {
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
         console.log("Alert message: " + alertMessage);
         expect(alertMessage).toBe('Login successfully');
-        await page.waitForURL('http://localhost:3000/bfilreact/home');
+        await page.waitForURL('http://localhost:3000/bfilreacttest/home');
         // await page.waitForTimeout(5000);
         // // Retrieve section names dynamically from the rendered UI
         // const sections = await page.$$eval('.MuiListItemText-primary', items =>
@@ -240,7 +240,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9677694777');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -263,7 +263,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9884794975');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -285,7 +285,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '9655008962');
         await page.fill('input#password', '1234');
 
@@ -306,7 +306,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
 
@@ -328,7 +328,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '1234567');
         await page.fill('input#password', '');
 
@@ -350,7 +350,7 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreact');
+        await page.goto('http://localhost:3000/bfilreacttest');
         await page.fill('input#userName', '0000000001'); //deleted data 
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
