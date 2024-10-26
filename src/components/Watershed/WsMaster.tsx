@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
-    MenuItem, InputAdornment, Typography, CircularProgress
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, FormControl,
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Select,
+    MenuItem, InputAdornment, Typography, CircularProgress, Checkbox, ListItemText, OutlinedInput, InputLabel,
 } from "@mui/material";
 import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { VillageName } from '../../LocName';
+import { SelectChangeEvent } from '@mui/material/Select';
 
 export const wsDef = {
     watershedId: '',
@@ -22,7 +23,6 @@ export const wsDef = {
     talukName: '',
     gramPanchayatId: '',
     gramPanchayatName: '',
-    villageId: [''],
     villages: [
         {
             villageName: '',
@@ -50,6 +50,16 @@ export const WsMaster: React.FC = () => {
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
     const [isTouched, setIsTouched] = React.useState({ wsName: false, wsDescription: false });
+    const [vList, setvList] = React.useState<any[]>([]);
+
+    const handleChange = (event: SelectChangeEvent<typeof vList>) => {
+        const {
+            target: { value },
+        } = event;
+        setvList(
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const handleFieldChange = (field: string, value: string) => {
         setIsTouched((prev) => ({ ...prev, [field]: true }));
@@ -128,40 +138,37 @@ export const WsMaster: React.FC = () => {
         })
     }
 
-    const talukCh = async (e: any) => {
+    const talukCh = (e: any) => {
         setwsObj({
             ...wsObj,
-            districtId: e,
-            talukId: '',
+            talukId: e,
             gramPanchayatId: '',
             villages: []
         })
     }
 
-    const panchayatCh = async (e: any) => {
+    const panchayatCh = (e: any) => {
         setwsObj({
             ...wsObj,
-            districtId: e,
-            talukId: '',
-            gramPanchayatId: '',
-            villages: []
-        })
-    }
-
-    const villageCh = async (e: any) => {
-        setwsObj({
-            ...wsObj,
-            districtId: e,
-            talukId: '',
-            gramPanchayatId: '',
+            gramPanchayatId: e,
             villages: []
         })
     }
 
     const WSadd = async () => {
         setLoading(true);
+        const addObj = {
+            "wsName": wsObj.wsName,
+            "wsDescription": wsObj.wsDescription,
+            "stateId": wsObj.stateId,
+            "districtId": wsObj.districtId,
+            "talukId": wsObj.talukId,
+            "grampanchayatId": wsObj.gramPanchayatId,
+            "villageId": vList,
+            "mapLink": "https://example.com/map-link"
+        }
         try {
-            const resp = await addWS(wsObj)
+            const resp = await addWS(addObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert("Watershed added");
@@ -221,6 +228,8 @@ export const WsMaster: React.FC = () => {
         setdeleteM('');
     }
 
+
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
         {loadingResponse ?
@@ -245,7 +254,6 @@ export const WsMaster: React.FC = () => {
                         <TableRow>
                             <TableCell>Watershed</TableCell>
                             <TableCell>Description</TableCell>
-                            <TableCell>Village</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
                         </TableRow>
                     </TableHead>
@@ -254,7 +262,6 @@ export const WsMaster: React.FC = () => {
                         <TableRow key={i}>
                             <TableCell>{w.wsName}</TableCell>
                             <TableCell>{w.wsDescription}</TableCell>
-                            <TableCell>{VillageName(w.villageId)}</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell>
                                 <IconButton title='Edit watershed' onClick={() => { setwsObj(w); seteditM(true); }}><Edit /></IconButton>
                                 <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
@@ -311,9 +318,27 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField required select label="Village" value={wsObj.villages} onChange={(e) => villageCh(e.target.value)}>
-                    {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
-                </TextField></Grid>
+                <Grid item xs={4}><FormControl fullWidth >
+                    <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
+                    <Select
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        value={vList}
+                        onChange={handleChange}
+                        input={<OutlinedInput label="Villages" />}
+                        renderValue={(selected) => selected.join(', ')}
+                        sx={{ height: '48px' }}
+                    >
+                        {vilOps?.map((o) => (
+                            <MenuItem key={o.villageId} value={o.villageId}>
+                                <Checkbox checked={vList.includes(o.villageId)} />
+                                <ListItemText primary={o.villageName} />
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl></Grid>
+
             </Grid></DialogContent>
 
             <DialogActions>
