@@ -2,22 +2,28 @@ import React from 'react';
 import {
     Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
-    InputAdornment, Typography, CircularProgress
+    InputAdornment, Typography, CircularProgress, MenuItem, Divider
 } from "@mui/material";
 import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
+import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 
 export const fmrDef = {
     wsfarmerId: "",
     adharNumber: "",
     mobileNumber: "",
     wsfarmerName: "",
+    state: "1",
+    district: "",
+    taluk: "",
+    panchayat: "",
+    village: "",
+    remarks: "",
     createdUser: "",
+    createTime: "",
     updatedUser: "",
     updatedTime: "",
-    remarks: "",
-    createTime: ""
 }
 
 export const FarmerMaster: React.FC = () => {
@@ -34,6 +40,11 @@ export const FarmerMaster: React.FC = () => {
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+    const [stOps, setstOps] = React.useState<any[]>([]);
+    const [dsOps, setdsOps] = React.useState<any[]>([]);
+    const [tlOps, settlOps] = React.useState<any[]>([]);
+    const [panOps, setpanOps] = React.useState<any[]>([]);
+    const [vilOps, setvilOps] = React.useState<any[]>([]);
 
     const handleFieldChange = (field: string, value: string, validator: (value: string) => boolean) => {
         setIsTouched((prev) => ({ ...prev, [field]: true }));
@@ -57,14 +68,86 @@ export const FarmerMaster: React.FC = () => {
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.district) {
+                    const resp = await talukById(fmrObj.district);
+                    if (resp.status === 'success') { settlOps(resp.data); }
+                } else { settlOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.district])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.taluk) {
+                    const resp = await panchayatById(fmrObj.taluk);
+                    if (resp.status === 'success') { setpanOps(resp.data); }
+                } else { setpanOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.taluk])
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                if (fmrObj.panchayat) {
+                    const resp = await VillageById(fmrObj.panchayat);
+                    if (resp.status === 'success') { setvilOps(resp.data); }
+                } else { setvilOps([]); }
+            }
+            catch (error) { console.log(error) }
+        })();
+    }, [fmrObj.panchayat])
+
     const fetchData = async () => {
         try {
             const resp1 = await listFarmer();
             if (resp1.status === 'success') { setfmrList(resp1.data.reverse()); }
+            setstOps(JSON.parse(localStorage.getItem("StateList") as string))
+            setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
         catch (error) { console.log(error) }
         setLoadingResponse(false);
     };
+
+    const districtCh = (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            district: e,
+            taluk: '',
+            panchayat: '',
+            village: ''
+        })
+    }
+
+    const talukCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            taluk: e,
+            panchayat: '',
+            village: ''
+        })
+    }
+
+    const panchayatCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            panchayat: e,
+            village: ''
+        })
+    }
+
+    const villageCh = async (e: any) => {
+        setfmrObj({
+            ...fmrObj,
+            village: e
+        })
+    }
 
     const fmrAdd = async () => {
         setLoading(true);
@@ -73,17 +156,17 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Farmer added");
+                setalert("Beneficiary added");
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to add farmer");
+                setalert(("Failed: " + resp.message) || "Failed to add beneficiary");
             }
         }
         catch (error) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to add farmer");
+            setalert("Failed to add beneficiary");
         }
         setLoading(false);
         setaddM(false);
@@ -96,17 +179,17 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Farmer edited");
+                setalert("Beneficiary edited");
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to edit farmer");
+                setalert(("Failed: " + resp.message) || "Failed to edit beneficiary");
             }
         }
         catch (error) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to edit farmer");
+            setalert("Failed to edit beneficiary");
         }
         setLoading(false);
         seteditM(false);
@@ -118,16 +201,16 @@ export const FarmerMaster: React.FC = () => {
             const resp = await deleteFarmer(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Farmer deleted`);
+                setalert(`Beneficiary deleted`);
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to delete farmer");
+                setalert(("Failed: " + resp.message) || "Failed to delete beneficiary");
             }
         }
         catch (error) {
             console.log(error); setalertClr(false);
-            setalert("Failed to delete farmer");
+            setalert("Failed to delete beneficiary");
         }
         setLoading(false);
         setdeleteM('');
@@ -140,12 +223,12 @@ export const FarmerMaster: React.FC = () => {
                 <CircularProgress size={80} />
             </Box> : <>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Farmer Master</Typography>
+                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
                     <div>
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Farmer Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
-                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Farmer</Button>}
+                        {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
+                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
                     </div>
                 </Box>
                 {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
@@ -156,7 +239,7 @@ export const FarmerMaster: React.FC = () => {
                             <TableCell>Name</TableCell>
                             <TableCell>Aadhar</TableCell>
                             <TableCell>Mobile Number</TableCell>
-                            {PerChk('EDIT_Farmer Master') && <TableCell width='5%'>Actions</TableCell>}
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
                         </TableRow>
                     </TableHead>
 
@@ -165,9 +248,9 @@ export const FarmerMaster: React.FC = () => {
                             <TableCell>{w.wsfarmerName}</TableCell>
                             <TableCell>{`${w.adharNumber.slice(0, -4).replace(/\d/g, '*')}${w.adharNumber.slice(-4)}`}</TableCell>
                             <TableCell>{w.mobileNumber}</TableCell>
-                            {PerChk('EDIT_Farmer Master') && <TableCell>
-                                <IconButton title="Edit farmer" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title="Delete farmer" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell>
+                                <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
                     ))}</TableBody>
@@ -185,8 +268,8 @@ export const FarmerMaster: React.FC = () => {
                     </TableRow></TableFooter>
                 </Table></TableContainer>}
 
-                <Dialog open={addM} maxWidth='sm'>
-                    <DialogTitle>Add New Farmer</DialogTitle>
+                <Dialog open={addM || editM}>
+                    <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12}>
@@ -220,60 +303,34 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
+                        <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
+                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                            {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={dsOps?.length <= 0} required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                            {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={tlOps?.length <= 0} required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                            {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={panOps?.length <= 0} required select label="Grampanchayat" value={fmrObj.panchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                            {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
+                        </TextField></Grid>
+                        <Grid item xs={4}><TextField disabled={vilOps?.length <= 0} required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                            {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
+                        </TextField></Grid>
                     </Grid></DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => { setaddM(false); }} disabled={loading}>Cancel</Button>
-                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck || loading}>Add</Button>
-                    </DialogActions>
-                </Dialog>
-
-                <Dialog open={editM} maxWidth='sm'>
-                    <DialogTitle>Edit farmer</DialogTitle>
-
-                    <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={12}><TextField
-                            required
-                            label="Name"
-                            value={fmrObj.wsfarmerName}
-                            onChange={(e) => {
-                                const regex = /^[A-Za-z\s]*$/;
-                                if (regex.test(e.target.value)) {
-                                    setfmrObj({ ...fmrObj, wsfarmerName: e.target.value });
-                                }
-                            }}
-                            helperText={fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
-                        /></Grid>
-                        <Grid item xs={6}><TextField
-                            disabled
-                            required
-                            label="Aadhar"
-                            value={fmrObj.adharNumber}
-                            onChange={(e) => { if (/^\d{0,12}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, adharNumber: e.target.value }) } }}
-                            inputProps={{ maxLength: 12 }}
-                            type="tel"
-                            helperText={fmrObj.adharNumber.length !== 12 ? 'Aadhar number should have 12 digits' : ''}
-                        /></Grid>
-                        <Grid item xs={6}><TextField
-                            required
-                            label="Mobile"
-                            value={fmrObj.mobileNumber}
-                            onChange={(e) => { if (/^\d{0,10}$/.test(e.target.value)) { setfmrObj({ ...fmrObj, mobileNumber: e.target.value }); } }}
-                            inputProps={{ maxLength: 10 }}
-                            type="tel"
-                            helperText={fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
-                        /></Grid>
-                    </Grid></DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={() => { seteditM(false); }} disabled={loading}>Cancel</Button>
-                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck || loading}>Update</Button>
+                        <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Cancel</Button>
+                        {addM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck}>Add</Button>}
+                        {editM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>}
                     </DialogActions>
                 </Dialog>
 
                 <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-                    <DialogTitle>Delete farmer</DialogTitle>
-                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this farmer?</DialogContent>
+                    <DialogTitle>Delete beneficiary</DialogTitle>
+                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this beneficiary?</DialogContent>
                     <DialogActions>
                         <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
                         <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>

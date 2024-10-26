@@ -44,6 +44,7 @@ export const Home: React.FC = () => {
     const [sideList, setsideList] = React.useState<any[]>([]);
     const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
     const [uName, setuName] = React.useState('');
+    const [actCount, setactCount] = useState(0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
     sessionStorage.setItem("multiLanguage", "en");
@@ -118,7 +119,7 @@ export const Home: React.FC = () => {
                         localStorage.setItem("userStatus", uStatus.workflowstatusName)
                         const resp0 = await ListSide(uStatus.workflowstatusName);
                         if (resp0.status === 'success') {
-                            localStorage.setItem("actCount", resp0.workActivityCount)
+                            setactCount(resp0.workActivityCount)
                             let sortscreenlist = resp0.data;
                             setsideList(sortscreenlist);
                             const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
@@ -131,12 +132,12 @@ export const Home: React.FC = () => {
                                         return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
                                     case 'Watershed Master':
                                         return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
-                                    case 'Farmer Master':
-                                        return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Farmer Master', component: <FarmerMaster /> };
+                                    case 'Beneficiary Master':
+                                        return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
                                     case 'Watershed Mapping':
                                         return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                                     case 'Watershed Activity':
-                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', Number(localStorage.getItem("actCount") as string)), permission: 'VIEW_Watershed Activity', component: <WsActivity /> };
+                                        return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
                                     case 'Work Plan':
                                         return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                                     case 'Report':
@@ -185,12 +186,16 @@ export const Home: React.FC = () => {
         </Box > : <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
-                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+                    <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='100%' />
+                    <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height='100%' />
                 </Box>
-                <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor') }}>{t("p_Home.Pragat_Watershed_Header")}</Typography>
+                <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor'), textAlign: 'center' }}>
+                        {t("p_Home.Pragat_Watershed_Header")}
+                    </Typography>
+                </Box>
                 <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/myrada.png`} alt="Myrada" height='100%' />
+                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height="100%" />
                     <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
                 </Box>
             </Toolbar>
@@ -244,7 +249,7 @@ export const Home: React.FC = () => {
                 <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
             </Box>
             <Divider />
-            <MenuItem component={Link} href="/bfilreacttest/profile">My Profile</MenuItem>
+            <MenuItem component={Link} href="profile">My Profile</MenuItem>
             <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
                 <AccordionSummary
                     expandIcon={<ArrowDropDownIcon />}

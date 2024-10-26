@@ -290,12 +290,12 @@ export default function (props: mapTypeProps) {
                                 <TableContainer component={Paper} sx={{ maxHeight: '300px' }}><Table>
                                     <TableHead>
                                         <TableRow sx={{ alignItems: 'center' }}>
-                                            <TableCell >Watershed Name</TableCell>
-                                            <TableCell >State</TableCell>
-                                            <TableCell >District</TableCell>
-                                            <TableCell >Taluka</TableCell>
-                                            <TableCell >Grampanchayat</TableCell>
-                                            <TableCell >Village</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Watershed_Name")}</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.State")}</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.District")}</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Taluka")}</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Grampanchayat")}</TableCell>
+                                            <TableCell >{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Village")}</TableCell>
 
                                         </TableRow>
                                     </TableHead>

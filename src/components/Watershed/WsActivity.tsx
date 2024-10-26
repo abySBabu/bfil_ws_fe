@@ -70,7 +70,7 @@ export const actDef = {
     ]
 }
 
-export const WsActivity: React.FC = () => {
+export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatch<React.SetStateAction<number>>; }> = ({ actCount, setactCount }) => {
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -356,8 +356,7 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    const actCount = Number(localStorage.getItem("actCount") as string)
-                    localStorage.setItem("actCount", (actCount - 1).toString());
+                    setactCount(actCount - 1);
                 }
                 else {
                     setalertClr(false);
@@ -386,8 +385,7 @@ export const WsActivity: React.FC = () => {
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    const actCount = Number(localStorage.getItem("actCount") as string)
-                    localStorage.setItem("actCount", (actCount - 1).toString());
+                    setactCount(actCount - 1);
                 }
                 else {
                     setalertClr(false);
@@ -501,7 +499,7 @@ export const WsActivity: React.FC = () => {
                         <Grid item xs={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0}>
                             {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                         </TextField></Grid>
-                        {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><TextField required label='Sustainable Practice' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>}
+                        <Grid item xs={12}><TextField required label='Description' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={3}><TextField required label='Event Name' value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
@@ -604,7 +602,7 @@ export const WsActivity: React.FC = () => {
                         <Grid item xs={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0}>
                             {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                         </TextField></Grid>
-                        {actObj.workActivity.activityName === 'Sustainable Practices' && <Grid item xs={3}><TextField required label='Sustainable Practice' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>}
+                        <Grid item xs={12}><TextField required label='Description' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={3}><TextField required label='Event Name' value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
