@@ -183,8 +183,18 @@ export const WsMaster: React.FC = () => {
 
     const WSedit = async (id: any) => {
         setLoading(true);
+        const editObj = {
+            "wsName": wsObj.wsName,
+            "wsDescription": wsObj.wsDescription,
+            "stateId": wsObj.stateId,
+            "districtId": wsObj.districtId,
+            "talukId": wsObj.talukId,
+            "grampanchayatId": wsObj.gramPanchayatId,
+            "villageId": vList,
+            "mapLink": "https://example.com/map-link"
+        }
         try {
-            const resp = await editWS(wsObj, id)
+            const resp = await editWS(editObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Watershed updated`);
@@ -256,7 +266,7 @@ export const WsMaster: React.FC = () => {
                             <TableCell>{w.wsName}</TableCell>
                             <TableCell>{w.wsDescription}</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell>
-                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
                                 <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
@@ -331,7 +341,6 @@ export const WsMaster: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl></Grid>
-
             </Grid></DialogContent>
 
             <DialogActions>
