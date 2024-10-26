@@ -321,7 +321,7 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><FormControl fullWidth >
+                <Grid item xs={4}><FormControl fullWidth>
                     <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
                     <Select
                         labelId="demo-multiple-checkbox-label"
@@ -330,7 +330,12 @@ export const WsMaster: React.FC = () => {
                         value={vList}
                         onChange={handleChange}
                         input={<OutlinedInput label="Villages" />}
-                        renderValue={(selected) => selected.join(', ')}
+                        renderValue={(selected) =>
+                            selected
+                                .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
+                                .filter(Boolean) // Filter undefined
+                                .join(', ')
+                        }
                         sx={{ height: '48px' }}
                     >
                         {vilOps?.map((o) => (
