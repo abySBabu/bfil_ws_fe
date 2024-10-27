@@ -202,15 +202,14 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             //Edited by lakshmi - sessionstorage to localstorage
             const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
             if (resp1) {
-                const found: typeof wsDef = resp1.find((x: typeof wsDef) => x.wsId === id) || wsDef
+                const found: typeof wsDef = resp1.find((x: typeof wsDef) => x.watershedId === id) || wsDef
                 setactObj({
                     ...actObj, workActivity: {
                         ...actObj.workActivity,
                         state: 1,
-                        district: found.district.districtId,
-                        taluk: found.taluk.talukId,
-                        gramPanchayat: found.gramPanchayat.panchayatId,
-                        village: found.village.villageId
+                        district: found.districtId,
+                        taluk: found.talukId,
+                        gramPanchayat: found.gramPanchayatId,
                     }
                 })
             }
@@ -307,7 +306,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             "mobilizer": actObj.workActivity.mobilizer
         }
         try {
-            const resp1 = await addAct(addObj)
+            const resp1 = await addAct(actObj)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
@@ -535,7 +534,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
-                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='District' value={DistrictName(actObj.workActivity.district)} /></Grid>
@@ -581,7 +580,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
-                            <Grid item xs={3}><TextField required disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
                         </>}
                     </Grid></DialogContent>
@@ -638,7 +636,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
-                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='District' value={DistrictName(actObj.workActivity.district)} /></Grid>
@@ -684,7 +682,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
-                            <Grid item xs={3}><TextField required disabled label='Aadhar' value={`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
                         </>}
                     </Grid></DialogContent>
@@ -749,7 +746,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
-                            <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                             <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                         </>}
 
@@ -841,7 +837,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
-                            <Grid item xs={3}><b>Aadhar:</b> {`${fmrObj.adharNumber.slice(0, -4).replace(/\d/g, '*')}${fmrObj.adharNumber.slice(-4)}`}</Grid>
                             <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                         </>}
 
