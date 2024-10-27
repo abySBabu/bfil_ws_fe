@@ -9,16 +9,44 @@ export type mapDataType = {
     updatedTime: string
 };
 
+districtId
+:
+1
+districtName
+:
+"Kalaburagi"
+gramPanchayatId
+:
+1
+gramPanchayatName
+:
+"ALGOOD"
+stateId
+:
+1
+stateName
+:
+"Karnataka"
+talukId
+:
+1
+talukName
+:
+"Kalaburagi"
+
 export type wsData = {
-    wsId: number,
+    watershedId: number,
     wsName: string,
     wsDescription: string,
-    state: StateType,
-    district: DistrictType,
-    taluk: TalukType,
-    gramPanchayat: GramPanchayatType,
-    village: VillageType,
-    mapLink: string
+    stateId: number;
+    stateName: string;
+    districtId: number;
+    districtName: string;
+    talukId: number;
+    talukName: string;
+    gramPanchayatId: number;
+    gramPanchayatName: string;
+    villages: [],
 }
 
 export type StateType = {
