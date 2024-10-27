@@ -8,7 +8,6 @@ import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
-import { VillageName } from '../../LocName';
 import { SelectChangeEvent } from '@mui/material/Select';
 
 export const wsDef = {
@@ -245,7 +244,7 @@ export const WsMaster: React.FC = () => {
                         <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
-                            onClick={() => { setwsObj(wsDef); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
+                            onClick={() => { setwsObj(wsDef); setvList([]); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
                             sx={{ height: '48px', ml: '4px' }}>Add Watershed</Button>)}
                     </div>
                 </Box>
