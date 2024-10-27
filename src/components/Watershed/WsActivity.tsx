@@ -571,7 +571,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     inputProps={{ pattern: "[0-9, ]*" }}
                                 />
                             </Grid>
-                            <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                            <Grid item xs={12}><Divider>Activity Physical Details</Divider></Grid>
                             <Grid item xs={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
                             <Grid item xs={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
                             <Grid item xs={3}><TextField type='number' required label='Area Treated (acres)' value={actObj.workActivity.areaTreated} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, areaTreated: e.target.value } })} /></Grid>
@@ -581,10 +581,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 </TextField></Grid>
                                 <Grid item xs={3}><TextField type='number' required label="Water Conserved (litres)" value={actObj.workActivity.waterConserved} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, waterConserved: e.target.value } })} /></Grid>
                             </>}
-                            <Grid item xs={3}><TextField type='number' required label="Funds spent (₹)" value={actObj.workActivity.amountSpend} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, amountSpend: e.target.value } })} /></Grid>
-                            <Grid item xs={3}><TextField required select label="Funds source" value={actObj.workActivity.sourceExpenditure} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, sourceExpenditure: e.target.value } })}>
-                                {fundOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                            </TextField></Grid>
+                            <Grid item xs={12}><Divider>Activity Financial Details</Divider></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="BFIL" value={actObj.workActivity.bfilAmount} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, bfilAmount: e.target.value } })} /></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="Gov Schemes" value={actObj.workActivity.otherGovScheme} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, otherGovScheme: e.target.value } })} /></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="Other" value={actObj.workActivity.other} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, other: e.target.value } })} /></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="MGNREGA" value={actObj.workActivity.menrege} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, menrege: e.target.value } })} /></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="IBL" value={actObj.workActivity.ibl} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, ibl: e.target.value } })} /></Grid>
+                            <Grid item xs={3}><TextField type='number' required label="Community" value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: e.target.value } })} /></Grid>
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
