@@ -62,7 +62,7 @@ export const VillageName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("VillageList")) || null;
         if (list) {
-            const obj = list.find(x => x.villageId === id);
+            const obj = list.find(x => x.villageId == id);
             return obj ? obj.villageName : id;
         }
         return id;
