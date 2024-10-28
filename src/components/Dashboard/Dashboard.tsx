@@ -12,7 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
-const ActCard: React.FC<{ activity: string, value: number, unit: string }> = ({ activity, value, unit }) => (
+const ActCard: React.FC<{ activity: string, value: number | string, unit: string }> = ({ activity, value, unit }) => (
     <Grid item xs={6} lg={3}>
         <Card sx={{ height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }}>
             <CardContent sx={{ textAlign: 'center' }}>
@@ -30,7 +30,11 @@ export const Dashboard: React.FC = () => {
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
-
+    const expectedSupplyActivities = [
+        "Farm Ponds", "Recharge Structures", "Check Dams", "Bunding",
+        "Pebble/Boulder Bund", "Open Well Renovation", "Waste Weirs",
+        "Nala Treatment", "Kalyani Renovation"
+    ];
     React.useEffect(() => {
         const fetchData = async () => {
             try {
@@ -106,14 +110,13 @@ export const Dashboard: React.FC = () => {
                         <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
                         <Grid item xs={12} md={8}>
                             <Grid container spacing={1}>
-                                {
-                                    Object.entries(supplyList)?.map(([activity, data], i) => {
-                                        const [unit, value] = Object.entries(data)[0];
-                                        return (
-                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
-                                        );
-                                    })
-                                }
+                            {expectedSupplyActivities.map((activity, i) => {
+                                    const data = supplyList[activity];
+                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                    return (
+                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                    );
+                                })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
                                 {
                                     Object.entries(demandList)?.map(([activity, data], i) => {
