@@ -333,7 +333,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -362,7 +362,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -450,7 +450,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     {(uRole === 'Community Resource person' &&
                                         (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                         (a.workActivity.activityWorkflowStatus === uStatus) ? (
-                                        <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setrmk(''); setprogM(true); }}>
+                                        <IconButton title="Activity approval" onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); setprogM(true); }}>
                                             <PlayArrow />
                                         </IconButton>
                                     ) : null}
