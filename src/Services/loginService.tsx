@@ -3,7 +3,7 @@ import { serverPath } from '../common';
 
 export async function login(data: any) {
     const configuration = {
-        url: serverPath.authserver + "user-profile-service/login",
+        url: serverPath.authserver + `user-profile-service/loginForBfil`,
         method: "post",
         data: data
     };

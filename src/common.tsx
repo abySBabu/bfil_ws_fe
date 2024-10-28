@@ -8,20 +8,10 @@ import { tpaTheme } from './theme';
 
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
-
-export const serverPath = { authserver: "http://localhost:8086/auth/", bfil: "http://localhost:8080/bfil/", workFlow: "http://localhost:8083/wf/" }
-// export const serverPath = { authserver: "http://192.168.1.2:8086/auth/", bfil: "http://192.168.1.2:8080/bfil/", , workFlow: "https://workflow1.abynet.xyz/wf/" }
-// export const serverPath = { authserver: "http://172.104.56.206:9077/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
-// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/" }
-
-// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
-
 //Server
-// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
+// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
-//export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbetest.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
-//export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
-
+export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/", companyID: "137" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
     const permList = sessionStorage.getItem('permList');
