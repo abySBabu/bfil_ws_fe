@@ -97,7 +97,7 @@ export default function MappingList() {
     function fetchWsData(wsId: string) {
         const wsIds = wsId.split(',').map(id => parseInt(id, 10));
         return wsIds.map(id => {
-            const ws = wsList.find(ws => ws.wsId === id);
+            const ws = wsList.find(ws => ws.watershedId === id);
             return ws ? ws.wsName : null;
         }).filter(name => name).join(', ');
         // const wsdatabyName = wsList.find(ws => ws.wsId === wsId);

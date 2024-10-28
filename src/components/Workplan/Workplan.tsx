@@ -120,7 +120,7 @@ export const Workplan: React.FC = () => {
         setloadingResponse(false);
     }
 
-    const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.wsId === id) || wsDef) }
+    const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.watershedId === id) || wsDef) }
 
     const ActSet = async () => {
         try {
@@ -254,12 +254,12 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
                 <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
-                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
+                    {wsOps.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.district.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.taluk.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayat.panchayatId)} disabled /></Grid>
+                <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
+                <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
+                <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
 
                 <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
                 <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>

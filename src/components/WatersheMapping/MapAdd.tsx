@@ -118,13 +118,13 @@ export default function (props: mapTypeProps) {
         if (selectedRoleName === 'Community Resource person') {
             // Single selection
             setValue('ws_name', [value as number]); // wrap in an array for consistency
-            const selectedWsData = wsList.filter(ws => ws.wsId === value);
+            const selectedWsData = wsList.filter(ws => ws.watershedId === value);
             setSelectedWs(selectedWsData);
         } else {
             // Multiple selection
             const selectedWsIds = value as number[];
             setValue('ws_name', selectedWsIds);
-            const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.wsId));
+            const selectedWsData = wsList.filter(ws => selectedWsIds.includes(ws.watershedId));
             setSelectedWs(selectedWsData);
         }
     };
@@ -245,13 +245,13 @@ export default function (props: mapTypeProps) {
                                         onChange={handleWatershedChange}
                                         input={<OutlinedInput label={t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Ws_Name")} />}
                                         renderValue={(selected: number) => {
-                                            const ws = wsList.find(option => option.wsId === selected);
+                                            const ws = wsList.find(option => option.watershedId === selected);
                                             return ws ? ws.wsName : '';
                                         }}
                                         error={!!errors.ws_name}
                                     >
                                         {wsList.map((option, index) => (
-                                            <MenuItem key={index} value={option.wsId}>{option.wsName}</MenuItem>
+                                            <MenuItem key={index} value={option.watershedId}>{option.wsName}</MenuItem>
                                         ))}
                                     </Select>
 
@@ -268,15 +268,15 @@ export default function (props: mapTypeProps) {
                                         onChange={handleWatershedChange}
                                         input={<OutlinedInput label={t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Ws_Name")} />}
                                         renderValue={(selected: number[]) => selected.map(id => {
-                                            const ws = wsList.find(option => option.wsId === id);
+                                            const ws = wsList.find(option => option.watershedId === id);
                                             return ws ? ws.wsName : '';
                                         }).join(', ')}
                                         error={!!errors.ws_name}
                                     >
                                         {wsList.map((option, index) => (
-                                            <MenuItem key={index} value={option.wsId}>
+                                            <MenuItem key={index} value={option.watershedId}>
                                                 <Checkbox
-                                                    checked={watch('ws_name')?.indexOf(option.wsId) > -1}
+                                                    checked={watch('ws_name')?.indexOf(option.watershedId) > -1}
                                                 />
                                                 {option.wsName}
                                             </MenuItem>))}
@@ -309,19 +309,23 @@ export default function (props: mapTypeProps) {
                                                     {row.wsName || ''}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.state.stateName || ''}
+                                                    {row.stateName || ''}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.district.districtName || ''}
+                                                    {row.districtName || ''}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.taluk.talukName || ''}
+                                                    {row.talukName || ''}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.gramPanchayat.panchayatName || ''}
+                                                    {row.gramPanchayatName || ''}
                                                 </TableCell>
-                                                <TableCell>
-                                                    {row.village.villageName || ''}
+                                                <TableCell sx={{textWrap:'wrap', width:'30%'}}>
+                                                    {row.villages.length > 0 ? (
+                                                        row.villages.map(village => VillageName(village)).join(', ')
+                                                    ) : (
+                                                        <span>-</span>
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         ))}
