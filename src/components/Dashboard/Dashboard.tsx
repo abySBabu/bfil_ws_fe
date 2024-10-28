@@ -9,6 +9,7 @@ import { DashKey, DashSupply, DashDemand } from '../../Services/activityService'
 import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ListDemand, ListSupply } from 'src/Services/dashboardService';
 
 const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
@@ -30,14 +31,30 @@ export const Dashboard: React.FC = () => {
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
+<<<<<<< HEAD
     const expectedSupplyActivities = [
         "Farm Ponds", "Recharge Structures", "Check Dams", "Bunding",
         "Pebble/Boulder Bund", "Open Well Renovation", "Waste Weirs",
         "Nala Treatment", "Kalyani Renovation"
     ];
+=======
+    const [expectedSupplyActivities, setExpectedSupplyActivities] = React.useState<string[]>([]);
+    const [expectedDemandActivities, setExpectedDemandActivities] = React.useState<string[]>([]);
+
+>>>>>>> refs/heads/dev
     React.useEffect(() => {
         const fetchData = async () => {
             try {
+                const Supplyresp = await ListSupply();
+                if (Supplyresp) {
+                    const activities = Supplyresp.data.map((item: any) => item.activityName);
+                    setExpectedSupplyActivities(activities);
+                }
+                const Demandresp = await ListDemand();
+                if (Demandresp) {
+                    const activities = Demandresp.data.map((item: any) => item.activityName);
+                    setExpectedDemandActivities(activities);
+                }
                 const resp1 = await DashKey();
                 if (resp1) {
                     setkeyList(resp1);
@@ -72,7 +89,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAreaTreated || ''}</b></Typography>
+                                <Typography variant='h4'><b>{keyList.totalAreaTreated}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -82,7 +99,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalWaterConserved || ''}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.totalWaterConserved}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -92,7 +109,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.Farmers || ''}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.Farmers}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -110,7 +127,11 @@ export const Dashboard: React.FC = () => {
                         <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
                         <Grid item xs={12} md={8}>
                             <Grid container spacing={1}>
+<<<<<<< HEAD
                             {expectedSupplyActivities.map((activity, i) => {
+=======
+                                {expectedSupplyActivities.map((activity, i) => {
+>>>>>>> refs/heads/dev
                                     const data = supplyList[activity];
                                     const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
                                     return (
@@ -118,14 +139,13 @@ export const Dashboard: React.FC = () => {
                                     );
                                 })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
-                                {
-                                    Object.entries(demandList)?.map(([activity, data], i) => {
-                                        const [unit, value] = Object.entries(data)[0];
-                                        return (
-                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
-                                        );
-                                    })
-                                }
+                                {expectedDemandActivities.map((activity, i) => {
+                                    const data = demandList[activity];
+                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                    return (
+                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                    );
+                                })}
                             </Grid>
                         </Grid>
                         <Grid item xs={12} md={4}>

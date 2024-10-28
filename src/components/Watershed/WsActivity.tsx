@@ -48,7 +48,7 @@ export const actDef = {
         district: '',
         taluk: '',
         gramPanchayat: '',
-        village: [''],
+        village: '',
         createdTime: '',
         createdUser: sessionStorage.getItem("userName") as string,
         updatedTime: '',
@@ -89,7 +89,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [actOps, setactOps] = React.useState<any[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [fmrOps, setfmrOps] = React.useState<typeof fmrDef[]>([]);
-    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
+    const [wsOps, setwsOps] = React.useState<any[]>([]);
     const [landOps, setlandOps] = React.useState<any[]>([]);
     const [fundOps, setfundOps] = React.useState<any[]>([]);
     const [intOps, setintOps] = React.useState<any[]>([]);
@@ -98,6 +98,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [tlOps, settlOps] = React.useState<any[]>([]);
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
+    const [vilOps2, setvilOps2] = React.useState<string[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [viewM, setviewM] = React.useState(false);
@@ -131,9 +132,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         );
     });
 
-    const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
-    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure
-    const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.amountSpend || !actObj.workActivity.sourceExpenditure || !actObj.workActivity.activityDescription
+    const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
+    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
+    const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.activityDescription
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
 
     const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
@@ -227,7 +228,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         gramPanchayat: found.gramPanchayatId,
                     }
                 })
-                setvilOps(found.villages)
+                setvilOps2(found.villages)
             }
         }
         catch (error) { console.log(error) }
@@ -415,7 +416,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
                 {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Activity</TableCell>
@@ -445,7 +446,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
                                         <Visibility />
                                     </IconButton>
-                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village); seteditM(true); }}><Edit /></IconButton>)}
+                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); seteditM(true); }}><Edit /></IconButton>)}
                                     {(uRole === 'Community Resource person' &&
                                         (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                         (a.workActivity.activityWorkflowStatus === uStatus) ? (
@@ -517,7 +518,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
-                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
+                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='District' value={DistrictName(actObj.workActivity.district)} /></Grid>
@@ -535,22 +536,21 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         input={<OutlinedInput label="Villages" />}
                                         renderValue={(selected) =>
                                             selected
-                                                ?.map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
-                                                ?.filter(Boolean) // Filter undefined
+                                                ?.map((id) => VillageName(id))
                                                 ?.join(', ')
                                         }
                                         sx={{ height: '48px' }}
                                     >
-                                        {vilOps?.map((o) => (
+                                        {vilOps2?.map((o) => (
                                             <MenuItem key={o} value={o}>
                                                 <Checkbox checked={vList.includes(o)} />
-                                                <ListItemText primary={o} />
+                                                <ListItemText primary={VillageName(o)} />
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-
                             </Grid>
+
                             <Grid item xs={3}>
                                 <TextField
                                     required
@@ -643,7 +643,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
                             <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
                             <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
-                            <Grid item xs={3}><b>Villages:</b> {VillageName(actObj.workActivity.village)}</Grid>
+                            <Grid item xs={3}><b>Villages:</b> {actObj.workActivity.village.split(',').map(id => VillageName(id)).join(', ')}</Grid>
                             <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>

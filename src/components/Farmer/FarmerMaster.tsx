@@ -18,7 +18,7 @@ export const fmrDef = {
     "state": '1',
     "district": '',
     "taluk": '',
-    "grampanchayat": '',
+    "gramPanchayat": '',
     "village": '',
     "relationalIdentifiers": '',
     "identifierName": '',
@@ -93,14 +93,14 @@ export const FarmerMaster: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                if (fmrObj.grampanchayat) {
-                    const resp = await VillageById(fmrObj.grampanchayat);
+                if (fmrObj.gramPanchayat) {
+                    const resp = await VillageById(fmrObj.gramPanchayat);
                     if (resp.status === 'success') { setvilOps(resp.data); }
                 } else { setvilOps([]); }
             }
             catch (error) { console.log(error) }
         })();
-    }, [fmrObj.grampanchayat])
+    }, [fmrObj.gramPanchayat])
 
     const fetchData = async () => {
         try {
@@ -118,7 +118,7 @@ export const FarmerMaster: React.FC = () => {
             ...fmrObj,
             district: e,
             taluk: '',
-            grampanchayat: '',
+            gramPanchayat: '',
             village: ''
         })
     }
@@ -127,7 +127,7 @@ export const FarmerMaster: React.FC = () => {
         setfmrObj({
             ...fmrObj,
             taluk: e,
-            grampanchayat: '',
+            gramPanchayat: '',
             village: ''
         })
     }
@@ -135,7 +135,7 @@ export const FarmerMaster: React.FC = () => {
     const panchayatCh = async (e: any) => {
         setfmrObj({
             ...fmrObj,
-            grampanchayat: e,
+            gramPanchayat: e,
             village: ''
         })
     }
@@ -231,7 +231,7 @@ export const FarmerMaster: React.FC = () => {
                 </Box>
                 {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
@@ -291,10 +291,14 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={6}>
                             <TextField
                                 required
+                                select
                                 label="Relation"
                                 value={fmrObj.relationalIdentifiers}
                                 onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
-                            />
+                            >
+                                <MenuItem value="Son/Daughter of">Son/Daughter of</MenuItem>
+                                <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
+                            </TextField>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
@@ -322,7 +326,7 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                             {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.grampanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                             {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                         </TextField></Grid>
                         <Grid item xs={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>

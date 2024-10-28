@@ -251,7 +251,7 @@ export const WsMaster: React.FC = () => {
 
                 {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Watershed</TableCell>
@@ -345,6 +345,10 @@ export const WsMaster: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl></Grid>
+                <Grid item xs={12}><Typography><b>Selected villages:</b> {vList
+                    .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
+                    .filter(Boolean)
+                    .join(', ')}</Typography></Grid>
             </Grid></DialogContent>
 
             <DialogActions>

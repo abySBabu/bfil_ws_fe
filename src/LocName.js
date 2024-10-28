@@ -2,7 +2,7 @@ export const StateName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("StateList")) || null;
         if (list) {
-            const obj = list.find(x => x.stateId === id);
+            const obj = list.find(x => x.stateId == id);
             return obj ? obj.stateName : id;
         }
         return id;
@@ -14,7 +14,7 @@ export const DistrictName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("DistrictList")) || null;
         if (list) {
-            const obj = list.find(x => x.districtId === id);
+            const obj = list.find(x => x.districtId == id);
             return obj ? obj.districtName : id;
         }
         return id;
@@ -26,7 +26,7 @@ export const TalukName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("TalukList")) || null;
         if (list) {
-            const obj = list.find(x => x.talukId === id);
+            const obj = list.find(x => x.talukId == id);
             return obj ? obj.talukName : id;
         }
         return id;
@@ -38,7 +38,7 @@ export const PanName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("PanList")) || null;
         if (list) {
-            const obj = list.find(x => x.panchayatId === id);
+            const obj = list.find(x => x.panchayatId == id);
             return obj ? obj.panchayatName : id;
         }
         return id;
@@ -50,7 +50,7 @@ export const WsName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("WsList")) || null;
         if (list) {
-            const obj = list.find(x => x.wsId === id);
+            const obj = list.find(x => x.watershedId == id);
             return obj ? obj.wsName : id;
         }
         return id;
