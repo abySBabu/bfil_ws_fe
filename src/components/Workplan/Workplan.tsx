@@ -197,7 +197,7 @@ export const Workplan: React.FC = () => {
 
                 {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Watershed</TableCell>

@@ -416,7 +416,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
                 {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ height: '90%' }}><Table sx={{ height: '100%' }}>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Activity</TableCell>
@@ -536,8 +536,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         input={<OutlinedInput label="Villages" />}
                                         renderValue={(selected) =>
                                             selected
-                                                .map((id) => VillageName(id))
-                                                .join(', ')
+                                                ?.map((id) => VillageName(id))
+                                                ?.join(', ')
                                         }
                                         sx={{ height: '48px' }}
                                     >
