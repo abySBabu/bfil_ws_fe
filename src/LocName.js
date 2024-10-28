@@ -50,7 +50,7 @@ export const WsName = (id) => {
     if (id !== null && id !== undefined) {
         const list = JSON.parse(localStorage.getItem("WsList")) || null;
         if (list) {
-            const obj = list.find(x => x.wsId == id);
+            const obj = list.find(x => x.watershedId == id);
             return obj ? obj.wsName : id;
         }
         return id;

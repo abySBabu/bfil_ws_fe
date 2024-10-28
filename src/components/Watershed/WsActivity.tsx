@@ -48,7 +48,7 @@ export const actDef = {
         district: '',
         taluk: '',
         gramPanchayat: '',
-        village: [''],
+        village: '',
         createdTime: '',
         createdUser: sessionStorage.getItem("userName") as string,
         updatedTime: '',
@@ -446,7 +446,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
                                         <Visibility />
                                     </IconButton>
-                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village); seteditM(true); }}><Edit /></IconButton>)}
+                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); seteditM(true); }}><Edit /></IconButton>)}
                                     {(uRole === 'Community Resource person' &&
                                         (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                         (a.workActivity.activityWorkflowStatus === uStatus) ? (
