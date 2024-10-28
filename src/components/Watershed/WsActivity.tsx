@@ -98,6 +98,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [tlOps, settlOps] = React.useState<any[]>([]);
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
+    const [vilOps2, setvilOps2] = React.useState<string[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [viewM, setviewM] = React.useState(false);
@@ -195,7 +196,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
-            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data); console.log("Watershed options--", resp6.data) }
+            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
@@ -227,8 +228,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         gramPanchayat: found.gramPanchayatId,
                     }
                 })
-                setvilOps(found.villages)
-                console.log("Village options--", found.villages)
+                setvilOps2(found.villages)
             }
         }
         catch (error) { console.log(error) }
@@ -535,19 +535,22 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         onChange={handleChange}
                                         input={<OutlinedInput label="Villages" />}
                                         renderValue={(selected) =>
-                                            selected.join(', ')
+                                            selected
+                                                .map((id) => VillageName(id))
+                                                .join(', ')
                                         }
                                         sx={{ height: '48px' }}
                                     >
-                                        {vilOps?.map((o) => (
+                                        {vilOps2?.map((o) => (
                                             <MenuItem key={o} value={o}>
                                                 <Checkbox checked={vList.includes(o)} />
-                                                <ListItemText primary={o.toString()} />
+                                                <ListItemText primary={VillageName(o)} />
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             </Grid>
+
                             <Grid item xs={3}>
                                 <TextField
                                     required
