@@ -220,18 +220,57 @@ export const FarmerMaster: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
-                    <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
-                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
-                    </div>
-                </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+    <Typography
+        variant='h5'
+        sx={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+            flexGrow: 1,
+            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
+            mb: { xs: 2, sm: 2 },
+        }}
+    >
+        Beneficiary Master
+    </Typography>
+
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+        <TextField
+            label="Search"
+            fullWidth={false}
+            value={search}
+            onChange={(e) => setsearch(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }}
+        />
+        {PerChk('EDIT_Beneficiary Master') && (
+            <Button
+                startIcon={<PersonAdd />}
+                sx={{ height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '150px' }, ml: { xs: 0, sm: '4px' } }}
+                onClick={() => {
+                    setfmrObj(fmrDef);
+                    setaddM(true);
+                    setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+                }}
+            >
+                Add Beneficiary
+            </Button>
+        )}
+    </Box>
+</Box>
+
                 {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
                     No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}>
+                    <Table sx={{ width: '100%'}}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>

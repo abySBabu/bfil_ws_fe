@@ -180,7 +180,8 @@ export default function RoleList() {
 
 
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+                        <Table sx={{ width: '100%'}}>
                         <TableHead>
                             <TableRow sx={{ alignItems: 'center' }}>
                                 <TableCell >{t("p_Role_Management.ss_RoleList.Role_Name")}</TableCell>

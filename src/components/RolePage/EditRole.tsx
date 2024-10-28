@@ -246,7 +246,7 @@ export default function EditRole(props: RoleTypeProps) {
                         <DialogTitle>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Role_Popup.Edit_Role_Label")}</DialogTitle>
                         <DialogContent>
                             <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={4}>
                                     <TextField
                                         margin="normal"
                                         required
@@ -270,7 +270,7 @@ export default function EditRole(props: RoleTypeProps) {
                                         helperText={errors.roleName ? errors.roleName.message : ''}
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={4}>
                                     <TextField
                                         margin="normal"
                                         required
