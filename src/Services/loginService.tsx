@@ -43,7 +43,7 @@ export async function login(data: any) {
 
 export async function logout() {
     const configuration = {
-        url: serverPath.authserver + "user-profile-service/logout",
+        url: serverPath.authserver + "user-profile-service/logoutForBfil",
         method: "post",
         data: {
             address: "address",
