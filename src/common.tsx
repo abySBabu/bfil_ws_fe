@@ -9,9 +9,9 @@ import { tpaTheme } from './theme';
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
 //Server
-// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
+// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
-export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/" }
+export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/", companyID: "137" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
     const permList = sessionStorage.getItem('permList');

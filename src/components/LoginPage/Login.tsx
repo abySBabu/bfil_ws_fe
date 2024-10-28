@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Avatar } from '@mui/material';
 import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { serverPath, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { Height } from '@mui/icons-material';
 
 
@@ -34,6 +34,7 @@ const Login: React.FC = () => {
             let data = {
                 userName: value.userName,
                 password: value.password,
+                companyId: serverPath.companyID,
             };
 
             const response = await login(data);
