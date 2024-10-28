@@ -291,10 +291,14 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={6}>
                             <TextField
                                 required
+                                select
                                 label="Relation"
                                 value={fmrObj.relationalIdentifiers}
                                 onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
-                            />
+                            >
+                                <MenuItem value="Son/Daughter of">Son/Daughter of</MenuItem>
+                                <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
+                            </TextField>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
