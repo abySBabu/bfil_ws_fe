@@ -643,7 +643,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
                             <Grid item xs={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
                             <Grid item xs={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
-                            <Grid item xs={3}><b>Villages:</b> {VillageName(actObj.workActivity.village)}</Grid>
+                            <Grid item xs={3}><b>Villages:</b> {actObj.workActivity.village.split(',').map(id => VillageName(id)).join(', ')}</Grid>
                             <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
                             <Grid item xs={12}><Divider>Activity Details</Divider></Grid>

@@ -74,9 +74,8 @@ export const Dashboard: React.FC = () => {
                     <CircularProgress size={80} />
                 </Box > : <>
                     <Grid container spacing={1}>
-                        {(keyList.totalAreaTreated || keyList.totalWaterConserved || keyList.Farmers || keyList.totalAmountSpent) &&
-                            <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>}
-                        {keyList.totalAreaTreated && <Grid item xs={12} md={3}><Card sx={keyCard}>
+                        <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
+                        <Grid item xs={12} md={3}><Card sx={keyCard}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Subheader_Text")}</Typography>
                                 <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
@@ -85,8 +84,8 @@ export const Dashboard: React.FC = () => {
                                 <Typography variant='h4'><b>{keyList.totalAreaTreated}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
-                        </Card></Grid>}
-                        {keyList.totalWaterConserved && <Grid item xs={12} md={3}><Card sx={keyCard}>
+                        </Card></Grid>
+                        <Grid item xs={12} md={3}><Card sx={keyCard}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WaterConserved_Subheader_Text")}</Typography>
                                 <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
@@ -95,8 +94,8 @@ export const Dashboard: React.FC = () => {
                                 <Typography variant='h4'><b>{keyList?.totalWaterConserved}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
-                        </Card></Grid>}
-                        {keyList.Farmers && <Grid item xs={12} md={3}><Card sx={keyCard}>
+                        </Card></Grid>
+                        <Grid item xs={12} md={3}><Card sx={keyCard}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Subheader_Text")}</Typography>
                                 <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
@@ -105,8 +104,8 @@ export const Dashboard: React.FC = () => {
                                 <Typography variant='h4'><b>{keyList?.Farmers}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
-                        </Card></Grid>}
-                        {keyList.totalAmountSpent && <Grid item xs={12} md={3}><Card sx={keyCard}>
+                        </Card></Grid>
+                        <Grid item xs={12} md={3}><Card sx={keyCard}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Subheader_Text")}</Typography>
                                 <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
@@ -115,7 +114,7 @@ export const Dashboard: React.FC = () => {
                                 <Typography variant='h4'><b>{keyList?.totalAmountSpent || ''}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
-                        </Card></Grid>}
+                        </Card></Grid>
 
                         <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
                         <Grid item xs={12} md={8}>
