@@ -174,7 +174,7 @@ export default function (props: userTypeProps) {
                 <DialogTitle>{t("p_User_Management.Add_User_Link.Add_User_Popup.Add_User_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -197,7 +197,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.userName ? errors.userName.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -219,7 +219,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.employeeCode ? errors.employeeCode.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 fullWidth
@@ -239,7 +239,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.designation ? errors.designation.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 required
@@ -260,7 +260,7 @@ export default function (props: userTypeProps) {
                                 {rolesListFromService.map((option, index) => (<MenuItem key={index} value={option.roleName}>{option.roleName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -283,7 +283,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.email ? errors.email.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -305,7 +305,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.mobileNo ? errors.mobileNo.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item  xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -328,7 +328,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.password ? errors.password.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 margin="normal"
@@ -347,7 +347,7 @@ export default function (props: userTypeProps) {
                                 {managerList.map((option, index) => (<MenuItem key={index} value={option.userName}>{option.userName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 required

@@ -110,30 +110,74 @@ export default function RoleList() {
                 {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
                 {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
                 {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                        {t("p_Role_Management.ss_Role_Management_Header")}
-                    </Typography>
-                    <TextField
-                        label={t("p_Role_Management.ss_Search_Label")}
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    {PerChk('EDIT_Role Management') && (
-                        <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                            {t("p_Role_Management.Add_Role_Link.Add_Role_Link_Text")}
-                        </Button>)}
-                </Box>
+    
+
+<Box
+    sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '4px',
+        mb: 1,
+        flexDirection: { xs: 'column', sm: 'row' }
+    }}
+>
+    <Typography
+        variant="h5"
+        sx={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+            flexGrow: 1,
+            mb: { xs: 2, sm: 2 }
+        }}
+    >
+        {t("p_Role_Management.ss_Role_Management_Header")}
+    </Typography>
+
+    <Box
+        sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: 'center',
+            gap: { xs: 1, sm: 2 },
+        }}
+    >
+        <TextField
+            label={t("p_Role_Management.ss_Search_Label")}
+            fullWidth={false}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon />
+                    </InputAdornment>
+                ),
+            }}
+            sx={{
+                width: { xs: '80%', sm: '200px' },
+                mb: { xs: 1, sm: 0 }
+            }}
+        />
+        {PerChk('EDIT_Role Management') && (
+            <Button
+                variant="outlined"
+                onClick={() => { setShowAddModal(true) }}
+                startIcon={<PersonAddIcon />}
+                sx={{
+                    height: { xs: 'auto', sm: '45px' },
+                    width: { xs: '80%', sm: '150px' },
+                    ml: { xs: 0, sm: '4px' },
+                }}
+            >
+                {t("p_Role_Management.Add_Role_Link.Add_Role_Link_Text")}
+            </Button>
+        )}
+    </Box>
+</Box>
+
 
                 {filteredData.length > 0 ?
                     <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>

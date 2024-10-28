@@ -170,7 +170,7 @@ export default function UserForm(props: userTypeProps) {
                 <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Edit_User_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -194,7 +194,7 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.userName?.message}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -214,7 +214,7 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.employeeCode?.message}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 fullWidth
@@ -235,7 +235,7 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.designation?.message}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <TextField
                                 margin="normal"
                                 required
@@ -255,7 +255,7 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.email?.message}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={6}>
                             <TextField
                                 margin="normal"
                                 required
@@ -275,7 +275,7 @@ export default function UserForm(props: userTypeProps) {
                                 helperText={errors.mobileNo?.message}
                             />
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 required
@@ -300,7 +300,7 @@ export default function UserForm(props: userTypeProps) {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 margin="normal"
@@ -322,7 +322,7 @@ export default function UserForm(props: userTypeProps) {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 select
                                 required
