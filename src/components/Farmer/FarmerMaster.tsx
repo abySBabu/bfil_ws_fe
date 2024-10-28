@@ -307,7 +307,7 @@ export const FarmerMaster: React.FC = () => {
                     <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Name"
@@ -316,7 +316,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Mobile"
@@ -327,7 +327,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 select
@@ -339,7 +339,7 @@ export const FarmerMaster: React.FC = () => {
                                 <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Relation Name"
@@ -347,7 +347,7 @@ export const FarmerMaster: React.FC = () => {
                                 onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Remarks"
@@ -356,19 +356,19 @@ export const FarmerMaster: React.FC = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
-                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                        <Grid item xs={12} sm={4}><TextField disabled required select label='State' value={fmrObj.state}>
                             {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
                             {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                             {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                             {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
                             {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                         </TextField></Grid>
                     </Grid></DialogContent>

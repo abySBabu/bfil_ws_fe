@@ -120,30 +120,59 @@ export default function MappingList() {
                 {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' mapList={mapData} /> : null}
                 {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
-                        {t("p_Watershed_Mapping.ss_Watershed_Mapping_Header")}
-                    </Typography>
-                    <TextField
-                        label={t("p_Watershed_Mapping.ss_Search_Label")}
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    {PerChk('EDIT_Watershed Mapping') && (
-                        <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                            {t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Link_Text")}
-                        </Button>)}
-                </Box>
+                <Box sx={{ 
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '4px',
+    mb: 1,
+    flexDirection: { xs: 'column', sm: 'row' } 
+}}>
+    <Typography variant="h5" sx={{ 
+        fontWeight: 'bold', 
+        textAlign: 'left', 
+        flexGrow: 1,
+        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
+        mb: { xs: 2, sm: 0 } // Adjust margin bottom for small screens
+    }}>
+        {t("p_Watershed_Mapping.ss_Watershed_Mapping_Header")}
+    </Typography>
+
+    <Box sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: 'center',
+        gap: { xs: 1, sm: 2 },
+    }}>
+        <TextField
+            label={t("p_Watershed_Mapping.ss_Search_Label")}
+            fullWidth={false}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon />
+                    </InputAdornment>
+                ),
+            }}
+            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }} // Adjust width for responsiveness
+        />
+        {PerChk('EDIT_Watershed Mapping') && (
+            <Button 
+                variant="outlined" 
+                onClick={() => { setShowAddModal(true) }} 
+                startIcon={<PersonAddIcon />}
+                sx={{ height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '150px' }, ml: { xs: 0, sm: '4px' } }}
+            >
+                {t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Link_Text")}
+            </Button>
+        )}
+    </Box>
+</Box>
+
 
                 {filteredData.length > 0 ?
                     <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
