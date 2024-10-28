@@ -47,7 +47,8 @@ export async function logout() {
         method: "post",
         data: {
             address: "address",
-            loginId: sessionStorage.getItem("userNumber") || ""
+            loginId: sessionStorage.getItem("userNumber") || "",
+            companyId: serverPath.companyID
         }
     };
     try {
