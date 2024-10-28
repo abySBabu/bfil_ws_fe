@@ -333,11 +333,9 @@ export default function (props: mapTypeProps) {
                                                 <TableCell>
                                                     {row.gramPanchayatName || ''}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell sx={{ textWrap: 'wrap', width: '30%' }}>
                                                     {row.villages.length > 0 ? (
-                                                        row.villages.map((village, vIndex) => (
-                                                            <div key={vIndex}>{village || ''}</div>
-                                                        ))
+                                                        row.villages.map(village => VillageName(village)).join(', ')
                                                     ) : (
                                                         <span>-</span>
                                                     )}
