@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -21,6 +21,7 @@ import ReportTable from './components/ReportPage/ReportTable';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CircularProgress from '@mui/material/CircularProgress';
+import MenuIcon from '@mui/icons-material/Menu';
 
 interface SideItem {
     screenName: string;
@@ -47,6 +48,8 @@ export const Home: React.FC = () => {
     const [actCount, setactCount] = useState(0);
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [isClosing, setIsClosing] = React.useState(false);
     sessionStorage.setItem("multiLanguage", "en");
 
     const countHeader = (textKey: string, badgeCount: number) => {
@@ -173,6 +176,47 @@ export const Home: React.FC = () => {
         }; fetchLoc();
     }, [i18n.language]);
 
+    const handleDrawerClose = () => {
+        setIsClosing(true);
+        setMobileOpen(false);
+      };
+    
+      const handleDrawerTransitionEnd = () => {
+        setIsClosing(false);
+      };
+  
+  
+      const handleDrawerToggle = () => {
+        if (!isClosing) {
+          setMobileOpen(!mobileOpen);
+        }
+      };
+      const drawer = (
+        <Box sx={{ marginLeft: '10px',mt:5}}>
+          <List>
+            {sections && sections.map((section, index) => (
+              PerChk(section.permission) && (  
+                <ListItem key={section.name} disablePadding>
+                  <ListItemButton 
+                    sx={{ 
+                      backgroundColor: '#bb4d53', 
+                      '&:hover': { backgroundColor: '#cc802a' },  
+                      color: '#fff',
+                    
+                    }}
+                    onClick={() => setdIndex(index)}  
+                    selected={dIndex === index}       
+                  >
+                    <ListItemText primary={section.name} />
+                  </ListItemButton>
+                </ListItem>
+              )
+            ))}
+          </List>
+        </Box>
+      );
+  
+
     return (<>
         {loadingResponse ? <Box
             sx={{
@@ -183,26 +227,146 @@ export const Home: React.FC = () => {
             }}
         >
             <CircularProgress size={80} />
-        </Box > : <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', p: sd('--page-header-padding'), height: '6%' }}>
-                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/iib.jpg`} alt="IndusInd" height='100%' />
-                    <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height='100%' />
-                </Box>
-                <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Typography variant='h4' fontWeight='bold' sx={{ color: sd('--page-header-txtcolor'), textAlign: 'center' }}>
-                        {t("p_Home.Pragat_Watershed_Header")}
-                    </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', gap: '8px', height: '60px', alignItems: 'center' }}>
-                    <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height="100%" />
-                    <Avatar onClick={(event) => setavatarAnchor(event.currentTarget)}>{uName}</Avatar>
-                </Box>
-            </Toolbar>
+        </Box > : 
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
+           
+           <AppBar
+  position="relative"
+  sx={{
+    zIndex: 1100,
+  }}
+>
+  <Toolbar
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      backgroundColor: '#8d272b',
+      p: sd('--page-header-padding'),
+      minHeight: '28px',
+      height: 'auto',
+      flexWrap: 'wrap', // Allows elements to wrap on smaller screens
+    }}
+  >
+    <IconButton
+      edge="start"
+      color="inherit"
+      aria-label="menu"
+      onClick={handleDrawerToggle}
+      sx={{ mr: 2, display: { xs: 'block', sm: 'none' } }} 
+    >
+      <MenuIcon sx={{ ml: 2, color: '#fff' }} />
+    </IconButton>
+    
+    <Box
+  sx={{
+    display: { xs: 'none', sm: 'flex' }, // Hide on extra small screens, show on small and up
+    gap: '8px',
+    height: { xs: '40px', md: '60px' }, // Responsive height
+    alignItems: 'center',
+  }}
+>
+  <img
+    src={`${process.env.PUBLIC_URL}/images/iib.jpg`}
+    alt="IndusInd"
+    style={{ height: '100%', maxHeight: '60px' }} // Responsive image size
+  />
+  <img
+    src={`${process.env.PUBLIC_URL}/images/bfil.png`}
+    alt="BFIL"
+    style={{ height: '100%', maxHeight: '40px' }} // Responsive image size
+  />
+</Box>
+
+
+    <Typography
+      variant='h4'
+      fontWeight='bold'
+      sx={{
+        color: sd('--page-header-txtcolor'),
+        textAlign: 'center',
+        flexGrow: 1,
+        fontSize: { xs: '1rem',md:'1.5rem', lg: '2rem' }, // Responsive font size
+        display: { xs: 'none', sm: 'block' }, // Hide on small screens if desired
+      }}
+    >
+      {t("p_Home.Pragat_Watershed_Header")}
+    </Typography>
+
+    <Box
+      sx={{
+        display: 'flex',
+        gap: '8px',
+        height: { xs: '40px', md: '60px' },
+        alignItems: 'center',
+      }}
+    >
+     <Box
+  sx={{
+    display: { xs: 'none', md: 'none', lg: 'block' }, 
+    height: '100%',
+    maxHeight: '60px',
+  }}
+>
+  <img
+    src={`${process.env.PUBLIC_URL}/images/pragat.png`}
+    alt="Pragat"
+    style={{ height: '100%' }} 
+  />
+</Box>
+
+      <Avatar
+        onClick={(event) => setavatarAnchor(event.currentTarget)}
+        sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
+      >
+        {uName}
+      </Avatar>
+    </Box>
+  </Toolbar>
+
+  <Drawer
+    variant="temporary"
+    open={mobileOpen}
+    onTransitionEnd={handleDrawerTransitionEnd}
+    onClose={handleDrawerClose}
+    ModalProps={{
+      keepMounted: true,
+    }}
+    sx={{
+      display: { xs: 'block', sm: 'none' },
+      '& .MuiDrawer-paper': {
+        boxSizing: 'border-box',
+        backgroundColor: '#8d272b',
+        height: '100%',
+      },
+    }}
+  >
+    <Box
+      sx={{
+        display: 'flex',
+        gap: '8px',
+        height: '60px',
+        alignItems: 'center',
+        mt: 2,
+        ml: 2,
+      }}
+    >
+      <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
+      <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+    </Box>
+
+    <Box sx={{ height: '100vh', backgroundColor: '#bb4d53' }}>
+      {drawer} 
+    </Box>
+  </Drawer>
+</AppBar>
+
+
+
+
 
             {!hasPermission &&
-                <Paper elevation={8} sx={{ flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'hidden' }}>
-                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                <Paper elevation={8} sx={{ mt:1,flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'hidden' }}>
+                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), display: { xs: 'none', sm: 'block' }, width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
                                 <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
@@ -212,7 +376,7 @@ export const Home: React.FC = () => {
                         ))}</List>
                     </Box>
 
-                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '88%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
                         {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
                     </Box>
                 </Paper>
