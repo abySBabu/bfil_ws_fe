@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -366,7 +366,7 @@ export const Home: React.FC = () => {
 
             {!hasPermission &&
                 <Paper elevation={8} sx={{ mt:1,flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'hidden' }}>
-                    <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), display: { xs: 'none', sm: 'block' }, width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                    {/* <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), display: { xs: 'none', sm: 'block' }, width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                             PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
                                 <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
@@ -374,11 +374,30 @@ export const Home: React.FC = () => {
                                 </ListItemButton>
                             </ListItem>)
                         ))}</List>
-                    </Box>
+                    </Box> */}
 
-                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+
+<Card sx={{ color: sd('--page-nav-txtcolor'), display: { xs: 'none', sm: 'block' }, bgcolor: sd('--page-nav-bgcolor'), width: {md:'25%',lg:'15%'}, borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
+                                    <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
+                                        PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
+                                            <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                                                <ListItemText primary={section.name} />
+                                            </ListItemButton>
+                                        </ListItem>)
+                                    ))}</List>
+                                </Card>
+
+
+
+                    {/* <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
                         {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
-                    </Box>
+                    </Box> */}
+
+
+
+                    <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor') ,width:'100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+                                    {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
+                                </Box>
                 </Paper>
             }
 
