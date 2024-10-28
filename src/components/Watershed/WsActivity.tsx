@@ -89,7 +89,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [actOps, setactOps] = React.useState<any[]>([]);
     const [fmrObj, setfmrObj] = React.useState(fmrDef);
     const [fmrOps, setfmrOps] = React.useState<typeof fmrDef[]>([]);
-    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
+    const [wsOps, setwsOps] = React.useState<any[]>([]);
     const [landOps, setlandOps] = React.useState<any[]>([]);
     const [fundOps, setfundOps] = React.useState<any[]>([]);
     const [intOps, setintOps] = React.useState<any[]>([]);
@@ -195,7 +195,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
-            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data) }
+            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data); console.log("Watershed options--", resp6.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
@@ -228,6 +228,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     }
                 })
                 setvilOps(found.villages)
+                console.log("Village options--", found.villages)
             }
         }
         catch (error) { console.log(error) }
@@ -517,7 +518,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
-                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
+                                {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='District' value={DistrictName(actObj.workActivity.district)} /></Grid>
@@ -534,22 +535,18 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         onChange={handleChange}
                                         input={<OutlinedInput label="Villages" />}
                                         renderValue={(selected) =>
-                                            selected
-                                                ?.map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
-                                                ?.filter(Boolean) // Filter undefined
-                                                ?.join(', ')
+                                            selected.join(', ')
                                         }
                                         sx={{ height: '48px' }}
                                     >
                                         {vilOps?.map((o) => (
                                             <MenuItem key={o} value={o}>
                                                 <Checkbox checked={vList.includes(o)} />
-                                                <ListItemText primary={o} />
+                                                <ListItemText primary={o.toString()} />
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-
                             </Grid>
                             <Grid item xs={3}>
                                 <TextField
