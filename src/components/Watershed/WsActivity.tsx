@@ -513,9 +513,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><TextField required type='number' label='Female Participants' value={actObj.workActivity.participantsFemale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsFemale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
                             <Grid item xs={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={3}><TextField required label='Facilitator' value={actObj.workActivity.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, trainerFacilitator: e.target.value } })} /></Grid>
-                            <Grid item xs={3}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
-                            <Grid item xs={6}><TextField required label='Remarks' value={actObj.workActivity.remarks} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, remarks: e.target.value } })} /></Grid>
+                            <Grid item xs={6}><TextField required label='Facilitator' value={actObj.workActivity.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, trainerFacilitator: e.target.value } })} /></Grid>
+                            <Grid item xs={6}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                             <Grid item xs={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
@@ -648,20 +647,26 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={3}><b>Villages:</b> {actObj.workActivity.village.split(',').map(id => VillageName(id)).join(', ')}</Grid>
                             <Grid item xs={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
-                            <Grid item xs={12}><Divider>Activity Details</Divider></Grid>
+                            <Grid item xs={12}><Divider>Activity Physical Details</Divider></Grid>
                             <Grid item xs={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit}</Grid>
                             <Grid item xs={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated}</Grid>
                             {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
                                 <Grid item xs={3}><b>Land Type:</b> {actObj.workActivity.landType}</Grid>
                                 <Grid item xs={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved}</Grid>
                             </>}
-                            <Grid item xs={3}><b>Funds spent (₹):</b> {actObj.workActivity.amountSpend}</Grid>
-                            <Grid item xs={3}><b>Funds source:</b> {actObj.workActivity.sourceExpenditure}</Grid>
+
+                            <Grid item xs={12}><Divider>Activity Financial Details</Divider></Grid>
+                            <Grid item xs={3}><b>BFIL: </b>{actObj.workActivity.bfilAmount} </Grid>
+                            <Grid item xs={3}><b>Gov Schemes: </b>{actObj.workActivity.otherGovScheme}</Grid>
+                            <Grid item xs={3}><b>Other: </b>{actObj.workActivity.other}</Grid>
+                            <Grid item xs={3}><b>MGNREGA: </b>{actObj.workActivity.menrege}</Grid>
+                            <Grid item xs={3}><b>IBL: </b>{actObj.workActivity.ibl}</Grid>
+                            <Grid item xs={3}><b>Community: </b>{actObj.workActivity.community}</Grid>
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
                             <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
-                            <Grid item xs={6}><b>Relation: </b> {fmrObj.relationalIdentifiers}: {fmrObj.identifierName}</Grid>
+                            <Grid item xs={6}><b>{fmrObj.relationalIdentifiers}: </b>{fmrObj.identifierName}</Grid>
                         </>}
 
                         <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
