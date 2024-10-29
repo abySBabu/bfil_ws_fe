@@ -661,6 +661,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
                             <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
+                            <Grid item xs={6}><b>Relation: </b> {fmrObj.relationalIdentifiers}: {fmrObj.identifierName}</Grid>
                         </>}
 
                         <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
