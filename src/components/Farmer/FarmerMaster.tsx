@@ -223,7 +223,7 @@ export const FarmerMaster: React.FC = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
                     <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
                             onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}

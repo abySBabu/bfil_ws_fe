@@ -128,7 +128,7 @@ export default function MappingList() {
                         label={t("p_Watershed_Mapping.ss_Search_Label")}
                         fullWidth={false}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
                         variant="outlined"
                         size="small"
                         InputProps={{
@@ -165,10 +165,10 @@ export default function MappingList() {
                                     <TableCell>
                                         {fetchUserData(row.userId)}
                                     </TableCell>
-                                    <TableCell sx={{textWrap:'wrap', width:'50%'}}>
+                                    <TableCell sx={{ textWrap: 'wrap', width: '50%' }}>
                                         {fetchWsData(row.watershedId)}
                                     </TableCell>
-                                    <TableCell sx={{textWrap:'wrap', width:'30%'}} >
+                                    <TableCell sx={{ textWrap: 'wrap', width: '30%' }} >
                                         {row.remarks}
                                     </TableCell>
                                     {PerChk('EDIT_Watershed Mapping') && (

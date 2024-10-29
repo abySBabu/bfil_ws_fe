@@ -189,7 +189,7 @@ export const Workplan: React.FC = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
                     <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0) }}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '48px', ml: '4px' }}>Add Plan</Button>}
                     </div>

@@ -407,7 +407,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
                     <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} sx={{ height: '48px', ml: '4px' }}
                             onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setvList([]); setaddM(true); }} >Add Activity</Button>)}

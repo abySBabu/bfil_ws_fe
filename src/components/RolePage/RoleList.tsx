@@ -118,7 +118,7 @@ export default function RoleList() {
                         label={t("p_Role_Management.ss_Search_Label")}
                         fullWidth={false}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
                         variant="outlined"
                         size="small"
                         InputProps={{
