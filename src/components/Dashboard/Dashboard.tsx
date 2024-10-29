@@ -81,7 +81,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList.totalAreaTreated}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -91,7 +91,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalWaterConserved}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -101,7 +101,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.Farmers}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.Farmers ? keyList?.Farmers : "N/A"}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -111,7 +111,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAmountSpent || ''}</b></Typography>
+                                <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
                                 <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>

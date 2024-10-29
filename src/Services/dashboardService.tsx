@@ -82,6 +82,7 @@ export async function ListSide(status: any) {
 }
 
 export async function ListStatus() {
+    console.log("Testing "+sessionStorage.getItem("token"));
     const configs = {
         url: serverPath.bfil + `status_mapping/getAllMappingStatus`,
         method: 'get',

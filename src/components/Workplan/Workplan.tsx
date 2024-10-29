@@ -244,46 +244,45 @@ export const Workplan: React.FC = () => {
     </Box>
 </Box>
 
+                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                    : planListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Watershed</TableCell>
+                                    <TableCell>Year</TableCell>
+                                    <TableCell>Intervention/Component</TableCell>
+                                    <TableCell>Activity</TableCell>
+                                    <TableCell>Physical</TableCell>
+                                    <TableCell align='center'>Financial</TableCell>
+                                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
+                                </TableRow>
+                            </TableHead>
 
-                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-                    No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Watershed</TableCell>
-                            <TableCell>Year</TableCell>
-                            <TableCell>Intervention/Component</TableCell>
-                            <TableCell>Activity</TableCell>
-                            <TableCell>Physical</TableCell>
-                            <TableCell align='center'>Financial</TableCell>
-                            {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
-                        </TableRow>
-                    </TableHead>
+                            <TableBody>{planListP.map((w, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{WsName(w.watershedId)}</TableCell>
+                                    <TableCell>{w.planningYear}</TableCell>
+                                    <TableCell>{w.interventionType_Components}</TableCell>
+                                    <TableCell>{w.activityName}</TableCell>
+                                    <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
+                                    <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
+                                    {PerChk('EDIT_Work Plan') && <TableCell>
+                                        <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
+                                    </TableCell>}
+                                </TableRow>
+                            ))}</TableBody>
 
-                    <TableBody>{planListP.map((w, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{WsName(w.watershedId)}</TableCell>
-                            <TableCell>{w.planningYear}</TableCell>
-                            <TableCell>{w.interventionType_Components}</TableCell>
-                            <TableCell>{w.activityName}</TableCell>
-                            <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                            <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                            {PerChk('EDIT_Work Plan') && <TableCell>
-                                <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                            </TableCell>}
-                        </TableRow>
-                    ))}</TableBody>
-
-                    <TableFooter><TableRow><TablePagination
-                        count={planListF.length}
-                        rowsPerPage={rPP}
-                        page={page}
-                        onPageChange={(e, p) => setPage(p)}
-                        rowsPerPageOptions={[5, 10, 15]}
-                        onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                        ActionsComponent={TPA}
-                    /></TableRow></TableFooter>
-                </Table></TableContainer>}
+                            <TableFooter><TableRow><TablePagination
+                                count={planListF.length}
+                                rowsPerPage={rPP}
+                                page={page}
+                                onPageChange={(e, p) => setPage(p)}
+                                rowsPerPageOptions={[5, 10, 15]}
+                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                ActionsComponent={TPA}
+                            /></TableRow></TableFooter>
+                        </Table></TableContainer>}
             </>}
 
         <Dialog open={addM || editM}>

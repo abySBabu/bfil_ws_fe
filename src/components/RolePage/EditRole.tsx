@@ -207,6 +207,13 @@ export default function EditRole(props: RoleTypeProps) {
                 if (viewPermission) {
                     updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== viewPermission.permissionId);
                 }
+            } else {
+                const editPermission = selectedPermissions
+                    .flatMap(screen => screen.permission)
+                    .find(p => p.permissionName === perm.permissionName.replace("VIEW", "EDIT"));
+                if (editPermission) {
+                    updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== editPermission.permissionId);
+                }
             }
         }
 

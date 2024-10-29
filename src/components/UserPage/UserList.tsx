@@ -166,11 +166,6 @@ export default function UserList() {
       </Box>
                 </Box>
 
-
-        
-
-
-
                 {filteredData.length > 0 ?
                     <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table sx={{ width: '100%'}}>
                         <TableHead>
