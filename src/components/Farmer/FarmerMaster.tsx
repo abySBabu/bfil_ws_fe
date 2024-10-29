@@ -254,7 +254,7 @@ export const FarmerMaster: React.FC = () => {
         {PerChk('EDIT_Beneficiary Master') && (
             <Button
                 startIcon={<PersonAdd />}
-                sx={{ height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '150px' }, ml: { xs: 0, sm: '4px' } }}
+                sx={{ height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '180px' }, ml: { xs: 0, sm: '4px' } }}
                 onClick={() => {
                     setfmrObj(fmrDef);
                     setaddM(true);

@@ -175,7 +175,8 @@ export default function MappingList() {
 
 
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+                        <Table>
                         <TableHead>
                             <TableRow sx={{ alignItems: 'center' }}>
                                 <TableCell >{t("p_Watershed_Mapping.ss_MappingList.User_Name")}</TableCell>

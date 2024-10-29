@@ -285,8 +285,8 @@ export const Home: React.FC = () => {
         color: sd('--page-header-txtcolor'),
         textAlign: 'center',
         flexGrow: 1,
-        fontSize: { xs: '1rem',md:'1.5rem', lg: '2rem' }, // Responsive font size
-        display: { xs: 'none', sm: 'block' }, // Hide on small screens if desired
+        fontSize: { xs: '1rem',md:'1.5rem', lg: '2rem' }, 
+       
       }}
     >
       {t("p_Home.Pragat_Watershed_Header")}

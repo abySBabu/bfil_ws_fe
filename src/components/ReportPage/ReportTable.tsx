@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import {Table,TableBody,TableCell,TableContainer, TableHead, TableRow, Paper, Typography,Button,
   Box,
+  TextField,
 } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -10,6 +11,7 @@ import 'jspdf-autotable';
 import { listWP } from '../../Services/workplanService';
 import { useReactToPrint } from 'react-to-print';
 import SummaryReport from './SummaryReport';
+import { Label } from '@mui/icons-material';
 
 const ReportTable: React.FC = () => {
   const [showReport, setShowReport] = useState(false);
@@ -144,30 +146,61 @@ const ReportTable: React.FC = () => {
       <Typography variant="h4" align="center" style={{ padding: '16px',marginBottom:'20px' }}>
         Funds Disbursement Year on Year.
       </Typography>
+      <Box 
+  sx={{ 
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    width: '100%', 
+    mb: 2, 
+    flexDirection: { xs: 'column', sm: 'row' } 
+  }}
+>
+  {/* Left side - Financial Year Label and Input */}
+  <Box 
+    display="flex" 
+    alignItems="center" 
+    sx={{ mb: { xs: 2, sm: 0 } }}
+  >
+    <label style={{ fontSize: '18px', marginLeft: '20px' }}>
+      Financial Year:
+      <TextField
+        type="number"
+        value={planningYear !== null ? planningYear : ''}
+        style={{
+          marginLeft: '10px',
+          width: '100px',
+          height: '30px',
+          textAlign: 'center',
+          fontSize: '16px'
+        }}
+        onChange={(e) => {
+          const value = e.target.value;
+          setPlanningYear(value ? Number(value) : null);
+        }}
+      />
+    </label>
+  </Box>
 
-      <Box display="flex" alignItems="center" justifyContent="end" mb={5} marginLeft={10}>
-        <label style={{ fontSize: '18px', marginRight: '20px' }}>
-          Financial Year:
-          <input
-            type="number"
-            value={planningYear !== null ? planningYear : ''}
-            style={{marginLeft: '10px',width: '100px',height: '30px',textAlign: 'center',fontSize: '16px' }}
-            onChange={(e) => {
-              const value = e.target.value;
-              setPlanningYear(value ? Number(value) : null);
-            }}
-          /></label>
+  {/* Right side - Buttons and Icons */}
+  <Box 
+    display="flex" 
+    alignItems="center" 
+    sx={{ 
+      marginRight: '20px', 
+      flexDirection: { xs: 'column', sm: 'row' }, 
+      gap: { xs: 1, sm: 2 } 
+    }}
+  >
+    <Button onClick={handleReportSummary} sx={{ width: { xs: '100%', sm: '150px' } }}>
+      {showReport ? 'Show Report' : 'Summary Report'}
+    </Button>
+    <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 2 } }} />
+    <PictureAsPdfIcon onClick={exportToPDF} sx={{ cursor: 'pointer', ml: { xs: 0, sm: 2 } }} />
+  </Box>
+</Box>
 
-        <Button onClick={handleReportSummary} sx={{ mr: 2,width:'150px'}}>
-          {showReport ? 'Show Report' : 'Summary Report'}
-        </Button>
-            
-        <FileDownloadIcon onClick={exportToExcel}  sx={{marginRight: '10px'}}></FileDownloadIcon>
-       
 
-        <PictureAsPdfIcon onClick={exportToPDF} sx={{ marginLeft: '10px', marginRight: '30px' }}></PictureAsPdfIcon>
-       
-      </Box>
       <div style={{ marginBottom: '20px' }} ref={contentRef}> 
       <h1 className="pdf-title">Funds Disbursement Year on Year.</h1>
   {showReport ? (
