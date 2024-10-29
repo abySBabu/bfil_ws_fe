@@ -311,7 +311,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '' }, id)
+            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: rmk }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
@@ -446,7 +446,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
                                         <Visibility />
                                     </IconButton>
-                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); seteditM(true); }}><Edit /></IconButton>)}
+                                    {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title="Edit activity" onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                     {(uRole === 'Community Resource person' &&
                                         (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
                                         (a.workActivity.activityWorkflowStatus === uStatus) ? (
@@ -476,13 +476,14 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <DialogTitle>{addM ? 'Add Activity' : editM ? 'Update Activity' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                        <Grid item xs={3}><TextField required select label="Intervention" value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: e.target.value, activityName: '' } })}>
-                            {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                        <Grid item xs={3}><TextField disabled={editM} required select label="Intervention" value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: e.target.value, activityName: '' } })}>
+                            {uRole === "Community Resource person" ? intOps?.slice(1).map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>)) : intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0}>
+                        <Grid item xs={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0 || editM}>
                             {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                         </TextField></Grid>
                         <Grid item xs={12}><TextField required label='Description' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
+                        {editM && <Grid item xs={12}><TextField label='Update remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} /></Grid>}
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={3}><TextField required label='Event Name' value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
@@ -550,7 +551,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     </Select>
                                 </FormControl>
                             </Grid>
-
                             <Grid item xs={3}>
                                 <TextField
                                     required
@@ -594,6 +594,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
+                            <Grid item xs={6}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
                         </>}
                     </Grid></DialogContent>
 
@@ -610,8 +611,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                         <Grid item xs={3}><b>Intervention:</b> {actObj.workActivity.interventionType}</Grid>
                         <Grid item xs={3}><b>Activity:</b> {actObj.workActivity.activityName}</Grid>
-                        {actObj.workActivity.activityName === 'Sustainable Practices' ? <Grid item xs={3}><b>Sustainable Practice:</b> {actObj.workActivity.activityDescription}</Grid> : <Grid item xs={3} />}
+                        <Grid item xs={3} />
                         <Grid item xs={3}><b>Status:</b> {actObj.workActivity.activityWorkflowStatus}</Grid>
+                        <Grid item xs={12}><b>Description:</b> {actObj.workActivity.activityDescription}</Grid>
 
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
@@ -659,31 +661,28 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
                             <Grid item xs={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
+                            <Grid item xs={6}><b>Relation: </b> {fmrObj.relationalIdentifiers}: {fmrObj.identifierName}</Grid>
                         </>}
 
                         <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
                         <Grid item xs={12}>{
                             actObj.history?.length > 0 ?
                                 <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
-                                            <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
-                                            <TableCell>Images</TableCell>
-                                        </TableRow>
-                                    </TableHead>
+                                    <TableHead><TableRow>
+                                        <TableCell sx={{ borderRight: '1px solid black' }}>Remark</TableCell>
+                                        <TableCell sx={{ borderRight: '1px solid black' }}>Status</TableCell>
+                                        <TableCell sx={{ borderRight: '1px solid black' }}>Update By</TableCell>
+                                        <TableCell sx={{ borderRight: '1px solid black' }}>Update On</TableCell>
+                                        <TableCell>Images</TableCell>
+                                    </TableRow></TableHead>
 
-                                    <TableBody>{actObj.history?.map((a, i) =>
-                                    (<TableRow key={i}>
+                                    <TableBody>{actObj.history?.slice().sort((a, b) => new Date(b.createdTime).getTime() - new Date(a.createdTime).getTime()).map((a, i) => (<TableRow key={i}>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
                                         <TableCell />
-                                    </TableRow>)
-                                    )}</TableBody>
+                                    </TableRow>))}</TableBody>
                                 </Table></TableContainer>
                                 :
                                 <Typography>No history to show</Typography>
