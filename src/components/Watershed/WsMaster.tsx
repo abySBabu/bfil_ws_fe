@@ -241,7 +241,7 @@ export const WsMaster: React.FC = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
                     <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
                             onClick={() => { setwsObj(wsDef); setvList([]); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
@@ -249,40 +249,40 @@ export const WsMaster: React.FC = () => {
                     </div>
                 </Box>
 
-                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-                    No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Watershed</TableCell>
-                            <TableCell>Description</TableCell>
-                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
-                        </TableRow>
-                    </TableHead>
+                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                    : wsListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Watershed</TableCell>
+                                    <TableCell>Description</TableCell>
+                                    {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
+                                </TableRow>
+                            </TableHead>
 
-                    <TableBody>{wsListP.map((w, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{w.wsName}</TableCell>
-                            <TableCell>{w.wsDescription}</TableCell>
-                            {PerChk('EDIT_Watershed Master') && <TableCell>
-                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
-                            </TableCell>}
-                        </TableRow>
-                    ))}</TableBody>
+                            <TableBody>{wsListP.map((w, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{w.wsName}</TableCell>
+                                    <TableCell>{w.wsDescription}</TableCell>
+                                    {PerChk('EDIT_Watershed Master') && <TableCell>
+                                        <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
+                                        <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
+                                    </TableCell>}
+                                </TableRow>
+                            ))}</TableBody>
 
-                    <TableFooter><TableRow>
-                        <TablePagination
-                            count={wsListF.length}
-                            rowsPerPage={rPP}
-                            page={page}
-                            onPageChange={(e, p) => setPage(p)}
-                            rowsPerPageOptions={[5, 10, 15]}
-                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                            ActionsComponent={TPA}
-                        />
-                    </TableRow></TableFooter>
-                </Table></TableContainer>}
+                            <TableFooter><TableRow>
+                                <TablePagination
+                                    count={wsListF.length}
+                                    rowsPerPage={rPP}
+                                    page={page}
+                                    onPageChange={(e, p) => setPage(p)}
+                                    rowsPerPageOptions={[5, 10, 15]}
+                                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                    ActionsComponent={TPA}
+                                />
+                            </TableRow></TableFooter>
+                        </Table></TableContainer>}
             </>}
 
         <Dialog open={addM || editM}>

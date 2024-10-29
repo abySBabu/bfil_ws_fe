@@ -213,6 +213,22 @@ export default function AddRole(props: userTypeProps) {
                         updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== viewPerm.permissionId);
                     }
                 }
+            } else {
+                const screen = selectedPermissions.find(screenData =>
+                    screenData.permission.some(p => p.permissionId === perm.permissionId)
+                );
+
+                if (screen) {
+                    const editPerm = screen.permission.find(p =>
+                        p.permissionName.startsWith("EDIT") &&
+                        p.permissionName.includes(perm.permissionName.replace("VIEW", ""))
+                    );
+
+                    if (editPerm) {
+                        // Remove the 'View' permission
+                        updatedCheckedPermissions = updatedCheckedPermissions.filter(p => p.permissionId !== editPerm.permissionId);
+                    }
+                }
             }
         }
 

@@ -223,46 +223,47 @@ export const FarmerMaster: React.FC = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
                     <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
                     <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
+                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
                             InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
                         {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
                             onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
                     </div>
                 </Box>
-                {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-                    No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Mobile Number</TableCell>
-                            {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
-                        </TableRow>
-                    </TableHead>
 
-                    <TableBody>{fmrListP.map((w, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{w.wsfarmerName}</TableCell>
-                            <TableCell>{w.mobileNumber}</TableCell>
-                            {PerChk('EDIT_Beneficiary Master') && <TableCell>
-                                <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
-                            </TableCell>}
-                        </TableRow>
-                    ))}</TableBody>
+                {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                    : fmrListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Mobile Number</TableCell>
+                                    {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
+                                </TableRow>
+                            </TableHead>
 
-                    <TableFooter><TableRow>
-                        <TablePagination
-                            count={fmrListF.length}
-                            rowsPerPage={rPP}
-                            page={page}
-                            onPageChange={(e, p) => setPage(p)}
-                            rowsPerPageOptions={[5, 10, 15]}
-                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                            ActionsComponent={TPA}
-                        />
-                    </TableRow></TableFooter>
-                </Table></TableContainer>}
+                            <TableBody>{fmrListP.map((w, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{w.wsfarmerName}</TableCell>
+                                    <TableCell>{w.mobileNumber}</TableCell>
+                                    {PerChk('EDIT_Beneficiary Master') && <TableCell>
+                                        <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                        <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                                    </TableCell>}
+                                </TableRow>
+                            ))}</TableBody>
+
+                            <TableFooter><TableRow>
+                                <TablePagination
+                                    count={fmrListF.length}
+                                    rowsPerPage={rPP}
+                                    page={page}
+                                    onPageChange={(e, p) => setPage(p)}
+                                    rowsPerPageOptions={[5, 10, 15]}
+                                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                    ActionsComponent={TPA}
+                                />
+                            </TableRow></TableFooter>
+                        </Table></TableContainer>}
 
                 <Dialog open={addM || editM}>
                     <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>

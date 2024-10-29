@@ -156,7 +156,7 @@ export default function UserList() {
                         label={t("p_User_Management.ss_Search_Label")}
                         fullWidth={false}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
                         variant="outlined"
                         size="small"
                         InputProps={{
