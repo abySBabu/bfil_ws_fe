@@ -559,7 +559,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     value={actObj.workActivity.surveyNo}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        const validValue = value.replace(/[^0-9, ]/g, '');
+                                        const validValue = value.replace(/[^0-9a-zA-Z, \-/]/g, '');
                                         setactObj({
                                             ...actObj,
                                             workActivity: {
@@ -568,7 +568,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             }
                                         });
                                     }}
-                                    inputProps={{ pattern: "[0-9, ]*" }}
+                                    inputProps={{ pattern: "[0-9a-zA-Z, \\-/]*" }}
                                 />
                             </Grid>
                             <Grid item xs={12}><Divider>Activity Physical Details</Divider></Grid>
