@@ -186,63 +186,63 @@ export const Workplan: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-            <Box sx={{ 
-    display: 'flex', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', // Center items vertically
-    gap: '4px', // Space between elements
-    mb: 1, // Margin-bottom for spacing below the Box
-    flexDirection: { xs: 'column', sm: 'row' } // Responsive layout: column on small screens, row on larger screens
-}}>
-    <Typography variant='h5' sx={{ 
-        fontWeight: 'bold', 
-        textAlign: 'left', 
-        flexGrow: 1, // Allow the title to take available space
-        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
-        mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
-    }}>
-        Work Plan
-    </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center', // Center items vertically
+                    gap: '4px', // Space between elements
+                    mb: 1, // Margin-bottom for spacing below the Box
+                    flexDirection: { xs: 'column', sm: 'row' } // Responsive layout: column on small screens, row on larger screens
+                }}>
+                    <Typography variant='h5' sx={{
+                        fontWeight: 'bold',
+                        textAlign: 'left',
+                        flexGrow: 1, // Allow the title to take available space
+                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
+                        mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
+                    }}>
+                        Work Plan
+                    </Typography>
 
-    <Box sx={{ 
-        display: 'flex', 
-        flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout for search and button
-        alignItems: 'center', 
-        gap: { xs: 1, sm: 2 } // Space between search and button
-    }}>
-        <TextField 
-            label="Search" 
-            fullWidth={false} 
-            value={search} 
-            onChange={(e) => setsearch(e.target.value)}
-            variant="outlined" 
-            size="small" 
-            InputProps={{ 
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <Search />
-                    </InputAdornment>
-                )
-            }} 
-            sx={{ 
-                width: { xs: '80%', sm: '200px' }, 
-                mb: { xs: 1, sm: 0 } 
-            }} 
-        />
-        {PerChk('EDIT_Work Plan') && (
-            <Button 
-                startIcon={<PersonAddAlt1 />} 
-                onClick={() => { setplanObj(wpDef); setaddM(true); }} 
-                sx={{ 
-                    height: { xs: 'auto', sm: '45px' }, 
-                    ml: { xs: 0, sm: '4px' } 
-                }}
-            >
-                Add Plan
-            </Button>
-        )}
-    </Box>
-</Box>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout for search and button
+                        alignItems: 'center',
+                        gap: { xs: 1, sm: 2 } // Space between search and button
+                    }}>
+                        <TextField
+                            label="Search"
+                            fullWidth={false}
+                            value={search}
+                            onChange={(e) => { setsearch(e.target.value); setPage(0); }}
+                            variant="outlined"
+                            size="small"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Search />
+                                    </InputAdornment>
+                                )
+                            }}
+                            sx={{
+                                width: { xs: '80%', sm: '200px' },
+                                mb: { xs: 1, sm: 0 }
+                            }}
+                        />
+                        {PerChk('EDIT_Work Plan') && (
+                            <Button
+                                startIcon={<PersonAddAlt1 />}
+                                onClick={() => { setplanObj(wpDef); setaddM(true); }}
+                                sx={{
+                                    height: { xs: 'auto', sm: '45px' },
+                                    ml: { xs: 0, sm: '4px' }
+                                }}
+                            >
+                                Add Plan
+                            </Button>
+                        )}
+                    </Box>
+                </Box>
 
                 {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
                     : planListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>

@@ -432,7 +432,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             label="Search"
                             fullWidth={false}
                             value={search}
-                            onChange={(e) => setsearch(e.target.value)}
+                            onChange={(e) => { setsearch(e.target.value); setPage(0); }}
                             variant="outlined" // Added variant for styling
                             size="small" // Added size for smaller TextField
                             InputProps={{
