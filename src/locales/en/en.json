@@ -267,5 +267,67 @@
             },
             "Rows_per_page": "Rows per page :"
         }
+    },
+    "p_Beneficiary_Mapping": {
+        "ss_Watershed_Mapping_Header": "Beneficiary Master",
+        "ss_Search_Label": "Search",
+        "Add_Beneficiary_Link": {
+            "Add_Beneficiary_Link_Text": "Add Beneficiary",
+            "Add_Beneficiary_Popup": {
+                "Add_Mapping_Label": "Add Beneficiary",
+                "Name": "Name",
+                "Mobile": "Mobile",
+                "Relation": "Relation",
+                "Relation_Name": "Relation Name",
+                "Remarks": "Remarks",
+                "State": "State",
+                "District": "District",
+                "Taluka": "Taluka",
+                "Grampanchayat": "Grampanchayat",
+                "Village": "Village",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Beneficiary master created successfully"
+        },
+        "ss_BeneficiaryList": {
+            "Name": "Name",
+            "Mobile_Number": "Mobile Number",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Beneficiary",
+                        "Edit_Beneficiary_Popup": {
+                            "Edit_Beneficiary_Label": "Edit Beneficiary",
+                            "Name": "Name",
+                            "Mobile": "Mobile",
+                            "Relation": "Relation",
+                            "Relation_Name": "Relation Name",
+                            "Remarks": "Remarks",
+                            "State": "State",
+                            "District": "District",
+                            "Taluka": "Taluka",
+                            "Grampanchayat": "Grampanchayat",
+                            "Village": "Village",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Beneficiary Master updated successfully"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "Delete Beneficiary",
+                        "Delete_Beneficiary_Popup": {
+                            "Delete_Beneficiary_Label": "Delete Beneficiary",
+                            "Delete_Beneficiary_Content": "Are you sure you want to delete",
+                            "Cancel_Button": "Cancel",
+                            "Delete_Button": "Delete"
+                        },
+                        "Delete_Success_Message": "Beneficiary Master deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
     }
 }

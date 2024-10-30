@@ -267,5 +267,67 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "p_Beneficiary_Mapping": {
+        "ss_Watershed_Mapping_Header": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್",
+        "ss_Search_Label": "ಶೋಧಿಸಿ",
+        "Add_Beneficiary_Link": {
+            "Add_Beneficiary_Link_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸೇರಿಸಿ",
+            "Add_Beneficiary_Popup": {
+                "Add_Mapping_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸೇರಿಸಿ",
+                "Name": "ಹೆಸರು",
+                "Mobile": "ಮೊಬೈಲ್",
+                "Relation": "ಸಂಬಂಧ",
+                "Relation_Name": "ಸಂಬಂಧದ ಹೆಸರು",
+                "Remarks": "ಗಮನ",
+                "State": "ರಾಜ್ಯ",
+                "District": "ಜಿಲ್ಲೆ",
+                "Taluka": "ತಾಲೂಕು",
+                "Grampanchayat": "ಗ್ರಾಮ ಪಂಚಾಯಿತಿ",
+                "Village": "ಗಾವಿ",
+                "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
+                "Add_Button": "ಸೆರೆಯಿರಿ"
+            },
+            "Add_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ"
+        },
+        "ss_BeneficiaryList": {
+            "Name": "ಹೆಸರು",
+            "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_Beneficiary_Popup": {
+                            "Edit_Beneficiary_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Name": "ಹೆಸರು",
+                            "Mobile": "ಮೊಬೈಲ್",
+                            "Relation": "ಸಂಬಂಧ",
+                            "Relation_Name": "ಸಂಬಂಧದ ಹೆಸರು",
+                            "Remarks": "ಗಮನ",
+                            "State": "ರಾಜ್ಯ",
+                            "District": "ಜಿಲ್ಲೆ",
+                            "Taluka": "ತಾಲೂಕು",
+                            "Grampanchayat": "ಗ್ರಾಮ ಪಂಚಾಯಿತಿ",
+                            "Village": "ಗಾವಿ",
+                            "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಅಳಿಸಿ",
+                        "Delete_Beneficiary_Popup": {
+                            "Delete_Beneficiary_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಅಳಿಸಿ",
+                            "Delete_Beneficiary_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಲ್ಲವೇ?",
+                            "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
+                            "Delete_Button": "ಅಳಿಸಿ"
+                        },
+                        "Delete_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
+                    }
+                },
+                "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+            }
+        }
     }
 }
