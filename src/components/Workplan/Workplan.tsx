@@ -85,6 +85,7 @@ export const Workplan: React.FC = () => {
             w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
             WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
             w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
+            w.activityName?.toString().toLowerCase().includes(searchTerm) ||
             w.value?.toString().toLowerCase().includes(searchTerm) ||
             w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
             w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
