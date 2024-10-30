@@ -5,12 +5,12 @@ import {
     MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
-import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
+import { Edit, Search, Add,Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
+import { listAct,addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -407,43 +407,43 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center', // Changed from 'top' to 'center' for vertical alignment
-                    gap: '4px', // Added gap for spacing
-                    mb: 1, // Add margin-bottom for spacing below the Box
-                    flexDirection: { xs: 'column', sm: 'row' } // Responsive direction
+                    alignItems: 'center', 
+                    gap: '4px', 
+                    mb: 1, 
+                    flexDirection: { xs: 'column', sm: 'row' } 
                 }}>
                     <Typography variant='h5' sx={{
                         fontWeight: 'bold',
                         textAlign: 'left',
                         flexGrow: 1,
-                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
-                        mb: { xs: 2, sm: 0 } // Adjust margin-bottom for smaller screens
+                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, 
+                        mb: { xs: 2, sm: 0 } 
                     }}>
                         Watershed Activity
                     </Typography>
 
                     <Box sx={{
                         display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' }, // Responsive direction for child Box
+                        flexDirection: { xs: 'column', sm: 'row' }, 
                         alignItems: 'center',
-                        gap: { xs: 1, sm: 2 }, // Responsive gap
+                        gap: { xs: 1, sm: 2 }, 
                     }}>
                         <TextField
                             label="Search"
                             fullWidth={false}
                             value={search}
                             onChange={(e) => setsearch(e.target.value)}
-                            variant="outlined" // Added variant for styling
-                            size="small" // Added size for smaller TextField
+                            variant="outlined" 
+                            size="small" 
                             InputProps={{
                                 startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>)
                             }}
-                            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }} // Responsive width
+                            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }} 
                         />
                         {PerChk('EDIT_Watershed Activity') && (
                             <Button
                                 startIcon={<Add />}
-                                sx={{ height: '48px', ml: { xs: 0, sm: '4px' } }} // Responsive margin-left
+                                sx={{ height: '48px', ml: { xs: 0, sm: '4px' } }} 
                                 onClick={() => {
                                     setactObj(actDef);
                                     setfmrObj(fmrDef);
@@ -747,12 +747,31 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         </DialogActions>
                         : progM ?
                             <DialogActions sx={{ justifyContent: 'space-between', p: '12px' }}>
-                                <TextField label='Remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} fullWidth={false} sx={{ width: '50%' }} />
-                                <div>
-                                    <Button sx={{ mx: '2px' }} onClick={() => { setprogM(false); }}>Close</Button>
-                                    {prev && <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Reject to {prev}</Button>}
-                                    {next && <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>Send to {next}</Button>}
-                                </div>
+                              <Box
+                                  sx={{
+                                  display: 'flex',
+                                  flexDirection: { xs: 'column', sm: 'row' }, 
+                                  justifyContent: 'space-between',
+                                  alignItems: 'flex-start', 
+                                  width: '100%',
+                                  }}>
+                                  <TextField
+                                        label='Remarks'
+                                         value={rmk}
+                                        onChange={(e) => setrmk(e.target.value)}
+                                        fullWidth={false}
+                                        sx={{width: { xs: '100%', sm: '50%' },mb: { xs: 1, sm: 0 },}}/>
+  
+                                        <Box sx={{display: 'flex',alignItems: 'center',gap: 1,flexDirection: { xs: 'row', sm: 'row' },mt: { sm: 4, md: 0 } }}>
+                                            <Button onClick={() => { setprogM(false); }}>Close</Button>
+                                            {prev && (
+                                            <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
+                                                Reject to {prev} </Button>)}
+                                            {next && (
+                                            <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
+                                                Send to {next}</Button>)}
+                                        </Box>
+                                    </Box>
                             </DialogActions>
                             :
                             <DialogActions />
