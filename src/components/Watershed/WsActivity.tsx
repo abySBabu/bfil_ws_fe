@@ -290,7 +290,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActAdd = async () => {
         setLoading(true);
         try {
-            const resp1 = await addAct({ ...actObj.workActivity, village: vList })
+            const resp1 = await addAct({ ...actObj.workActivity, village: vList, createdUser: sessionStorage.getItem("userName") as string })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity added`);
@@ -311,7 +311,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: rmk }, id)
+            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '', updatedUser: sessionStorage.getItem("userName") as string }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(`Activity updated`);
@@ -404,14 +404,57 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Activity</Typography>
-                    <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
-                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Watershed Activity') && (<Button startIcon={<Add />} sx={{ height: '48px', ml: '4px' }}
-                            onClick={() => { setactObj(actDef); setfmrObj(fmrDef); setvList([]); setaddM(true); }} >Add Activity</Button>)}
-                    </div>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center', // Changed from 'top' to 'center' for vertical alignment
+                    gap: '4px', // Added gap for spacing
+                    mb: 1, // Add margin-bottom for spacing below the Box
+                    flexDirection: { xs: 'column', sm: 'row' } // Responsive direction
+                }}>
+                    <Typography variant='h5' sx={{
+                        fontWeight: 'bold',
+                        textAlign: 'left',
+                        flexGrow: 1,
+                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
+                        mb: { xs: 2, sm: 0 } // Adjust margin-bottom for smaller screens
+                    }}>
+                        Watershed Activity
+                    </Typography>
+
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' }, // Responsive direction for child Box
+                        alignItems: 'center',
+                        gap: { xs: 1, sm: 2 }, // Responsive gap
+                    }}>
+                        <TextField
+                            label="Search"
+                            fullWidth={false}
+                            value={search}
+                            onChange={(e) => setsearch(e.target.value)}
+                            variant="outlined" // Added variant for styling
+                            size="small" // Added size for smaller TextField
+                            InputProps={{
+                                startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>)
+                            }}
+                            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }} // Responsive width
+                        />
+                        {PerChk('EDIT_Watershed Activity') && (
+                            <Button
+                                startIcon={<Add />}
+                                sx={{ height: '48px', ml: { xs: 0, sm: '4px' } }} // Responsive margin-left
+                                onClick={() => {
+                                    setactObj(actDef);
+                                    setfmrObj(fmrDef);
+                                    setvList([]);
+                                    setaddM(true);
+                                }}
+                            >
+                                Add Activity
+                            </Button>
+                        )}
+                    </Box>
                 </Box>
 
                 {actList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>

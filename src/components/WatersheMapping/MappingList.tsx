@@ -149,6 +149,7 @@ export default function MappingList() {
             fullWidth={false}
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
+
             variant="outlined"
             size="small"
             InputProps={{

@@ -257,7 +257,7 @@ export default function AddRole(props: userTypeProps) {
                         <DialogTitle>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Role_Label")}</DialogTitle>
                         <DialogContent>
                             <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                                <Grid item xs={12} sm={6}>
+                               <Grid item xs={12} sm={6}>
                                     <TextField
                                         margin="normal"
                                         required
@@ -280,7 +280,9 @@ export default function AddRole(props: userTypeProps) {
                                         helperText={errors.roleName ? errors.roleName.message : ''}
                                     />
                                 </Grid>
+
                                 <Grid item xs={12} sm={6}>
+
                                     <TextField
                                         margin="normal"
                                         required

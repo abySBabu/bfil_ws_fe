@@ -220,56 +220,94 @@ export const FarmerMaster: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Beneficiary Master</Typography>
-                    <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
-                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Beneficiary Master') && <Button startIcon={<PersonAdd />} sx={{ ml: '4px', height: '48px' }}
-                            onClick={() => { setfmrObj(fmrDef); setaddM(true); setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false }); }}>Add Beneficiary</Button>}
-                    </div>
-                </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+    <Typography
+        variant='h5'
+        sx={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+            flexGrow: 1,
+            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
+            mb: { xs: 2, sm: 2 },
+        }}
+    >
+        Beneficiary Master
+    </Typography>
 
-                {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
-                    : fmrListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
-                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Mobile Number</TableCell>
-                                    {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
-                                </TableRow>
-                            </TableHead>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+        <TextField
+            label="Search"
+            fullWidth={false}
+            value={search}
+            onChange={(e) => setsearch(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }}
+        />
+        {PerChk('EDIT_Beneficiary Master') && (
+            <Button
+                startIcon={<PersonAdd />}
+                sx={{ height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '180px' }, ml: { xs: 0, sm: '4px' } }}
+                onClick={() => {
+                    setfmrObj(fmrDef);
+                    setaddM(true);
+                    setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+                }}
+            >
+                Add Beneficiary
+            </Button>
+        )}
+    </Box>
+</Box>
 
-                            <TableBody>{fmrListP.map((w, i) => (
-                                <TableRow key={i}>
-                                    <TableCell>{w.wsfarmerName}</TableCell>
-                                    <TableCell>{w.mobileNumber}</TableCell>
-                                    {PerChk('EDIT_Beneficiary Master') && <TableCell>
-                                        <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                        <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
-                                    </TableCell>}
-                                </TableRow>
-                            ))}</TableBody>
+                {fmrList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                    No records
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}>
+                    <Table sx={{ width: '100%'}}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Mobile Number</TableCell>
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
+                        </TableRow>
+                    </TableHead>
 
-                            <TableFooter><TableRow>
-                                <TablePagination
-                                    count={fmrListF.length}
-                                    rowsPerPage={rPP}
-                                    page={page}
-                                    onPageChange={(e, p) => setPage(p)}
-                                    rowsPerPageOptions={[5, 10, 15]}
-                                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                                    ActionsComponent={TPA}
-                                />
-                            </TableRow></TableFooter>
-                        </Table></TableContainer>}
+                    <TableBody>{fmrListP.map((w, i) => (
+                        <TableRow key={i}>
+                            <TableCell>{w.wsfarmerName}</TableCell>
+                            <TableCell>{w.mobileNumber}</TableCell>
+                            {PerChk('EDIT_Beneficiary Master') && <TableCell>
+                                <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                            </TableCell>}
+                        </TableRow>
+                    ))}</TableBody>
+
+                    <TableFooter><TableRow>
+                        <TablePagination
+                            count={fmrListF.length}
+                            rowsPerPage={rPP}
+                            page={page}
+                            onPageChange={(e, p) => setPage(p)}
+                            rowsPerPageOptions={[5, 10, 15]}
+                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                            ActionsComponent={TPA}
+                        />
+                    </TableRow></TableFooter>
+                </Table></TableContainer>}
 
                 <Dialog open={addM || editM}>
                     <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Name"
@@ -278,7 +316,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Mobile"
@@ -289,7 +327,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 select
@@ -301,7 +339,7 @@ export const FarmerMaster: React.FC = () => {
                                 <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Relation Name"
@@ -309,7 +347,7 @@ export const FarmerMaster: React.FC = () => {
                                 onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 label="Remarks"
@@ -318,19 +356,19 @@ export const FarmerMaster: React.FC = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
-                        <Grid item xs={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                        <Grid item xs={12} sm={4}><TextField disabled required select label='State' value={fmrObj.state}>
                             {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
                             {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                             {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                             {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
                             {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                         </TextField></Grid>
                     </Grid></DialogContent>

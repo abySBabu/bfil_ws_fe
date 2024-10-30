@@ -254,6 +254,7 @@ export default function EditRole(props: RoleTypeProps) {
                         <DialogContent>
                             <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                                 <Grid item xs={12} sm={6}>
+
                                     <TextField
                                         margin="normal"
                                         required
@@ -278,6 +279,7 @@ export default function EditRole(props: RoleTypeProps) {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
+
                                     <TextField
                                         margin="normal"
                                         required

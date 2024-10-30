@@ -238,27 +238,88 @@ export const WsMaster: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Watershed Master</Typography>
-                    <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => { setsearch(e.target.value); setPage(0); }}
-                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Watershed Master') && (<Button startIcon={<AddHome />}
-                            onClick={() => { setwsObj(wsDef); setvList([]); setaddM(true); setIsTouched({ wsName: false, wsDescription: false }) }}
-                            sx={{ height: '48px', ml: '4px' }}>Add Watershed</Button>)}
-                    </div>
-                </Box>
+            <Box
+    sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        gap: '4px',
+        mb: 1,
+        flexDirection: { xs: 'column', sm: 'row' }
+    }}
+>
+    <Typography
+        variant="h5"
+        sx={{
+            fontWeight: 'bold',
+            textAlign: 'left',
+            flexGrow: 1,
+            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
+            mb: { xs: 2, sm: 0 }
+        }}
+    >
+        Watershed Master
+    </Typography>
 
-                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
-                    : wsListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
-                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Watershed</TableCell>
-                                    <TableCell>Description</TableCell>
-                                    {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
-                                </TableRow>
-                            </TableHead>
+    <Box
+        sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: 'center',
+            gap: { xs: 1, sm: 2 },
+        }}
+    >
+        <TextField
+            label="Search"
+            fullWidth={false}
+            value={search}
+            onChange={(e) => setsearch(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            sx={{
+                width: { xs: '80%', sm: '200px' },
+                mb: { xs: 1, sm: 0 }
+            }}
+        />
+        {PerChk('EDIT_Watershed Master') && (
+            <Button
+                startIcon={<AddHome />}
+                onClick={() => {
+                    setwsObj(wsDef);
+                    setvList([]);
+                    setaddM(true);
+                    setIsTouched({ wsName: false, wsDescription: false });
+                }}
+                sx={{
+                    height: { xs: 'auto', sm: '48px' },
+                    width: { xs: '80%', sm: '170px' },
+                    ml: { xs: 0, sm: '4px' },
+                }}
+            >
+                Add Watershed
+            </Button>
+        )}
+    </Box>
+</Box>
+
+
+                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
+                    No records
+                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%'}}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Watershed</TableCell>
+                            <TableCell>Description</TableCell>
+                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
+                        </TableRow>
+                    </TableHead>
 
                             <TableBody>{wsListP.map((w, i) => (
                                 <TableRow key={i}>
@@ -289,7 +350,7 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>{addM ? 'Add Watershed' : editM ? 'Edit Watershed' : ''}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={4}>
                     <TextField
                         required
                         label="Name"
@@ -298,7 +359,7 @@ export const WsMaster: React.FC = () => {
                         helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={4}>
                     <TextField
                         required
                         label="Description"
@@ -308,19 +369,19 @@ export const WsMaster: React.FC = () => {
                     />
                 </Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={4}><TextField disabled required select label='State' value={wsObj.stateId}>
+                <Grid item xs={12} md={4}><TextField disabled required select label='State' value={wsObj.stateId}>
                     {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
                     {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
                     {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={4}><FormControl fullWidth>
+                <Grid item xs={12} md={4}><FormControl fullWidth>
                     <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
                     <Select
                         labelId="demo-multiple-checkbox-label"
@@ -345,7 +406,7 @@ export const WsMaster: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl></Grid>
-                <Grid item xs={12}><Typography><b>Selected villages:</b> {vList
+                <Grid item xs={12} md={4}><Typography><b>Selected villages:</b> {vList
                     .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
                     .filter(Boolean)
                     .join(', ')}</Typography></Grid>

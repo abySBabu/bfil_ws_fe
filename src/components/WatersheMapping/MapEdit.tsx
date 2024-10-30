@@ -204,6 +204,7 @@ export default function (props: mapTypeProps) {
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                         <Grid item xs={12} sm={6} >
+
                             <TextField
                                 select
                                 id="user"
@@ -225,6 +226,7 @@ export default function (props: mapTypeProps) {
                             </TextField>
                         </Grid>
                         <Grid item xs={12} sm={6}>
+
                             <TextField
                                 disabled
                                 label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Role")}
