@@ -110,80 +110,125 @@ export default function RoleList() {
                 {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
                 {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
                 {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '4px',
+                        mb: 1,
+                        flexDirection: { xs: 'column', sm: 'row' }
+                    }}
+                >
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            flexGrow: 1,
+                            mb: { xs: 2, sm: 2 }
+                        }}
+                    >
                         {t("p_Role_Management.ss_Role_Management_Header")}
                     </Typography>
-                    <TextField
-                        label={t("p_Role_Management.ss_Search_Label")}
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: { xs: 'column', sm: 'row' },
+                            alignItems: 'center',
+                            gap: { xs: 1, sm: 2 },
                         }}
-                    />
-                    {PerChk('EDIT_Role Management') && (
-                        <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                            {t("p_Role_Management.Add_Role_Link.Add_Role_Link_Text")}
-                        </Button>)}
+                    >
+                        <TextField
+                            label={t("p_Role_Management.ss_Search_Label")}
+                            fullWidth={false}
+                            value={searchQuery}
+                            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
+                            variant="outlined"
+                            size="small"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            sx={{
+                                width: { xs: '80%', sm: '200px' },
+                                mb: { xs: 1, sm: 0 }
+                            }}
+                        />
+                        {PerChk('EDIT_Role Management') && (
+                            <Button
+                                variant="outlined"
+                                onClick={() => { setShowAddModal(true) }}
+                                startIcon={<PersonAddIcon />}
+                                sx={{
+                                    height: { xs: 'auto', sm: '45px' },
+                                    width: { xs: '80%', sm: '150px' },
+                                    ml: { xs: 0, sm: '4px' },
+                                }}
+                            >
+                                {t("p_Role_Management.Add_Role_Link.Add_Role_Link_Text")}
+                            </Button>
+                        )}
+                    </Box>
                 </Box>
 
+
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
-                        <TableHead>
-                            <TableRow sx={{ alignItems: 'center' }}>
-                                <TableCell >{t("p_Role_Management.ss_RoleList.Role_Name")}</TableCell>
-                                <TableCell >{t("p_Role_Management.ss_RoleList.Role_Description")}</TableCell>
-                                {PerChk('EDIT_Role Management') && (
-                                    <TableCell sx={{ textAlign: 'center' }}>{t("p_Role_Management.ss_RoleList.Action.Action_Text")}</TableCell>)}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {(rowsPerPage > 0
-                                ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : filteredData
-                            ).map((row, id) => (
-                                <TableRow key={id} onClick={() => handleRowClick(row)}>
-                                    <TableCell>
-                                        {row.roleName}
-                                    </TableCell>
-                                    <TableCell >
-                                        {row.roleDescription}
-                                    </TableCell>
+                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+                        <Table sx={{ width: '100%' }}>
+                            <TableHead>
+                                <TableRow sx={{ alignItems: 'center' }}>
+                                    <TableCell >{t("p_Role_Management.ss_RoleList.Role_Name")}</TableCell>
+                                    <TableCell >{t("p_Role_Management.ss_RoleList.Role_Description")}</TableCell>
                                     {PerChk('EDIT_Role Management') && (
-                                        <TableCell sx={{ textAlign: 'center' }}>
-                                            <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
-                                                <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
-                                            </Tooltip>
-                                            <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
-                                                <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
-                                            </Tooltip>
-                                        </TableCell>)}
+                                        <TableCell sx={{ textAlign: 'center' }}>{t("p_Role_Management.ss_RoleList.Action.Action_Text")}</TableCell>)}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination
-                                    count={filteredData.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={(e, p) => setPage(p)}
-                                    rowsPerPageOptions={[5, 10, 15]}
-                                    onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
-                                    ActionsComponent={TPA}
-                                    labelRowsPerPage={t("p_Role_Management.ss_RoleList.Rows_per_page")}
-                                />
-                            </TableRow>
-                        </TableFooter>
-                    </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
+                            </TableHead>
+                            <TableBody>
+                                {(rowsPerPage > 0
+                                    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : filteredData
+                                ).map((row, id) => (
+                                    <TableRow key={id} onClick={() => handleRowClick(row)}>
+                                        <TableCell>
+                                            {row.roleName}
+                                        </TableCell>
+                                        <TableCell >
+                                            {row.roleDescription}
+                                        </TableCell>
+                                        {PerChk('EDIT_Role Management') && (
+                                            <TableCell sx={{ textAlign: 'center' }}>
+                                                <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowEditModal(true) }}><EditIcon /></IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
+                                                </Tooltip>
+                                            </TableCell>)}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination
+                                        count={filteredData.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={(e, p) => setPage(p)}
+                                        rowsPerPageOptions={[5, 10, 15]}
+                                        onRowsPerPageChange={(e) => { setPage(0); setRowsPerPage(parseInt(e.target.value)); }}
+                                        ActionsComponent={TPA}
+                                        labelRowsPerPage={t("p_Role_Management.ss_RoleList.Rows_per_page")}
+                                    />
+                                </TableRow>
+                            </TableFooter>
+                        </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
             </>}
     </Box>)
 }
