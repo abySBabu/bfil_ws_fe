@@ -406,7 +406,7 @@ export const WsMaster: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl></Grid>
-                <Grid item xs={12} md={4}><Typography><b>Selected villages:</b> {vList
+                <Grid item xs={12}><Typography><b>Selected villages:</b> {vList
                     .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
                     .filter(Boolean)
                     .join(', ')}</Typography></Grid>
