@@ -156,19 +156,19 @@ const ReportTable: React.FC = () => {
     flexDirection: { xs: 'column', sm: 'row' } 
   }}
 >
-  {/* Left side - Financial Year Label and Input */}
+  
   <Box 
     display="flex" 
     alignItems="center" 
     sx={{ mb: { xs: 2, sm: 0 } }}
   >
-    <label style={{ fontSize: '18px', marginLeft: '20px' }}>
+    <label style={{ fontSize: '18px', marginLeft: '20px'}}>
       Financial Year:
       <TextField
         type="number"
         value={planningYear !== null ? planningYear : ''}
         style={{
-          marginLeft: '10px',
+          marginLeft: '0px',
           width: '100px',
           height: '30px',
           textAlign: 'center',
@@ -181,22 +181,20 @@ const ReportTable: React.FC = () => {
       />
     </label>
   </Box>
-
-  {/* Right side - Buttons and Icons */}
   <Box 
     display="flex" 
     alignItems="center" 
     sx={{ 
-      marginRight: '20px', 
-      flexDirection: { xs: 'column', sm: 'row' }, 
-      gap: { xs: 1, sm: 2 } 
+      marginRight:{md: '20px'}, 
+      flexDirection: {  sm: 'row' }, 
+      gap: { xs: 1, sm: 1 } 
     }}
   >
     <Button onClick={handleReportSummary} sx={{ width: { xs: '100%', sm: '150px' } }}>
       {showReport ? 'Show Report' : 'Summary Report'}
     </Button>
-    <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 2 } }} />
-    <PictureAsPdfIcon onClick={exportToPDF} sx={{ cursor: 'pointer', ml: { xs: 0, sm: 2 } }} />
+    <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1} }} />
+    <PictureAsPdfIcon onClick={exportToPDF} sx={{ cursor: 'pointer',  }} />
   </Box>
 </Box>
 
