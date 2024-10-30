@@ -171,7 +171,7 @@ export const Home: React.FC = () => {
             setLoadingResponse(false);
 
         }; fetchLoc();
-    }, [i18n.language]);
+    }, [i18n.language, actCount]);
 
     return (<>
         {loadingResponse ? <Box

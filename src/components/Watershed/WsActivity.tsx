@@ -441,7 +441,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         <TableCell>{a.workActivity.surveyNo}</TableCell>
                                         <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
                                         <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
-                                        <TableCell>{a.workActivity.updatedUser || "-"}</TableCell>
+                                        <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                         <TableCell width='5%'>
                                             <IconButton title="Activity details" onClick={() => { setactObj(a); setviewM(true); }}>
                                                 <Visibility />
