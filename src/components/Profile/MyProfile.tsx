@@ -27,7 +27,7 @@ export const MyProfile: React.FC = () => {
                 <CircularProgress size={80} />
             </Box> : <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: sd('--page-header-bgcolor') }}>
                 <Toolbar sx={{ height: '6%', gap: '4px' }}>
-                    <IconButton href="/bfilreacttest/home" sx={{ color: '#fff' }}><ArrowBack /></IconButton>
+                    <IconButton href="home" sx={{ color: '#fff' }}><ArrowBack /></IconButton>
                     <Typography variant='h5' sx={{ color: '#fff', fontWeight: 'bold' }}>My Profile</Typography>
                 </Toolbar>
 

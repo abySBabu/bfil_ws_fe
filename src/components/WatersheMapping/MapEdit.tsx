@@ -203,7 +203,8 @@ export default function (props: mapTypeProps) {
                 <DialogTitle>{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Edit_Mapping_Label")}</DialogTitle>
                 <DialogContent>
                     <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6} >
+
                             <TextField
                                 select
                                 id="user"
@@ -224,7 +225,8 @@ export default function (props: mapTypeProps) {
                                 {userList.map((option, index) => (<MenuItem key={index} value={option.userId}>{option.userName}</MenuItem>))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
+
                             <TextField
                                 disabled
                                 label={t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Role")}

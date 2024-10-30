@@ -148,33 +148,31 @@ export default function UserList() {
                 {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
                 {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', mb: 1 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'left', flexGrow: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+                    <Typography variant="h5" sx={{
+                        fontWeight: 'bold', textAlign: 'left',
+                        flexGrow: 1, fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem', mb: { xs: 2, sm: 2 } }
+                    }}>
                         {t("p_User_Management.ss_User_Management_Header")}
                     </Typography>
-                    <TextField
-                        label={t("p_User_Management.ss_Search_Label")}
-                        fullWidth={false}
-                        value={searchQuery}
-                        onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    {PerChk('EDIT_User Management') && (
-                        <Button variant="outlined" onClick={() => { setShowAddModal(true) }} startIcon={<PersonAddIcon />}>
-                            {t("p_User_Management.Add_User_Link.Add_User_Link_Text")}
-                        </Button>)}
+
+
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 2 }, }} >
+                        <TextField label={t("p_User_Management.ss_Search_Label")} fullWidth={false} value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
+                            variant="outlined" size="small" InputProps={{
+                                startAdornment: (<InputAdornment position="start">
+                                    <SearchIcon /></InputAdornment>),
+                            }}
+                            sx={{ width: { xs: '80%', sm: '200px' }, mb: { xs: 1, sm: 0 } }} />
+                        {PerChk('EDIT_User Management') && (<Button variant="outlined" onClick={() => { setShowAddModal(true) }}
+                            startIcon={<PersonAddIcon />} sx={{
+                                height: { xs: 'auto', sm: '45px' }, width: { xs: '80%', sm: '150px' }, ml: { xs: 0, sm: '4px' },
+                            }}>{t("p_User_Management.Add_User_Link.Add_User_Link_Text")}</Button>)}
+                    </Box>
                 </Box>
 
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table>
+                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table sx={{ width: '100%' }}>
                         <TableHead>
                             <TableRow sx={{ alignItems: 'center' }}>
                                 <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
