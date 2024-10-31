@@ -223,7 +223,7 @@ export const Home: React.FC = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh', // Ensure it takes up the full height
+        height: '100vh', 
       }}
     >
       <CircularProgress size={80} />
@@ -244,7 +244,7 @@ export const Home: React.FC = () => {
               p: sd('--page-header-padding'),
               minHeight: '28px',
               height: 'auto',
-              flexWrap: 'wrap', // Allows elements to wrap on smaller screens
+              flexWrap: 'wrap', 
             }}
           >
             <IconButton
@@ -355,7 +355,12 @@ export const Home: React.FC = () => {
             </Box>
 
             <Box sx={{ height: '100vh', backgroundColor: '#bb4d53' }}>
-              {drawer}
+            {React.Children.map(drawer, (item) => (
+      <div onClick={handleDrawerClose}>
+        {item}
+      </div>
+    ))}
+              {/* {drawer} */}
             </Box>
           </Drawer>
         </AppBar>
