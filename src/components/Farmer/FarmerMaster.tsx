@@ -8,6 +8,8 @@ import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
+import { useTranslation } from 'react-i18next';
+
 
 export const fmrDef = {
     "wsfarmerId": "",
@@ -26,6 +28,7 @@ export const fmrDef = {
 }
 
 export const FarmerMaster: React.FC = () => {
+    const { t } = useTranslation();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -231,12 +234,12 @@ export const FarmerMaster: React.FC = () => {
                             mb: { xs: 2, sm: 2 },
                         }}
                     >
-                        Beneficiary Master
+                        {t("p_Beneficiary_Master.ss_Beneficiary_Master_Header")}
                     </Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
                         <TextField
-                            label="Search"
+                            label={t("p_Beneficiary_Master.ss_Search_Label")}
                             fullWidth={false}
                             value={search}
                             onChange={(e) => { setsearch(e.target.value); setPage(0); }}
@@ -261,7 +264,7 @@ export const FarmerMaster: React.FC = () => {
                                     setIsTouched({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
                                 }}
                             >
-                                Add Beneficiary
+                                {t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Link_Text")}
                             </Button>
                         )}
                     </Box>
@@ -273,9 +276,9 @@ export const FarmerMaster: React.FC = () => {
                     <Table sx={{ width: '100%' }}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Mobile Number</TableCell>
-                                {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>Actions</TableCell>}
+                                <TableCell>{t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}</TableCell>
+                                <TableCell>{t("p_Beneficiary_Master.ss_BeneficiaryList.Mobile_Number")}</TableCell>
+                                {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Text")}</TableCell>}
                             </TableRow>
                         </TableHead>
 
@@ -284,8 +287,8 @@ export const FarmerMaster: React.FC = () => {
                                 <TableCell>{w.wsfarmerName}</TableCell>
                                 <TableCell>{w.mobileNumber}</TableCell>
                                 {PerChk('EDIT_Beneficiary Master') && <TableCell>
-                                    <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                    <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                                    <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                    <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                                 </TableCell>}
                             </TableRow>
                         ))}</TableBody>
@@ -299,18 +302,19 @@ export const FarmerMaster: React.FC = () => {
                                 rowsPerPageOptions={[5, 10, 15]}
                                 onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                                 ActionsComponent={TPA}
+                                labelRowsPerPage={t("p_Beneficiary_Master.ss_BeneficiaryList.Rows_per_page")}
                             />
                         </TableRow></TableFooter>
                     </Table></TableContainer>}
 
                 <Dialog open={addM || editM}>
-                    <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
+                    <DialogTitle>{addM ? t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Add_Mapping_Label") : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 required
-                                label="Name"
+                                label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Name")}
                                 value={fmrObj.wsfarmerName}
                                 onChange={(e) => handleFieldChange('wsfarmerName', e.target.value, (value) => /^[A-Za-z\s]*$/.test(value))}
                                 helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
@@ -319,7 +323,7 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 required
-                                label="Mobile"
+                                label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Mobile")}
                                 value={fmrObj.mobileNumber}
                                 onChange={(e) => handleFieldChange('mobileNumber', e.target.value, (value) => /^\d{0,10}$/.test(value))}
                                 inputProps={{ maxLength: 10 }}
@@ -331,7 +335,7 @@ export const FarmerMaster: React.FC = () => {
                             <TextField
                                 required
                                 select
-                                label="Relation"
+                                label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation")}
                                 value={fmrObj.relationalIdentifiers}
                                 onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
                             >
@@ -342,7 +346,7 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 required
-                                label="Relation Name"
+                                label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation_Name")}
                                 value={fmrObj.identifierName}
                                 onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
                             />
@@ -350,42 +354,42 @@ export const FarmerMaster: React.FC = () => {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 required
-                                label="Remarks"
+                                label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Remarks")}
                                 value={fmrObj.remarks}
                                 onChange={(e) => setfmrObj({ ...fmrObj, remarks: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ my: 1 }}><Divider /></Grid>
-                        <Grid item xs={12} sm={4}><TextField disabled required select label='State' value={fmrObj.state}>
+                        <Grid item xs={12} sm={4}><TextField disabled required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.State")} value={fmrObj.state}>
                             {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={12} sm={4}><TextField required select label='District' value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.District")} value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
                             {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={12} sm={4}><TextField required select label='Taluk' value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Taluka")} value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                             {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={12} sm={4}><TextField required select label="Grampanchayat" value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Grampanchayat")} value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                             {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={12} sm={4}><TextField required select label="Village" value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                        <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Village")} value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
                             {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                         </TextField></Grid>
                     </Grid></DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Cancel</Button>
-                        {addM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck}>Add</Button>}
-                        {editM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>Update</Button>}
+                        <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>{t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Cancel_Button")}</Button>
+                        {addM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={fmrAdd} disabled={addCheck}>{t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Add_Button")}</Button>}
+                        {editM && <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => { fmrEdit(fmrObj.wsfarmerId) }} disabled={addCheck}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Beneficiary_Popup.Update_Button")}</Button>}
                     </DialogActions>
                 </Dialog>
 
                 <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-                    <DialogTitle>Delete beneficiary</DialogTitle>
-                    <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this beneficiary?</DialogContent>
+                    <DialogTitle>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Beneficiary_Popup.Delete_Beneficiary_Label")}</DialogTitle>
+                    <DialogContent sx={{ mt: 2 }}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Beneficiary_Popup.Delete_Beneficiary_Content")}</DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
-                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>Delete</Button>
+                        <Button onClick={() => setdeleteM('')} disabled={loading}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Beneficiary_Popup.Cancel_Button")}</Button>
+                        <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => fmrDelete(deleteM)} disabled={loading}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Beneficiary_Popup.Delete_Button")}</Button>
                     </DialogActions>
                 </Dialog>
             </>}

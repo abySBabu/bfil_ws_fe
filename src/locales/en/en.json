@@ -319,7 +319,7 @@
                         "Delete_Tooltip_Text": "Delete Beneficiary",
                         "Delete_Beneficiary_Popup": {
                             "Delete_Beneficiary_Label": "Delete Beneficiary",
-                            "Delete_Beneficiary_Content": "Are you sure you want to delete",
+                            "Delete_Beneficiary_Content": "Are you sure you want to delete this beneficiary ?",
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },

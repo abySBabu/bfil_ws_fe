@@ -319,7 +319,7 @@
                         "Delete_Tooltip_Text": "ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಿ",
                         "Delete_Beneficiary_Popup": {
                             "Delete_Beneficiary_Label": "ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಿ",
-                            "Delete_Beneficiary_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
+                            "Delete_Beneficiary_Content": "ಈ ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?",
                             "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                             "Delete_Button": "ಅಳಿಸಿ"
                         },
