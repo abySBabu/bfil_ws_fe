@@ -199,12 +199,21 @@ export const Home: React.FC = () => {
           PerChk(section.permission) && (
             <ListItem key={section.name} disablePadding>
               <ListItemButton
-                sx={{
-                  backgroundColor: '#bb4d53',
-                  '&:hover': { backgroundColor: '#cc802a' },
-                  color: '#fff',
+              sx={{
+                backgroundColor: '#bb4d53',                
+                color: '#fff',                             
+                '&:hover': {
+                  backgroundColor: '#8d272b',              
+                },
+                '&.Mui-selected': {
+                  backgroundColor: '#cc802a',              
+                  color: '#fff',                           
+                  '&:hover': {
+                    backgroundColor: '#941f20',            
+                  },
+                },
+              }}
 
-                }}
                 onClick={() => setdIndex(index)}
                 selected={dIndex === index}
               >
@@ -259,21 +268,21 @@ export const Home: React.FC = () => {
 
             <Box
               sx={{
-                display: { xs: 'none', sm: 'flex' }, // Hide on extra small screens, show on small and up
+                display: { xs: 'none', sm: 'flex' },
                 gap: '8px',
-                height: { xs: '40px', md: '60px' }, // Responsive height
+                height: { xs: '40px', md: '60px' }, 
                 alignItems: 'center',
               }}
             >
               <img
                 src={`${process.env.PUBLIC_URL}/images/iib.jpg`}
                 alt="IndusInd"
-                style={{ height: '100%', maxHeight: '60px' }} // Responsive image size
+                style={{ height: '100%', maxHeight: '60px' }} 
               />
               <img
                 src={`${process.env.PUBLIC_URL}/images/bfil.png`}
                 alt="BFIL"
-                style={{ height: '100%', maxHeight: '40px' }} // Responsive image size
+                style={{ height: '100%', maxHeight: '40px' }} 
               />
             </Box>
 
