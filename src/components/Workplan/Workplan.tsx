@@ -85,6 +85,7 @@ export const Workplan: React.FC = () => {
             w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
             WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
             w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
+            w.activityName?.toString().toLowerCase().includes(searchTerm) ||
             w.value?.toString().toLowerCase().includes(searchTerm) ||
             w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
             w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
@@ -186,54 +187,103 @@ export const Workplan: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress size={80} />
             </Box> : <>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top', height: '10%' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Work Plan</Typography>
-                    <div>
-                        <TextField label="Search" fullWidth={false} value={search} onChange={(e) => setsearch(e.target.value)}
-                            InputProps={{ startAdornment: (<InputAdornment position="start"><Search /></InputAdornment>) }} />
-                        {PerChk('EDIT_Work Plan') && <Button startIcon={<PersonAddAlt1 />} onClick={() => { setplanObj(wpDef); setaddM(true); }} sx={{ height: '48px', ml: '4px' }}>Add Plan</Button>}
-                    </div>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center', // Center items vertically
+                    gap: '4px', // Space between elements
+                    mb: 1, // Margin-bottom for spacing below the Box
+                    flexDirection: { xs: 'column', sm: 'row' } // Responsive layout: column on small screens, row on larger screens
+                }}>
+                    <Typography variant='h5' sx={{
+                        fontWeight: 'bold',
+                        textAlign: 'left',
+                        flexGrow: 1, // Allow the title to take available space
+                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
+                        mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
+                    }}>
+                        Work Plan
+                    </Typography>
+
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout for search and button
+                        alignItems: 'center',
+                        gap: { xs: 1, sm: 2 } // Space between search and button
+                    }}>
+                        <TextField
+                            label="Search"
+                            fullWidth={false}
+                            value={search}
+                            onChange={(e) => { setsearch(e.target.value); setPage(0); }}
+                            variant="outlined"
+                            size="small"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Search />
+                                    </InputAdornment>
+                                )
+                            }}
+                            sx={{
+                                width: { xs: '80%', sm: '200px' },
+                                mb: { xs: 1, sm: 0 }
+                            }}
+                        />
+                        {PerChk('EDIT_Work Plan') && (
+                            <Button
+                                startIcon={<PersonAddAlt1 />}
+                                onClick={() => { setplanObj(wpDef); setaddM(true); }}
+                                sx={{
+                                    height: { xs: 'auto', sm: '45px' },
+                                    ml: { xs: 0, sm: '4px' }
+                                }}
+                            >
+                                Add Plan
+                            </Button>
+                        )}
+                    </Box>
                 </Box>
 
-                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-                    No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Watershed</TableCell>
-                            <TableCell>Year</TableCell>
-                            <TableCell>Intervention/Component</TableCell>
-                            <TableCell>Activity</TableCell>
-                            <TableCell>Physical</TableCell>
-                            <TableCell align='center'>Financial</TableCell>
-                            {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
-                        </TableRow>
-                    </TableHead>
+                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                    : planListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Watershed</TableCell>
+                                    <TableCell>Year</TableCell>
+                                    <TableCell>Intervention/Component</TableCell>
+                                    <TableCell>Activity</TableCell>
+                                    <TableCell>Physical</TableCell>
+                                    <TableCell align='center'>Financial</TableCell>
+                                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
+                                </TableRow>
+                            </TableHead>
 
-                    <TableBody>{planListP.map((w, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{WsName(w.watershedId)}</TableCell>
-                            <TableCell>{w.planningYear}</TableCell>
-                            <TableCell>{w.interventionType_Components}</TableCell>
-                            <TableCell>{w.activityName}</TableCell>
-                            <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                            <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                            {PerChk('EDIT_Work Plan') && <TableCell>
-                                <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                            </TableCell>}
-                        </TableRow>
-                    ))}</TableBody>
+                            <TableBody>{planListP.map((w, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{WsName(w.watershedId)}</TableCell>
+                                    <TableCell>{w.planningYear}</TableCell>
+                                    <TableCell>{w.interventionType_Components}</TableCell>
+                                    <TableCell>{w.activityName}</TableCell>
+                                    <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
+                                    <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
+                                    {PerChk('EDIT_Work Plan') && <TableCell>
+                                        <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
+                                    </TableCell>}
+                                </TableRow>
+                            ))}</TableBody>
 
-                    <TableFooter><TableRow><TablePagination
-                        count={planListF.length}
-                        rowsPerPage={rPP}
-                        page={page}
-                        onPageChange={(e, p) => setPage(p)}
-                        rowsPerPageOptions={[5, 10, 15]}
-                        onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                        ActionsComponent={TPA}
-                    /></TableRow></TableFooter>
-                </Table></TableContainer>}
+                            <TableFooter><TableRow><TablePagination
+                                count={planListF.length}
+                                rowsPerPage={rPP}
+                                page={page}
+                                onPageChange={(e, p) => setPage(p)}
+                                rowsPerPageOptions={[5, 10, 15]}
+                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                ActionsComponent={TPA}
+                            /></TableRow></TableFooter>
+                        </Table></TableContainer>}
             </>}
 
         <Dialog open={addM || editM}>
@@ -241,33 +291,33 @@ export const Workplan: React.FC = () => {
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
-                <Grid item xs={3}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
-                <Grid item xs={3}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                <Grid item xs={12} md={4}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
+                <Grid item xs={12} md={4}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
+                <Grid item xs={12} md={4}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
+                <Grid item xs={12} md={4}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
 
                 <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={3}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                <Grid item xs={12} md={4}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
                     {wsOps.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={3}><TextField required label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
-                <Grid item xs={3}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
+                <Grid item xs={12} md={4}><TextField required label='State' value={StateName(1)} disabled /></Grid>
+                <Grid item xs={12} md={4}><TextField required label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
+                <Grid item xs={12} md={4}><TextField required label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
+                <Grid item xs={12} md={4}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
 
                 <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={3}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={3}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                <Grid item xs={12} md={4}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
+                <Grid item xs={12} md={4}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
 
                 <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
-                    <Grid item xs={3}><TextField
+                    <Grid item xs={12} sm={4}><TextField
                         type='number'
                         label={detail.wfsName}
                         value={detail.wfsValue}
@@ -285,7 +335,7 @@ export const Workplan: React.FC = () => {
                 </React.Fragment>))}
 
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={3}><TextField required label="Total" value={finTotal} disabled /></Grid>
+                <Grid item xs={12} md={4}><TextField required label="Total" value={finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
