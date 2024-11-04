@@ -390,10 +390,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActFlowSet = async (status: any) => {
         try {
             const resp1 = await actFlowNext(status)
-            if (resp1) { setnext(resp1); console.log("Next--", resp1); } else { setnext('') }
+            if (resp1) { setnext(resp1); } else { setnext('') }
 
             const resp2 = await actFlowPrev(status)
-            if (resp2) { setprev(resp2); console.log("Prev--", resp2); } else { setprev('') }
+            if (resp2) { setprev(resp2); } else { setprev('') }
         }
         catch (error) { console.log(error) }
     }

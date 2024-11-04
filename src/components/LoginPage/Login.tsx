@@ -38,7 +38,6 @@ const Login: React.FC = () => {
             };
 
             const response = await login(data);
-            console.log('Login Success:', response);
             if (response) {
                 setSeverityColor("success");
                 setMessage("Login successfully");

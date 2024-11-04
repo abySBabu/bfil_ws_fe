@@ -154,7 +154,6 @@ export const Home: React.FC = () => {
               setSections(generatedSections);
               const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
               if (defaultIndex !== -1) {
-                console.log('defaultIndex', defaultIndex)
                 setdIndex(defaultIndex);
               } else {
                 setHasPermission(true);

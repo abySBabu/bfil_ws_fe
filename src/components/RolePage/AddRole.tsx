@@ -58,7 +58,6 @@ export default function AddRole(props: userTypeProps) {
     const formValues = watch();
 
     const addRole: SubmitHandler<RoleFormInput> = async (value) => {
-        console.log('value', value, checkedPermissions);
         setLoading(true);
         if (checkedPermissions.length == 0) {
             setSeverityColor("error");
@@ -79,7 +78,6 @@ export default function AddRole(props: userTypeProps) {
                     roleDescription: value.roleDesc,
                     roleName: value.roleName
                 }
-                console.log("mappingData.........", mappingData)
 
                 let resp = await addRolePermission(mappingData);
                 if (resp) {
@@ -112,7 +110,6 @@ export default function AddRole(props: userTypeProps) {
             try {
                 let applicationID = sessionStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
-                console.log('resp', resp);
                 let temporaryPermList: permissionByAppID[] = resp;
                 const uRole = localStorage.getItem("userRole")
 
@@ -143,7 +140,6 @@ export default function AddRole(props: userTypeProps) {
                                 screenPermissionMappingList.push(screenPermissionMapping);
 
                             }
-                            console.log("screenPermissionMappingList", screenPermissionMappingList)
                             setSelectedPermissions(screenPermissionMappingList);
                         }
                     }

@@ -39,7 +39,6 @@ export default function MappingList() {
     const handleRowClick = async (row: any) => {
         setSelectedRow(row);
         setTableDialog(true);
-        console.log('Selected row:', row);
     };
     const fetchMapData = async () => {
         try {

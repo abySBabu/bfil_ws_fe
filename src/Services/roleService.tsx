@@ -82,7 +82,6 @@ export async function addRolePermission(data: any) {
 
     try {
         const response = await axios(configs);
-        console.log("addRolePermission ---- ", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching user data:", error);
@@ -102,7 +101,6 @@ export async function updateRolePermission(data: any, roleId: any) {
 
     try {
         const response = await axios(configs);
-        console.log("updateRolePermission ---- ", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching user data:", error);
