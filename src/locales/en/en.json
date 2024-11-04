@@ -343,8 +343,8 @@
                 "District": "District",
                 "Taluka": "Taluka",
                 "Grampanchayat": "Grampanchayat",
-                "Village": "Village",
-                "Selected_Villages": "Selected villages",
+                "Villages": "Villages",
+                "Selected_Villages": "Selected villages:",
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
@@ -366,8 +366,8 @@
                             "District": "District",
                             "Taluka": "Taluka",
                             "Grampanchayat": "Grampanchayat",
-                            "Village": "Village",
-                            "Selected_Villages": "Selected villages",
+                            "Villages": "Villages",
+                            "Selected_Villages": "Selected villages:",
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
@@ -377,7 +377,7 @@
                         "Delete_Tooltip_Text": "Delete Watershed",
                         "Delete_Watershed_Popup": {
                             "Delete_Watershed_Label": "Delete Watershed",
-                            "Delete_Watershed_Content": "Are you sure you want to delete",
+                            "Delete_Watershed_Content": "Are you sure you want to delete this watershed?",
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },

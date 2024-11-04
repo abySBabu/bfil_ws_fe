@@ -343,8 +343,8 @@
                 "District": "ಜಿಲ್ಲೆ",
                 "Taluka": "ತಾಲೂಕು",
                 "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
-                "Village": "ಗ್ರಾಮ",
-                "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು",
+                "Villages": "ಹಳ್ಳಿಗಳು",
+                "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು:",
                 "Cancel_Button": "ರದ್ದುಮಾಡು",
                 "Add_Button": "ಸೇರಿಸಿ"
             },
@@ -366,8 +366,8 @@
                             "District": "ಜಿಲ್ಲೆ",
                             "Taluka": "ತಾಲೂಕು",
                             "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
-                            "Village": "ಗ್ರಾಮ",
-                            "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು",
+                            "Villages": "ಹಳ್ಳಿಗಳು",
+                            "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು:",
                             "Cancel_Button": "ರದ್ದುಮಾಡು",
                             "Update_Button": "ನವೀಕರಿಸಿ"
                         },

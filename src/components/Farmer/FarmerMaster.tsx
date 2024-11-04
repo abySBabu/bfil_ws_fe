@@ -157,7 +157,7 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Beneficiary added");
+                setalert(t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -180,7 +180,7 @@ export const FarmerMaster: React.FC = () => {
             if (resp.status === 'success') {
                 fetchData();
                 setalertClr(true);
-                setalert("Beneficiary edited");
+                setalert(t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -202,7 +202,7 @@ export const FarmerMaster: React.FC = () => {
             const resp = await deleteFarmer(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Beneficiary deleted`);
+                setalert(t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
             }
             else {
                 setalertClr(false);

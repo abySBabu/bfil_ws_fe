@@ -9,6 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { SelectChangeEvent } from '@mui/material/Select';
+import { useTranslation } from 'react-i18next';
 
 export const wsDef = {
     watershedId: '',
@@ -26,6 +27,7 @@ export const wsDef = {
 }
 
 export const WsMaster: React.FC = () => {
+    const { t } = useTranslation();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
@@ -165,7 +167,7 @@ export const WsMaster: React.FC = () => {
             const resp = await addWS(addObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert("Watershed added");
+                setalert(t("p_Watershed_Master.Add_Watershed_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -196,7 +198,7 @@ export const WsMaster: React.FC = () => {
             const resp = await editWS(editObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Watershed updated`);
+                setalert(t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -217,7 +219,7 @@ export const WsMaster: React.FC = () => {
             const resp = await deleteWS(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Watershed deleted`);
+                setalert(t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -258,7 +260,7 @@ export const WsMaster: React.FC = () => {
                             mb: { xs: 2, sm: 0 }
                         }}
                     >
-                        Watershed Master
+                        {t("p_Watershed_Master.ss_Watershed_Master_Header")}
                     </Typography>
 
                     <Box
@@ -270,7 +272,7 @@ export const WsMaster: React.FC = () => {
                         }}
                     >
                         <TextField
-                            label="Search"
+                            label={t("p_Watershed_Master.ss_Search_Label")}
                             fullWidth={false}
                             value={search}
                             onChange={(e) => { setsearch(e.target.value); setPage(0); }}
@@ -303,7 +305,7 @@ export const WsMaster: React.FC = () => {
                                     ml: { xs: 0, sm: '4px' },
                                 }}
                             >
-                                Add Watershed
+                                {t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Link_Text")}
                             </Button>
                         )}
                     </Box>
@@ -315,9 +317,9 @@ export const WsMaster: React.FC = () => {
                 </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Watershed</TableCell>
-                            <TableCell>Description</TableCell>
-                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>Actions</TableCell>}
+                            <TableCell>{t("p_Watershed_Master.ss_WatershedList.Watershed")}</TableCell>
+                            <TableCell>{t("p_Watershed_Master.ss_WatershedList.Description")}</TableCell>
+                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Text")}</TableCell>}
                         </TableRow>
                     </TableHead>
 
@@ -326,8 +328,8 @@ export const WsMaster: React.FC = () => {
                             <TableCell>{w.wsName}</TableCell>
                             <TableCell>{w.wsDescription}</TableCell>
                             {PerChk('EDIT_Watershed Master') && <TableCell>
-                                <IconButton title='Edit watershed' onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title='Delete watershed' onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
+                                <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
+                                <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
                             </TableCell>}
                         </TableRow>
                     ))}</TableBody>
@@ -341,19 +343,20 @@ export const WsMaster: React.FC = () => {
                             rowsPerPageOptions={[5, 10, 15]}
                             onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                             ActionsComponent={TPA}
+                            labelRowsPerPage={t("p_Watershed_Master.ss_WatershedList.Rows_per_page")}
                         />
                     </TableRow></TableFooter>
                 </Table></TableContainer>}
             </>}
 
         <Dialog open={addM || editM}>
-            <DialogTitle>{addM ? 'Add Watershed' : editM ? 'Edit Watershed' : ''}</DialogTitle>
+            <DialogTitle>{addM ? t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Add_Mapping_Label") : editM ? t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Watershed_Popup.Edit_Watershed_Label") : ''}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12} md={4}>
                     <TextField
                         required
-                        label="Name"
+                        label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Name")}
                         value={wsObj.wsName}
                         onChange={(e) => handleFieldChange('wsName', e.target.value)}
                         helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
@@ -362,34 +365,34 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={12} md={4}>
                     <TextField
                         required
-                        label="Description"
+                        label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Description")}
                         value={wsObj.wsDescription}
                         onChange={(e) => handleFieldChange('wsDescription', e.target.value)}
                         helperText={isTouched.wsDescription && !wsObj.wsDescription ? 'Watershed description cannot be empty' : ''}
                     />
                 </Grid>
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={12} md={4}><TextField disabled required select label='State' value={wsObj.stateId}>
+                <Grid item xs={12} md={4}><TextField disabled required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.State")} value={wsObj.stateId}>
                     {stOps?.map((o, i) => (<MenuItem key={i} value={o.stateId}>{o.stateName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} md={4}><TextField required select label='District' value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.District")} value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
                     {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} md={4}><TextField required select label='Taluk' value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Taluka")} value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
                     {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} md={4}><TextField required select label="Grampanchayat" value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Grampanchayat")} value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={12} md={4}><FormControl fullWidth>
-                    <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
+                    <InputLabel id="demo-multiple-checkbox-label">{t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Villages")}</InputLabel>
                     <Select
                         labelId="demo-multiple-checkbox-label"
                         id="demo-multiple-checkbox"
                         multiple
                         value={vList}
                         onChange={handleChange}
-                        input={<OutlinedInput label="Villages" />}
+                        input={<OutlinedInput label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Villages")} />}
                         renderValue={(selected) =>
                             selected
                                 .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
@@ -406,26 +409,26 @@ export const WsMaster: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl></Grid>
-                <Grid item xs={12}><Typography><b>Selected villages:</b> {vList
+                <Grid item xs={12}><Typography><b>{t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Selected_Villages")}</b> {vList
                     .map((id) => vilOps.find((o) => o.villageId === id)?.villageName)
                     .filter(Boolean)
                     .join(', ')}</Typography></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Cancel</Button>
-                {addM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>Add</Button>
-                    : editM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.watershedId)} disabled={addCheck || loading}>Update</Button>
+                <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>{t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Cancel_Button")}</Button>
+                {addM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={WSadd} disabled={addCheck || loading}>{t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Add_Button")}</Button>
+                    : editM ? <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSedit(wsObj.watershedId)} disabled={addCheck || loading}>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Watershed_Popup.Update_Button")}</Button>
                         : null}
             </DialogActions>
         </Dialog>
 
         <Dialog open={Boolean(deleteM)} maxWidth='xs'>
-            <DialogTitle>Delete Watershed</DialogTitle>
-            <DialogContent sx={{ mt: 2 }}>Are you sure you want to delete this watershed?</DialogContent>
+            <DialogTitle>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Watershed_Popup.Delete_Watershed_Label")}</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Watershed_Popup.Delete_Watershed_Content")}</DialogContent>
             <DialogActions>
-                <Button onClick={() => setdeleteM('')} disabled={loading}>Cancel</Button>
-                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>Delete</Button>
+                <Button onClick={() => setdeleteM('')} disabled={loading}>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Watershed_Popup.Cancel_Button")}</Button>
+                <Button startIcon={loading ? <CircularProgress /> : null} onClick={() => WSdelete(deleteM)} disabled={loading}>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Watershed_Popup.Delete_Button")}</Button>
             </DialogActions>
         </Dialog>
     </>)
