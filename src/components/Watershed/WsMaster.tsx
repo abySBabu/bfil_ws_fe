@@ -353,7 +353,7 @@ export const WsMaster: React.FC = () => {
             <DialogTitle>{addM ? t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Add_Mapping_Label") : editM ? t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Watershed_Popup.Edit_Watershed_Label") : ''}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Name")}
@@ -362,7 +362,7 @@ export const WsMaster: React.FC = () => {
                         helperText={isTouched.wsName && !wsObj.wsName ? 'Watershed name cannot be empty' : ''}
                     />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12}>
                     <TextField
                         required
                         label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Description")}

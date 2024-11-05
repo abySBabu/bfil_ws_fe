@@ -311,7 +311,7 @@ export const FarmerMaster: React.FC = () => {
                     <DialogTitle>{addM ? t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Add_Mapping_Label") : editM ? 'Edit beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Name")}
@@ -320,7 +320,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.wsfarmerName && fmrObj.wsfarmerName.length === 0 ? 'Name cannot be empty' : ''}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Mobile")}
@@ -331,7 +331,7 @@ export const FarmerMaster: React.FC = () => {
                                 helperText={isTouched.mobileNumber && fmrObj.mobileNumber.length !== 10 ? 'Mobile number should have 10 digits' : ''}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 select
@@ -343,7 +343,7 @@ export const FarmerMaster: React.FC = () => {
                                 <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
                             </TextField>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation_Name")}
@@ -351,7 +351,7 @@ export const FarmerMaster: React.FC = () => {
                                 onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12}>
                             <TextField
                                 required
                                 label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Remarks")}
