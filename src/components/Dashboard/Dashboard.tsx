@@ -159,21 +159,22 @@ export const Dashboard: React.FC = () => {
                                             width={chartWidth}
                                         />
                                     </Box>
-                                    <Box sx={{ overflowX: 'auto', mt: 2 }}>
-                                        <PieChart
-                                            series={[
-                                             {
-                                                data: [
-                                                { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
-                                                { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
-                                                { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
-                                                ]
-                                             }
-                                            ]}
-                                            height={chartHeight}
-                                            width={chartWidth}
-                                        />
-                                    </Box>
+                                    <Box sx={{mt: 2,width: "100%" }}>
+                                    <PieChart
+                                    margin={{ right: 170 }}
+                                    series={[
+                                    {
+                                        data: [
+                                    { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
+                                    { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
+                                    { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
+                                    ],
+                                    }
+                                    ]}
+                                    height={chartHeight}
+                                    //width={chartWidth}
+                                     />
+                                </Box>
                             </CardContent>
                         </Card>
                     </Modal> 
