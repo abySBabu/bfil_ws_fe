@@ -60,12 +60,12 @@ export const actDef = {
         mobilizer: '',
         photoEvent: '',
         photoattendanceResolution: '',
-        bfilAmount: '',
-        otherGovScheme: '',
-        other: '',
-        menrege: '',
-        ibl: '',
-        community: ''
+        bfilAmount: 0,
+        otherGovScheme: 0,
+        other: 0,
+        menrege: 0,
+        ibl: 0,
+        community: 0
     },
     history: [
         {
@@ -553,8 +553,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             </TextField></Grid>
 
                             <Grid item xs={12}><Divider /></Grid>
-                            <Grid item xs={12} sm={3}><TextField required type='number' label='Male Participants' value={actObj.workActivity.participantsMale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsMale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField required type='number' label='Female Participants' value={actObj.workActivity.participantsFemale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsFemale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' label='Male Participants' value={actObj.workActivity.participantsMale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsMale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' label='Female Participants' value={actObj.workActivity.participantsFemale} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsFemale: parseInt(e.target.value) } })} inputProps={{ min: 0 }} /></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='Total Participants' value={totalP} /></Grid>
                             <Grid item xs={12}><Divider /></Grid>
                             <Grid item xs={12} sm={3}><TextField required label='Facilitator' value={actObj.workActivity.trainerFacilitator} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, trainerFacilitator: e.target.value } })} /></Grid>
@@ -627,12 +627,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <Grid item xs={12} sm={3}><TextField type='number' required label="Water Conserved (litres)" value={actObj.workActivity.waterConserved} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, waterConserved: e.target.value } })} /></Grid>
                             </>}
                             <Grid item xs={12}><Divider>Activity Financial Details</Divider></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="BFIL" value={actObj.workActivity.bfilAmount} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, bfilAmount: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="Gov Schemes" value={actObj.workActivity.otherGovScheme} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, otherGovScheme: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="Other" value={actObj.workActivity.other} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, other: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="MGNREGA" value={actObj.workActivity.menrege} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, menrege: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="IBL" value={actObj.workActivity.ibl} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, ibl: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label="Community" value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: e.target.value } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="BFIL" value={actObj.workActivity.bfilAmount} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, bfilAmount: parseInt(e.target.value) } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="Gov Schemes" value={actObj.workActivity.otherGovScheme} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, otherGovScheme: parseInt(e.target.value) } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="Other" value={actObj.workActivity.other} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, other: parseInt(e.target.value) } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="MGNREGA" value={actObj.workActivity.menrege} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, menrege: parseInt(e.target.value) } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="IBL" value={actObj.workActivity.ibl} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, ibl: parseInt(e.target.value) } })} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="Community" value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: parseInt(e.target.value) } })} /></Grid>
 
                             <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
                             <Grid item xs={12} sm={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
