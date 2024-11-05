@@ -134,13 +134,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
-    const sustainCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.activityDescription
-    const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer || !actObj.workActivity.remarks
+    const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
     const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
-        : actObj.workActivity.activityName === 'Sustainable Practices' ? sustainCheck
-            : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
-                : supplyCheck
+        : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
+            : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
@@ -448,6 +446,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     setactObj(actDef);
                                     setfmrObj(fmrDef);
                                     setvList([]);
+                                    setvilOps2([]);
                                     setaddM(true);
                                 }}
                             >
@@ -516,6 +515,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 />
                             </TableRow></TableFooter>
                         </Table></TableContainer>}
+
                 <Dialog open={addM || editM} maxWidth='xl'>
                     <DialogTitle>{addM ? 'Add Activity' : editM ? 'Update Activity' : ''}</DialogTitle>
 
@@ -526,7 +526,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         <Grid item xs={12} sm={3}><TextField required select label='Activity' value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0 || editM}>
                             {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
                         </TextField></Grid>
-                        <Grid item xs={12} sm={3}><TextField required label='Description' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
+                        <Grid item xs={12} sm={6}><TextField label='Description' value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                         {editM && <Grid item xs={12}><TextField label='Update remarks' value={rmk} onChange={(e) => setrmk(e.target.value)} /></Grid>}
                         {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                             <Grid item xs={12}><Divider /></Grid>
@@ -561,7 +561,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12} sm={3}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                            <Grid item xs={12} sm={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
+                            <Grid item xs={12} sm={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => { setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } }); setvList([]); }}>
                                 {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
@@ -572,6 +572,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
                                     <Select
+                                        disabled={vilOps2?.length <= 0}
                                         labelId="demo-multiple-checkbox-label"
                                         id="demo-multiple-checkbox"
                                         multiple
@@ -616,8 +617,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 />
                             </Grid>
                             <Grid item xs={12}><Divider>Activity Physical Details</Divider></Grid>
-                            <Grid item xs={12} sm={3}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
-                            <Grid item xs={12} sm={2}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
+                            <Grid item xs={12} sm={2}><TextField type='number' required label='Total Value' value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
+                            <Grid item xs={12} sm={1}><TextField required label='Unit' value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
                             <Grid item xs={12} sm={3}><TextField type='number' required label='Area Treated (acres)' value={actObj.workActivity.areaTreated} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, areaTreated: e.target.value } })} /></Grid>
                             {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
                                 <Grid item xs={12} sm={3}><TextField required select label='Land Type' value={actObj.workActivity.landType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, landType: e.target.value } })}>
@@ -638,7 +639,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
+                            <Grid item xs={12} sm={6}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
                         </>}
                     </Grid></DialogContent>
 
