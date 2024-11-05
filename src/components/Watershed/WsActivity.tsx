@@ -633,12 +633,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12} sm={3}><TextField type='number' required label="IBL" value={actObj.workActivity.ibl} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, ibl: e.target.value } })} /></Grid>
                             <Grid item xs={12} sm={3}><TextField type='number' required label="Community" value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: e.target.value } })} /></Grid>
 
-                            <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                            <Grid item xs={12}><Divider>Beneficiary Details</Divider></Grid>
                             <Grid item xs={12} sm={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
-                            <Grid item xs={12} sm={3}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
+                            <Grid item xs={12} sm={3}><TextField required disabled label='Relationship' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
   </>}
                     </Grid></DialogContent>
 
@@ -660,30 +660,30 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Grid item xs={12} sm={3}><b>Description:</b> {actObj.workActivity.activityDescription}</Grid>
 
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
-                    <Grid item xs={12} sm={3}><Divider /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>Event Name:</b> {actObj.workActivity.capacitynameEvent}</Grid>
                    <Grid item xs={12} sm={3}><b>Event Type:</b> {actObj.workActivity.capacitytypeEvent}</Grid>
                     <Grid item xs={12} sm={3}><b>Event Date:</b> {actObj.workActivity.eventDate}</Grid>
                     <Grid item xs={12} sm={3}><b>Target Group:</b> {actObj.workActivity.participantsType}</Grid>
 
-                    <Grid item xs={12} sm={3}><Divider /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
                    <Grid item xs={12} sm={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
                     <Grid item xs={12} sm={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
                     <Grid item xs={12} sm={3}><b>Taluk:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
                     <Grid item xs={12} sm={3}><b>Panchayat:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
                     <Grid item xs={12} sm={3}><b>Habitation:</b> {VillageName(actObj.workActivity.habitationsCovered)}</Grid>
 
-                    <Grid item xs={12} sm={3}><Divider /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>Male Participants:</b> {actObj.workActivity.participantsMale}</Grid>
                     <Grid item xs={12} sm={3}><b>Female Participants:</b> {actObj.workActivity.participantsFemale}</Grid>
                     <Grid item xs={12} sm={3}><b>Total Participants:</b> {totalP}</Grid>
 
-                    <Grid item xs={12} sm={3}><Divider /></Grid>
+                    <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>Facilitator:</b> {actObj.workActivity.trainerFacilitator}</Grid>
                     <Grid item xs={12} sm={3}><b>Mobilizer:</b> {actObj.workActivity.mobilizer}</Grid>
                     <Grid item xs={12} sm={3}><b>Remarks:</b> {actObj.workActivity.remarks}</Grid>
                 </> : <>
-                    <Grid item xs={12} sm={3}><Divider>Watershed Details</Divider></Grid>
+                    <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
                     <Grid item xs={12} sm={3}><b>Watershed:</b> {WsName(actObj.workActivity.watershedId)}</Grid>
                     <Grid item xs={12} sm={3}><b>State:</b> {StateName(actObj.workActivity.state)}</Grid>
                     <Grid item xs={12} sm={3}><b>District:</b> {DistrictName(actObj.workActivity.district)}</Grid>
@@ -692,7 +692,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={3}><b>Villages:</b> {actObj.workActivity.village.split(',').map(id => VillageName(id)).join(', ')}</Grid>
                     <Grid item xs={12} sm={3}><b>Survey No:</b> {actObj.workActivity.surveyNo}</Grid>
 
-                    <Grid item xs={12} sm={3}><Divider>Activity Physical Details</Divider></Grid>
+                    <Grid item xs={12}><Divider>Activity Physical Details</Divider></Grid>
                     <Grid item xs={12} sm={3}><b>Total Value:</b> {actObj.workActivity.total}  {actObj.workActivity.unit}</Grid>
                     <Grid item xs={12} sm={3}><b>Area Treated (acres):</b> {actObj.workActivity.areaTreated}</Grid>
                     {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
@@ -700,7 +700,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                         <Grid item xs={12} sm={3}><b>Water Conserved (litres):</b> {actObj.workActivity.waterConserved}</Grid>
                     </>}
 
-                    <Grid item xs={12} sm={3}><Divider>Activity Financial Details</Divider></Grid>
+                    <Grid item xs={12}><Divider>Activity Financial Details</Divider></Grid>
                     <Grid item xs={12} sm={3}><b>BFIL: </b>{actObj.workActivity.bfilAmount} </Grid>
                     <Grid item xs={12} sm={3}><b>Gov Schemes: </b>{actObj.workActivity.otherGovScheme}</Grid>
                     <Grid item xs={12} sm={3}><b>Other: </b>{actObj.workActivity.other}</Grid>
@@ -708,13 +708,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={3}><b>IBL: </b>{actObj.workActivity.ibl}</Grid>
                     <Grid item xs={12} sm={3}><b>Community: </b>{actObj.workActivity.community}</Grid>
 
-                    <Grid item xs={12} sm={3}><Divider>Farmer Details</Divider></Grid>
+                    <Grid item xs={12}><Divider>Beneficiary Details</Divider></Grid>
                     <Grid item xs={12} sm={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
                     <Grid item xs={12} sm={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                     <Grid item xs={12} sm={3}><b>{fmrObj.relationalIdentifiers}: </b>{fmrObj.identifierName}</Grid>
                 </>}
 
-                        <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
+                        <Grid item xs={12}><Divider>Update History</Divider></Grid>
                         <Grid item xs={12}>{
                             actObj.history?.length > 0 ?
                                 <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>

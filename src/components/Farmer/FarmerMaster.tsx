@@ -284,8 +284,8 @@ export const FarmerMaster: React.FC = () => {
                                 <TableCell>{w.wsfarmerName}</TableCell>
                                 <TableCell>{w.mobileNumber}</TableCell>
                                 {PerChk('EDIT_Beneficiary Master') && <TableCell>
-                                    <IconButton title="Edit beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                    <IconButton title="Delete beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                                    <IconButton title="Edit Beneficiary" onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                    <IconButton title="Delete Beneficiary" onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                                 </TableCell>}
                             </TableRow>
                         ))}</TableBody>
@@ -304,7 +304,7 @@ export const FarmerMaster: React.FC = () => {
                     </Table></TableContainer>}
 
                 <Dialog open={addM || editM}>
-                    <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit beneficiary' : ''}</DialogTitle>
+                    <DialogTitle>{addM ? 'Add New Beneficiary' : editM ? 'Edit Beneficiary' : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12} sm={4}>
@@ -331,7 +331,7 @@ export const FarmerMaster: React.FC = () => {
                             <TextField
                                 required
                                 select
-                                label="Relation"
+                                label="Relationship"
                                 value={fmrObj.relationalIdentifiers}
                                 onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
                             >
