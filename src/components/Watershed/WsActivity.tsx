@@ -5,7 +5,7 @@ import {
     MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
-import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Height } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
@@ -108,6 +108,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [next, setnext] = React.useState('');
     const [prev, setprev] = React.useState('');
     const [vList, setvList] = React.useState<any[]>([]);
+    const [imgM, setimgM] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
@@ -193,8 +194,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
-            const resp5 = await ListFund(); if (resp5.status === 'success') { setfundOps(resp5.data) }
-            const resp6 = await listWSbyUserId(); if (resp6.status === 'success') { setwsOps(resp6.data) }
+            const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
@@ -634,12 +634,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="IBL" value={actObj.workActivity.ibl} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, ibl: parseInt(e.target.value) } })} /></Grid>
                             <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label="Community" value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: parseInt(e.target.value) } })} /></Grid>
 
-                            <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                            <Grid item xs={12}><Divider>Beneficiary Details</Divider></Grid>
                             <Grid item xs={12} sm={3}><TextField required select label='Name' value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
                                 {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='Mobile No.' value={fmrObj.mobileNumber} /></Grid>
-                            <Grid item xs={12} sm={6}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers}: ${fmrObj.identifierName}`} /></Grid>
+                            <Grid item xs={12} sm={6}><TextField required disabled label='Relation' value={`${fmrObj.relationalIdentifiers} ${fmrObj.identifierName}`} /></Grid>
                         </>}
                     </Grid></DialogContent>
 
@@ -709,13 +709,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12} sm={3}><b>IBL: </b>{actObj.workActivity.ibl}</Grid>
                             <Grid item xs={12} sm={3}><b>Community: </b>{actObj.workActivity.community}</Grid>
 
-                            <Grid item xs={12}><Divider>Farmer Details</Divider></Grid>
+                            <Grid item xs={12}><Divider>Beneficiary Details</Divider></Grid>
                             <Grid item xs={12} sm={3}><b>Name:</b> {fmrObj.wsfarmerName} </Grid>
                             <Grid item xs={12} sm={3}><b>Mobile No:</b> {fmrObj.mobileNumber}</Grid>
                             <Grid item xs={12} sm={3}><b>{fmrObj.relationalIdentifiers}</b> {fmrObj.identifierName}</Grid>
                         </>}
 
-                        <Grid item xs={12}><Divider textAlign='left'><b style={{ fontSize: '115%' }}>Update History</b></Divider></Grid>
+                        <Grid item xs={12}><Divider>Update History</Divider></Grid>
                         <Grid item xs={12}>{
                             actObj.history?.length > 0 ?
                                 <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
@@ -734,7 +734,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                         <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
-                                        <TableCell />
+                                        <TableCell><img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat"
+                                            style={{ height: '24px', objectFit: 'contain', cursor: 'pointer' }}
+                                            onClick={() => setimgM(`${process.env.PUBLIC_URL}/images/pragat.png`)} /></TableCell>
                                     </TableRow>)
                                     )}</TableBody>
                                 </Table></TableContainer>
@@ -777,6 +779,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             :
                             <DialogActions />
                     }
+                </Dialog>
+
+                <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
+                    <img src={imgM} style={{ objectFit: 'contain' }} />
                 </Dialog>
             </>}
     </>)
