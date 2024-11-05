@@ -448,6 +448,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     setactObj(actDef);
                                     setfmrObj(fmrDef);
                                     setvList([]);
+                                    setvilOps2([]);
                                     setaddM(true);
                                 }}
                             >
@@ -516,6 +517,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 />
                             </TableRow></TableFooter>
                         </Table></TableContainer>}
+
                 <Dialog open={addM || editM} maxWidth='xl'>
                     <DialogTitle>{addM ? 'Add Activity' : editM ? 'Update Activity' : ''}</DialogTitle>
 
@@ -561,7 +563,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Grid item xs={12} sm={3}><TextField required label='Mobilizer' value={actObj.workActivity.mobilizer} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, mobilizer: e.target.value } })} /></Grid>
                         </> : <>
                             <Grid item xs={12}><Divider>Watershed Details</Divider></Grid>
-                            <Grid item xs={12} sm={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } })}>
+                            <Grid item xs={12} sm={3}><TextField required select label='Watershed' value={actObj.workActivity.watershedId} onChange={(e) => { setactObj({ ...actObj, workActivity: { ...actObj.workActivity, watershedId: e.target.value } }); setvList([]); }}>
                                 {wsOps?.map((o, i) => (<MenuItem key={i} value={o.wsId}>{o.wsName}</MenuItem>))}
                             </TextField></Grid>
                             <Grid item xs={12} sm={3}><TextField required disabled label='State' value={StateName(actObj.workActivity.state)} /></Grid>
@@ -572,6 +574,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-multiple-checkbox-label">Villages</InputLabel>
                                     <Select
+                                        disabled={vilOps2?.length <= 0}
                                         labelId="demo-multiple-checkbox-label"
                                         id="demo-multiple-checkbox"
                                         multiple
