@@ -308,7 +308,7 @@ export const FarmerMaster: React.FC = () => {
                     </Table></TableContainer>}
 
                 <Dialog open={addM || editM}>
-                    <DialogTitle>{addM ? t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Add_Mapping_Label") : editM ? 'Edit Beneficiary' : ''}</DialogTitle>
+                    <DialogTitle>{addM ? t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Add_Mapping_Label") : editM ? t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Beneficiary_Popup.Edit_Beneficiary_Label") : ''}</DialogTitle>
 
                     <DialogContent><Grid container spacing={1} sx={{ my: 1 }}>
                         <Grid item xs={12} sm={6}>
