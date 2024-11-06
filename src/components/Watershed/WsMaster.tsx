@@ -117,13 +117,10 @@ export const WsMaster: React.FC = () => {
         setLoadingResponse(true);
         try {
             const resp1 = await listWS();
-            if (resp1.status === 'success') {
-                setwsList(resp1.data.reverse());
-                setserverDown(false);
-            }
-            else { setserverDown(true) }
+            if (resp1.status === 'success') { setwsList(resp1.data.reverse()) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
+            setserverDown(false);
         }
         catch (error) { console.log(error); setserverDown(true); }
         setLoadingResponse(false);
