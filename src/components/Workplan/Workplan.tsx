@@ -113,11 +113,12 @@ export const Workplan: React.FC = () => {
     const fetchData = async () => {
         setloadingResponse(true);
         try {
-            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); setserverDown(false); } else { setserverDown(true) }
+            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); }
             const resp2 = await ListInter(); const resp3 = await ListDonor();
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
+            setserverDown(false);
         }
         catch (error) { console.log(error); setserverDown(true); }
         setloadingResponse(false);

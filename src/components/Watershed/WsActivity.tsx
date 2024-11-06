@@ -5,14 +5,14 @@ import {
     MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
-import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Height } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
 import { listFarmer } from '../../Services/farmerService';
-import { ListDemand, ListSupply, ListInter, ListFund, ListLand } from '../../Services/dashboardService';
+import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
@@ -191,13 +191,14 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const fetchData = async () => {
         setLoadingResponse(true);
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data); setserverDown(false); } else { setserverDown(true) }
+            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
             const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
+            setserverDown(false);
         }
         catch (error) { console.log(error); setserverDown(true); }
         setLoadingResponse(false);
