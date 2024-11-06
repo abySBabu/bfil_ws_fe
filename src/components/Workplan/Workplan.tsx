@@ -62,6 +62,7 @@ const wpDef = {
 
 export const Workplan: React.FC = () => {
     const [loadingResponse, setloadingResponse] = React.useState(true);
+    const [serverDown, setserverDown] = React.useState(false);
     const [loading, setloading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -110,14 +111,15 @@ export const Workplan: React.FC = () => {
     }, [planObj.financialDetails.map(detail => detail.wfsValue)]);
 
     const fetchData = async () => {
+        setloadingResponse(true);
         try {
-            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); }
+            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); setserverDown(false); } else { setserverDown(true) }
             const resp2 = await ListInter(); const resp3 = await ListDonor();
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
         }
-        catch (error) { console.log(error) }
+        catch (error) { console.log(error); setserverDown(true); }
         setloadingResponse(false);
     }
 
@@ -183,108 +185,107 @@ export const Workplan: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
-        {loadingResponse ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress size={80} />
-            </Box> : <>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center', // Center items vertically
-                    gap: '4px', // Space between elements
-                    mb: 1, // Margin-bottom for spacing below the Box
-                    flexDirection: { xs: 'column', sm: 'row' } // Responsive layout: column on small screens, row on larger screens
-                }}>
-                    <Typography variant='h5' sx={{
-                        fontWeight: 'bold',
-                        textAlign: 'left',
-                        flexGrow: 1, // Allow the title to take available space
-                        fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
-                        mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
-                    }}>
-                        Work Plan
-                    </Typography>
-
+        {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
+            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+                : <>
                     <Box sx={{
                         display: 'flex',
-                        flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout for search and button
-                        alignItems: 'center',
-                        gap: { xs: 1, sm: 2 } // Space between search and button
+                        justifyContent: 'space-between',
+                        alignItems: 'center', // Center items vertically
+                        gap: '4px', // Space between elements
+                        mb: 1, // Margin-bottom for spacing below the Box
+                        flexDirection: { xs: 'column', sm: 'row' } // Responsive layout: column on small screens, row on larger screens
                     }}>
-                        <TextField
-                            label="Search"
-                            fullWidth={false}
-                            value={search}
-                            onChange={(e) => { setsearch(e.target.value); setPage(0); }}
-                            variant="outlined"
-                            size="small"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search />
-                                    </InputAdornment>
-                                )
-                            }}
-                            sx={{
-                                width: { xs: '80%', sm: '200px' },
-                                mb: { xs: 1, sm: 0 }
-                            }}
-                        />
-                        {PerChk('EDIT_Work Plan') && (
-                            <Button
-                                startIcon={<PersonAddAlt1 />}
-                                onClick={() => { setplanObj(wpDef); setaddM(true); }}
-                                sx={{
-                                    height: { xs: 'auto', sm: '45px' },
-                                    ml: { xs: 0, sm: '4px' }
+                        <Typography variant='h5' sx={{
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            flexGrow: 1, // Allow the title to take available space
+                            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
+                            mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
+                        }}>
+                            Work Plan
+                        </Typography>
+
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout for search and button
+                            alignItems: 'center',
+                            gap: { xs: 1, sm: 2 } // Space between search and button
+                        }}>
+                            <TextField
+                                label="Search"
+                                fullWidth={false}
+                                value={search}
+                                onChange={(e) => { setsearch(e.target.value); setPage(0); }}
+                                variant="outlined"
+                                size="small"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Search />
+                                        </InputAdornment>
+                                    )
                                 }}
-                            >
-                                Add Plan
-                            </Button>
-                        )}
+                                sx={{
+                                    width: { xs: '80%', sm: '200px' },
+                                    mb: { xs: 1, sm: 0 }
+                                }}
+                            />
+                            {PerChk('EDIT_Work Plan') && (
+                                <Button
+                                    startIcon={<PersonAddAlt1 />}
+                                    onClick={() => { setplanObj(wpDef); setaddM(true); }}
+                                    sx={{
+                                        height: { xs: 'auto', sm: '45px' },
+                                        ml: { xs: 0, sm: '4px' }
+                                    }}
+                                >
+                                    Add Plan
+                                </Button>
+                            )}
+                        </Box>
                     </Box>
-                </Box>
 
-                {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
-                    : planListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
-                        : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Watershed</TableCell>
-                                    <TableCell>Year</TableCell>
-                                    <TableCell>Intervention/Component</TableCell>
-                                    <TableCell>Activity</TableCell>
-                                    <TableCell>Physical</TableCell>
-                                    <TableCell align='center'>Financial</TableCell>
-                                    {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
-                                </TableRow>
-                            </TableHead>
+                    {planList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                        : planListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                            : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Watershed</TableCell>
+                                        <TableCell>Year</TableCell>
+                                        <TableCell>Intervention/Component</TableCell>
+                                        <TableCell>Activity</TableCell>
+                                        <TableCell>Physical</TableCell>
+                                        <TableCell align='center'>Financial</TableCell>
+                                        {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
+                                    </TableRow>
+                                </TableHead>
 
-                            <TableBody>{planListP.map((w, i) => (
-                                <TableRow key={i}>
-                                    <TableCell>{WsName(w.watershedId)}</TableCell>
-                                    <TableCell>{w.planningYear}</TableCell>
-                                    <TableCell>{w.interventionType_Components}</TableCell>
-                                    <TableCell>{w.activityName}</TableCell>
-                                    <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
-                                    <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
-                                    {PerChk('EDIT_Work Plan') && <TableCell>
-                                        <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
-                                    </TableCell>}
-                                </TableRow>
-                            ))}</TableBody>
+                                <TableBody>{planListP.map((w, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{WsName(w.watershedId)}</TableCell>
+                                        <TableCell>{w.planningYear}</TableCell>
+                                        <TableCell>{w.interventionType_Components}</TableCell>
+                                        <TableCell>{w.activityName}</TableCell>
+                                        <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
+                                        <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
+                                        {PerChk('EDIT_Work Plan') && <TableCell>
+                                            <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
+                                        </TableCell>}
+                                    </TableRow>
+                                ))}</TableBody>
 
-                            <TableFooter><TableRow><TablePagination
-                                count={planListF.length}
-                                rowsPerPage={rPP}
-                                page={page}
-                                onPageChange={(e, p) => setPage(p)}
-                                rowsPerPageOptions={[5, 10, 15]}
-                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                                ActionsComponent={TPA}
-                            /></TableRow></TableFooter>
-                        </Table></TableContainer>}
-            </>}
+                                <TableFooter><TableRow><TablePagination
+                                    count={planListF.length}
+                                    rowsPerPage={rPP}
+                                    page={page}
+                                    onPageChange={(e, p) => setPage(p)}
+                                    rowsPerPageOptions={[5, 10, 15]}
+                                    onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                    ActionsComponent={TPA}
+                                /></TableRow></TableFooter>
+                            </Table></TableContainer>}
+                </>}
 
         <Dialog open={addM || editM}>
             <DialogTitle>{addM ? 'Add Plan' : editM ? 'Edit Plan' : ''}</DialogTitle>

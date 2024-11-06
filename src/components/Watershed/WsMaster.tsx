@@ -29,6 +29,7 @@ export const wsDef = {
 export const WsMaster: React.FC = () => {
     const { t } = useTranslation();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
+    const [serverDown, setserverDown] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
@@ -113,14 +114,18 @@ export const WsMaster: React.FC = () => {
     }, [wsObj.gramPanchayatId])
 
     const fetchData = async () => {
+        setLoadingResponse(true);
         try {
-            const resp1 = await listWS(); if (resp1.status === 'success') {
+            const resp1 = await listWS();
+            if (resp1.status === 'success') {
                 setwsList(resp1.data.reverse());
+                setserverDown(false);
             }
+            else { setserverDown(true) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
         }
-        catch (error) { console.log(error) }
+        catch (error) { console.log(error); setserverDown(true); }
         setLoadingResponse(false);
     };
 
@@ -236,118 +241,117 @@ export const WsMaster: React.FC = () => {
 
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
-        {loadingResponse ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress size={80} />
-            </Box> : <>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: '4px',
-                        mb: 1,
-                        flexDirection: { xs: 'column', sm: 'row' }
-                    }}
-                >
-                    <Typography
-                        variant="h5"
-                        sx={{
-                            fontWeight: 'bold',
-                            textAlign: 'left',
-                            flexGrow: 1,
-                            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
-                            mb: { xs: 2, sm: 0 }
-                        }}
-                    >
-                        {t("p_Watershed_Master.ss_Watershed_Master_Header")}
-                    </Typography>
-
+        {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
+            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+                : <>
                     <Box
                         sx={{
                             display: 'flex',
-                            flexDirection: { xs: 'column', sm: 'row' },
+                            justifyContent: 'space-between',
                             alignItems: 'center',
-                            gap: { xs: 1, sm: 2 },
+                            gap: '4px',
+                            mb: 1,
+                            flexDirection: { xs: 'column', sm: 'row' }
                         }}
                     >
-                        <TextField
-                            label={t("p_Watershed_Master.ss_Search_Label")}
-                            fullWidth={false}
-                            value={search}
-                            onChange={(e) => { setsearch(e.target.value); setPage(0); }}
-                            variant="outlined"
-                            size="small"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search />
-                                    </InputAdornment>
-                                ),
-                            }}
+                        <Typography
+                            variant="h5"
                             sx={{
-                                width: { xs: '80%', sm: '200px' },
-                                mb: { xs: 1, sm: 0 }
+                                fontWeight: 'bold',
+                                textAlign: 'left',
+                                flexGrow: 1,
+                                fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' },
+                                mb: { xs: 2, sm: 0 }
                             }}
-                        />
-                        {PerChk('EDIT_Watershed Master') && (
-                            <Button
-                                startIcon={<AddHome />}
-                                onClick={() => {
-                                    setwsObj(wsDef);
-                                    setvList([]);
-                                    setaddM(true);
-                                    setIsTouched({ wsName: false, wsDescription: false });
+                        >
+                            {t("p_Watershed_Master.ss_Watershed_Master_Header")}
+                        </Typography>
+
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                alignItems: 'center',
+                                gap: { xs: 1, sm: 2 },
+                            }}
+                        >
+                            <TextField
+                                label={t("p_Watershed_Master.ss_Search_Label")}
+                                fullWidth={false}
+                                value={search}
+                                onChange={(e) => { setsearch(e.target.value); setPage(0); }}
+                                variant="outlined"
+                                size="small"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Search />
+                                        </InputAdornment>
+                                    ),
                                 }}
                                 sx={{
-                                    height: { xs: 'auto', sm: '48px' },
-                                    width: { xs: '80%', sm: '170px' },
-                                    ml: { xs: 0, sm: '4px' },
+                                    width: { xs: '80%', sm: '200px' },
+                                    mb: { xs: 1, sm: 0 }
                                 }}
-                            >
-                                {t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Link_Text")}
-                            </Button>
-                        )}
+                            />
+                            {PerChk('EDIT_Watershed Master') && (
+                                <Button
+                                    startIcon={<AddHome />}
+                                    onClick={() => {
+                                        setwsObj(wsDef);
+                                        setvList([]);
+                                        setaddM(true);
+                                        setIsTouched({ wsName: false, wsDescription: false });
+                                    }}
+                                    sx={{
+                                        height: { xs: 'auto', sm: '48px' },
+                                        width: { xs: '80%', sm: '170px' },
+                                        ml: { xs: 0, sm: '4px' },
+                                    }}
+                                >
+                                    {t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Link_Text")}
+                                </Button>
+                            )}
+                        </Box>
                     </Box>
-                </Box>
 
 
-                {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>
-                    No records
-                </Typography> : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>{t("p_Watershed_Master.ss_WatershedList.Watershed")}</TableCell>
-                            <TableCell>{t("p_Watershed_Master.ss_WatershedList.Description")}</TableCell>
-                            {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Text")}</TableCell>}
-                        </TableRow>
-                    </TableHead>
+                    {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
+                        : wsListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
+                            : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>{t("p_Watershed_Master.ss_WatershedList.Watershed")}</TableCell>
+                                        <TableCell>{t("p_Watershed_Master.ss_WatershedList.Description")}</TableCell>
+                                        {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Text")}</TableCell>}
+                                    </TableRow>
+                                </TableHead>
 
-                    <TableBody>{wsListP.map((w, i) => (
-                        <TableRow key={i}>
-                            <TableCell>{w.wsName}</TableCell>
-                            <TableCell>{w.wsDescription}</TableCell>
-                            {PerChk('EDIT_Watershed Master') && <TableCell>
-                                <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
-                                <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
-                            </TableCell>}
-                        </TableRow>
-                    ))}</TableBody>
+                                <TableBody>{wsListP.map((w, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{w.wsName}</TableCell>
+                                        <TableCell>{w.wsDescription}</TableCell>
+                                        {PerChk('EDIT_Watershed Master') && <TableCell>
+                                            <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setwsObj(w); setvList(w.villages.map(village => parseInt(village, 10))); seteditM(true); }}><Edit /></IconButton>
+                                            <IconButton title={t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.watershedId); }}><Delete /></IconButton>
+                                        </TableCell>}
+                                    </TableRow>
+                                ))}</TableBody>
 
-                    <TableFooter><TableRow>
-                        <TablePagination
-                            count={wsListF.length}
-                            rowsPerPage={rPP}
-                            page={page}
-                            onPageChange={(e, p) => setPage(p)}
-                            rowsPerPageOptions={[5, 10, 15]}
-                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                            ActionsComponent={TPA}
-                            labelRowsPerPage={t("p_Watershed_Master.ss_WatershedList.Rows_per_page")}
-                        />
-                    </TableRow></TableFooter>
-                </Table></TableContainer>}
-            </>}
+                                <TableFooter><TableRow>
+                                    <TablePagination
+                                        count={wsListF.length}
+                                        rowsPerPage={rPP}
+                                        page={page}
+                                        onPageChange={(e, p) => setPage(p)}
+                                        rowsPerPageOptions={[5, 10, 15]}
+                                        onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                        ActionsComponent={TPA}
+                                        labelRowsPerPage={t("p_Watershed_Master.ss_WatershedList.Rows_per_page")}
+                                    />
+                                </TableRow></TableFooter>
+                            </Table></TableContainer>}
+                </>}
 
         <Dialog open={addM || editM}>
             <DialogTitle>{addM ? t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Add_Mapping_Label") : editM ? t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Watershed_Popup.Edit_Watershed_Label") : ''}</DialogTitle>
