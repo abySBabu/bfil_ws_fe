@@ -50,6 +50,7 @@ export const Home: React.FC = () => {
   const { i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const [serverDown, setserverDown] = React.useState(false);
   sessionStorage.setItem("multiLanguage", "en");
 
   const countHeader = (textKey: string, badgeCount: number) => {
@@ -153,13 +154,13 @@ export const Home: React.FC = () => {
               setSections(generatedSections);
               const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
               if (defaultIndex !== -1) {
-                console.log('defaultIndex', defaultIndex)
                 setdIndex(defaultIndex);
               } else {
                 setHasPermission(true);
                 setMessage("You do not have permission to view any sections.");
               }
             }
+            else { setserverDown(true) }
           }
         }
         const resp1 = await listState(); if (resp1.status === 'success') localStorage.setItem("StateList", JSON.stringify(resp1.data));
@@ -198,12 +199,21 @@ export const Home: React.FC = () => {
           PerChk(section.permission) && (
             <ListItem key={section.name} disablePadding>
               <ListItemButton
-                sx={{
-                  backgroundColor: '#bb4d53',
-                  '&:hover': { backgroundColor: '#cc802a' },
-                  color: '#fff',
+              sx={{
+                backgroundColor: '#bb4d53',                
+                color: '#fff',                             
+                '&:hover': {
+                  backgroundColor: '#8d272b',              
+                },
+                '&.Mui-selected': {
+                  backgroundColor: '#cc802a',              
+                  color: '#fff',                           
+                  '&:hover': {
+                    backgroundColor: '#941f20',            
+                  },
+                },
+              }}
 
-                }}
                 onClick={() => setdIndex(index)}
                 selected={dIndex === index}
               >
@@ -223,13 +233,12 @@ export const Home: React.FC = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh', 
+        height: '100vh',
       }}
     >
       <CircularProgress size={80} />
     </Box > :
       <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: sd('--page-header-bgcolor'), height: '100vh' }}>
-
         <AppBar
           position="relative"
           sx={{
@@ -244,7 +253,7 @@ export const Home: React.FC = () => {
               p: sd('--page-header-padding'),
               minHeight: '28px',
               height: 'auto',
-              flexWrap: 'wrap', 
+              flexWrap: 'wrap',
             }}
           >
             <IconButton
@@ -259,21 +268,21 @@ export const Home: React.FC = () => {
 
             <Box
               sx={{
-                display: { xs: 'none', sm: 'flex' }, // Hide on extra small screens, show on small and up
+                display: { xs: 'none', sm: 'flex' },
                 gap: '8px',
-                height: { xs: '40px', md: '60px' }, // Responsive height
+                height: { xs: '40px', md: '60px' }, 
                 alignItems: 'center',
               }}
             >
               <img
                 src={`${process.env.PUBLIC_URL}/images/iib.jpg`}
                 alt="IndusInd"
-                style={{ height: '100%', maxHeight: '60px' }} // Responsive image size
+                style={{ height: '100%', maxHeight: '60px' }} 
               />
               <img
                 src={`${process.env.PUBLIC_URL}/images/bfil.png`}
                 alt="BFIL"
-                style={{ height: '100%', maxHeight: '40px' }} // Responsive image size
+                style={{ height: '100%', maxHeight: '40px' }} 
               />
             </Box>
 
@@ -355,21 +364,17 @@ export const Home: React.FC = () => {
             </Box>
 
             <Box sx={{ height: '100vh', backgroundColor: '#bb4d53' }}>
-            {React.Children.map(drawer, (item) => (
-      <div onClick={handleDrawerClose}>
-        {item}
-      </div>
-    ))}
+              {React.Children.map(drawer, (item) => (
+                <div onClick={handleDrawerClose}>
+                  {item}
+                </div>
+              ))}
               {/* {drawer} */}
             </Box>
           </Drawer>
         </AppBar>
 
-
-
-
-
-        {!hasPermission &&
+        {(!hasPermission && !serverDown) &&
           <Paper elevation={8} sx={{ mt: 1, flexGrow: 1, display: 'flex', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, overflow: 'hidden' }}>
             {/* <Box sx={{ color: sd('--page-nav-txtcolor'), bgcolor: sd('--page-nav-bgcolor'), display: { xs: 'none', sm: 'block' }, width: '12%', borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
                         <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
@@ -405,6 +410,14 @@ export const Home: React.FC = () => {
           <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
             <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
               You do not have permission to view any sections.
+            </Typography>
+          </Paper>
+        }
+
+        {serverDown &&
+          <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
+            <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+              Unable to connect to the server
             </Typography>
           </Paper>
         }

@@ -268,8 +268,8 @@
             "Rows_per_page": "Rows per page :"
         }
     },
-    "p_Beneficiary_Mapping": {
-        "ss_Watershed_Mapping_Header": "Beneficiary Master",
+    "p_Beneficiary_Master": {
+        "ss_Beneficiary_Master_Header": "Beneficiary Master",
         "ss_Search_Label": "Search",
         "Add_Beneficiary_Link": {
             "Add_Beneficiary_Link_Text": "Add Beneficiary",
@@ -277,7 +277,7 @@
                 "Add_Mapping_Label": "Add Beneficiary",
                 "Name": "Name",
                 "Mobile": "Mobile",
-                "Relation": "Relation",
+                "Relation": "Relationship",
                 "Relation_Name": "Relation Name",
                 "Remarks": "Remarks",
                 "State": "State",
@@ -302,7 +302,7 @@
                             "Edit_Beneficiary_Label": "Edit Beneficiary",
                             "Name": "Name",
                             "Mobile": "Mobile",
-                            "Relation": "Relation",
+                            "Relation": "Relationship",
                             "Relation_Name": "Relation Name",
                             "Remarks": "Remarks",
                             "State": "State",
@@ -319,11 +319,69 @@
                         "Delete_Tooltip_Text": "Delete Beneficiary",
                         "Delete_Beneficiary_Popup": {
                             "Delete_Beneficiary_Label": "Delete Beneficiary",
-                            "Delete_Beneficiary_Content": "Are you sure you want to delete",
+                            "Delete_Beneficiary_Content": "Are you sure you want to delete this beneficiary ?",
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
                         "Delete_Success_Message": "Beneficiary Master deleted successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
+    },
+    "p_Watershed_Master": {
+        "ss_Watershed_Master_Header": "Watershed Master",
+        "ss_Search_Label": "Search",
+        "Add_Watershed_Link": {
+            "Add_Watershed_Link_Text": "Add Watershed",
+            "Add_Watershed_Popup": {
+                "Add_Mapping_Label": "Add Watershed",
+                "Name": "Name",
+                "Description": "Description",
+                "State": "State",
+                "District": "District",
+                "Taluka": "Taluka",
+                "Grampanchayat": "Grampanchayat",
+                "Villages": "Villages",
+                "Selected_Villages": "Selected villages:",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Watershed master created successfully"
+        },
+        "ss_WatershedList": {
+            "Watershed": "Watershed",
+            "Description": "Description",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit Watershed",
+                        "Edit_Watershed_Popup": {
+                            "Edit_Watershed_Label": "Edit Watershed",
+                            "Name": "Name",
+                            "Description": "Description",
+                            "State": "State",
+                            "District": "District",
+                            "Taluka": "Taluka",
+                            "Grampanchayat": "Grampanchayat",
+                            "Villages": "Villages",
+                            "Selected_Villages": "Selected villages:",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "Watershed Master updated successfully"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "Delete Watershed",
+                        "Delete_Watershed_Popup": {
+                            "Delete_Watershed_Label": "Delete Watershed",
+                            "Delete_Watershed_Content": "Are you sure you want to delete this watershed?",
+                            "Cancel_Button": "Cancel",
+                            "Delete_Button": "Delete"
+                        },
+                        "Delete_Success_Message": "Watershed Master deleted successfully"
                     }
                 }
             },

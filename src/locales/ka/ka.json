@@ -268,27 +268,27 @@
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
     },
-    "p_Beneficiary_Mapping": {
-        "ss_Watershed_Mapping_Header": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್",
-        "ss_Search_Label": "ಶೋಧಿಸಿ",
+    "p_Beneficiary_Master": {
+        "ss_Beneficiary_Master_Header": "ಫಲಾನುಭವಿ ಮಾಸ್ಟರ್",
+        "ss_Search_Label": "ಹುಡುಕು",
         "Add_Beneficiary_Link": {
-            "Add_Beneficiary_Link_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸೇರಿಸಿ",
+            "Add_Beneficiary_Link_Text": "ಫಲಾನುಭವಿ ಸೇರಿಸಿ",
             "Add_Beneficiary_Popup": {
-                "Add_Mapping_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸೇರಿಸಿ",
+                "Add_Mapping_Label": "ಫಲಾನುಭವಿ ಸೇರಿಸಿ",
                 "Name": "ಹೆಸರು",
                 "Mobile": "ಮೊಬೈಲ್",
                 "Relation": "ಸಂಬಂಧ",
                 "Relation_Name": "ಸಂಬಂಧದ ಹೆಸರು",
-                "Remarks": "ಗಮನ",
+                "Remarks": "ಟೀಕೆಗಳು",
                 "State": "ರಾಜ್ಯ",
                 "District": "ಜಿಲ್ಲೆ",
                 "Taluka": "ತಾಲೂಕು",
-                "Grampanchayat": "ಗ್ರಾಮ ಪಂಚಾಯಿತಿ",
-                "Village": "ಗಾವಿ",
-                "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
-                "Add_Button": "ಸೆರೆಯಿರಿ"
+                "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                "Village": "ಗ್ರಾಮ",
+                "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                "Add_Button": "ಸೇರಿಸಿ"
             },
-            "Add_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ"
+            "Add_Success_Message": "ಫಲಾನುಭವಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
         },
         "ss_BeneficiaryList": {
             "Name": "ಹೆಸರು",
@@ -297,37 +297,95 @@
                 "Action_Text": "ಕ್ರಿಯೆ",
                 "Action_Tooltip": {
                     "Edit_Tooltip": {
-                        "Edit_Tooltip_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_Tooltip_Text": "ಫಲಾನುಭವಿಯನ್ನು ಸಂಪಾದಿಸಿ",
                         "Edit_Beneficiary_Popup": {
-                            "Edit_Beneficiary_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Edit_Beneficiary_Label": "ಫಲಾನುಭವಿಯನ್ನು ಸಂಪಾದಿಸಿ",
                             "Name": "ಹೆಸರು",
                             "Mobile": "ಮೊಬೈಲ್",
                             "Relation": "ಸಂಬಂಧ",
                             "Relation_Name": "ಸಂಬಂಧದ ಹೆಸರು",
-                            "Remarks": "ಗಮನ",
+                            "Remarks": "ಟೀಕೆಗಳು",
                             "State": "ರಾಜ್ಯ",
                             "District": "ಜಿಲ್ಲೆ",
                             "Taluka": "ತಾಲೂಕು",
-                            "Grampanchayat": "ಗ್ರಾಮ ಪಂಚಾಯಿತಿ",
-                            "Village": "ಗಾವಿ",
-                            "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
-                            "Update_Button": "ನವೀಕರಿಸಿ"
+                            "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                            "Village": "ಗ್ರಾಮ",
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
                         },
-                        "Edit_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                        "Edit_Success_Message": "ಫಲಾನುಭವಿ ಮಾಸ್ಟರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
                     },
                     "Delete_Tooltip": {
-                        "Delete_Tooltip_Text": "ಲಾಭಾರ್ಥಿಯನ್ನು ಅಳಿಸಿ",
+                        "Delete_Tooltip_Text": "ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಿ",
                         "Delete_Beneficiary_Popup": {
-                            "Delete_Beneficiary_Label": "ಲಾಭಾರ್ಥಿಯನ್ನು ಅಳಿಸಿ",
-                            "Delete_Beneficiary_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಲ್ಲವೇ?",
-                            "Cancel_Button": "ರದ್ದುಗೊಳಿಸಿ",
+                            "Delete_Beneficiary_Label": "ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಿ",
+                            "Delete_Beneficiary_Content": "ಈ ಫಲಾನುಭವಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?",
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                             "Delete_Button": "ಅಳಿಸಿ"
                         },
-                        "Delete_Success_Message": "ಲಾಭಾರ್ಥಿ ಮಾಸ್ಟರ್ ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
+                        "Delete_Success_Message": "ಫಲಾನುಭವಿ ಮಾಸ್ಟರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
                     }
-                },
-                "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
-            }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+        }
+    },
+    "p_Watershed_Master": {
+        "ss_Watershed_Master_Header": "ಜಲಾನಯನ ಮಾಸ್ಟರ್",
+        "ss_Search_Label": "ಹುಡುಕು",
+        "Add_Watershed_Link": {
+            "Add_Watershed_Link_Text": "ಜಲಾನಯನವನ್ನು ಸೇರಿಸಿ",
+            "Add_Watershed_Popup": {
+                "Add_Mapping_Label": "ಜಲಾನಯನವನ್ನು ಸೇರಿಸಿ",
+                "Name": "ಹೆಸರು",
+                "Description": "ವಿವರಣೆ",
+                "State": "ರಾಜ್ಯ",
+                "District": "ಜಿಲ್ಲೆ",
+                "Taluka": "ತಾಲೂಕು",
+                "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                "Villages": "ಹಳ್ಳಿಗಳು",
+                "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು:",
+                "Cancel_Button": "ರದ್ದುಮಾಡು",
+                "Add_Button": "ಸೇರಿಸಿ"
+            },
+            "Add_Success_Message": "ಜಲಾನಯನ ಮಾಸ್ಟರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+        },
+        "ss_WatershedList": {
+            "Watershed": "ಜಲಾನಯನ",
+            "Description": "ವಿವರಣೆ",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಜಲಾನಯನವನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_Watershed_Popup": {
+                            "Edit_Watershed_Label": "ಜಲಾನಯನವನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Name": "ಹೆಸರು",
+                            "Description": "ವಿವರಣೆ",
+                            "State": "ರಾಜ್ಯ",
+                            "District": "ಜಿಲ್ಲೆ",
+                            "Taluka": "ತಾಲೂಕು",
+                            "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                            "Villages": "ಹಳ್ಳಿಗಳು",
+                            "Selected_Villages": "ಆಯ್ದ ಗ್ರಾಮಗಳು:",
+                            "Cancel_Button": "ರದ್ದುಮಾಡು",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ವಾಟರ್‌ಶೆಡ್ ಮಾಸ್ಟರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    },
+                    "Delete_Tooltip": {
+                        "Delete_Tooltip_Text": "ಜಲಾನಯನವನ್ನು ಅಳಿಸಿ",
+                        "Delete_Watershed_Popup": {
+                            "Delete_Watershed_Label": "ಜಲಾನಯನವನ್ನು ಅಳಿಸಿ",
+                            "Delete_Watershed_Content": "ನೀವು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ",
+                            "Cancel_Button": "ರದ್ದುಮಾಡು",
+                            "Delete_Button": "ಅಳಿಸಿ"
+                        },
+                        "Delete_Success_Message": "ವಾಟರ್‌ಶೆಡ್ ಮಾಸ್ಟರ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ"
+                    }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
     }
 }

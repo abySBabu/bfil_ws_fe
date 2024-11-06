@@ -169,7 +169,6 @@ export default function EditRole(props: RoleTypeProps) {
                                 };
                             });
 
-                            console.log("screenPermissionMappingList", screenPermissionMappingList);
                             setSelectedPermissions(screenPermissionMappingList);
                         }
                     }
