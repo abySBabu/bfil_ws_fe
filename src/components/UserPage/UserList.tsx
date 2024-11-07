@@ -57,7 +57,6 @@ export default function UserList() {
     const handleRowClick = async (row: any) => {
         setSelectedRow(row);
         setTableDialog(true);
-        console.log('Selected row:', row);
     };
 
 
@@ -77,7 +76,6 @@ export default function UserList() {
     const fetchUserData = async () => {
         try {
             let resp = await usersList(companyID);
-            console.log("getuserData -", resp)
             setuserData(resp);
         } catch (error) {
             console.log(error)

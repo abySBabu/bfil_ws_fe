@@ -82,7 +82,6 @@ export async function ListSide(status: any) {
 }
 
 export async function ListStatus() {
-    console.log("Testing "+sessionStorage.getItem("token"));
     const configs = {
         url: serverPath.bfil + `status_mapping/getAllMappingStatus`,
         method: 'get',
@@ -102,3 +101,12 @@ export async function ListDonor() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function ListRelation() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Relationship",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}

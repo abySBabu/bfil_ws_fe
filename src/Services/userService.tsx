@@ -63,7 +63,6 @@ export async function updateUserDetails(data: any, userId: any) {
 
     try {
         const response = await axios(configs);
-        console.log("createUser---", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching user data:", error);
@@ -83,7 +82,6 @@ export async function blockUser(data: any) {
 
     try {
         const response = await axios(configs);
-        console.log("blockUser---", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching user data:", error);

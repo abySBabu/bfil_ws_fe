@@ -39,7 +39,6 @@ export default function RoleList() {
     const handleRowClick = async (row: any) => {
         setSelectedRow(row);
         setTableDialog(true);
-        console.log('Selected row:', row);
     };
 
 
@@ -54,7 +53,6 @@ export default function RoleList() {
     const fetchUserData = async () => {
         try {
             let resp = await getRolesByCompany(CompanyId);
-            console.log("getRoleData -", resp);
             let sorData = resp;
             setRoleData(sorData.reverse());
         } catch (error) {

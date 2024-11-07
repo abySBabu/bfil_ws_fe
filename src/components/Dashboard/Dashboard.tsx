@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton, Button, useMediaQuery } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
@@ -25,6 +25,9 @@ const ActCard: React.FC<{ activity: string, value: number | string, unit: string
 )
 
 export const Dashboard: React.FC = () => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+    const isMidScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
+
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
     const [gMod, setgMod] = React.useState("");
@@ -74,7 +77,9 @@ export const Dashboard: React.FC = () => {
             setLoadingResponse(false);
         }; fetchData();
     }, [])
-
+    const chartHeight = isSmallScreen ? 150 : isMidScreen ? 180 : 200;
+    const chartWidth = isSmallScreen ? 300 : isMidScreen ? 500 : 600;
+  
     return (<>
         <div>
             {loadingResponse ?
@@ -153,33 +158,38 @@ export const Dashboard: React.FC = () => {
                         </Grid>
                     </Grid >
 
+
                     <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
                         <Card sx={{ outline: 'none' }}>
                             <CardHeader title={gMod} sx={{ color: '#fff', bgcolor: sd('--text-color-special') }} />
-
-                            <CardContent sx={{ gap: '8px', p: 1 }}>
-                                <LineChart
-                                    xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                                    series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
-                                    height={200}
-                                    width={600}
-                                />
-                                <PieChart
+                                <CardContent sx={{ gap: '8px', p: 1 }}>
+                                    <Box sx={{ overflowX: 'auto' }}>
+                                        <LineChart
+                                            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                                            series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
+                                            height={chartHeight}
+                                            width={chartWidth}
+                                        />
+                                    </Box>
+                                    <Box sx={{mt: 2,width: "100%" }}>
+                                    <PieChart
+                                    margin={{ right: 170 }}
                                     series={[
-                                        {
-                                            data: [
-                                                { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
-                                                { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
-                                                { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
-                                            ]
-                                        }
+                                    {
+                                        data: [
+                                    { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
+                                    { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
+                                    { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
+                                    ],
+                                    }
                                     ]}
-                                    height={200}
-                                    width={600}
-                                />
+                                    height={chartHeight}
+                                    //width={chartWidth}
+                                     />
+                                </Box>
                             </CardContent>
                         </Card>
-                    </Modal>
+                    </Modal> 
                 </>}</div>
     </>)
 }

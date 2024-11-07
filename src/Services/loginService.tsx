@@ -7,10 +7,8 @@ export async function login(data: any) {
         method: "post",
         data: data
     };
-    console.log("login", configuration)
     try {
         const response = await axios(configuration);
-        console.log('response data', response.data);
         sessionStorage.setItem("token", response.data.jwtBearer);
         sessionStorage.setItem("refToken", response.data.jwtRefresh);
         sessionStorage.setItem("userId", response.data.user.userId);
