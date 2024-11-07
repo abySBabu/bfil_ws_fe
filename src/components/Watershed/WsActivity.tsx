@@ -22,6 +22,7 @@ export const actDef = {
     workActivity: {
         activityId: '',
         activityName: '',
+        activityCode: '',
         userId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
@@ -465,10 +466,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Activity")}</TableCell>
+                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}</TableCell>
+                                        <TableCell>Activity Type</TableCell>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Watershed")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}.</TableCell>
+                                        <TableCell>Villages</TableCell>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Status")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_On")}</TableCell>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}</TableCell>
                                         <TableCell width='5%'>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}</TableCell>
                                     </TableRow>
@@ -482,10 +484,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     }).slice(page * rPP, page * rPP + rPP).map((a, i) => (
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
-                                            <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.surveyNo}</TableCell>
+                                            <TableCell>{a.workActivity.activityCode}</TableCell>
+                                            <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
+                                            <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                                            <TableCell>{DateTime(a.workActivity.updatedTime)}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell width='5%'>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
@@ -523,11 +526,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             <DialogTitle>{addM ? t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Add_Activity_Label") : editM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Edit_Activity_Label") : ''}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
-                <Grid item xs={12} sm={3}><TextField disabled={editM} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Intervention")} value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: e.target.value, activityName: '' } })}>
-                    {uRole === "Community Resource person" ? intOps?.slice(1).map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>)) : intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={12} sm={3}><TextField disabled={editM} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Intervention")} value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: e.target.value, activityCode: '' } })}>
+                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} disabled={actOps?.length <= 0 || editM}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityName}>{o.activityName}</MenuItem>))}
+                <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityCode} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityCode: e.target.value } })} disabled={actOps?.length <= 0 || editM}>
+                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityCode}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={12} sm={6}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                 {editM && <Grid item xs={12}><TextField label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Remarks")} value={rmk} onChange={(e) => setrmk(e.target.value)} /></Grid>}
@@ -654,14 +657,15 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         </Dialog>
 
         <Dialog open={viewM || progM} maxWidth='lg'>
-            <DialogTitle>{viewM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.View_Tooltip_Text") : progM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Activity_Popup.Progress_Tooltip_Text") : ''}</DialogTitle>
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>{viewM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.View_Tooltip_Text") : progM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Activity_Popup.Progress_Tooltip_Text") : ''}</div>
+                <div><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Status")}:</b> {actObj.workActivity.activityWorkflowStatus}</div>
+            </DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {actObj.workActivity.interventionType}</Grid>
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
-                <Grid item xs={12} sm={3} />
-                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Status")}:</b> {actObj.workActivity.activityWorkflowStatus}</Grid>
-                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
+                <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
 
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                     <Grid item xs={12}><Divider /></Grid>
