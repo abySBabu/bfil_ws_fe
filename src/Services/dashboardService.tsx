@@ -101,3 +101,12 @@ export async function ListDonor() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function ListRelation() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Relationship",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}

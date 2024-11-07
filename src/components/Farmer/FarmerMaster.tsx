@@ -9,7 +9,7 @@ import { TPA, PerChk, SnackAlert } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { useTranslation } from 'react-i18next';
-
+import { ListRelation } from 'src/Services/dashboardService';
 
 export const fmrDef = {
     "wsfarmerId": "",
@@ -43,6 +43,7 @@ export const FarmerMaster: React.FC = () => {
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+    const [relationOps, setrelationOps] = React.useState<any[]>([]);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
     const [tlOps, settlOps] = React.useState<any[]>([]);
@@ -109,8 +110,8 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         setLoadingResponse(true);
         try {
-            const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
+            const resp1 = await listFarmer(); if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
+            const resp2 = await ListRelation(); if (resp2.status === 'success') { setrelationOps(resp2.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
@@ -343,8 +344,7 @@ export const FarmerMaster: React.FC = () => {
                         value={fmrObj.relationalIdentifiers}
                         onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
                     >
-                        <MenuItem value="Son/Daughter of">Son/Daughter of</MenuItem>
-                        <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
+                        {relationOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                     </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
