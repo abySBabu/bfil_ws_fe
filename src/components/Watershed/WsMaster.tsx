@@ -379,10 +379,10 @@ export const WsMaster: React.FC = () => {
                 <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.District")} value={wsObj.districtId} onChange={(e) => districtCh(e.target.value)}>
                     {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Taluka")} value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField disabled={!wsObj.districtId} required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Taluka")} value={wsObj.talukId} onChange={(e) => talukCh(e.target.value)}>
                     {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} md={4}><TextField required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Grampanchayat")} value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
+                <Grid item xs={12} md={4}><TextField disabled={!wsObj.talukId} required select label={t("p_Watershed_Master.Add_Watershed_Link.Add_Watershed_Popup.Grampanchayat")} value={wsObj.gramPanchayatId} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={12} md={4}><FormControl fullWidth>
@@ -390,6 +390,7 @@ export const WsMaster: React.FC = () => {
                     <Select
                         labelId="demo-multiple-checkbox-label"
                         id="demo-multiple-checkbox"
+                        disabled={!wsObj.gramPanchayatId}
                         multiple
                         value={vList}
                         onChange={handleChange}
