@@ -6,8 +6,7 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
-import { DateTime } from '../../LocName';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
@@ -15,7 +14,7 @@ import { listFarmer } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
-import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
+import { DateTime, StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 
 export const actDef = {
     workActivity: {
@@ -401,7 +400,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box sx={{
                         display: 'flex',

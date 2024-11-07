@@ -5,7 +5,7 @@ import {
     Typography, InputAdornment, MenuItem, CircularProgress
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
 import { listWP, addWP, editWP } from '../../Services/workplanService';
@@ -187,7 +187,7 @@ export const Workplan: React.FC = () => {
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box sx={{
                         display: 'flex',

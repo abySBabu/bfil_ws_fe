@@ -5,7 +5,7 @@ import {
     InputAdornment, Typography, CircularProgress, MenuItem, Divider
 } from "@mui/material";
 import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { useTranslation } from 'react-i18next';
@@ -225,7 +225,7 @@ export const FarmerMaster: React.FC = () => {
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
                         <Typography

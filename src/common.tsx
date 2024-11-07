@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, IconButton, Typography, ThemeProvider, Snackbar, Alert } from '@mui/material';
+import { Box, IconButton, Typography, ThemeProvider, Snackbar, Alert, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -92,3 +92,9 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
         {alert}
     </Alert>
 </Snackbar>)
+
+export const ServerDownDialog = () => (<Dialog open={true} maxWidth='xs'>
+    <DialogTitle>Server Error</DialogTitle>
+    <DialogContent sx={{ mt: 2 }}>Unable to connect to the server. Please try again later.</DialogContent>
+    <DialogActions><Button href='/bfilreactdev'>Okay</Button></DialogActions>
+</Dialog>)
