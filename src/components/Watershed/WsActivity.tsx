@@ -102,6 +102,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [panOps, setpanOps] = React.useState<any[]>([]);
     const [vilOps, setvilOps] = React.useState<any[]>([]);
     const [vilOps2, setvilOps2] = React.useState<string[]>([]);
+    const [allAct, setallAct] = React.useState<any[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [viewM, setviewM] = React.useState(false);
@@ -199,6 +200,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }
+            const resp6a = await ListSupply(); const resp6b = await ListDemand();
+            if (resp6a && resp6b) { setallAct([...resp6a.data, ...resp6b.data]) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
@@ -206,6 +209,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         catch (error) { console.log(error); setserverDown(true); }
         setLoadingResponse(false);
     };
+
+    const ActTypeName = (code: any) => {
+        const act = allAct.find(x => x.activityCode == code)
+        return act ? act.activityName : code
+    }
 
     const FmrSet = async (id: any) => {
         try {
@@ -485,7 +493,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
                                             <TableCell>{a.workActivity.surveyNo}</TableCell>
-                                            <TableCell>{a.workActivity.activityCode}</TableCell>
+                                            <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
@@ -532,7 +540,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityCode} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityCode: e.target.value } })} disabled={actOps?.length <= 0 || editM}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityCode}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={6}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
+                <Grid item xs={12} sm={6}><TextField required label="Activity Name" value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} /></Grid>
+                <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                 {editM && <Grid item xs={12}><TextField label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Remarks")} value={rmk} onChange={(e) => setrmk(e.target.value)} /></Grid>}
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
                     <Grid item xs={12}><Divider /></Grid>
@@ -664,7 +673,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {actObj.workActivity.interventionType}</Grid>
-                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
+                <Grid item xs={12} sm={3}><b>Activity Type:</b> {ActTypeName(actObj.workActivity.activityCode)}</Grid>
+                <Grid item xs={12} sm={6}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
 
                 {actObj.workActivity.activityName === 'Members Capacitated' ? <>
