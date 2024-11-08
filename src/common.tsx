@@ -96,5 +96,5 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
 export const ServerDownDialog = () => (<Dialog open={true} maxWidth='xs'>
     <DialogTitle>Server Error</DialogTitle>
     <DialogContent sx={{ mt: 2 }}>Unable to connect to the server. Please try again later.</DialogContent>
-    <DialogActions><Button href='/bfilreactdev'>Okay</Button></DialogActions>
+    <DialogActions><Button href='/'>Okay</Button></DialogActions>
 </Dialog>)
