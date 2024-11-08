@@ -93,14 +93,14 @@ export default function RoleList() {
         return matchesSearchQuery;
     });
 
-    return (<Box>
+    return (<>
         {loadingResponse ?
             <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
+                    height: '100%', // Ensure it takes up the full height
                 }}
             >
                 <CircularProgress size={80} />
@@ -178,7 +178,7 @@ export default function RoleList() {
 
 
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+                    <TableContainer component={Paper} sx={{ maxHeight: '90%' }}>
                         <Table sx={{ width: '100%' }}>
                             <TableHead>
                                 <TableRow sx={{ alignItems: 'center' }}>
@@ -228,5 +228,5 @@ export default function RoleList() {
                             </TableFooter>
                         </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
             </>}
-    </Box>)
+    </>)
 }
