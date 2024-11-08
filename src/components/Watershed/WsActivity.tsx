@@ -304,7 +304,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp1 = await addAct({ ...actObj.workActivity, village: vList, createdUser: sessionStorage.getItem("userName") as string })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Activity added`);
+                setalert(t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -325,7 +325,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '', updatedUser: sessionStorage.getItem("userName") as string }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Activity updated`);
+                setalert(t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);

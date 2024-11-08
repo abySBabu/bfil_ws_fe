@@ -164,7 +164,7 @@ export default function (props: mapTypeProps) {
             let resp = await addWS(mapData);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("WaterShed mapping created successfully");
+                setMessage(t("p_Watershed_Mapping.Add_Mapping_Link.Add_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
