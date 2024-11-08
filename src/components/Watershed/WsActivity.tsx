@@ -637,7 +637,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={3}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Area_Treated")} value={actObj.workActivity.areaTreated} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, areaTreated: e.target.value } })} /></Grid>
                     {actObj.workActivity.interventionType !== 'Demand Side Interventions' && <>
                         <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Land_Type")} value={actObj.workActivity.landType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, landType: e.target.value } })}>
-                            {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
+                            {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
                         <Grid item xs={12} sm={3}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.WaterConserved")} value={actObj.workActivity.waterConserved} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, waterConserved: e.target.value } })} /></Grid>
                     </>}
