@@ -114,6 +114,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [vList, setvList] = React.useState<any[]>([]);
     const [imgM, setimgM] = React.useState('');
 
+    const ActTypeName = (code: string | undefined) => {
+        const act = allAct.find(x => x.activityCode === code);
+        return act ? act.activityName : code || "";
+    };
+
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
             target: { value },
@@ -128,11 +133,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const actListF = actList.filter((a) => {
         const searchTerm = search?.toLowerCase();
         return (
-            a.workActivity.surveyNo?.toLowerCase().includes(searchTerm) ||
-            WsName(a.workActivity.watershedId)?.toLowerCase().includes(searchTerm) ||
             a.workActivity.activityName?.toLowerCase().includes(searchTerm) ||
+            a.workActivity.surveyNo?.toLowerCase().includes(searchTerm) ||
+            ActTypeName(a.workActivity?.activityCode)?.toLowerCase().includes(searchTerm) ||
+            WsName(a.workActivity.watershedId)?.toLowerCase().includes(searchTerm) ||
+            a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toLowerCase().includes(searchTerm) ||
             a.workActivity.activityWorkflowStatus?.toLowerCase().includes(searchTerm) ||
-            DateTime(a.workActivity.updatedTime)?.toLowerCase().includes(searchTerm) ||
             a.workActivity.updatedUser?.toLowerCase().includes(searchTerm)
         );
     });
@@ -209,11 +215,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         catch (error) { console.log(error); setserverDown(true); }
         setLoadingResponse(false);
     };
-
-    const ActTypeName = (code: any) => {
-        const act = allAct.find(x => x.activityCode == code)
-        return act ? act.activityName : code
-    }
 
     const FmrSet = async (id: any) => {
         try {
@@ -497,7 +498,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                                            <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
+                                            <TableCell>{a.workActivity.updatedUser}</TableCell>
                                             <TableCell width='5%'>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
