@@ -225,7 +225,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         }
         catch (error) { console.log(error) }
     }
-
+ 
     const WsSet = async (id: any) => {
         try {
             const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
