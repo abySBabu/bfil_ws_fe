@@ -147,8 +147,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
-    const addCheck = actObj.workActivity.activityCode == 203 ? eventCheck
-        : actObj.workActivity.interventionType == 23 ? demandCheck
+    const addCheck = actObj.workActivity.activityCode === 203 ? eventCheck
+        : actObj.workActivity.interventionType === 23 ? demandCheck
             : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
@@ -248,11 +248,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const ActSet = async () => {
         try {
-            if (actObj.workActivity.interventionType == 22) {
+            if (actObj.workActivity.interventionType === 22) {
                 const resp1 = await ListSupply();
                 if (resp1) { setactOps(resp1.data) }
             }
-            else if (actObj.workActivity.interventionType == 23) {
+            else if (actObj.workActivity.interventionType === 23) {
                 const resp1 = await ListDemand();
                 if (resp1) { setactOps(resp1.data) }
             }
