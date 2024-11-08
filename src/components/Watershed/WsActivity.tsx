@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
@@ -147,7 +147,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
-    const addCheck = actObj.workActivity.activityName === 'Members Capacitated' ? eventCheck
+    const addCheck = actObj.workActivity.activityCode === '203' ? eventCheck
         : actObj.workActivity.interventionType === 'Demand Side Interventions' ? demandCheck
             : supplyCheck
 
@@ -413,7 +413,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box sx={{
                         display: 'flex',
@@ -544,7 +544,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Grid item xs={12} sm={6}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} /></Grid>
                 <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
                 {editM && <Grid item xs={12}><TextField label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Remarks")} value={rmk} onChange={(e) => setrmk(e.target.value)} /></Grid>}
-                {actObj.workActivity.activityName === 'Members Capacitated' ? <>
+                {actObj.workActivity.activityCode === '203' ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Name")} value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Type")} value={actObj.workActivity.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitytypeEvent: e.target.value } })} /></Grid>
@@ -678,7 +678,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Grid item xs={12} sm={6}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
 
-                {actObj.workActivity.activityName === 'Members Capacitated' ? <>
+                {actObj.workActivity.activityCode === '203' ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Name")}:</b> {actObj.workActivity.capacitynameEvent}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Type")}:</b> {actObj.workActivity.capacitytypeEvent}</Grid>
