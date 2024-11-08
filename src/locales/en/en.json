@@ -447,7 +447,7 @@
             "Survey_No": "Survey No",
             "Status": "Status",
             "Last_Updated_On": "Last Updated On",
-            "Last_Updated_By": "Last Updated By",
+            "Last_Updated_By": "Last Updated On",
             "Action": {
                 "Action_Text": "Action",
                 "Action_Tooltip": {
