@@ -5,11 +5,11 @@ import {
     InputAdornment, Typography, CircularProgress, MenuItem, Divider
 } from "@mui/material";
 import { Edit, PersonAdd, Search, Delete } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { listFarmer, addFarmer, editFarmer, deleteFarmer } from '../../Services/farmerService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { useTranslation } from 'react-i18next';
-
+import { ListRelation } from 'src/Services/dashboardService';
 
 export const fmrDef = {
     "wsfarmerId": "",
@@ -43,6 +43,7 @@ export const FarmerMaster: React.FC = () => {
     const [alert, setalert] = React.useState("");
     const [alertClr, setalertClr] = React.useState(false);
     const [isTouched, setIsTouched] = React.useState({ wsfarmerName: false, adharNumber: false, mobileNumber: false });
+    const [relationOps, setrelationOps] = React.useState<any[]>([]);
     const [stOps, setstOps] = React.useState<any[]>([]);
     const [dsOps, setdsOps] = React.useState<any[]>([]);
     const [tlOps, settlOps] = React.useState<any[]>([]);
@@ -109,8 +110,8 @@ export const FarmerMaster: React.FC = () => {
     const fetchData = async () => {
         setLoadingResponse(true);
         try {
-            const resp1 = await listFarmer();
-            if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
+            const resp1 = await listFarmer(); if (resp1.status === 'success') { setfmrList(resp1.data.reverse()) }
+            const resp2 = await ListRelation(); if (resp2.status === 'success') { setrelationOps(resp2.data) }
             setstOps(JSON.parse(localStorage.getItem("StateList") as string))
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
@@ -224,7 +225,7 @@ export const FarmerMaster: React.FC = () => {
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
 
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
                         <Typography
@@ -343,8 +344,7 @@ export const FarmerMaster: React.FC = () => {
                         value={fmrObj.relationalIdentifiers}
                         onChange={(e) => setfmrObj({ ...fmrObj, relationalIdentifiers: e.target.value })}
                     >
-                        <MenuItem value="Son/Daughter of">Son/Daughter of</MenuItem>
-                        <MenuItem value="Husband/Wife of">Husband/Wife of</MenuItem>
+                        {relationOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                     </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -370,13 +370,13 @@ export const FarmerMaster: React.FC = () => {
                 <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.District")} value={fmrObj.district} onChange={(e) => districtCh(e.target.value)}>
                     {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Taluka")} value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
+                <Grid item xs={12} sm={4}><TextField disabled={!fmrObj.district} required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Taluka")} value={fmrObj.taluk} onChange={(e) => talukCh(e.target.value)}>
                     {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Grampanchayat")} value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
+                <Grid item xs={12} sm={4}><TextField disabled={!fmrObj.taluk} required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Grampanchayat")} value={fmrObj.gramPanchayat} onChange={(e) => panchayatCh(e.target.value)}>
                     {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={4}><TextField required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Village")} value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
+                <Grid item xs={12} sm={4}><TextField disabled={!fmrObj.gramPanchayat} required select label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Village")} value={fmrObj.village} onChange={(e) => villageCh(e.target.value)}>
                     {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                 </TextField></Grid>
             </Grid></DialogContent>

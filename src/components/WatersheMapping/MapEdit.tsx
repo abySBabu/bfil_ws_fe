@@ -174,7 +174,7 @@ export default function (props: mapTypeProps) {
             let resp = await editWS(mapData, props.mapDetails.mappingId);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("WaterShed mapping updated successfully");
+                setMessage(t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
