@@ -34,7 +34,7 @@ export const actDef = {
         remarks: '',
         surveyNo: '',
         hissa: '',
-        landType: '',
+        landType: 0,
         areaTreated: '',
         total: '',
         unit: '',
@@ -147,8 +147,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
-    const addCheck = actObj.workActivity.activityCode === 203 ? eventCheck
-        : actObj.workActivity.interventionType === 23 ? demandCheck
+    const addCheck = actObj.workActivity.activityCode == 203 ? eventCheck
+        : actObj.workActivity.interventionType == 23 ? demandCheck
             : supplyCheck
 
     const uRole = localStorage.getItem("userRole");
@@ -248,11 +248,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const ActSet = async () => {
         try {
-            if (actObj.workActivity.interventionType === 22) {
+            if (actObj.workActivity.interventionType == 22) {
                 const resp1 = await ListSupply();
                 if (resp1) { setactOps(resp1.data) }
             }
-            else if (actObj.workActivity.interventionType === 23) {
+            else if (actObj.workActivity.interventionType == 23) {
                 const resp1 = await ListDemand();
                 if (resp1) { setactOps(resp1.data) }
             }
@@ -636,7 +636,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={1}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Unit")} value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
                     <Grid item xs={12} sm={3}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Area_Treated")} value={actObj.workActivity.areaTreated} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, areaTreated: e.target.value } })} /></Grid>
                     {actObj.workActivity.interventionType !== 23 && <>
-                        <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Land_Type")} value={actObj.workActivity.landType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, landType: e.target.value } })}>
+                        <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Land_Type")} value={actObj.workActivity.landType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, landType: parseInt(e.target.value) } })}>
                             {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                         </TextField></Grid>
                         <Grid item xs={12} sm={3}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.WaterConserved")} value={actObj.workActivity.waterConserved} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, waterConserved: e.target.value } })} /></Grid>
