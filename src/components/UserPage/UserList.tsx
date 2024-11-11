@@ -128,14 +128,14 @@ export default function UserList() {
         return matchesSearchQuery || roleMatchesSearchQuery;
     });
 
-    return (<Box>
+    return (<>
         {loadingResponse ?
             <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh', // Ensure it takes up the full height
+                    height: '100%', // Ensure it takes up the full height
                 }}
             >
                 <CircularProgress size={80} />
@@ -170,7 +170,7 @@ export default function UserList() {
                 </Box>
 
                 {filteredData.length > 0 ?
-                    <TableContainer component={Paper} sx={{ maxHeight: '550px' }}><Table sx={{ width: '100%' }}>
+                    <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
                         <TableHead>
                             <TableRow sx={{ alignItems: 'center' }}>
                                 <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
@@ -258,5 +258,5 @@ export default function UserList() {
                         </TableFooter>
                     </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
             </>}
-    </Box>)
+    </>)
 }

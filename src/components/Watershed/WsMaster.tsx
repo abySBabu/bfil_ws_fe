@@ -5,7 +5,7 @@ import {
     MenuItem, InputAdornment, Typography, CircularProgress, Checkbox, ListItemText, OutlinedInput, InputLabel,
 } from "@mui/material";
 import { AddHome, Edit, Search, Delete } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { listWS, addWS, editWS, deleteWS } from '../../Services/wsService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -239,7 +239,7 @@ export const WsMaster: React.FC = () => {
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert("")} success={alertClr} />
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
-            : serverDown ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Unable to connect to the server. Please try again later.</Box>
+            : serverDown ? <ServerDownDialog />
                 : <>
                     <Box
                         sx={{

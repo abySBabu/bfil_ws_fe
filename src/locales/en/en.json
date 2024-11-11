@@ -396,7 +396,8 @@
             "Add_Activity_Popup": {
                 "Add_Activity_Label": "Add Activity",
                 "Intervention": "Intervention",
-                "Activity": "Activity",
+                "Activity": "Activity Name",
+                "Activity_Type": "Activity Type",
                 "Description": "Description",
                 "Watershed_Details": "Watershed Details",
                 "Watershed": "Watershed",
@@ -439,12 +440,14 @@
             "Add_Success_Message": "Watershed Activity created successfully"
         },
         "ss_WatershedActivityList": {
-            "Activity": "Activity",
+            "Activity": "Activity Name",
+            "Activity_Type": "Activity Type",
+            "Villages": "Villages",
             "Watershed": "Watershed",
             "Survey_No": "Survey No",
             "Status": "Status",
             "Last_Updated_On": "Last Updated On",
-            "Last_Updated_By": "Last Updated On",
+            "Last_Updated_By": "Last Updated By",
             "Action": {
                 "Action_Text": "Action",
                 "Action_Tooltip": {
@@ -453,8 +456,10 @@
                         "Edit_Activity_Popup": {
                             "Edit_Activity_Label": "Edit Activity",
                             "Intervention": "Intervention",
-                            "Activity": "Activity",
+                            "Activity": "Activity Name",
+                            "Activity_Type": "Activity Type",
                             "Description": "Description",
+                            "Remarks": "Remarks",
                             "Watershed_Details": "Watershed Details",
                             "Watershed": "Watershed",
                             "State": "State",
@@ -500,8 +505,10 @@
                         "View_Activity_Popup": {
                             "View_Tooltip_Text": "View Activity",
                             "Intervention": "Intervention",
-                            "Activity": "Activity",
+                            "Activity": "Activity Name",
+                            "Activity_Type": "Activity Type",
                             "Description": "Description",
+                            "Remarks": "Remarks",
                             "Status": "Status",
                             "Watershed_Details": "Watershed Details",
                             "Watershed": "Watershed",
@@ -554,8 +561,10 @@
                         "Progress_Activity_Popup": {
                             "Progress_Tooltip_Text": "Progress Activity",
                             "Intervention": "Intervention",
-                            "Activity": "Activity",
+                            "Activity": "Activity Name",
+                            "Activity_Type": "Activity Type",
                             "Description": "Description",
+                            "Remarks": "Remarks",
                             "Status": "Status",
                             "Watershed_Details": "Watershed Details",
                             "Watershed": "Watershed",
