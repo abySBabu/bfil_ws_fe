@@ -616,5 +616,85 @@
             },
             "Rows_per_page": "Rows per page :"
         }
+    },
+    "p_WorkPlan": {
+        "ss_WorkPlan": "Work Plan",
+        "ss_Search_Label": "Search",
+        "Add_WorkPlan_Link": {
+            "Add_WorkPlan_Link_Text": "Add WorkPlan",
+            "Add_WorkPlan_Popup": {
+                "Add_WorkPlan_Label": "Add WorkPlan",
+                "Plan_Details": "Plan Details",
+                "Financial_Year": "Financial Year",
+                "Intervention": "Intervention/Component",
+                "Activity": "Activity",
+                "Land_Type": "Land Type",
+                "Watershed_Details": "Watershed Details",
+                "Watershed": "Watershed",
+                "State": "State",
+                "District": "District",
+                "Taluka": "Taluka",
+                "Grampanchayat": "Grampanchayat",
+                "Physical_Plan": "Physical Plan",
+                "Value": "Value",
+                "UOM": "UOM",
+                "Financial_Details": "Financial Details",
+                "Bfil": "BFIL",
+                "Gov_Schemes": "Gov Schemes",
+                "Other": "Other",
+                "MGNREGA": "MGNREGA",
+                "IBL": "IBL",
+                "Community": "Community",
+                "Total": "Total",
+                "Cancel_Button": "Cancel",
+                "Add_Button": "Add"
+            },
+            "Add_Success_Message": "Workplan created successfully"
+        },
+        "ss_WorkplanList": {
+            "Watershed": "Watershed",
+            "Year": "Year",
+            "Intervention": "Intervention/Component",
+            "Activity": "Activity",
+            "Physical": "Physical",
+            "Financial": "Financial",
+            "Action": {
+                "Action_Text": "Action",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "Edit WorkPlan",
+                        "Edit_WorkPlan_Popup": {
+                            "Edit_WorkPlan_Label": "Edit WorkPlan",
+                            "Plan_Details": "Plan Details",
+                            "Financial_Year": "Financial Year",
+                            "Intervention": "Intervention/Component",
+                            "Activity": "Activity",
+                            "Land_Type": "Land Type",
+                            "Watershed_Details": "Watershed Details",
+                            "Watershed": "Watershed",
+                            "State": "State",
+                            "District": "District",
+                            "Taluka": "Taluka",
+                            "Grampanchayat": "Grampanchayat",
+                            "Physical_Plan": "Physical Plan",
+                            "Value": "Value",
+                            "UOM": "UOM",
+                            "Financial_Details": "Financial Details",
+                            "Bfil": "BFIL",
+                            "Gov_Schemes": "Gov Schemes",
+                            "Other": "Other",
+                            "MGNREGA": "MGNREGA",
+                            "IBL": "IBL",
+                            "Community": "Community",
+                            "Total": "Total",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Edit_Success_Message": "WorkPlan updated successfully"
+                    }
+                }
+            },
+            "Rows_per_page": "Rows per page :"
+        }
     }
 }

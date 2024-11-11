@@ -616,5 +616,85 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "p_WorkPlan": {
+        "ss_WorkPlan": "ಕೆಲಸದ ಯೋಜನೆ",
+        "ss_Search_Label": "ಹುಡುಕು",
+        "Add_WorkPlan_Link": {
+            "Add_WorkPlan_Link_Text": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸೇರಿಸಿ",
+            "Add_WorkPlan_Popup": {
+                "Add_WorkPlan_Label": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸೇರಿಸಿ",
+                "Plan_Details": "ಯೋಜನೆ ವಿವರಗಳು",
+                "Financial_Year": "ಆರ್ಥಿಕ ವರ್ಷ",
+                "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+                "Activity": "ಚಟುವಟಿಕೆ",
+                "Land_Type": "ಭೂಮಿಯ ಪ್ರಕಾರ",
+                "Watershed_Details": "ಜಲಾನಯನ ವಿವರಗಳು",
+                "Watershed": "ಜಲಾನಯನ",
+                "State": "ರಾಜ್ಯ",
+                "District": "ಜಿಲ್ಲೆ",
+                "Taluka": "ತಾಲೂಕು",
+                "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                "Physical_Plan": "ಭೌತಿಕ ಯೋಜನೆ",
+                "Value": "ಮೌಲ್ಯ",
+                "UOM": "UOM",
+                "Financial_Details": "ಹಣಕಾಸಿನ ವಿವರಗಳು",
+                "Bfil": "BFIL",
+                "Gov_Schemes": "ಸರ್ಕಾರದ ಯೋಜನೆಗಳು",
+                "Other": "ಇತರೆ",
+                "MGNREGA": "MGNREGA",
+                "IBL": "IBL",
+                "Community": "ಸಮುದಾಯ",
+                "Total": "ಒಟ್ಟು",
+                "Cancel_Button": "ರದ್ದುಮಾಡು",
+                "Add_Button": "ಸೇರಿಸಿ"
+            },
+            "Add_Success_Message": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+        },
+        "ss_WorkplanList": {
+            "Watershed": "ಜಲಾನಯನ",
+            "Year": "ವರ್ಷ",
+            "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+            "Activity": "ಚಟುವಟಿಕೆ",
+            "Physical": "ಭೌತಿಕ",
+            "Financial": "ಹಣಕಾಸು",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_WorkPlan_Popup": {
+                            "Edit_WorkPlan_Label": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Plan_Details": "ಯೋಜನೆ ವಿವರಗಳು",
+                            "Financial_Year": "ಆರ್ಥಿಕ ವರ್ಷ",
+                            "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+                            "Activity": "ಚಟುವಟಿಕೆ",
+                            "Land_Type": "ಭೂಮಿಯ ಪ್ರಕಾರ",
+                            "Watershed_Details": "ಜಲಾನಯನ ವಿವರಗಳು",
+                            "Watershed": "ಜಲಾನಯನ",
+                            "State": "ರಾಜ್ಯ",
+                            "District": "ಜಿಲ್ಲೆ",
+                            "Taluka": "ತಾಲೂಕು",
+                            "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                            "Physical_Plan": "ಭೌತಿಕ ಯೋಜನೆ",
+                            "Value": "ಮೌಲ್ಯ",
+                            "UOM": "UOM",
+                            "Financial_Details": "ಹಣಕಾಸಿನ ವಿವರಗಳು",
+                            "Bfil": "BFIL",
+                            "Gov_Schemes": "ಸರ್ಕಾರದ ಯೋಜನೆಗಳು",
+                            "Other": "ಇತರೆ",
+                            "MGNREGA": "MGNREGA",
+                            "IBL": "IBL",
+                            "Community": "ಸಮುದಾಯ",
+                            "Total": "ಒಟ್ಟು",
+                            "Cancel_Button": "ರದ್ದುಮಾಡು",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+        }
     }
 }
