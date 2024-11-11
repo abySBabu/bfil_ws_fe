@@ -12,7 +12,7 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694732');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
@@ -170,7 +170,7 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694732');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
@@ -259,7 +259,7 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694732');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
@@ -343,7 +343,7 @@ test.describe('Permission based screen view', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694732');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);

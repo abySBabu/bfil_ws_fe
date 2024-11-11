@@ -15,7 +15,7 @@ test.describe('Check Browser History Automation', () => {
         // Navigate to the login page
         await page.goto('http://localhost:3000/bfilreacttest');
         // Fill in the login form and submit
-        await page.fill('input#userName', '9677694732');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
 
