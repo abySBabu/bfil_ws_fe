@@ -618,7 +618,7 @@
         }
     },
     "p_WorkPlan": {
-        "ss_WorkPlan": "Work Plan",
+        "ss_WorkPlan_Header": "Work Plan",
         "ss_Search_Label": "Search",
         "Add_WorkPlan_Link": {
             "Add_WorkPlan_Link_Text": "Add WorkPlan",

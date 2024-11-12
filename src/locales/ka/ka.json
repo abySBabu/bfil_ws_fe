@@ -618,7 +618,7 @@
         }
     },
     "p_WorkPlan": {
-        "ss_WorkPlan": "ಕೆಲಸದ ಯೋಜನೆ",
+        "ss_WorkPlan_Header": "ಕೆಲಸದ ಯೋಜನೆ",
         "ss_Search_Label": "ಹುಡುಕು",
         "Add_WorkPlan_Link": {
             "Add_WorkPlan_Link_Text": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸೇರಿಸಿ",
