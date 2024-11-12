@@ -125,7 +125,12 @@ export default function UserList() {
             role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        return matchesSearchQuery || roleMatchesSearchQuery;
+        const statusMatchesSearchQuery = blockedUserOptions.some(option =>
+            option.value === user.userBlockedFlag &&
+            option.dispalyValue.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return matchesSearchQuery || roleMatchesSearchQuery || statusMatchesSearchQuery;
     });
 
     return (<>
