@@ -130,8 +130,20 @@ export const Workplan: React.FC = () => {
 
     const ActSet = async () => {
         try {
-            if (planObj.interventionType_Components) {
-                const resp1 = await ListPara(planObj.interventionType_Components);
+            if (planObj.interventionType_Components == '22') {
+                const resp1 = await ListPara('Supply Side Interventions');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '23') {
+                const resp1 = await ListPara('Demand Side Interventions');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '31') {
+                const resp1 = await ListPara('Administration Cost');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '32') {
+                const resp1 = await ListPara('Post Watershed Management');
                 if (resp1) { setactOps(resp1.data) }
             }
             else {
@@ -300,7 +312,7 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid> 
+                </TextField></Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")} value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
