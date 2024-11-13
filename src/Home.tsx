@@ -22,6 +22,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuIcon from '@mui/icons-material/Menu';
+import DonerReport from './components/ReportPage/DonerReport';
+import Report from './components/ReportPage/Report';
 
 interface SideItem {
   screenName: string;
@@ -145,7 +147,7 @@ export const Home: React.FC = () => {
                   case 'Work Plan':
                     return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
                   case 'Report':
-                    return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <ReportTable /> };
+                    return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Report /> };
                   default:
                     return null;
                 }
