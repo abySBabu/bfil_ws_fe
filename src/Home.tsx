@@ -76,9 +76,9 @@ export const Home: React.FC = () => {
 
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);
+    i18n.changeLanguage(lng);
     setLanguageAnchor(null);
     setavatarAnchor(null);
-    i18n.changeLanguage(lng);
   }
 
   const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -95,6 +95,10 @@ export const Home: React.FC = () => {
     } catch (error: any) {
       console.log('error', error);
     }
+  }
+
+  const myProfile = async () => {
+    navigate('/profile');
   }
 
   const handleClose = async () => {
@@ -448,7 +452,7 @@ export const Home: React.FC = () => {
         <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
       </Box>
       <Divider />
-      <MenuItem component={Link} href="profile">{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
+      <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
       <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
         <AccordionSummary
           expandIcon={<ArrowDropDownIcon />}
