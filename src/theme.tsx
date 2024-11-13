@@ -148,7 +148,15 @@ export const bfilTheme = createTheme({
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
                         '&.Mui-disabled': { color: sd('--textfield-label-dis'), opacity: 0.5 }
                     },
-                    '& .MuiFormHelperText-root': { color: 'red' }
+                    '& .MuiFormHelperText-root': { color: 'red' },
+                    '& input[type=number]': {
+                        MozAppearance: 'textfield',       // Firefox
+                        appearance: 'textfield',          // Chrome, Safari, Edge
+                    },
+                    '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                        WebkitAppearance: 'none',         // WebKit (Chrome/Safari)
+                        margin: 0,
+                    }
                 }
             },
             defaultProps: {
