@@ -25,6 +25,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 
+
 interface SideItem {
   screenName: string;
 }
@@ -201,20 +202,20 @@ export const Home: React.FC = () => {
           PerChk(section.permission) && (
             <ListItem key={section.name} disablePadding>
               <ListItemButton
-              sx={{
-                backgroundColor: '#bb4d53',                
-                color: '#fff',                             
-                '&:hover': {
-                  backgroundColor: '#8d272b',              
-                },
-                '&.Mui-selected': {
-                  backgroundColor: '#cc802a',              
-                  color: '#fff',                           
+                sx={{
+                  backgroundColor: '#bb4d53',
+                  color: '#fff',
                   '&:hover': {
-                    backgroundColor: '#941f20',            
+                    backgroundColor: '#8d272b',
                   },
-                },
-              }}
+                  '&.Mui-selected': {
+                    backgroundColor: '#cc802a',
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: '#941f20',
+                    },
+                  },
+                }}
 
                 onClick={() => setdIndex(index)}
                 selected={dIndex === index}
@@ -272,19 +273,19 @@ export const Home: React.FC = () => {
               sx={{
                 display: { xs: 'none', sm: 'flex' },
                 gap: '8px',
-                height: { xs: '40px', md: '60px' }, 
+                height: { xs: '40px', md: '60px' },
                 alignItems: 'center',
               }}
             >
               <img
                 src={`${process.env.PUBLIC_URL}/images/iib.jpg`}
                 alt="IndusInd"
-                style={{ height: '100%', maxHeight: '60px' }} 
+                style={{ height: '100%', maxHeight: '60px' }}
               />
               <img
                 src={`${process.env.PUBLIC_URL}/images/bfil.png`}
                 alt="BFIL"
-                style={{ height: '100%', maxHeight: '40px' }} 
+                style={{ height: '100%', maxHeight: '40px' }}
               />
             </Box>
 
@@ -447,24 +448,24 @@ export const Home: React.FC = () => {
         <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
       </Box>
       <Divider />
-      <MenuItem component={Link} href="profile">My Profile</MenuItem>
+      <MenuItem component={Link} href="profile">{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
       <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
         <AccordionSummary
           expandIcon={<ArrowDropDownIcon />}
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <Typography>Language</Typography>
+          <Typography>{t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Text')}</Typography>
         </AccordionSummary>
         <Divider />
         <AccordionDetails>
-          <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
-          <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
+          <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> {t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Submenu.English')}</MenuItem>
+          <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> {t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Submenu.Kannada')}</MenuItem>
         </AccordionDetails>
         <Divider />
       </Accordion>
       {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
-      <MenuItem onClick={logOut}>Logout</MenuItem>
+      <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>
     {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
                 <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
