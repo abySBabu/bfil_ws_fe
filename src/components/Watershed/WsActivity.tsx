@@ -115,7 +115,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [imgM, setimgM] = React.useState('');
 
     const ActTypeName = (code: number | undefined) => {
-        const act = allAct.find(x => x.activityCode === code);
+        const act = allAct.find(x => x.activityId === code);
         return act ? act.activityName : code || "";
     };
 
