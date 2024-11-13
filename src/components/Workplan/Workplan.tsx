@@ -299,13 +299,13 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Plan_Details")}</Divider></Grid>
                 <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
-                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
-                </TextField></Grid>
+                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
+                </TextField></Grid> 
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")} value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Land_Type")} value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
-                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
 
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed_Details")}</Divider></Grid>
