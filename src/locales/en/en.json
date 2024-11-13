@@ -696,5 +696,39 @@
             },
             "Rows_per_page": "Rows per page :"
         }
+    },
+    "ss_Avatar_Icon_Link": {
+        "Avatar_Menu": {
+            "My_Profile_Text": "My Profile",
+            "p_MyProfile": {
+                "MyProfile_Header": "My Profile",
+                "Name": "Name",
+                "Mobile_Number": "Mobile Number",
+                "Role": "Role",
+                "EditProfile_Link_Text": "Edit Profile",
+                "ResetPassword_Link_Text": "Reset Password",
+                "ss_Edit_Profile": {
+                    "Name": "Name",
+                    "Mobile_Number": "Mobile Number",
+                    "Role": "Role",
+                    "Cancel": "Cancel",
+                    "Update_Link_Text": "Upadate",
+                    "Update_Sucess_Message": "Your Profile updated successfully"
+                },
+                "ss_ResetPassword": {
+                    "Current_Password": "Current Password",
+                    "New_Password": "New Password",
+                    "Cancel": "Cancel",
+                    "Update_Link_Text": "Upadate",
+                    "Update_Sucess_Message": "Your Password updated successfully"
+                }
+            },
+            "Language_Text": "Languages",
+            "Language_Submenu": {
+                "English": "English",
+                "Kannada": "Kannada"
+            },
+            "Logout_Text": "Logout"
+        }
     }
 }

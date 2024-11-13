@@ -696,5 +696,39 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "ss_Avatar_Icon_Link": {
+        "Avatar_Menu": {
+            "My_Profile_Text": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+            "p_MyProfile": {
+                "MyProfile_Header": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+                "Name": "ಹೆಸರು",
+                "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+                "Role": "ಪಾತ್ರ",
+                "EditProfile_Link_Text": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+                "ResetPassword_Link_Text": "ಪಾಸ್ವರ್ಡ್ ಮರುಹೊಂದಿಸಿ",
+                "ss_Edit_Profile": {
+                    "Name": "ಹೆಸರು",
+                    "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+                    "Role": "ಪಾತ್ರ",
+                    "Cancel": "ರದ್ದುಮಾಡಿ",
+                    "Update_Link_Text": "ನವೀಕರಿಸಿ",
+                    "Update_Sucess_Message": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                },
+                "ss_ResetPassword": {
+                    "Current_Password": "ಪ್ರಸ್ತುತ ಪಾಸ್ವರ್ಡ್",
+                    "New_Password": "ಹೊಸ ಪಾಸ್ವರ್ಡ್",
+                    "Cancel": "ರದ್ದುಮಾಡಿ",
+                    "Update_Link_Text": "ನವೀಕರಿಸಿ",
+                    "Update_Sucess_Message": "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                }
+            },
+            "Language_Text": "ಭಾಷೆಗಳು",
+            "Language_Submenu": {
+                "English": "ಇಂಗ್ಲೀಷ್",
+                "Kannada": "ಕನ್ನಡ"
+            },
+            "Logout_Text": "ಲಾಗ್ಔಟ್"
+        }
     }
 }
