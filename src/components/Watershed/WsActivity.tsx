@@ -114,8 +114,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [vList, setvList] = React.useState<any[]>([]);
     const [imgM, setimgM] = React.useState('');
 
-    const ActTypeName = (code: number | undefined) => {
-        const act = allAct.find(x => x.activityId === code);
+    const ActTypeName = (code: number | string | undefined) => {
+        const act = allAct.find(x => x.activityId == code);
         return act ? act.activityName : code || "";
     };
 
@@ -133,13 +133,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const actListF = actList.filter((a) => {
         const searchTerm = search?.toLowerCase();
         return (
-            a.workActivity.activityName?.toLowerCase().includes(searchTerm) ||
-            a.workActivity.surveyNo?.toLowerCase().includes(searchTerm) ||
-            ActTypeName(a.workActivity?.activityCode)?.toLowerCase().includes(searchTerm) ||
-            WsName(a.workActivity.watershedId)?.toLowerCase().includes(searchTerm) ||
-            a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toLowerCase().includes(searchTerm) ||
-            a.workActivity.activityWorkflowStatus?.toLowerCase().includes(searchTerm) ||
-            a.workActivity.updatedUser?.toLowerCase().includes(searchTerm)
+            a.workActivity.activityName?.toString().toLowerCase().includes(searchTerm) ||
+            a.workActivity.surveyNo?.toString().toLowerCase().includes(searchTerm) ||
+            ActTypeName(a.workActivity?.activityCode)?.toString().toLowerCase().includes(searchTerm) ||
+            WsName(a.workActivity.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+            a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toString().toLowerCase().includes(searchTerm) ||
+            a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
+            a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm)
         );
     });
 

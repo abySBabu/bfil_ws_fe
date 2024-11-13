@@ -82,12 +82,17 @@ export const Workplan: React.FC = () => {
     const [alertClr, setalertClr] = React.useState(false);
     const [finTotal, setfinTotal] = React.useState(0);
 
+    const IntTypeName = (code: number | string | undefined) => {
+        const int = intOps.find(x => x.parameterId == code);
+        return int ? int.parameterName : code || "";
+    };
+
     const planListF = planList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
             w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
             WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
-            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
+            IntTypeName(w.interventionType_Components)?.toString().toLowerCase().includes(searchTerm) ||
             w.activityName?.toString().toLowerCase().includes(searchTerm) ||
             w.value?.toString().toLowerCase().includes(searchTerm) ||
             w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
@@ -280,7 +285,7 @@ export const Workplan: React.FC = () => {
                                     <TableRow key={i}>
                                         <TableCell>{WsName(w.watershedId)}</TableCell>
                                         <TableCell>{w.planningYear}</TableCell>
-                                        <TableCell>{w.interventionType_Components}</TableCell>
+                                        <TableCell>{IntTypeName(w.interventionType_Components)}</TableCell>
                                         <TableCell>{w.activityName}</TableCell>
                                         <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                                         <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
@@ -353,7 +358,7 @@ export const Workplan: React.FC = () => {
                 </React.Fragment>))}
 
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Total")} value={finTotal} disabled /></Grid>
+                <Grid item xs={15} md={4}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Total")} value={finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
