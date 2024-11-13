@@ -712,14 +712,14 @@
                     "Mobile_Number": "Mobile Number",
                     "Role": "Role",
                     "Cancel": "Cancel",
-                    "Update_Link_Text": "Upadate",
+                    "Update_Link_Text": "Update",
                     "Update_Sucess_Message": "Your Profile updated successfully"
                 },
                 "ss_ResetPassword": {
                     "Current_Password": "Current Password",
                     "New_Password": "New Password",
                     "Cancel": "Cancel",
-                    "Update_Link_Text": "Upadate",
+                    "Update_Link_Text": "Update",
                     "Update_Sucess_Message": "Your Password updated successfully"
                 }
             },
