@@ -542,7 +542,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={12} sm={6}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} /></Grid>
-                <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} /></Grid>
+                <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} inputProps={{ maxLength: 120 }} /></Grid>
                 {actObj.workActivity.activityCode === 13 ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Name")} value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
