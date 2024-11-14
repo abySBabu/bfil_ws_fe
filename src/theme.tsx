@@ -96,6 +96,7 @@ export const bfilTheme = createTheme({
                     },
                     '& .MuiTableSortLabel-icon': {
                         color: 'white !important', 
+                        opacity: 1,
                     }
                 }
             }
