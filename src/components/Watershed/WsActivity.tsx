@@ -659,7 +659,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             </Grid></DialogContent>
 
             <DialogActions>
-                {editM && <TextField label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Remarks")} value={rmk} onChange={(e) => setrmk(e.target.value)} />}
+                {editM && <TextField label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Remarks")} value={rmk} onChange={(e) => setrmk(e.target.value)} inputProps={{ maxLength: 120 }} />}
                 <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Cancel_Button")}</Button>
                 {addM && <Button onClick={ActAdd} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Add_Button")}</Button>}
                 {editM && <Button onClick={() => ActEdit(actObj.workActivity.activityId)} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Update_Button")}</Button>}
@@ -781,7 +781,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 value={rmk}
                                 onChange={(e) => setrmk(e.target.value)}
                                 fullWidth={false}
-                                sx={{ width: { xs: '100%', sm: '50%' }, mb: { xs: 1, sm: 0 }, }} />
+                                sx={{ width: { xs: '100%', sm: '50%' }, mb: { xs: 1, sm: 0 }, }}
+                                inputProps={{ maxLength: 120 }} />
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
