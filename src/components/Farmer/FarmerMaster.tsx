@@ -57,7 +57,7 @@ export const FarmerMaster: React.FC = () => {
         }
     };
 
-    const addCheck = !fmrObj.wsfarmerName || fmrObj.mobileNumber.length !== 10
+    const addCheck = !fmrObj.wsfarmerName || fmrObj.mobileNumber.length !== 10 || !fmrObj.village || loading
 
     const fmrListF = fmrList.filter((w) => {
         const searchTerm = search?.toLowerCase();
@@ -338,7 +338,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        required
                         select
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation")}
                         value={fmrObj.relationalIdentifiers}
@@ -349,7 +348,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        required
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation_Name")}
                         value={fmrObj.identifierName}
                         onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
@@ -357,7 +355,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
-                        required
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Remarks")}
                         value={fmrObj.remarks}
                         onChange={(e) => setfmrObj({ ...fmrObj, remarks: e.target.value })}
