@@ -87,16 +87,16 @@ export const bfilTheme = createTheme({
         MuiTableSortLabel: {
             styleOverrides: {
                 root: {
-                    color: 'white', 
+                    color: 'white',
                     '&:hover': {
                         color: 'white',
                     },
                     '&.Mui-active': {
-                        color: 'white', 
+                        color: sd('--button-bgcolor-hover-brand'),
                     },
                     '& .MuiTableSortLabel-icon': {
-                        color: 'white !important', 
-                        opacity: 1,
+                        color: 'white !important',
+                        opacity: 1
                     }
                 }
             }

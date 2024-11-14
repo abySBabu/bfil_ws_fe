@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Tooltip,
     Typography, InputAdornment, MenuItem, CircularProgress
 } from "@mui/material";
@@ -87,19 +87,41 @@ export const Workplan: React.FC = () => {
         return int ? int.parameterName : code || "";
     };
 
-    const planListF = planList.filter((w) => {
-        const searchTerm = search?.toLowerCase();
-        return (
-            w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
-            WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
-            IntTypeName(w.interventionType_Components)?.toString().toLowerCase().includes(searchTerm) ||
-            w.activityName?.toString().toLowerCase().includes(searchTerm) ||
-            w.value?.toString().toLowerCase().includes(searchTerm) ||
-            w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
-            w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
-        )
-    });
+    //Sorting, filtering, and pagination
+    const [sortBy, setSortBy] = React.useState<keyof typeof planList[0] | null>(null);
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
+    const handleSort = (column: keyof typeof planList[0]) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(column);
+            setSortOrder('asc');
+        }
+    };
+
+    const planListF = planList
+        .filter((w) => {
+            const searchTerm = search?.toLowerCase();
+            return (
+                w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
+                WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+                IntTypeName(w.interventionType_Components)?.toString().toLowerCase().includes(searchTerm) ||
+                w.activityName?.toString().toLowerCase().includes(searchTerm) ||
+                w.value?.toString().toLowerCase().includes(searchTerm) ||
+                w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
+                w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
+            )
+        })
+        .sort((a, b) => {
+            if (!sortBy) return 0;
+            const valueA = a[sortBy];
+            const valueB = b[sortBy];
+
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
     const addCheck = loading || !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityId || !planObj.planlandType || !planObj.watershedId || !planObj.value || !planObj.unitofMeasurement || finTotal <= 0
@@ -271,13 +293,57 @@ export const Workplan: React.FC = () => {
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>{t("p_WorkPlan.ss_WorkplanList.Watershed")}</TableCell>
-                                        <TableCell>{t("p_WorkPlan.ss_WorkplanList.Year")}</TableCell>
-                                        <TableCell>{t("p_WorkPlan.ss_WorkplanList.Intervention")}</TableCell>
-                                        <TableCell>{t("p_WorkPlan.ss_WorkplanList.Activity")}</TableCell>
-                                        <TableCell>{t("p_WorkPlan.ss_WorkplanList.Physical")}</TableCell>
-                                        <TableCell align='center'>{t("p_WorkPlan.ss_WorkplanList.Financial")}</TableCell>
-                                        {PerChk('EDIT_Work Plan') && <TableCell width='5%'>{t("p_WorkPlan.ss_WorkplanList.Action.Action_Text")}</TableCell>}
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'watershedId'}
+                                                direction={sortBy === 'watershedId' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('watershedId')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Watershed")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'planningYear'}
+                                                direction={sortBy === 'planningYear' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('planningYear')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Year")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'interventionType_Components'}
+                                                direction={sortBy === 'interventionType_Components' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('interventionType_Components')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Intervention")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'activityName'}
+                                                direction={sortBy === 'activityName' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('activityName')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Activity")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'value'}
+                                                direction={sortBy === 'value' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('value')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Physical")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {t("p_WorkPlan.ss_WorkplanList.Financial")}
+                                        </TableCell>
+                                        {PerChk('EDIT_Work Plan') && <TableCell width="5%">
+                                            {t("p_WorkPlan.ss_WorkplanList.Action.Action_Text")}
+                                        </TableCell>}
                                     </TableRow>
                                 </TableHead>
 
