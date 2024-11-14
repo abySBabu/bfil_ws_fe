@@ -150,11 +150,13 @@ export const bfilTheme = createTheme({
                     },
                     '& .MuiFormHelperText-root': { color: 'red' },
                     '& input[type=number]': {
-                        MozAppearance: 'textfield',       // Firefox
-                        appearance: 'textfield',          // Chrome, Safari, Edge
+                        MozAppearance: 'textfield',
+                        textAlign: 'right',
+                        appearance: 'textfield',
                     },
                     '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
-                        WebkitAppearance: 'none',         // WebKit (Chrome/Safari)
+                        WebkitAppearance: 'none',
+                        textAlign: 'right',
                         margin: 0,
                     }
                 }

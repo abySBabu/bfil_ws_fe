@@ -493,7 +493,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     }).slice(page * rPP, page * rPP + rPP).map((a, i) => (
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
-                                            <TableCell>{a.workActivity.surveyNo}</TableCell>
+                                            <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo}</TableCell>
                                             <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
