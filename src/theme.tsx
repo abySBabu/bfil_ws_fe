@@ -84,6 +84,22 @@ export const bfilTheme = createTheme({
                 }
             }
         },
+        MuiTableSortLabel: {
+            styleOverrides: {
+                root: {
+                    color: 'white', 
+                    '&:hover': {
+                        color: 'white',
+                    },
+                    '&.Mui-active': {
+                        color: 'white', 
+                    },
+                    '& .MuiTableSortLabel-icon': {
+                        color: 'white !important', 
+                    }
+                }
+            }
+        },
         MuiTableHead: {
             styleOverrides: {
                 root: {
