@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Select,MenuItem,TextField,Box,Typography,Button,FormControl,InputLabel,SelectChangeEvent,} from '@mui/material';
-import { donerReport } from 'src/Services/reportService';
+import { donerReport, watershedReport } from 'src/Services/reportService';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
@@ -26,6 +26,7 @@ const DonerReport: React.FC = () => {
   const [showWatershedReport, setShowWatershedReport] = useState(false);
 
 const fetchData = async (year: any) => {
+    if (!selectedYear) return; 
         try {
             const resp1 = await donerReport(selectedYear);
             if (resp1?.length > 0 && Array.isArray(resp1)) {
@@ -97,7 +98,6 @@ const fetchData = async (year: any) => {
                 excelData.push(row);
                 currentRowIndex++; 
             });
-    
             if (activities.length > 1) {
                 merges.push({ s: { r: mergeStartRow, c: 0 }, e: { r: currentRowIndex - 1, c: 0 } });
             }
@@ -222,8 +222,8 @@ const fetchData = async (year: any) => {
                     {showReport ? (
                     <DonerSummaryReport selectedYear={selectedYear} formattedData={data} /> 
                     ) : (
-                <TableContainer component={Paper}>
-                    <Table>
+                <TableContainer component={Paper} className="scrollable-table">
+                    <Table sx={{Width:'100%'}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center" sx={{ maxWidth: '80px',width:'80px',borderRight: '1px solid #ccc' }}>Component</TableCell>
@@ -291,6 +291,17 @@ const fetchData = async (year: any) => {
         </div>
     <style>
         {`
+        .scrollable-table {
+    max-height: 550px;
+    overflow-y: auto;
+}
+
+@media print {
+    .scrollable-table {
+        max-height: none;
+        overflow-y: visible;
+    }
+}
             .pdf-title {display: none;text-align: center;}
             @media print {.pdf-title {display: block;margin-top:30px; font-size: 20px;  margin-bottom: 20px;}} 
         `}

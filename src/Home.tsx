@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
-import ReportTable from './components/ReportPage/ReportTable';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CircularProgress from '@mui/material/CircularProgress';

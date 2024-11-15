@@ -1,49 +1,87 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useTheme } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import WatershedReport from './WatershedReport';
 import DonerReport from './DonerReport';
-import { Box, Typography } from '@mui/material';
 
-function Report() {
-  const [activeReport, setActiveReport] = useState('');
-
-  const showWatershedReport = () => setActiveReport('watershed');
-  const showDonerReport = () => setActiveReport('doner');
+interface TabPanelProps {
+  children?: React.ReactNode;
+  dir?: string;
+  index: number;
+  value: number;
+}
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
 
   return (
-    <div>
-      <Box sx={{ display: 'flex', gap: '20px', marginBottom: '50px' }}>
-        <Typography
-          onClick={showWatershedReport}
-          sx={{
-            fontSize:'24px',
-            mt:2,
-            cursor: 'pointer',
-            color: activeReport === 'watershed' ? 'blue' : 'black',
-            textDecoration: activeReport === 'watershed' ? 'underline' : 'none',
-            // fontWeight: activeReport === 'watershed' ? 'bold' : 'normal',
-          }}
-        >
-          Watershed Report
-        </Typography>
-
-        <Typography
-          onClick={showDonerReport}
-          sx={{
-            fontSize:'24px',
-            mt:2,
-            cursor: 'pointer',
-            color: activeReport === 'doner' ? 'blue' : 'black',
-            textDecoration: activeReport === 'doner' ? 'underline' : 'none',
-            // fontWeight: activeReport === 'doner' ? 'bold' : 'normal',
-          }}
-        >
-          Doner Report
-        </Typography>
-      </Box>
-
-      {activeReport === 'watershed' && <WatershedReport />}
-      {activeReport === 'doner' && <DonerReport />}
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
     </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
+
+function Report() {
+  const theme = useTheme();
+  const [value, setValue] = React.useState(-1); 
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ bgcolor: 'background.paper', maxwidth: '100%', maxheight: '100%' }}>
+      <AppBar position="static">
+        <Tabs
+          value={value >= 0 ? value : false} 
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="inherit"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+          sx={{
+            backgroundColor: '#bb4d53',
+            color: 'white',
+            '.MuiTabs-indicator': {
+              backgroundColor: 'white',
+            },
+          }}
+        >
+          <Tab label="WatershedReport" {...a11yProps(0)} />
+          <Tab label="DonerReport" {...a11yProps(1)} />
+        </Tabs>
+      </AppBar>
+      {value === 0 && (
+        <TabPanel value={value} index={0} dir={theme.direction}>
+          <WatershedReport />
+        </TabPanel>
+      )}
+      {value === 1 && (
+        <TabPanel value={value} index={1} dir={theme.direction}>
+          <DonerReport />
+        </TabPanel>
+      )}
+    </Box>
   );
 }
 

@@ -14,3 +14,15 @@ export async function donerReport(financialYear: any) {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function watershedReport(financialYear:any) {
+    const configs = {
+        url: serverPath.bfil + `reports/getAlReport/${financialYear}`,
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+           }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
