@@ -302,7 +302,7 @@ export const FarmerMaster: React.FC = () => {
                                 <Table sx={{ width: '100%' }}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>
+                                            <TableCell sx={{ width: '45%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'wsfarmerName'}
                                                     direction={sortBy === 'wsfarmerName' ? sortOrder : 'asc'}
@@ -311,7 +311,7 @@ export const FarmerMaster: React.FC = () => {
                                                     {t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell sx={{ width: '45%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'mobileNumber'}
                                                     direction={sortBy === 'mobileNumber' ? sortOrder : 'asc'}
@@ -321,7 +321,7 @@ export const FarmerMaster: React.FC = () => {
                                                 </TableSortLabel>
                                             </TableCell>
                                             {PerChk('EDIT_Beneficiary Master') && (
-                                                <TableCell width='5%'>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Text")}</TableCell>
+                                                <TableCell sx={{ width: '10%' }}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Text")}</TableCell>
                                             )}
                                         </TableRow>
                                     </TableHead>
@@ -333,12 +333,8 @@ export const FarmerMaster: React.FC = () => {
                                                 <TableCell>{w.mobileNumber}</TableCell>
                                                 {PerChk('EDIT_Beneficiary Master') && (
                                                     <TableCell>
-                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setfmrObj(w); seteditM(true); }}>
-                                                            <Edit />
-                                                        </IconButton>
-                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.wsfarmerId) }}>
-                                                            <Delete />
-                                                        </IconButton>
+                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
                                                     </TableCell>
                                                 )}
                                             </TableRow>
