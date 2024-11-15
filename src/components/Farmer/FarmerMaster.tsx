@@ -81,7 +81,7 @@ export const FarmerMaster: React.FC = () => {
             );
         })
         .sort((a, b) => {
-            if (!sortBy) return 0; // No sorting if no column is selected
+            if (!sortBy) return 0;
             const valueA = a[sortBy];
             const valueB = b[sortBy];
 

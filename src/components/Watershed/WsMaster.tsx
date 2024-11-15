@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, FormControl,
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel, FormControl,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Select,
     MenuItem, InputAdornment, Typography, CircularProgress, Checkbox, ListItemText, OutlinedInput, InputLabel,
 } from "@mui/material";
@@ -65,14 +65,34 @@ export const WsMaster: React.FC = () => {
 
     const addCheck = !wsObj.wsName || !wsObj.wsDescription
 
+    //
+    const [sortBy, setSortBy] = React.useState<keyof typeof wsList[0] | null>(null);
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (column: keyof typeof wsList[0]) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(column);
+            setSortOrder('asc');
+        }
+    };
+
     const wsListF = wsList.filter((w) => {
         const searchTerm = search?.toLowerCase();
         return (
             w.wsName?.toLowerCase().includes(searchTerm) ||
             w.wsDescription?.toLowerCase().includes(searchTerm)
         );
-    });
+    }).sort((a, b) => {
+        if (!sortBy) return 0;
+        const valueA = a[sortBy];
+        const valueB = b[sortBy];
 
+        if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+        if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+    });
     const wsListP = wsListF.slice(page * rPP, page * rPP + rPP);
 
     React.useEffect(() => { fetchData() }, [])
@@ -312,15 +332,26 @@ export const WsMaster: React.FC = () => {
                         </Box>
                     </Box>
 
-
                     {wsList?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>
                         : wsListF?.length <= 0 ? <Typography variant='h6' sx={{ textAlign: 'center' }}>No results for search</Typography>
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>{t("p_Watershed_Master.ss_WatershedList.Watershed")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Master.ss_WatershedList.Description")}</TableCell>
-                                        {PerChk('EDIT_Watershed Master') && <TableCell width='5%'>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Text")}</TableCell>}
+                                        <TableCell sx={{ width: '30%' }}><TableSortLabel
+                                            active={sortBy === 'wsName'}
+                                            direction={sortBy === 'wsName' ? sortOrder : 'asc'}
+                                            onClick={() => handleSort('wsName')}
+                                        >
+                                            {t("p_Watershed_Master.ss_WatershedList.Watershed")}
+                                        </TableSortLabel></TableCell>
+                                        <TableCell sx={{ width: '60%' }}><TableSortLabel
+                                            active={sortBy === 'wsDescription'}
+                                            direction={sortBy === 'wsDescription' ? sortOrder : 'asc'}
+                                            onClick={() => handleSort('wsDescription')}
+                                        >
+                                            {t("p_Watershed_Master.ss_WatershedList.Description")}
+                                        </TableSortLabel></TableCell>
+                                        {PerChk('EDIT_Watershed Master') && <TableCell sx={{ width: '10%' }}>{t("p_Watershed_Master.ss_WatershedList.Action.Action_Text")}</TableCell>}
                                     </TableRow>
                                 </TableHead>
 
