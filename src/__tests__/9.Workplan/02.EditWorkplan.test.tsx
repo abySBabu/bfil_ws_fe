@@ -1,7 +1,7 @@
 // import { test, expect, chromium, Page } from '@playwright/test';
 
 // test.describe('Worplan Edit Automation', () => {
-    // test.describe.configure({ mode: 'serial' });
+    // //test.describe.configure({ mode: 'serial' });
 //     //Test Number : 1
 //     test('Should click the edit icon button visible', async () => {
 //         test.setTimeout(800000);
@@ -12,15 +12,16 @@
 //         const context = await browser.newContext();
 //         const page: Page = await context.newPage();
 
-//         await page.goto('http://localhost:3000/bfilreacttest');
+//                 await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        // await page.goto('http://localhost:3000/bfilreactdev'); 
 //         await page.fill('input#userName', '8877199197');
 //         await page.fill('input#password', '1234');
 //         await page.click('button[type="submit"]');
 //         await page.waitForTimeout(1000);
-//         await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+//         await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
 //         await page.reload();
 
-//         const userManagementButton = page.locator('text=Work Plan');
+//         const userManagementButton = page.locator('text=Work Plan').first();
 //         await userManagementButton.click();
 //         await page.waitForTimeout(5000);
 //         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -58,15 +59,16 @@
 //         const context = await browser.newContext();
 //         const page: Page = await context.newPage();
 
-//         await page.goto('http://localhost:3000/bfilreacttest');
+//                 await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        // await page.goto('http://localhost:3000/bfilreactdev'); 
 //         await page.fill('input#userName', '8877199197');
 //         await page.fill('input#password', '1234');
 //         await page.click('button[type="submit"]');
 //         await page.waitForTimeout(1000);
-//         await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+//         await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
 //         await page.reload();
 
-//         const userManagementButton = page.locator('text=Work Plan');
+//         const userManagementButton = page.locator('text=Work Plan').first();
 //         await userManagementButton.click();
 //         await page.waitForTimeout(5000);
 //         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -140,15 +142,16 @@
 //         const context = await browser.newContext();
 //         const page: Page = await context.newPage();
 
-//         await page.goto('http://localhost:3000/bfilreacttest');
+//                 await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        // await page.goto('http://localhost:3000/bfilreactdev'); 
 //         await page.fill('input#userName', '8877199197');
 //         await page.fill('input#password', '1234');
 //         await page.click('button[type="submit"]');
 //         await page.waitForTimeout(1000);
-//         await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+//         await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
 //         await page.reload();
 
-//         const userManagementButton = page.locator('text=Work Plan');
+//         const userManagementButton = page.locator('text=Work Plan').first();
 //         await userManagementButton.click();
 //         await page.waitForTimeout(5000);
 //         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -214,15 +217,16 @@
 //         const context = await browser.newContext();
 //         const page: Page = await context.newPage();
 
-//         await page.goto('http://localhost:3000/bfilreacttest');
+//                 await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        // await page.goto('http://localhost:3000/bfilreactdev'); 
 //         await page.fill('input#userName', '8877199197');
 //         await page.fill('input#password', '1234');
 //         await page.click('button[type="submit"]');
 //         await page.waitForTimeout(1000);
-//         await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+//         await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
 //         await page.reload();
 
-//         const userManagementButton = page.locator('text=Work Plan');
+//         const userManagementButton = page.locator('text=Work Plan').first();
 //         await userManagementButton.click();
 //         await page.waitForTimeout(5000);
 //         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -287,15 +291,16 @@
 //         const context = await browser.newContext();
 //         const page: Page = await context.newPage();
 
-//         await page.goto('http://localhost:3000/bfilreacttest');
+//                 await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        // await page.goto('http://localhost:3000/bfilreactdev'); 
 //         await page.fill('input#userName', '8877199197');
 //         await page.fill('input#password', '1234');
 //         await page.click('button[type="submit"]');
 //         await page.waitForTimeout(1000);
-//         await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+//         await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
 //         await page.reload();
 
-//         const userManagementButton = page.locator('text=Work Plan');
+//         const userManagementButton = page.locator('text=Work Plan').first();
 //         await userManagementButton.click();
 //         await page.waitForTimeout(5000);
 //         const addIcon = await page.locator('button:has-text("Add Plan")');

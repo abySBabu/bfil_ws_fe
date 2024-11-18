@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('User Edit Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    // //test.describe.configure({ mode: 'serial' });
 
     test('1.Should display user data in the table', async () => {
         test.setTimeout(60000);
@@ -11,16 +11,17 @@ test.describe('User Edit Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
         // Navigate to the User Management page
-        const userManagementButton = page.locator('text=User Management');
+        const userManagementButton = page.locator('text=User Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(10000);
         await page.waitForSelector('table');

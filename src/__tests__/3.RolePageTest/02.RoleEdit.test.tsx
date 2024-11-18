@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('Role Management Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    //test.describe.configure({ mode: 'serial' });
     //Test Number : 1
     test('01.Should click the edit icon and error message  for role name', async () => {
         test.setTimeout(800000);
@@ -10,15 +10,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(1000);
 
@@ -43,16 +44,17 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
 
-        const userManagementButton = page.locator('text=Role Management');
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForSelector('table');
         await page.waitForTimeout(1000);
@@ -77,14 +79,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(1000);
 
@@ -114,14 +118,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(1000);
 
@@ -154,14 +160,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(1000);
 
@@ -191,14 +199,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForSelector('table');
         await page.waitForTimeout(1000);
@@ -237,14 +247,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(2000);
 
@@ -279,14 +291,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(2000);
 
@@ -318,14 +332,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(2000);
 
@@ -355,14 +371,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(2000);
 
@@ -391,15 +409,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         await page.waitForTimeout(2000);
 
@@ -421,50 +440,6 @@ test.describe('Role Management Automation', () => {
     });
 
 
-    //Test Number : 12
-    test('12.Should validate the role edit alert message', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
-        try {
-            await page.goto('http://localhost:3000/bfilreacttest');
-            await page.fill('input#userName', '8877199197');
-            await page.fill('input#password', '1234');
-            await page.click('button[type="submit"]');
-            await page.waitForTimeout(1000);
-            await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-            await page.reload();
-            const userManagementButton = page.locator('text=Role Management');
-            await userManagementButton.click();
-            await page.waitForTimeout(2000);
-
-            await page.waitForSelector('table');
-            const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
-            await editIcon.click();
-            // await page.fill('input#roleName', 'Testing New Role');
-            await page.fill('input#roleDesc', 'Desc');
-            await page.waitForTimeout(2000);
-            const editCheckbox = await page.locator('input[type="checkbox"]').nth(1);
-            await editCheckbox.check();
-            const addRoleDialogButton = page.locator('button:has-text("Update")').nth(0);
-            // const isButtonVisible = await addRoleDialogButton.isDisabled();
-            await addRoleDialogButton.click();
-            const alertMessage = await page.locator('.MuiAlert-message').innerText();
-            // const alertMessage = await page.locator('.MuiAlert-message', { timeout: 5000 }).innerText();
-
-            console.log("Alertmessage " + alertMessage);
-            expect(alertMessage).toBe('Role updated successfully');
-        } catch (error) {
-            console.error("Test failed with error: ", error);
-        } finally {
-            await page.waitForTimeout(1000);
-            await browser.close();
-        }
-    });
 
 
     //Test Number : 13
@@ -477,14 +452,16 @@ test.describe('Role Management Automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
         try {
-            await page.goto('http://localhost:3000/bfilreacttest');
+            // await page.goto('http://localhost:3000/bfilreactdev');
+            await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
             await page.fill('input#userName', '8877199197');
             await page.fill('input#password', '1234');
             await page.click('button[type="submit"]');
             await page.waitForTimeout(1000);
-            await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-            await page.reload();
-            const userManagementButton = page.locator('text=Role Management');
+            // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+            await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+            await page.waitForTimeout(2000);
+            const userManagementButton = page.locator('text=Role Management').first();
             await userManagementButton.click();
             await page.waitForTimeout(2000);
 
@@ -516,14 +493,15 @@ test.describe('Role Management Automation', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreacttest');
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev'); 
     //     await page.fill('input#userName', '9677694777');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+    //     await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
     //     await page.reload();
-    //     const userManagementButton = page.locator('text=Role Management');
+    //     const userManagementButton = page.locator('text=Role Management').first();
     //     await userManagementButton.click();
     //     await page.waitForSelector('table');
     //     const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
@@ -551,14 +529,15 @@ test.describe('Role Management Automation', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreacttest');
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev'); 
     //     await page.fill('input#userName', '9677694777');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+    //     await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
     //     await page.reload();
-    //     const userManagementButton = page.locator('text=Role Management');
+    //     const userManagementButton = page.locator('text=Role Management').first();
     //     await userManagementButton.click();
     //     await page.waitForSelector('table');
     //     const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');

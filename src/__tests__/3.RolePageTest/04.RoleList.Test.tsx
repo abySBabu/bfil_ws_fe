@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 test.describe('Role Management Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    //test.describe.configure({ mode: 'serial' });
     test('01.Should click the edit icon in the table row', async () => {
 
         test.setTimeout(800000);
@@ -10,16 +10,16 @@ test.describe('Role Management Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Role Management');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Role Management').first();
         await userManagementButton.click();
         // // Wait for the table to be visible
         await page.waitForSelector('table');

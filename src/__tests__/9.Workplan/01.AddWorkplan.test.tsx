@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Worplan Add Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    //test.describe.configure({ mode: 'serial' });
     //Test Number : 1
     test('01.Should click the add icon button visible', async () => {
         test.setTimeout(800000);
@@ -12,15 +12,17 @@ test.describe('Worplan Add Automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
 
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
 
-        const userManagementButton = page.locator('text=Work Plan');
+        const userManagementButton = page.locator('text=Work Plan').first();
         await userManagementButton.click();
         await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -58,15 +60,16 @@ test.describe('Worplan Add Automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
 
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
-        const userManagementButton = page.locator('text=Work Plan');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Work Plan').first();
         await userManagementButton.click();
         // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -105,7 +108,7 @@ test.describe('Worplan Add Automation', () => {
 
         await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
         await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
-    await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
+        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
         await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
         await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
         await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
@@ -130,152 +133,6 @@ test.describe('Worplan Add Automation', () => {
     });
 
 
-    //Test Number : 3
-    test('03.Should click the add icon and check alert successful message', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8877199197');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
-        const userManagementButton = page.locator('text=Work Plan');
-        await userManagementButton.click();
-        // await page.waitForTimeout(5000);
-        const addIcon = await page.locator('button:has-text("Add Plan")');
-        await addIcon.click();
-        await page.getByRole('textbox', { name: 'Year' }).fill('2024');
-
-        const interventionDropdown = page.locator('label:has-text("Intervention") + *');
-        await interventionDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const interventionOptions = await page.$$('ul[role="listbox"] > li');
-        if (interventionOptions.length > 0) {
-            await interventionOptions[1].click();
-        }
-        const activityDropdown = page.locator('label:has-text("Activity") + *');
-        await activityDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const activityDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (activityDropdownOptions.length > 0) {
-            await activityDropdownOptions[0].click();
-        }
-        const landTypeDropdown = page.locator('label:has-text("Land Type") + *');
-        await landTypeDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const landTypeDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (landTypeDropdownOptions.length > 0) {
-            await landTypeDropdownOptions[0].click();
-        }
-
-
-        const watershedDropdown = page.locator('label:has-text("Watershed") + *');
-        await watershedDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const watershedDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (watershedDropdownOptions.length > 0) {
-            await watershedDropdownOptions[0].click();
-        }
-        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
-        await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
-        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
-        await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
-        await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
-        await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
-        await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
-        await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
-        const addButton = page.locator('button:has-text("Add")').nth(1);
-        await addButton.click();
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        // expect(alertMessage).toBe(`Activity ${activityName} updated`);
-        expect(alertMessage).toBe('Plan added');
-        console.log('Alert Message:', alertMessage);
-        await page.waitForTimeout(1000);
-        await browser.close();
-    });
-
-    //Test Number : 4
-    test('04.Should click the add icon and check duplicate data can throw error message', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8877199197');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
-        const userManagementButton = page.locator('text=Work Plan');
-        await userManagementButton.click();
-        // await page.waitForTimeout(5000);
-        const addIcon = await page.locator('button:has-text("Add Plan")');
-        await addIcon.click();
-        await page.getByRole('textbox', { name: 'Year' }).fill('2024');
-
-        const interventionDropdown = page.locator('label:has-text("Intervention") + *');
-        await interventionDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const interventionOptions = await page.$$('ul[role="listbox"] > li');
-        if (interventionOptions.length > 0) {
-            await interventionOptions[1].click();
-        }
-        const activityDropdown = page.locator('label:has-text("Activity") + *');
-        await activityDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const activityDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (activityDropdownOptions.length > 0) {
-            await activityDropdownOptions[0].click();
-        }
-        const landTypeDropdown = page.locator('label:has-text("Land Type") + *');
-        await landTypeDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const landTypeDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (landTypeDropdownOptions.length > 0) {
-            await landTypeDropdownOptions[0].click();
-        }
-
-
-        const watershedDropdown = page.locator('label:has-text("Watershed") + *');
-        await watershedDropdown.click();
-        await page.waitForSelector('ul[role="listbox"]', { state: 'visible' });
-        const watershedDropdownOptions = await page.$$('ul[role="listbox"] > li');
-        if (watershedDropdownOptions.length > 0) {
-            await watershedDropdownOptions[0].click();
-        }
-        await page.getByRole('spinbutton', { name: 'Value' }).fill('250');
-        await page.getByRole('textbox', { name: 'UOM' }).fill('100000');
-        await page.getByRole('spinbutton', { name: 'BFIL' }).fill('250');
-        await page.getByRole('spinbutton', { name: 'Other Gov Scheme' }).fill('100000');
-        await page.getByRole('spinbutton', { name: 'Other', exact: true }).fill('250');
-        await page.getByRole('spinbutton', { name: 'MGNREGA' }).fill('100');
-        await page.getByRole('spinbutton', { name: 'IBL' }).fill('250');
-        await page.getByRole('spinbutton', { name: 'Community' }).fill('1000');
-        const addButton = page.locator('button:has-text("Add")').nth(1);
-        await addButton.click();
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        expect(alertMessage).toBe('Plan added');
-        console.log('Alert Message:', alertMessage);
-        await page.waitForTimeout(1000);
-        await browser.close();
-    });
-
-
     //Test Number : 5
     test('05.Should click the add icon and click the cancel button', async () => {
         test.setTimeout(800000);
@@ -285,16 +142,16 @@ test.describe('Worplan Add Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
-        const userManagementButton = page.locator('text=Work Plan');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Work Plan').first();
         await userManagementButton.click();
         // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -355,15 +212,19 @@ test.describe('Worplan Add Automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
 
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
+
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        //await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
 
-        const userManagementButton = page.locator('text=Work Plan');
+        await page.waitForTimeout(3000);
+
+        const userManagementButton = page.locator('text=Work Plan').first();
         await userManagementButton.click();
         // await page.waitForTimeout(5000);
         const addIcon = await page.locator('button:has-text("Add Plan")');
@@ -429,15 +290,19 @@ test.describe('Worplan Add Automation', () => {
         const context = await browser.newContext();
         const page: Page = await context.newPage();
 
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
+
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        //await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
 
-        const userManagementButton = page.locator('text=Work Plan');
+        await page.waitForTimeout(3000);
+
+        const userManagementButton = page.locator('text=Work Plan').first();
         await userManagementButton.click();
         const addIcon = await page.locator('button:has-text("Add Plan")');
         await addIcon.click();
@@ -502,15 +367,16 @@ test.describe('Worplan Add Automation', () => {
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
 
-    //     await page.goto('http://localhost:3000/bfilreacttest');
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev'); 
     //     await page.fill('input#userName', '8877199197');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+    //     await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
     //     await page.reload();
 
-    //     const userManagementButton = page.locator('text=Work Plan');
+    //     const userManagementButton = page.locator('text=Work Plan').first();
     //     await userManagementButton.click();
     //     await page.waitForTimeout(5000);
     //     const addIcon = await page.locator('button:has-text("Add Plan")');

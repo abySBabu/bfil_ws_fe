@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('User Edit Automation', () => {
-  test.describe.configure({ mode: 'serial' });
+  //test.describe.configure({ mode: 'serial' });
   //Test Number : 1
   test('01.Should edit user details with alphanumeric error message', async () => {
     test.setTimeout(800000);
@@ -11,24 +11,46 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
 
     // Find the row containing the specific user name and click the Edit icon
     // const userRow = page.locator('tr').filter({ hasText: 'NewUserName' });
-    const userRow = page.locator('tr').nth(1);
+    let index = 0;
+    let editIcon: any;
 
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
+
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
@@ -67,24 +89,47 @@ test.describe('User Edit Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
-    await page.reload();
-    const userManagementButton1 = page.locator('text=User Management');
-    await userManagementButton1.click();
     // Find the row containing the specific user name and click the Edit icon
     // const userRow = page.locator('tr').filter({ hasText: 'NewUserName' });
-    const userRow = page.locator('tr').nth(1);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    // const userRow = page.locator('tr').nth(1);
+    // const editIcon = userRow.locator('[data-testid="EditIcon"]');
+    // await editIcon.click();
+    let index = 0;
+    let editIcon: any;
+
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja#####Shetty');
     await page.fill('input#designation', 'NewDesignation');
@@ -120,18 +165,42 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
+
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
-    const userRow = page.locator('tr').nth(1);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    let index = 0;
+    let editIcon: any;
+
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
@@ -164,20 +233,41 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
-    const userRow = page.locator('tr').nth(1);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    let index = 0;
+    let editIcon: any;
+
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', 'Shivaraja');
     await page.fill('input#designation', 'NewDesignation#$#');
@@ -213,21 +303,43 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    let index = 0;
+    let editIcon: any;
+
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
 
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
@@ -251,7 +363,7 @@ test.describe('User Edit Automation', () => {
     console.log('Is the "Update" button visible?', isButtonVisible);
     expect(isButtonVisible).toBe(false);
     await page.waitForTimeout(1000);
-    await browser.close();   
+    await browser.close();
   });
 
   //Test Number : 6
@@ -263,21 +375,43 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
 
-    const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    let index = 0;
+    let editIcon: any;
+
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
 
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
@@ -313,21 +447,42 @@ test.describe('User Edit Automation', () => {
     });
     const context = await browser.newContext();
     const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
+    let index = 0;
+    let editIcon: any;
 
-    const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+    while (true) {
+      // Try to locate the row and EditIcon at the current index
+      const userRow = page.locator('tr').nth(index);
+      editIcon = userRow.locator('[data-testid="EditIcon"]');
+
+      // Check if the EditIcon is visible and enabled
+      if (await editIcon.isVisible()) {
+        await editIcon.click();
+        console.log(`Clicked EditIcon in row ${index + 1}`);
+        break; // Exit the loop once the icon is clicked
+      }
+
+      // Increment the index to check the next row
+      index++;
+
+      // Optionally, you might want to add a limit to avoid an infinite loop
+      if (index > 10) { // or any appropriate limit
+        throw new Error("No EditIcon found in the first 10 rows");
+      }
+    }
+
     await page.waitForSelector('[data-testid="EditIcon"]');
     await page.fill('input#userName', '');
     await page.fill('input#designation', '');
@@ -355,64 +510,65 @@ test.describe('User Edit Automation', () => {
     await browser.close();
   });
 
-  //Test Number : 8
-  test('08.Should edit user details with correct data and successful alert message ', async () => {
-    test.setTimeout(800000);
-    const browser = await chromium.launch({
-      headless: false,
-      channel: 'chrome',
-    });
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    await page.goto('http://localhost:3000/bfilreacttest');
-    await page.fill('input#userName', '8877199197');
-    await page.fill('input#password', '1234');
-    await page.click('button[type="submit"]');
-    await page.waitForTimeout(1000);
+  // //Test Number : 8
+  // test('08.Should edit user details with correct data and successful alert message ', async () => {
+  //   test.setTimeout(800000);
+  //   const browser = await chromium.launch({
+  //     headless: false,
+  //     channel: 'chrome',
+  //   });
+  //   const context = await browser.newContext();
+  //   const page: Page = await context.newPage();
+  //           await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+  // await page.goto('http://localhost:3000/bfilreactdev'); 
+  //   await page.fill('input#userName', '8877199197');
+  //   await page.fill('input#password', '1234');
+  //   await page.click('button[type="submit"]');
+  //   await page.waitForTimeout(1000);
 
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
-    await userManagementButton.click();
+  //   await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+  //   await page.reload();
+  //   const userManagementButton = page.locator('text=User Management').first();
+  //   await userManagementButton.click();
 
-    const userRow = page.locator('tr').nth(1);
-    console.log("Hi this userrow testing " + userRow);
-    const editIcon = userRow.locator('[data-testid="EditIcon"]');
-    await editIcon.click();
+  //   const userRow = page.locator('tr').nth(1);
+  //   console.log("Hi this userrow testing " + userRow);
+  //   const editIcon = userRow.locator('[data-testid="EditIcon"]');
+  //   await editIcon.click();
 
-    await page.waitForSelector('[data-testid="EditIcon"]');
-    await page.fill('input#userName', 'User Edited');
-    await page.fill('input#designation', 'Program officer');
-    await page.locator('#role').click();
-    await page.waitForSelector('ul[role="listbox"]');
-    // await expect(roleOptions).toBeVisible();
-    await page.waitForTimeout(1000);
-    const roleOptions = await page.$$('ul[role="listbox"] > li');
-    if (roleOptions.length > 0) {
-      await roleOptions[0].click();
-    }
+  //   await page.waitForSelector('[data-testid="EditIcon"]');
+  //   await page.fill('input#userName', 'User Edited');
+  //   await page.fill('input#designation', 'Program officer');
+  //   await page.locator('#role').click();
+  //   await page.waitForSelector('ul[role="listbox"]');
+  //   // await expect(roleOptions).toBeVisible();
+  //   await page.waitForTimeout(1000);
+  //   const roleOptions = await page.$$('ul[role="listbox"] > li');
+  //   if (roleOptions.length > 0) {
+  //     await roleOptions[0].click();
+  //   }
 
-    const loginTypeDropdown = page.locator('#loginType');
-    await loginTypeDropdown.click();
-    await page.waitForTimeout(1000);
+  //   const loginTypeDropdown = page.locator('#loginType');
+  //   await loginTypeDropdown.click();
+  //   await page.waitForTimeout(1000);
 
-    await page.waitForSelector('ul[role="listbox"]');
-    const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
-    if (loginTypeOptions.length > 0) {
-      await loginTypeOptions[2].click();
-    }
-    // const successMessage = page.locator('text=Update ');
-    // await expect(successMessage).toBeVisible();
-    const addUserDialogButton = page.locator('button:has-text("Update")');
-    await expect(addUserDialogButton).toBeVisible();
-    await addUserDialogButton.click();
-    const alertMessage = await page.locator('.MuiAlert-message').innerText();
-    // await page.waitForTimeout(3000);
-    console.log("Alert message: " + alertMessage);
-    expect(alertMessage).toBe('User updated successfully');
-    await page.waitForTimeout(1000);
-    await browser.close();
-  });
+  //   await page.waitForSelector('ul[role="listbox"]');
+  //   const loginTypeOptions = await page.$$('ul[role="listbox"] > li');
+  //   if (loginTypeOptions.length > 0) {
+  //     await loginTypeOptions[2].click();
+  //   }
+  //   // const successMessage = page.locator('text=Update ');
+  //   // await expect(successMessage).toBeVisible();
+  //   const addUserDialogButton = page.locator('button:has-text("Update")');
+  //   await expect(addUserDialogButton).toBeVisible();
+  //   await addUserDialogButton.click();
+  //   const alertMessage = await page.locator('.MuiAlert-message').innerText();
+  //   // await page.waitForTimeout(3000);
+  //   console.log("Alert message: " + alertMessage);
+  //   expect(alertMessage).toBe('User updated successfully');
+  //   await page.waitForTimeout(1000);
+  //   await browser.close();
+  // });
 
   // //Test Number : 9
   // test.only('9.Should edit user details with wrong alert message ', async () => {
@@ -423,15 +579,16 @@ test.describe('User Edit Automation', () => {
   //   });
   //   const context = await browser.newContext();
   //   const page: Page = await context.newPage();
-  //   await page.goto('http://localhost:3000/bfilreacttest');
+  //           await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+  // await page.goto('http://localhost:3000/bfilreactdev'); 
   //   await page.fill('input#userName', '8877199197');
   //   await page.fill('input#password', '1234');
   //   await page.click('button[type="submit"]');
   //   await page.waitForTimeout(1000);
 
-  //   await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+  //   await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
   //   await page.reload();
-  //   const userManagementButton = page.locator('text=User Management');
+  //   const userManagementButton = page.locator('text=User Management').first();
   //   await userManagementButton.click();
 
   //   const userRow = page.locator('tr').nth(1);
@@ -487,15 +644,16 @@ test.describe('User Edit Automation', () => {
     const context = await browser.newContext();
     const page: Page = await context.newPage();
 
-    await page.goto('http://localhost:3000/bfilreacttest');
+    // await page.goto('http://localhost:3000/bfilreactdev');
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
     await page.fill('input#userName', '8877199197');
     await page.fill('input#password', '1234');
     await page.click('button[type="submit"]');
     await page.waitForTimeout(1000);
-
-    await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    await page.reload();
-    const userManagementButton = page.locator('text=User Management');
+    // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+    await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    await page.waitForTimeout(2000);
+    const userManagementButton = page.locator('text=User Management').first();
     await userManagementButton.click();
     await page.waitForTimeout(5000);
 

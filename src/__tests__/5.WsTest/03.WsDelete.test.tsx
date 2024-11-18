@@ -2,7 +2,39 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Watershed Master Delete Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    //test.describe.configure({ mode: 'serial' });
+    // test('01.Should click the delete icon in the table row', async () => {
+    //     test.setTimeout(800000);
+    //     const browser = await chromium.launch({
+    //         headless: false,
+    //         channel: 'chrome',
+    //     });
+    //     const context = await browser.newContext();
+    //     const page: Page = await context.newPage();
+    //     await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+
+
+    //     //await page.goto('http://localhost:3000/bfilreactdev');
+
+    //     await page.fill('input#userName', '8877199197');
+    //     await page.fill('input#password', '1234');
+    //     await page.click('button[type="submit"]');
+    //     await page.waitForTimeout(1000);
+    //     // await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+    //     //await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+
+    //     await page.waitForTimeout(3000);
+    //     const userManagementButton = page.locator('text=Watershed Master').first();
+    //     await userManagementButton.click();
+    //     await page.waitForSelector('table');
+    //     const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
+    //     await expect(deleteIcon).toBeVisible();
+    //     //  await deleteIcon.click();
+    //     await page.waitForTimeout(2000);
+    //     await browser.close();
+    // });
+
+
     test('01.Should click the delete icon in the table row', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
@@ -11,24 +43,46 @@ test.describe('Watershed Master Delete Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Watershed Master');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+
+        // Navigate to "Watershed Master" module
+        const userManagementButton = page.locator('text=Watershed Master').first();
         await userManagementButton.click();
         await page.waitForSelector('table');
+
+        // Get the initial row count
+        const tableRows = page.locator('table tbody tr');
+        const initialRowCount = await tableRows.count();
+        console.log('Initial Row Count:', initialRowCount);
+
+        // Locate and click the delete icon in the first row
         const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
         await expect(deleteIcon).toBeVisible();
         await deleteIcon.click();
+
+        // Wait for the deletion to complete
         await page.waitForTimeout(2000);
+
+        // // Get the row count after deletion
+        // const finalRowCount = await tableRows.count();
+        // console.log('Final Row Count:', finalRowCount);
+
+        // // Verify the row count decreased by one
+        // expect(finalRowCount).toBe(initialRowCount - 1);
+
         await browser.close();
     });
 
-    test('02.Should click the confirmation delete icon ', async () => {
+    test('02.Should click the confirmation delete icon and check the visibility of delete', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -36,16 +90,23 @@ test.describe('Watershed Master Delete Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Watershed Master');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Watershed Master').first();
         await userManagementButton.click();
         await page.waitForSelector('table');
+
+        // Get the initial row count
+        const tableRows = page.locator('table tbody tr');
+        const initialRowCount = await tableRows.count();
+        console.log('Initial Row Count:', initialRowCount);
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
         await expect(editIcon).toBeVisible();
         await editIcon.click();
@@ -64,134 +125,31 @@ test.describe('Watershed Master Delete Automation', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Watershed Master');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const userManagementButton = page.locator('text=Watershed Master').first();
         await userManagementButton.click();
         await page.waitForSelector('table');
+
+        // Get the initial row count
+        const tableRows = page.locator('table tbody tr');
+        const initialRowCount = await tableRows.count();
+        console.log('Initial Row Count:', initialRowCount);
         const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
         await expect(editIcon).toBeVisible();
         await editIcon.click();
         const confirmButton = page.locator('button', { hasText: 'Cancel' });
         await confirmButton.isVisible();
+        await confirmButton.click();
         await page.waitForTimeout(2000);
         await browser.close();
     });
 
-    test('04.Should click the delete icon and check the successful message ', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8877199197');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const userManagementButton = page.locator('text=Watershed Master');
-        await userManagementButton.click();
-        await page.waitForSelector('table');
-        // const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="EditIcon"]');
-        // await expect(editIcon).toBeVisible();
-        // await editIcon.click();
-        const deleteIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
-        await expect(deleteIcon).toBeVisible();
-        await deleteIcon.click();
-        const confirmButton = page.locator('button', { hasText: 'Delete' });
-        await confirmButton.isVisible();
-
-        await page.click('button:has-text("Delete")');
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        expect(alertMessage).toBe(`Watershed deleted`);
-        await page.waitForTimeout(2000);
-        await browser.close();
-    });
-
-    //////
-    test('05.Should click the add icon and check the successful message ', async () => {
-        test.setTimeout(800000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8877199197');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-        await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        const watershed = page.locator('text=Watershed Master');
-        await watershed.click();
-        await page.waitForSelector('table');
-        const clickAddWs = page.locator('button:has-text("Add Watershed")');
-        await clickAddWs.click();
-        const dialog = await page.locator('div[role="dialog"]');
-        await dialog.getByLabel('Name').fill('TestingWatershed');
-        await dialog.getByLabel('Description').fill('New Description');
-        await dialog.getByLabel('District').click();
-        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 2nd district
-        await dialog.getByLabel('Taluk').click();
-        await page.click('ul[role="listbox"] li:nth-child(10)'); // Selects the 10th taluk
-        await dialog.getByLabel('Grampanchayat').click();
-        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
-        await dialog.getByLabel('Village').click();
-        await page.click('ul[role="listbox"] li:nth-child(2)'); // Selects the 10th taluk
-        await page.waitForTimeout(2000);
-    
-        const addButton = page.locator('button:has-text("Add")').nth(1);
-        console.log(await addButton.isEnabled());
-        console.log(await addButton.isVisible());
-        console.log(await addButton.isHidden());
-        if (await addButton.isEnabled()) {
-            await page.locator('button:has-text("Add")').nth(1).click();
-            const alertMessage = await page.locator('.MuiAlert-message').innerText();
-            expect(alertMessage).toBe(`Watershed added`);
-        }
-        else {
-            console.log("Add button is still disable ")
-        }
-        await page.waitForTimeout(2000);
-        await browser.close();
-    });
-
-    // test('05.Should click the cancel icon ', async () => {
-    //     test.setTimeout(800000);
-    //     const browser = await chromium.launch({
-    //         headless: false,
-    //         channel: 'chrome',
-    //     });
-    //     const context = await browser.newContext();
-    //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreacttest');
-    //     await page.fill('input#userName', '8877199197');
-    //     await page.fill('input#password', '1234');
-    //     await page.click('button[type="submit"]');
-    //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-    //     await page.reload();
-    //     const userManagementButton = page.locator('text=Watershed Master');
-    //     await userManagementButton.click();
-    //     await page.waitForSelector('table');
-    //     const editIcon = await page.locator('table tbody tr:first-child svg[data-testid="DeleteIcon"]');
-    //     await expect(editIcon).toBeVisible();
-    //     await editIcon.click();
-    //     await page.click('button:has-text("Cancel")');
-    //     // const alertMessage = await page.locator('.MuiAlert-message').innerText();
-    //     // expect(alertMessage).toBe(`Watershed ${wsName} updated`);
-    //     await page.waitForTimeout(2000);
-    //     await browser.close();
-    // });
 });

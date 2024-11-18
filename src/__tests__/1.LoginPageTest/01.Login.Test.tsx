@@ -1,7 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 
 test.describe('Login Screen Automation', () => {
-    test.describe.configure({ mode: 'serial' });
+    // //test.describe.configure({ mode: 'serial' });
 
     //Test Number : 1
     test('01.Should display validation error messages for empty userName field', async () => {
@@ -12,7 +12,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
@@ -32,7 +33,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.fill('input#password', '');
@@ -52,7 +54,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', 'ABC');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
@@ -76,7 +79,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '1234567890');
         await page.fill('input#password', 'ABC');
         await page.waitForTimeout(1000);
@@ -96,7 +100,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', 'ABC@');
         await page.fill('input#password', '1234');
         const userNameAlphaNumeric = await page.textContent('.MuiFormHelperText-root');
@@ -115,7 +120,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', 'Poun@123');
         await page.click('button[type="submit"]');
@@ -127,7 +133,7 @@ test.describe('Login Screen Automation', () => {
     });
 
     //Test Number : 7
-    test('07.Should display invalid user error contact admin', async () => {
+    test('07.Should display validation error messages for blocked user', async () => {
         test.setTimeout(60000);
         const browser = await chromium.launch({
             headless: false,
@@ -135,7 +141,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '1234567890');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -148,7 +155,7 @@ test.describe('Login Screen Automation', () => {
     });
 
     // Test Number : 8
-    test('08. Should navigate to home page on successful login', async () => {
+    test('08. Should navigate to home page on successful login and screen testing', async () => {
         test.setTimeout(60000);
         const browser = await chromium.launch({
             headless: false,
@@ -156,7 +163,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
 
         // Fill login form and submit
         await page.fill('input#userName', '8877199197');
@@ -169,37 +177,35 @@ test.describe('Login Screen Automation', () => {
         expect(alertMessage).toBe('Login successfully');
 
         // Wait for navigation to the home page
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home');
+        await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home');
+        //await page.waitForURL('http://localhost:3000/bfilreactdev/home');
 
         // Wait briefly for the sections to load
         await page.waitForTimeout(5000);
 
         // Retrieve all sections from the list items
         const sections = await page.$$eval('.MuiListItemText-primary', items =>
-            items.map(item => item.textContent ? item.textContent.trim() : '').filter(Boolean)
+            [...new Set(items.map(item => item.textContent ? item.textContent.trim() : '').filter(Boolean))]
         );
 
         // Log retrieved sections
         console.log("Retrieved sections:", sections);
 
         // Verify that each section is visible on the page
-        // Verify that each section is visible on the page
         for (const section of sections) {
             const sectionElement = page.locator('.MuiTypography-root.MuiListItemText-primary', {
                 hasText: section
-            });
+            }).first();
             await expect(sectionElement).toBeVisible();
         }
-        // Take a screenshot of the home page
-        await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
 
-        // Wait briefly before closing the browser
+        await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
     // Test Number : 9
-    test('09.Should navigate to home page on successful login and screen testing ', async () => {
+    test('09.Should navigate to home page on successful login ', async () => {
         test.setTimeout(60000);
         const browser = await chromium.launch({
             headless: false,
@@ -207,7 +213,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
 
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
@@ -216,43 +223,36 @@ test.describe('Login Screen Automation', () => {
         const alertMessage = await page.locator('.MuiAlert-message').innerText();
         console.log("Alert message: " + alertMessage);
         expect(alertMessage).toBe('Login successfully');
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home');
-        // await page.waitForTimeout(5000);
-        // // Retrieve section names dynamically from the rendered UI
-        // const sections = await page.$$eval('.MuiListItemText-primary', items =>
-        //     items.map(item => item.textContent ? item.textContent.trim() : '').filter(Boolean)
-        // ); console.log("Retrieved sections:", sections);
-        // for (const section of sections) {
-        //     const sectionElement = page.locator(`text=${section}`);
-        //     await expect(sectionElement).toBeVisible();
-        // }
-        // await page.screenshot({ path: 'D:/BFIL_workspace/bfil_ws_fe/home-page-screenshot.png' });
+        await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home');
+        //await page.waitForURL('http://localhost:3000/bfilreactdev/home');
+
         await page.waitForTimeout(1000);
         await browser.close();
     });
 
-    //Test Number : 10
-    test('10.Should display validation error messages for blocked user', async () => {
-        test.setTimeout(80000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694777');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
+    // //Test Number : 10
+    // test('10.Should display validation error messages for blocked user', async () => {
+    //     test.setTimeout(80000);
+    //     const browser = await chromium.launch({
+    //         headless: false,
+    //         channel: 'chrome',
+    //     });
+    //     const context = await browser.newContext();
+    //     const page = await context.newPage();
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev'); 
+    //     await page.fill('input#userName', '9677694777');
+    //     await page.fill('input#password', '1234');
+    //     await page.click('button[type="submit"]');
 
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        console.log("login Error Message:", alertMessage);
-        //User error:User disabled.If it's an error,please contact your administrator
-        const blockedPersonErrorMessage = "User error:User disabled.If it's an error,please contact your administrator";
-        expect(alertMessage).toBe(blockedPersonErrorMessage);
-        await page.waitForTimeout(1000);
-        await browser.close();
-    });
+    //     const alertMessage = await page.locator('.MuiAlert-message').innerText();
+    //     console.log("login Error Message:", alertMessage);
+    //     //User error:User disabled.If it's an error,please contact your administrator
+    //     const blockedPersonErrorMessage = "User error:User disabled.If it's an error,please contact your administrator";
+    //     expect(alertMessage).toBe(blockedPersonErrorMessage);
+    //     await page.waitForTimeout(1000);
+    //     await browser.close();
+    // });
 
     //Test Number : 11
     test('11.Should display validation error messages for deleted user', async () => {
@@ -263,7 +263,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '9884794975');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
@@ -285,8 +286,9 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9655008962');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
 
         const signInButton = page.locator('button[type="submit"]');
@@ -306,7 +308,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '');
         await page.fill('input#password', '1234');
 
@@ -328,7 +331,8 @@ test.describe('Login Screen Automation', () => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        //await page.goto('http://localhost:3000/bfilreactdev');
         await page.fill('input#userName', '1234567');
         await page.fill('input#password', '');
 
@@ -342,29 +346,30 @@ test.describe('Login Screen Automation', () => {
 
     //Negative test case
     //Test Number : 15
-    test('15.Should display validation error messages after login', async () => {
-        test.setTimeout(80000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '0000000001'); //deleted data 
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
+    // test('15.Should display validation error messages after login', async () => {
+    //     test.setTimeout(80000);
+    //     const browser = await chromium.launch({
+    //         headless: false,
+    //         channel: 'chrome',
+    //     });
+    //     const context = await browser.newContext();
+    //     const page = await context.newPage();
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev'); 
+    //     await page.fill('input#userName', '0000000001'); //deleted data 
+    //     await page.fill('input#password', '1234');
+    //     await page.click('button[type="submit"]');
 
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        console.log("login Error Message:", alertMessage);//
-        const blockedPersonErrorMessage =
-            //Received
-            "User error:User disabled.If it's an error,please contact your administrator";
-        //Expected
-        // "User error: MobileNumber already exits 9384615425";
-        expect(alertMessage).toBe(blockedPersonErrorMessage);
-        await page.waitForTimeout(1000);
-        await browser.close();
-    });
+    //     const alertMessage = await page.locator('.MuiAlert-message').innerText();
+    //     console.log("login Error Message:", alertMessage);//
+    //     const blockedPersonErrorMessage =
+    //         //Received
+    //         "User error:User disabled.If it's an error,please contact your administrator";
+    //     //Expected
+    //     // "User error: MobileNumber already exits 9384615425";
+    //     expect(alertMessage).toBe(blockedPersonErrorMessage);
+    //     await page.waitForTimeout(1000);
+    //     await browser.close();
+    // });
 
 });

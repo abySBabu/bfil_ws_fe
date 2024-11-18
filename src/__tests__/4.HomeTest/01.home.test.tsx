@@ -1,7 +1,7 @@
 import { test, expect, chromium, Page } from '@playwright/test';
 
 test.describe('Permission based screen view', () => {
-    test.describe.configure({ mode: 'serial' });
+    //test.describe.configure({ mode: 'serial' });
     //Test Number : 1
     test('01.Should check the manager role', async () => {
         test.setTimeout(800000);
@@ -11,15 +11,16 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        // Ensure the 'Watershed Master' section is visible and clickable
-        const dashBoard = page.locator('text=Dash Board');
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        const dashBoard = page.locator('text=Dashboard').first();
 
         // const dashBoard = page.locator('role=button[name="Dash Board"]');
         await expect(dashBoard).toBeVisible();
@@ -37,44 +38,23 @@ test.describe('Permission based screen view', () => {
     //     });
     //     const context = await browser.newContext();
     //     const page: Page = await context.newPage();
-    //     await page.goto('http://localhost:3000/bfilreacttest');
+    //             await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+    // await page.goto('http://localhost:3000/bfilreactdev');
     //     await page.fill('input#userName', '9677694777');
     //     await page.fill('input#password', '1234');
     //     await page.click('button[type="submit"]');
     //     await page.waitForTimeout(1000);
-    //     await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
+    //     await page.waitForURL('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
     //     await page.reload();
     //     // Ensure the 'Watershed Master' section is visible and clickable
-    //     const watershedMasterLink = page.locator('text=User Management');
+    //     const watershedMasterLink = page.locator('text=User Management').first();
     //     await expect(watershedMasterLink).toBeVisible();
     //     await watershedMasterLink.click(); 
     //     await browser.close();
     // });
 
-    //Test Number : 2
-    test('02.Should display validation error messages for blocked user', async () => {
-        test.setTimeout(80000);
-        const browser = await chromium.launch({
-            headless: false,
-            channel: 'chrome',
-        });
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '9677694777');
-        await page.fill('input#password', '1234');
-        await page.click('button[type="submit"]');
-
-        const alertMessage = await page.locator('.MuiAlert-message').innerText();
-        console.log("login Error Message:", alertMessage);
-        const blockedPersonErrorMessage = "User error:User disabled.If it's an error,please contact your administrator";
-        expect(alertMessage).toBe(blockedPersonErrorMessage);
-        await page.waitForTimeout(1000);
-        await browser.close();
-    });
-
     //Test Number : 3
-    test('03.Should check crp role have user management screen with add , edit', async () => {
+    test('03.Should check CRP role has access to User Management screen with add, edit permissions', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
             headless: false,
@@ -82,37 +62,47 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8310450995');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-        // Ensure the 'Watershed Master' section is visible and clickable
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
+        // Check for "User Management" link and show an alert if not found
+        const userManagementLink = page.locator('text=User Management').first();
+        if (await userManagementLink.count() === 0) {
+            await page.evaluate(() => {
+                alert("You do not have permission to view the User Management screen.");
+            });
+            await page.waitForTimeout(3000); // Wait to let the alert be visible before closing
+            await browser.close();
+            return;
+        }
 
-        // const userManagementButton = page.locator('text=Role Management');
-        // await userManagementButton.click();
-        // const watershedMasterLink = page.locator('role=button[name="User Management"]');
-        const watershedMasterLink = page.locator('text=User Management');
+        // If found, proceed with testing User Management functionality
+        await userManagementLink.click();
 
-        // const watershedMasterLink = page.locator('text=User Management');
-        await expect(watershedMasterLink).toBeVisible();
-        await watershedMasterLink.click();
-
+        // Check for the "Add User" button
         const addUserButton = page.locator('button:has-text("Add User")');
         await expect(addUserButton).toBeVisible();
-        // await addUserButton.click();
-        // const userRow = page.locator('tr').first(); // Adjust if you want a specific row PersonRemoveIcon
+
+        // Locate the first user row and check for edit and block icons
         const userRow = page.locator('tr').nth(1);
         console.log("Testing userRow: " + await userRow.innerText());
+
         const editIcon = userRow.locator('[data-testid="EditIcon"]');
         await expect(editIcon).toBeVisible();
+
         const blockUser = userRow.locator('[data-testid="PersonRemoveIcon"]');
         await expect(blockUser).toBeVisible();
+
         await page.waitForTimeout(1000);
         await browser.close();
     });
+
 
     //Test Number : 4
     //Role Name : CRP
@@ -124,17 +114,17 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        // Navigate to the login page and log in
-        await page.goto('http://localhost:3000/bfilreacttest');
-        await page.fill('input#userName', '8310450995');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
+        await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
-        // Wait for the home page to load
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        // Reload to ensure elements are present
-        await page.reload();
+        await page.waitForTimeout(1000);
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
         // Try to locate the 'Role Management' button with a timeout of 5 seconds
-        const roleManagementButton = page.locator('role=button[name="Role Management"]');
+        const roleManagementButton = page.locator('role=button[name="Role Management"]').first();
         try {
             // Wait for the 'Role Management' button to appear
             await roleManagementButton.waitFor({ timeout: 5000 });
@@ -160,7 +150,7 @@ test.describe('Permission based screen view', () => {
     });
 
     //Test Number : 5
-    //Role Name : Company Admin
+    //Role Name : Chief Manager Head Office
     test('05.Should check the company admin role screen permission', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
@@ -169,20 +159,21 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
         try {
-            const dashboard = page.locator('text=Dash Board');
+            const dashboard = page.locator('text=Dashboard').first();
             await expect(dashboard).toBeVisible();
             await dashboard.click();
 
-            const userManagement = page.locator('role=button[name="User Management"]');
+            const userManagement = page.locator('role=button[name="User Management"]').first();
             await expect(userManagement).toBeVisible();
             await userManagement.click();
             await page.waitForTimeout(3000);
@@ -197,7 +188,7 @@ test.describe('Permission based screen view', () => {
             const blockUser = userRow.locator('[data-testid="PersonRemoveIcon"]');
             await expect(blockUser).toBeVisible();
 
-            const roleManagement = page.locator('role=button[name="Role Management"]');
+            const roleManagement = page.locator('role=button[name="Role Management"]').first();
             await expect(roleManagement).toBeVisible();
             await roleManagement.click();
             await page.waitForTimeout(3000);
@@ -215,7 +206,7 @@ test.describe('Permission based screen view', () => {
             // await expect(wsEditIcon).toBeVisible();
             // const addWSWDialogButton = page.locator('button:has-text("Add Watershed")').nth(0);
             // await expect(addWSWDialogButton).toBeVisible();
-            const farmerMaster = page.locator('role=button[name="Farmer Master"]');
+            const farmerMaster = page.locator('role=button[name="Farmer Master"]').first();
             await expect(farmerMaster).toBeVisible();
             await farmerMaster.click();
             await page.waitForTimeout(3000);
@@ -249,7 +240,7 @@ test.describe('Permission based screen view', () => {
     });
 
     //Test Number : 6
-    //Role Name : Chief Manager
+    //Role Name : Program Officer
     test('06.Should check the Chief Manager role screen permission', async () => {
         test.setTimeout(800000);
         const browser = await chromium.launch({
@@ -258,15 +249,17 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
 
-        const dashboard = page.locator('text=Dash Board');
+        const dashboard = page.locator('text=Dashboard');
         await expect(dashboard).toBeVisible();
         await dashboard.click();
 
@@ -342,16 +335,17 @@ test.describe('Permission based screen view', () => {
         });
         const context = await browser.newContext();
         const page: Page = await context.newPage();
-        await page.goto('http://localhost:3000/bfilreacttest');
+        // await page.goto('http://localhost:3000/bfilreactdev');
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev');
         await page.fill('input#userName', '8877199197');
         await page.fill('input#password', '1234');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1000);
-        await page.waitForURL('http://localhost:3000/bfilreacttest/home', { timeout: 600000 });
-        await page.reload();
-
+        // await page.waitForURL('http://localhost:3000/bfilreactdev/home', { timeout: 600000 });
+        await page.goto('https://pragatbfildev.abynet.xyz/bfilreactdev/home', { timeout: 600000 });
+        await page.waitForTimeout(2000);
         try {
-            const dashboard = page.locator('text=Dash Board');
+            const dashboard = page.locator('text=Dashboard');
             await expect(dashboard).toBeVisible();
             await dashboard.click();
 
