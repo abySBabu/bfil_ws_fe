@@ -142,7 +142,10 @@ export const WsMaster: React.FC = () => {
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
         }
-        catch (error) { console.log(error); setserverDown(true); }
+        catch (error: any) {
+            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            else console.log(error);
+        }
         setLoadingResponse(false);
     };
 
