@@ -84,6 +84,23 @@ export const bfilTheme = createTheme({
                 }
             }
         },
+        MuiTableSortLabel: {
+            styleOverrides: {
+                root: {
+                    color: 'white',
+                    '&:hover': {
+                        color: 'white',
+                    },
+                    '&.Mui-active': {
+                        color: sd('--button-bgcolor-hover-brand'),
+                    },
+                    '& .MuiTableSortLabel-icon': {
+                        color: 'white !important',
+                        opacity: 1
+                    }
+                }
+            }
+        },
         MuiTableHead: {
             styleOverrides: {
                 root: {
@@ -148,7 +165,17 @@ export const bfilTheme = createTheme({
                         '&.Mui-focused': { color: sd('--textfield-label-sel') },
                         '&.Mui-disabled': { color: sd('--textfield-label-dis'), opacity: 0.5 }
                     },
-                    '& .MuiFormHelperText-root': { color: 'red' }
+                    '& .MuiFormHelperText-root': { color: 'red' },
+                    '& input[type=number]': {
+                        MozAppearance: 'textfield',
+                        textAlign: 'right',
+                        appearance: 'textfield',
+                    },
+                    '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                        WebkitAppearance: 'none',
+                        textAlign: 'right',
+                        margin: 0,
+                    }
                 }
             },
             defaultProps: {

@@ -1,13 +1,9 @@
 import React from 'react';
 import { Box, Typography, Toolbar, Paper, Button, IconButton, TextField } from '@mui/material';
-import { ArrowBack, Edit, Password } from '@mui/icons-material';
+import { ArrowBack, Password } from '@mui/icons-material';
 import { sd } from '../../common';
-
-const profDef = {
-    name: sessionStorage.getItem("userName"),
-    number: sessionStorage.getItem("userNumber"),
-    role: localStorage.getItem("userRole")
-}
+import { useTranslation } from 'react-i18next';
+import { PassReset } from 'src/Services/loginService';
 
 const passDef = {
     current: "",
@@ -15,54 +11,51 @@ const passDef = {
 }
 
 export const MyProfile: React.FC = () => {
-    const [profObj, setprofObj] = React.useState(profDef);
+    const { t } = useTranslation();
     const [passObj, setpassObj] = React.useState(passDef);
-    const [profEdit, setprofEdit] = React.useState(false);
     const [passEdit, setpassEdit] = React.useState(false);
+
+    const ResetPass = async () => {
+        const payload = {
+            password: passObj.new,
+            userName: sessionStorage.getItem("userNumber")
+        }
+        try {
+            const resp1 = await PassReset(payload)
+            if (resp1) { console.log("Password changed successfully") }
+        }
+        catch (error) { console.log(error) }
+        setpassEdit(false);
+    }
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: sd('--page-header-bgcolor') }}>
         <Toolbar sx={{ height: '6%', gap: '4px' }}>
             <IconButton href="home" sx={{ color: '#fff' }}><ArrowBack /></IconButton>
-            <Typography variant='h5' sx={{ color: '#fff', fontWeight: 'bold' }}>My Profile</Typography>
+            <Typography variant='h5' sx={{ color: '#fff', fontWeight: 'bold' }}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.MyProfile_Header')}</Typography>
         </Toolbar>
 
         <Paper elevation={8} sx={{ height: '90%', mx: '8px', overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: '12px' }}>{
-            profEdit ? <>
-                <TextField required label='Name' value={profObj.name}
-                    onChange={(e) => { if (/^[a-zA-Z\s]*$/.test(e.target.value)) { setprofObj({ ...profObj, name: e.target.value }); } }}
-                    helperText={profObj.name?.length === 0 && 'Name cannot be empty'} />
-                <TextField required label="Number" value={profObj.number}
-                    onChange={(e) => { if (/^\d*$/.test(e.target.value)) { setprofObj({ ...profObj, number: e.target.value }) } }}
-                    inputProps={{ maxLength: 10, inputMode: "numeric", pattern: "[0-9]*" }}
-                    helperText={profObj.number?.length !== 10 && 'Mobile number should have 10 digits'} />
-                <TextField disabled label='Role' value={profObj.role} />
+            passEdit ? <>
+                <TextField type='password' required label={t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Current_Password')} value={passObj.current} onChange={(e) => setpassObj({ ...passObj, current: e.target.value })} sx={{ width: '30%' }} />
+                <TextField type='password' required label={t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.New_Password')} value={passObj.new} onChange={(e) => setpassObj({ ...passObj, new: e.target.value })} sx={{ width: '30%' }} />
                 <Box>
-                    <Button sx={{ mr: '4px' }} onClick={() => { setprofObj(profDef); setprofEdit(false); }}>Cancel</Button>
-                    <Button sx={{ ml: '4px' }} onClick={() => setprofEdit(false)}>Save</Button>
+                    <Button sx={{ mr: '4px' }} onClick={() => setpassEdit(false)}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Cancel')}</Button>
+                    <Button sx={{ ml: '4px' }} onClick={ResetPass}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Update_Link_Text')}</Button>
                 </Box>
             </>
-                : passEdit ? <>
-                    <TextField required label='Current Password' value={passObj.current} onChange={(e) => setpassObj({ ...passObj, current: e.target.value })} />
-                    <TextField required label='New Password' value={passObj.new} onChange={(e) => setpassObj({ ...passObj, new: e.target.value })} />
+                : <>
+                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Name')}: </b>{sessionStorage.getItem("userName")}</Typography>
+                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Mobile_Number')}: </b>{sessionStorage.getItem("userNumber")}</Typography>
+                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Role')}: </b>{localStorage.getItem("userRole")}</Typography>
                     <Box>
-                        <Button sx={{ mr: '4px' }} onClick={() => setpassEdit(false)}>Cancel</Button>
-                        <Button sx={{ ml: '4px' }} onClick={() => setpassEdit(false)}>Save</Button>
+                        <Button startIcon={<Password fontSize='inherit' />} onClick={() => setpassEdit(true)}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ResetPassword_Link_Text')}</Button>
                     </Box>
                 </>
-                    : <>
-                        <Typography variant='h6'><b>Name: </b>{profObj.name}</Typography>
-                        <Typography variant='h6'><b>Number: </b>{profObj.number}</Typography>
-                        <Typography variant='h6'><b>Role: </b>{profObj.role}</Typography>
-                        <Box>
-                            <Button startIcon={<Edit fontSize='inherit' />} sx={{ mr: '4px' }} onClick={() => setprofEdit(true)}>Edit Profile</Button>
-                            <Button startIcon={<Password fontSize='inherit' />} sx={{ ml: '4px' }} onClick={() => setpassEdit(true)}>Edit Password</Button>
-                        </Box>
-                    </>
         }</Paper>
 
         <footer style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '4%' }}>
             <Typography variant='body2' sx={{ color: '#fff' }}>
-                Copyright - 2024. Bharat Pragat Watershed, All Rights Reserved.
+                {t("p_Home.Pragat_Watershed_Footer")}
             </Typography>
         </footer>
     </Box>)
