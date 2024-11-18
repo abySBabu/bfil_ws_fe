@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
     IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Paper,
     InputAdornment, Typography, CircularProgress, MenuItem, Divider
 } from "@mui/material";
@@ -57,16 +57,38 @@ export const FarmerMaster: React.FC = () => {
         }
     };
 
-    const addCheck = !fmrObj.wsfarmerName || fmrObj.mobileNumber.length !== 10
+    const addCheck = !fmrObj.wsfarmerName || fmrObj.mobileNumber.length !== 10 || !fmrObj.village || loading
 
-    const fmrListF = fmrList.filter((w) => {
-        const searchTerm = search?.toLowerCase();
-        return (
-            w.wsfarmerName?.toLowerCase().includes(searchTerm) ||
-            w.mobileNumber?.toString().toLowerCase().includes(searchTerm)
-        );
-    });
+    //Sorting, filtering, and pagination
+    const [sortBy, setSortBy] = React.useState<keyof typeof fmrList[0] | null>(null);
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
+    const handleSort = (column: keyof typeof fmrList[0]) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(column);
+            setSortOrder('asc');
+        }
+    };
+
+    const fmrListF = fmrList
+        .filter((w) => {
+            const searchTerm = search?.toLowerCase();
+            return (
+                w.wsfarmerName?.toString().toLowerCase().includes(searchTerm) ||
+                w.mobileNumber?.toString().toLowerCase().includes(searchTerm)
+            );
+        })
+        .sort((a, b) => {
+            if (!sortBy) return 0;
+            const valueA = a[sortBy];
+            const valueB = b[sortBy];
+
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
     const fmrListP = fmrListF.slice(page * rPP, page * rPP + rPP);
 
     React.useEffect(() => { fetchData() }, [])
@@ -116,7 +138,10 @@ export const FarmerMaster: React.FC = () => {
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
         }
-        catch (error) { console.log(error); setserverDown(true); }
+        catch (error: any) {
+            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            else console.log(error);
+        }
         setLoadingResponse(false);
     };
 
@@ -280,36 +305,61 @@ export const FarmerMaster: React.FC = () => {
                                 <Table sx={{ width: '100%' }}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>{t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}</TableCell>
-                                            <TableCell>{t("p_Beneficiary_Master.ss_BeneficiaryList.Mobile_Number")}</TableCell>
-                                            {PerChk('EDIT_Beneficiary Master') && <TableCell width='5%'>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Text")}</TableCell>}
+                                            <TableCell sx={{ width: '45%' }}>
+                                                <TableSortLabel
+                                                    active={sortBy === 'wsfarmerName'}
+                                                    direction={sortBy === 'wsfarmerName' ? sortOrder : 'asc'}
+                                                    onClick={() => handleSort('wsfarmerName')}
+                                                >
+                                                    {t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell sx={{ width: '45%' }}>
+                                                <TableSortLabel
+                                                    active={sortBy === 'mobileNumber'}
+                                                    direction={sortBy === 'mobileNumber' ? sortOrder : 'asc'}
+                                                    onClick={() => handleSort('mobileNumber')}
+                                                >
+                                                    {t("p_Beneficiary_Master.ss_BeneficiaryList.Mobile_Number")}
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            {PerChk('EDIT_Beneficiary Master') && (
+                                                <TableCell sx={{ width: '10%' }}>{t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Text")}</TableCell>
+                                            )}
                                         </TableRow>
                                     </TableHead>
 
-                                    <TableBody>{fmrListP.map((w, i) => (
-                                        <TableRow key={i}>
-                                            <TableCell>{w.wsfarmerName}</TableCell>
-                                            <TableCell>{w.mobileNumber}</TableCell>
-                                            {PerChk('EDIT_Beneficiary Master') && <TableCell>
-                                                <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
-                                                <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
-                                            </TableCell>}
-                                        </TableRow>
-                                    ))}</TableBody>
+                                    <TableBody>
+                                        {fmrListP.map((w, i) => (
+                                            <TableRow key={i}>
+                                                <TableCell>{w.wsfarmerName}</TableCell>
+                                                <TableCell>{w.mobileNumber}</TableCell>
+                                                {PerChk('EDIT_Beneficiary Master') && (
+                                                    <TableCell>
+                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setfmrObj(w); seteditM(true); }}><Edit /></IconButton>
+                                                        <IconButton title={t("p_Beneficiary_Master.ss_BeneficiaryList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")} onClick={() => { setdeleteM(w.wsfarmerId) }}><Delete /></IconButton>
+                                                    </TableCell>
+                                                )}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
 
-                                    <TableFooter><TableRow>
-                                        <TablePagination
-                                            count={fmrListF.length}
-                                            rowsPerPage={rPP}
-                                            page={page}
-                                            onPageChange={(e, p) => setPage(p)}
-                                            rowsPerPageOptions={[5, 10, 15]}
-                                            onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
-                                            ActionsComponent={TPA}
-                                            labelRowsPerPage={t("p_Beneficiary_Master.ss_BeneficiaryList.Rows_per_page")}
-                                        />
-                                    </TableRow></TableFooter>
-                                </Table></TableContainer>}
+                                    <TableFooter>
+                                        <TableRow>
+                                            <TablePagination
+                                                count={fmrListF.length}
+                                                rowsPerPage={rPP}
+                                                page={page}
+                                                onPageChange={(e, p) => setPage(p)}
+                                                rowsPerPageOptions={[5, 10, 15]}
+                                                onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
+                                                ActionsComponent={TPA}
+                                                labelRowsPerPage={t("p_Beneficiary_Master.ss_BeneficiaryList.Rows_per_page")}
+                                            />
+                                        </TableRow>
+                                    </TableFooter>
+                                </Table>
+                            </TableContainer>}
                 </>}
 
         <Dialog open={addM || editM}>
@@ -338,7 +388,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        required
                         select
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation")}
                         value={fmrObj.relationalIdentifiers}
@@ -349,7 +398,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        required
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Relation_Name")}
                         value={fmrObj.identifierName}
                         onChange={(e) => setfmrObj({ ...fmrObj, identifierName: e.target.value })}
@@ -357,7 +405,6 @@ export const FarmerMaster: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
-                        required
                         label={t("p_Beneficiary_Master.Add_Beneficiary_Link.Add_Beneficiary_Popup.Remarks")}
                         value={fmrObj.remarks}
                         onChange={(e) => setfmrObj({ ...fmrObj, remarks: e.target.value })}

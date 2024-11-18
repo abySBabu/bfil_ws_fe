@@ -5,6 +5,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { tpaTheme } from './theme';
+import { useNavigate } from 'react-router-dom';
+
 
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
@@ -89,6 +91,7 @@ export const TPA = (props: any) => {
     </ThemeProvider>);
 }
 
+
 export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; success: boolean; }> = ({ alert, setalert, success }) =>
 (<Snackbar open={Boolean(alert)} onClose={setalert} autoHideDuration={5000}>
     <Alert severity={success ? 'success' : 'error'} sx={{ width: '100%' }}>
@@ -96,8 +99,20 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
     </Alert>
 </Snackbar>)
 
-export const ServerDownDialog = () => (<Dialog open={true} maxWidth='xs'>
-    <DialogTitle>Server Error</DialogTitle>
-    <DialogContent sx={{ mt: 2 }}>Unable to connect to the server. Please try again later.</DialogContent>
-    <DialogActions><Button href='/'>Okay</Button></DialogActions>
-</Dialog>)
+export const ServerDownDialog = () => {
+    const navigate = useNavigate(); 
+
+    const handleClose = () => {
+        navigate('/');
+    };
+
+    return (
+        <Dialog open={true} maxWidth='xs'>
+            <DialogTitle>Server Error</DialogTitle>
+            <DialogContent sx={{ mt: 2 }}>Unable to connect to the server. Please try again later.</DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>Okay</Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
