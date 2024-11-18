@@ -23,7 +23,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import MenuIcon from '@mui/icons-material/Menu';
 import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
-
+import axios, { AxiosError } from 'axios';
 
 interface SideItem {
   screenName: string;
@@ -126,47 +126,60 @@ export const Home: React.FC = () => {
         if (resp) {
           const uStatus: any = resp.data.find((x: any) => x.roleName === uRole)
           if (uStatus) {
-            localStorage.setItem("userStatus", uStatus.workflowstatusName)
-            const resp0 = await ListSide(uStatus.workflowstatusName);
-            if (resp0.status === 'success') {
-              setactCount(resp0.workActivityCount)
-              let sortscreenlist = resp0.data;
-              setsideList(sortscreenlist);
-              const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
-                switch (sideItem.screenName) {
-                  case 'Dashboard':
-                    return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
-                  case 'User Management':
-                    return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
-                  case 'Role Management':
-                    return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
-                  case 'Watershed Master':
-                    return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
-                  case 'Beneficiary Master':
-                    return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
-                  case 'Watershed Mapping':
-                    return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
-                  case 'Watershed Activity':
-                    return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
-                  case 'Work Plan':
-                    return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
-                  case 'Report':
-                    return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Report /> };
-                  default:
-                    return null;
-                }
-              }).filter((section: Section): section is Section => section !== null);
+            localStorage.setItem("userStatus", uStatus.workflowstatusName);
+            try {
+              const resp0 = await ListSide(uStatus.workflowstatusName);
+              if (resp0.status === 'success') {
+                setactCount(resp0.workActivityCount)
+                let sortscreenlist = resp0.data;
+                setsideList(sortscreenlist);
+                const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
+                  switch (sideItem.screenName) {
+                    case 'Dashboard':
+                      return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+                    case 'User Management':
+                      return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+                    case 'Role Management':
+                      return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+                    case 'Watershed Master':
+                      return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+                    case 'Beneficiary Master':
+                      return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
+                    case 'Watershed Mapping':
+                      return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+                    case 'Watershed Activity':
+                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
+                    case 'Work Plan':
+                      return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                    case 'Report':
+                      return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Report /> };
+                    default:
+                      return null;
+                  }
+                }).filter((section: Section): section is Section => section !== null);
 
-              setSections(generatedSections);
-              const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
-              if (defaultIndex !== -1) {
-                setdIndex(defaultIndex);
+                setSections(generatedSections);
+                const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
+                if (defaultIndex !== -1) {
+                  setdIndex(defaultIndex);
+                } else {
+                  setHasPermission(true);
+                  setMessage("You do not have permission to view any sections.");
+                }
+              }
+              // else { setserverDown(true) }
+            }
+            catch (error) {
+              if (axios.isAxiosError(error)) {
+                if (error.code === 'ERR_NETWORK') {
+                  console.error('ERR_NETWORK error:', error);
+                } else {
+                  console.error('Error fetching data:', error.message);
+                }
               } else {
-                setHasPermission(true);
-                setMessage("You do not have permission to view any sections.");
+                console.error('Unexpected error:', error);
               }
             }
-            else { setserverDown(true) }
           }
         }
         const resp1 = await listState(); if (resp1.status === 'success') localStorage.setItem("StateList", JSON.stringify(resp1.data));
@@ -176,7 +189,15 @@ export const Home: React.FC = () => {
         const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
         const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
       } catch (error) {
-        console.log(error);
+        if (axios.isAxiosError(error)) {
+          if (error.code === 'ERR_NETWORK') {
+            setserverDown(true)
+          } else {
+            console.error('Error fetching data:', error.message);
+          }
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
       setLoadingResponse(false);
 
