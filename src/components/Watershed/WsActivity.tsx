@@ -73,6 +73,7 @@ export const actDef = {
         {
             remarks: '',
             activityWorkflowStatus: '',
+            activityImage: '',
             createdUser: '',
             createdTime: ''
         }
@@ -835,9 +836,28 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
-                                <TableCell><img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat"
-                                    style={{ height: '24px', objectFit: 'contain', cursor: 'pointer' }}
-                                    onClick={() => setimgM(`${process.env.PUBLIC_URL}/images/pragat.png`)} /></TableCell>
+                                <TableCell>
+                                    <img
+                                        src={(() => {
+                                            try {
+                                                return JSON.parse(a.activityImage).activityImage;
+                                            } catch (error) {
+                                                console.error("Invalid JSON in activityImage:", a.activityImage);
+                                                return ""; // Return a default or placeholder URL in case of error
+                                            }
+                                        })()}
+                                        alt="Activity"
+                                        style={{ height: '24px', objectFit: 'contain', cursor: 'pointer' }}
+                                        onClick={() => {
+                                            try {
+                                                setimgM(JSON.parse(a.activityImage).activityImage);
+                                            } catch (error) {
+                                                console.error("Invalid JSON in activityImage:", a.activityImage);
+                                            }
+                                        }}
+                                    />
+                                </TableCell>
+
                             </TableRow>)
                             )}</TableBody>
                         </Table></TableContainer>
