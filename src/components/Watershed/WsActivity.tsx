@@ -130,6 +130,19 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const totalP = (actObj.workActivity.participantsFemale || 0) + (actObj.workActivity.participantsMale || 0)
 
+    //Sorting, filtering, and pagination
+    const [sortBy, setSortBy] = React.useState<keyof typeof actDef.workActivity | null>(null);
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (column: keyof typeof actDef.workActivity) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(column);
+            setSortOrder('asc');
+        }
+    };
+
     const actListF = actList
         .filter((a) => {
             const searchTerm = search?.toLowerCase();
@@ -146,6 +159,15 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         .sort((a, b) => {
             if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
             if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+            return 0;
+        })
+        .sort((a, b) => {
+            if (!sortBy) return 0;
+            const valueA = a.workActivity[sortBy];
+            const valueB = b.workActivity[sortBy];
+
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
             return 0;
         });
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
@@ -481,14 +503,72 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Activity")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Activity_Type")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Watershed")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Villages")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Status")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}</TableCell>
-                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}</TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'activityName'}
+                                                direction={sortBy === 'activityName' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('activityName')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Activity")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'surveyNo'}
+                                                direction={sortBy === 'surveyNo' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('surveyNo')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'activityCode'}
+                                                direction={sortBy === 'activityCode' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('activityCode')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Activity_Type")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'watershedId'}
+                                                direction={sortBy === 'watershedId' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('watershedId')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Watershed")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'village'}
+                                                direction={sortBy === 'village' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('village')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Villages")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'activityWorkflowStatus'}
+                                                direction={sortBy === 'activityWorkflowStatus' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('activityWorkflowStatus')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Status")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'updatedUser'}
+                                                direction={sortBy === 'updatedUser' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('updatedUser')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            {t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
 
