@@ -149,7 +149,10 @@ export const Workplan: React.FC = () => {
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
             setserverDown(false);
         }
-        catch (error) { console.log(error); setserverDown(true); }
+        catch (error: any) {
+            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            else console.log(error);
+        }
         setloadingResponse(false);
     }
 

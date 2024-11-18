@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter,
+    Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography, OutlinedInput,
     MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
 } from "@mui/material";
@@ -130,18 +130,25 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const totalP = (actObj.workActivity.participantsFemale || 0) + (actObj.workActivity.participantsMale || 0)
 
-    const actListF = actList.filter((a) => {
-        const searchTerm = search?.toLowerCase();
-        return (
-            a.workActivity.activityName?.toString().toLowerCase().includes(searchTerm) ||
-            a.workActivity.surveyNo?.toString().toLowerCase().includes(searchTerm) ||
-            ActTypeName(a.workActivity?.activityCode)?.toString().toLowerCase().includes(searchTerm) ||
-            WsName(a.workActivity.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
-            a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toString().toLowerCase().includes(searchTerm) ||
-            a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
-            a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm)
-        );
-    });
+    const actListF = actList
+        .filter((a) => {
+            const searchTerm = search?.toLowerCase();
+            return (
+                a.workActivity.activityName?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.surveyNo?.toString().toLowerCase().includes(searchTerm) ||
+                ActTypeName(a.workActivity?.activityCode)?.toString().toLowerCase().includes(searchTerm) ||
+                WsName(a.workActivity.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm)
+            );
+        })
+        .sort((a, b) => {
+            if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
+            if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+            return 0;
+        });
+    const actListP = actListF.slice(page * rPP, page * rPP + rPP);
 
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
@@ -212,7 +219,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             setdsOps(JSON.parse(localStorage.getItem("DistrictList") as string))
             setserverDown(false);
         }
-        catch (error) { console.log(error); setserverDown(true); }
+        catch (error: any) {
+            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            else console.log(error);
+        }
         setLoadingResponse(false);
     };
 
@@ -481,16 +491,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Villages")}</TableCell>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Status")}</TableCell>
                                         <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}</TableCell>
-                                        <TableCell width='5%'>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}</TableCell>
+                                        <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}</TableCell>
                                     </TableRow>
                                 </TableHead>
 
                                 <TableBody>
-                                    {actListF.sort((a, b) => {
-                                        if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
-                                        if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
-                                        return 0;
-                                    }).slice(page * rPP, page * rPP + rPP).map((a, i) => (
+                                    {actListP.map((a, i) => (
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
                                             <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo}</TableCell>
@@ -499,7 +505,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser}</TableCell>
-                                            <TableCell width='5%'>
+                                            <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
