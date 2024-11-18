@@ -113,6 +113,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [prev, setprev] = React.useState('');
     const [vList, setvList] = React.useState<any[]>([]);
     const [imgM, setimgM] = React.useState('');
+    const uRole = localStorage.getItem("userRole");
+    const uStatus = localStorage.getItem("userStatus");
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -123,9 +125,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         const {
             target: { value },
         } = event;
-        setvList(
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        setvList(typeof value === 'string' ? value.split(',') : value);
     };
 
     const totalP = (actObj.workActivity.participantsFemale || 0) + (actObj.workActivity.participantsMale || 0)
@@ -157,9 +157,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const addCheck = actObj.workActivity.activityCode === 13 ? eventCheck
         : actObj.workActivity.interventionType === 23 ? demandCheck
             : supplyCheck
-
-    const uRole = localStorage.getItem("userRole");
-    const uStatus = localStorage.getItem("userStatus");
 
     React.useEffect(() => { fetchData() }, [])
 
