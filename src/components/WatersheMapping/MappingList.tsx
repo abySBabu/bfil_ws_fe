@@ -7,7 +7,7 @@ import {
 import { listWSMap } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { usersList } from '../../Services/userService';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, ServerDownDialog } from '../../common';
 import { mapDataType, wsData } from "./WatershedMappingMgmtType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,7 @@ import { allUserType } from '../UserPage/UserManagementType';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios, { AxiosError } from 'axios';
 
 type Order = 'asc' | 'desc';
 
@@ -35,6 +36,7 @@ export default function MappingList() {
     const [selectedRow, setSelectedRow] = useState<mapDataType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<Order>('asc');
@@ -55,7 +57,15 @@ export default function MappingList() {
                 setWsList(wsDatalist.data);
             }
         } catch (error) {
-            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.code === 'ERR_NETWORK') {
+                    setserverDown(true)
+                } else {
+                    console.error('Error fetching data:', error.message);
+                }
+            } else {
+                console.error('Unexpected error:', error);
+            }
         }
         setLoadingResponse(false);
     };
@@ -151,7 +161,7 @@ export default function MappingList() {
                 }}
             >
                 <CircularProgress size={80} />
-            </Box> : <>
+            </Box> : serverDown ? <ServerDownDialog /> : <>
                 {showAddModal ? <MapAdd show={true} hide={hideAddModal} action='Add' mapList={mapData} /> : null}
                 {showEditModal && selectedRow ? <MapEdit show={true} hide={hideEditModal} action='Edit' mapList={mapData} mapDetails={selectedRow} /> : null}
 

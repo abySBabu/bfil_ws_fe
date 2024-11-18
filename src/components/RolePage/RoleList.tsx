@@ -5,7 +5,7 @@ import {
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { getRolesByCompany } from '../../Services/roleService';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, ServerDownDialog } from '../../common';
 import { rolesByCompanyId } from "./RoleManagement";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,6 +16,8 @@ import DeleteRole from './DeleteRole';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios, { AxiosError } from 'axios';
+
 
 type Order = 'asc' | 'desc';
 
@@ -36,6 +38,8 @@ export default function RoleList() {
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
     let CompanyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    const [serverDown, setserverDown] = React.useState(false);
+
 
     const [sortColumn, setSortColumn] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<Order>('asc');
@@ -60,7 +64,15 @@ export default function RoleList() {
             let sorData = resp;
             setRoleData(sorData.reverse());
         } catch (error) {
-            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.code === 'ERR_NETWORK') {
+                    setserverDown(true)
+                } else {
+                    console.error('Error fetching data:', error.message);
+                }
+            } else {
+                console.error('Unexpected error:', error);
+            }
         }
         setLoadingResponse(false);
     };
@@ -134,7 +146,7 @@ export default function RoleList() {
                 }}
             >
                 <CircularProgress size={80} />
-            </Box> : <>
+            </Box> : serverDown ? <ServerDownDialog /> : <>
                 {showAddModal ? <AddRole show={true} hide={hideAddModal} /> : null}
                 {showEditModal ? <EditRole show={true} hide={hideEditModal} roleDetails={selectedRow} /> : null}
                 {showDeleteModal ? <DeleteRole show={true} hide={hideDeleteModal} roleDetails={selectedRow} /> : null}
