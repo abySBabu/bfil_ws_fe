@@ -904,7 +904,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         </Dialog>
 
         <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
-            <img src={imgM} style={{ objectFit: 'contain' }} />
+            <img src={imgM} style={{ objectFit: 'contain', height: '80vh', width: 'auto' }} />
         </Dialog>
     </>)
 }
