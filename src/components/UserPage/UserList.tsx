@@ -5,7 +5,7 @@ import {
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, ServerDownDialog } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,6 +20,8 @@ import UserDelete from './UserDelete';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios, { AxiosError } from 'axios';
+
 
 type Order = 'asc' | 'desc';
 export default function UserList() {
@@ -45,6 +47,7 @@ export default function UserList() {
     let userId: any;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<Order>('asc');
@@ -81,7 +84,15 @@ export default function UserList() {
             let resp = await usersList(companyID);
             setuserData(resp);
         } catch (error) {
-            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.code === 'ERR_NETWORK') {
+                    setserverDown(true)
+                } else {
+                    console.error('Error fetching data:', error.message);
+                }
+            } else {
+                console.error('Unexpected error:', error);
+            }
         }
         setLoadingResponse(false);
     };
@@ -183,7 +194,7 @@ export default function UserList() {
                 }}
             >
                 <CircularProgress size={80} />
-            </Box> : <>
+            </Box> : serverDown ? <ServerDownDialog /> : <>
                 {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
                 {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={userData} /> : null}
                 {showDisableModal ? <UserDisable show={true} hide={hideDisableModal} userDetails={selectedRow} userList={userData} /> : null}
@@ -336,6 +347,7 @@ export default function UserList() {
                             </TableRow>
                         </TableFooter>
                     </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
-            </>}
+            </>
+        }
     </>)
 }
