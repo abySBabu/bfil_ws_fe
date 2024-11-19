@@ -631,9 +631,34 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 <Grid item xs={12} sm={3}><TextField disabled={editM} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Intervention")} value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: parseInt(e.target.value), activityCode: 0 } })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity_Type")} value={actObj.workActivity.activityCode} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityCode: parseInt(e.target.value) } })} disabled={actOps?.length <= 0 || editM}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
+                <Grid item xs={12} sm={3}>
+                    <TextField
+                        required
+                        select
+                        label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity_Type")}
+                        value={actObj.workActivity.activityCode}
+                        onChange={(e) => {
+                            const selectedActivity = actOps.find((o) => o.activityId === parseInt(e.target.value));
+                            if (selectedActivity) {
+                                setactObj({
+                                    ...actObj,
+                                    workActivity: {
+                                        ...actObj.workActivity,
+                                        activityCode: selectedActivity.activityId,
+                                        unit: selectedActivity.uom,
+                                    },
+                                });
+                            }
+                        }}
+                        disabled={actOps?.length <= 0 || editM}
+                    >
+                        {actOps?.map((o, i) => (
+                            <MenuItem key={i} value={o.activityId}>
+                                {o.activityName}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
                 <Grid item xs={12} sm={6}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} /></Grid>
                 <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} inputProps={{ maxLength: 120 }} /></Grid>
                 {actObj.workActivity.activityCode === 13 ? <>
@@ -726,7 +751,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     </Grid>
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity_Physical_Details")}</Divider></Grid>
                     <Grid item xs={12} sm={2}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Total_Value")} value={actObj.workActivity.total} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, total: e.target.value } })} /></Grid>
-                    <Grid item xs={12} sm={1}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Unit")} value={actObj.workActivity.unit} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, unit: e.target.value } })} /></Grid>
+                    <Grid item xs={12} sm={1}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Unit")} value={actObj.workActivity.unit} disabled /></Grid>
                     <Grid item xs={12} sm={3}><TextField type='number' required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Area_Treated")} value={actObj.workActivity.areaTreated} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, areaTreated: e.target.value } })} /></Grid>
                     {actObj.workActivity.interventionType !== 23 && <>
                         <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Land_Type")} value={actObj.workActivity.landType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, landType: parseInt(e.target.value) } })}>

@@ -396,9 +396,31 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")} value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        select
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")}
+                        value={planObj.activityId}
+                        onChange={(e) => {
+                            const selectedActivity = actOps.find((o) => o.activityId === e.target.value);
+                            if (selectedActivity) {
+                                setplanObj({
+                                    ...planObj,
+                                    activityId: selectedActivity.activityId,
+                                    unitofMeasurement: selectedActivity.uom,
+                                });
+                            }
+                        }}
+                        disabled={actOps?.length <= 0}
+                    >
+                        {actOps?.map((o, i) => (
+                            <MenuItem key={i} value={o.activityId}>
+                                {o.activityName}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Land_Type")} value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
@@ -414,7 +436,7 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Physical_Plan")}</Divider></Grid>
                 <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Value")} value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} disabled /></Grid>
 
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Details")}</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
