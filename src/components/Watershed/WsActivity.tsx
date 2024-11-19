@@ -164,9 +164,18 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         })
         .sort((a, b) => {
             if (!sortBy) return 0;
-            const valueA = a.workActivity[sortBy];
-            const valueB = b.workActivity[sortBy];
-
+            let valueA: any;
+            let valueB: any;
+            if (sortBy === 'activityCode') {
+                valueA = ActTypeName(a.workActivity.activityCode)?.toLowerCase();
+                valueB = ActTypeName(b.workActivity.activityCode)?.toLowerCase();
+            } else if (sortBy === 'watershedId') {
+                valueA = WsName(a.workActivity.watershedId)?.toLowerCase();
+                valueB = WsName(b.workActivity.watershedId)?.toLowerCase();
+            } else {
+                valueA = a.workActivity[sortBy];
+                valueB = b.workActivity[sortBy];
+            }
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
             return 0;
