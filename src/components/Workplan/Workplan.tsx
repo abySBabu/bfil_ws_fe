@@ -115,9 +115,18 @@ export const Workplan: React.FC = () => {
         })
         .sort((a, b) => {
             if (!sortBy) return 0;
-            const valueA = a[sortBy];
-            const valueB = b[sortBy];
-
+            let valueA: any;
+            let valueB: any;
+            if (sortBy === 'watershedId') {
+                valueA = WsName(a.watershedId)?.toLowerCase();
+                valueB = WsName(b.watershedId)?.toLowerCase();
+            } else if (sortBy === 'interventionType_Components') {
+                valueA = IntTypeName(a.interventionType_Components)?.toLowerCase();
+                valueB = IntTypeName(b.interventionType_Components)?.toLowerCase();
+            } else {
+                valueA = a[sortBy];
+                valueB = b[sortBy];
+            }
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
             return 0;
