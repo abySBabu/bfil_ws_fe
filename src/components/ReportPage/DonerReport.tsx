@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Select,MenuItem,TextField,Box,Typography,Button,FormControl,InputLabel,SelectChangeEvent,} from '@mui/material';
-import { donerReport, watershedReport } from 'src/Services/reportService';
+import { donerReport} from 'src/Services/reportService';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
 import { ActivitySources, ComponentData } from './DonerReportTypes';
 import DonerSummaryReport from './DonerSummaryReport';
 import { listWP } from 'src/Services/workplanService';
-import WatershedReport from './WatershedReport';
+import { useNavigate } from 'react-router-dom';
 interface WorkPlan {
     planningYear: string;
     activityId?: number; 
@@ -16,6 +16,7 @@ interface WorkPlan {
     }
 
 const DonerReport: React.FC = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState<ComponentData[]>([]);
     const [showReport, setShowReport] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -23,9 +24,8 @@ const DonerReport: React.FC = () => {
     const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Funds Disbursement Report' });
     const exportToPDF = () => { handlePrint(); };
   const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
-  const [showWatershedReport, setShowWatershedReport] = useState(false);
-
-const fetchData = async (year: any) => {
+ 
+  const fetchData = async (year: any) => {
     if (!selectedYear) return; 
         try {
             const resp1 = await donerReport(selectedYear);
@@ -112,7 +112,7 @@ const fetchData = async (year: any) => {
         excelData.push(columnTotalRow);
         const worksheet = XLSX.utils.aoa_to_sheet([headers, ...excelData]);
         worksheet['!merges'] = merges; 
-        worksheet['!cols'] = [ { wch: 20 },   { wch: 20 },   ...dynamicColumnNames.map(() => ({ wch: 10 })), { wch: 10 }];
+        worksheet['!cols'] = [ { wch: 25 },   { wch: 30 },   ...dynamicColumnNames.map(() => ({ wch: 10 })), { wch: 10 }];
     
                 Object.keys(worksheet).forEach(cellKey => {
             if (cellKey[0] !== '!') { 
@@ -189,16 +189,17 @@ const fetchData = async (year: any) => {
         });
         return totals;
     };
- 
     const columnTotals = calculateColumnTotals();
     const handleReportSummary = () => { setShowReport((prevShowReport) => !prevShowReport); };
+    
     return (
         <div>
-            <Typography variant="h4" align="center" style={{ padding: '16px', marginBottom: '20px' }}>
+            <Typography variant="h5" align="center" style={{ padding: '5px' }}>
                 Funds Disbursement Year on Year {selectedYear}.
             </Typography>
+            {/* <Button sx={{mb:3,ml:3}} onClick={handleBackClick}>Back</Button> */}
             <Box sx={{ display: 'flex',justifyContent: 'space-between',alignItems: 'center',width: '100%',mb: 2,flexDirection: { xs: 'column', sm: 'row' }}} >
-                <FormControl sx={{ width: 200,marginBottom:'20px' }}>
+              <FormControl sx={{ width: 200,marginBottom:'20px',ml:3 }}>
                 <InputLabel id="select-year-label">Select Year</InputLabel>
                 <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
                 <MenuItem value="">Select Year</MenuItem> 
@@ -218,12 +219,12 @@ const fetchData = async (year: any) => {
             </Box>
            </Box>
             <div style={{ marginBottom: '20px' }} ref={contentRef}>
-                <h1 className="pdf-title">Funds Disbursement Year on Year {selectedYear}.</h1>
+                <Typography className="pdf-title">Funds Disbursement Year on Year {selectedYear}.</Typography>
                     {showReport ? (
                     <DonerSummaryReport selectedYear={selectedYear} formattedData={data} /> 
                     ) : (
                 <TableContainer component={Paper} className="scrollable-table">
-                    <Table sx={{Width:'100%'}}>
+                    <Table sx={{maxWidth:'100%'}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center" sx={{ maxWidth: '80px',width:'80px',borderRight: '1px solid #ccc' }}>Component</TableCell>
@@ -276,7 +277,7 @@ const fetchData = async (year: any) => {
                                     {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(columnTotals[colName] || 0)}
                                 </TableCell>
                             ))}
-                                <TableCell align="right" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', maxWidth: '80px' }}>
+                                <TableCell align="right" sx={{ fontWeight: 'bold', borderRight: '1px solid #ccc', maxWidth: '80px',width:'80px' }}>
                                      {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
                                         Object.values(columnTotals).reduce((sum, value) => sum + value, 0)
                                     )}
@@ -289,25 +290,27 @@ const fetchData = async (year: any) => {
 
          )}
         </div>
-    <style>
-        {`
-        .scrollable-table {
-    max-height: 550px;
-    overflow-y: auto;
-}
+            <style>
+            {`
+                .scrollable-table {
+                 max-height: 550px;
+                 overflow-y: auto;
+                }
 
-@media print {
-    .scrollable-table {
-        max-height: none;
-        overflow-y: visible;
-    }
-}
-            .pdf-title {display: none;text-align: center;}
-            @media print {.pdf-title {display: block;margin-top:30px; font-size: 20px;  margin-bottom: 20px;}} 
-        `}
-    </style>
-</div>
+                @media print {
+                    .scrollable-table {
+                    max-height: none;
+                    overflow-y: visible;
+                    }   
+                }
+                .pdf-title {display: none;text-align: center;}
+                @media print {.pdf-title {display: block;margin-top:30px; font-size: 20px;  margin-bottom: 20px;}} 
+            `}
+            </style>
+    </div>
 );
 };
 
 export default DonerReport;
+
+

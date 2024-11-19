@@ -43,7 +43,7 @@ function a11yProps(index: number) {
 
 function Report() {
   const theme = useTheme();
-  const [value, setValue] = React.useState(-1); 
+  const [value, setValue] = React.useState(0); 
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -53,7 +53,8 @@ function Report() {
     <Box sx={{ bgcolor: 'background.paper', maxwidth: '100%', maxheight: '100%' }}>
       <AppBar position="static">
         <Tabs
-          value={value >= 0 ? value : false} 
+          // value={value >= 0 ? value : false} 
+          value={value}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="inherit"
@@ -86,3 +87,5 @@ function Report() {
 }
 
 export default Report;
+
+
