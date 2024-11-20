@@ -675,13 +675,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.District")} value={actObj.workActivity.district} onChange={(e) => districtCh(e)} >
                         {dsOps?.map((o, i) => (<MenuItem key={i} value={o.districtId}>{o.districtName}</MenuItem>))}
                     </TextField></Grid>
-                    <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Taluka")} value={actObj.workActivity.taluk} onChange={(e) => talukCh(e)} >
+                    <Grid item xs={12} sm={3}><TextField disabled={!actObj.workActivity.district} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Taluka")} value={actObj.workActivity.taluk} onChange={(e) => talukCh(e)} >
                         {tlOps?.map((o, i) => (<MenuItem key={i} value={o.talukId}>{o.talukName}</MenuItem>))}
                     </TextField></Grid>
-                    <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Grampanchayat")} value={actObj.workActivity.gramPanchayat} onChange={(e) => panchayatCh(e)} >
+                    <Grid item xs={12} sm={3}><TextField disabled={!actObj.workActivity.taluk} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Grampanchayat")} value={actObj.workActivity.gramPanchayat} onChange={(e) => panchayatCh(e)} >
                         {panOps?.map((o, i) => (<MenuItem key={i} value={o.panchayatId}>{o.panchayatName}</MenuItem>))}
                     </TextField></Grid>
-                    <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Habitation")} value={actObj.workActivity.habitationsCovered} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, habitationsCovered: e.target.value } })}>
+                    <Grid item xs={12} sm={3}><TextField disabled={!actObj.workActivity.gramPanchayat} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Habitation")} value={actObj.workActivity.habitationsCovered} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, habitationsCovered: e.target.value } })}>
                         {vilOps?.map((o, i) => (<MenuItem key={i} value={o.villageId}>{o.villageName}</MenuItem>))}
                     </TextField></Grid>
 
