@@ -123,14 +123,18 @@ export default function MappingList() {
         const WsName = fetchWsData(user.watershedId);
         const matchesWatershedName = WsName && WsName.toLowerCase().includes(searchQuery.toLowerCase());
 
-        const matchesSearchQuery = Object.values(user).some(value => {
-            if (typeof value === 'string') {
-                return value.toLowerCase().includes(searchQuery.toLowerCase());
-            }
-            return false;
-        });
+        // const matchesSearchQuery = Object.values(user).some(value => {
+        //     if (typeof value === 'string') {
+        //         return value.toLowerCase().includes(searchQuery.toLowerCase());
+        //     }
+        //     return false;
+        // });
 
-        return matchesSearchQuery || matchesUserName || matchesWatershedName;
+        return (
+            user.remarks?.toString().toLowerCase().includes(searchQuery.toLowerCase()) || matchesUserName || matchesWatershedName);
+
+
+        // return matchesSearchQuery || matchesUserName || matchesWatershedName;
     });
 
     function fetchUserData(userid: number) {

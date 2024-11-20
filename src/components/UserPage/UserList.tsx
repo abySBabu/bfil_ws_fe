@@ -164,12 +164,12 @@ export default function UserList() {
 
 
     const filteredData = sortedData.filter(user => {
-        const matchesSearchQuery = Object.values(user).some(value => {
-            if (typeof value === 'string') {
-                return value.toLowerCase().includes(searchQuery.toLowerCase());
-            }
-            return false;
-        });
+        // const matchesSearchQuery = Object.values(user).some(value => {
+        //     if (typeof value === 'string') {
+        //         return value.toLowerCase().includes(searchQuery.toLowerCase());
+        //     }
+        //     return false;
+        // });
 
         const roleMatchesSearchQuery = user.userRoleList.some(role =>
             role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -180,7 +180,13 @@ export default function UserList() {
             option.dispalyValue.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        return matchesSearchQuery || roleMatchesSearchQuery || statusMatchesSearchQuery;
+        return (
+            user.userName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.mobileNumber?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.managerName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            roleMatchesSearchQuery || statusMatchesSearchQuery);
+
+        // return matchesSearchQuery || roleMatchesSearchQuery || statusMatchesSearchQuery;
     });
 
     return (<>

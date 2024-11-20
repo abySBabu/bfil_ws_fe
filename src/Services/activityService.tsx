@@ -38,7 +38,7 @@ export async function editAct(data: any, id: any) {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
-//Edited by lakshmi- service call changes
+
 export async function DashKey() {
     const configs = {
         url: serverPath.bfil + `data_capture/getAllDashboardData/${sessionStorage.getItem("userId")}/${localStorage.getItem("userRole")}`,
@@ -52,20 +52,19 @@ export async function DashKey() {
     catch (error) { console.error(error); throw error; }
 }
 
-//Edited by lakshmi- service call changes
 export async function DashDemand() {
     const configs = {
-        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=Demand Side Interventions&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
+        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=23&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
-//Edited by lakshmi- service call changes
+
 export async function DashSupply() {
     const configs = {
-        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=Supply Side Interventions&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
+        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=22&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
         method: 'get',
         headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
     }

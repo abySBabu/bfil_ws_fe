@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
-import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs } from './common';
+import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
 import UserList from './components/UserPage/UserList';
@@ -443,9 +443,7 @@ export const Home: React.FC = () => {
 
         {serverDown &&
           <Paper elevation={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90%', borderRadius: sd('--page-bradius-def'), mx: 1, padding: '3%', }}                >
-            <Typography sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-              Unable to connect to the server
-            </Typography>
+            <ServerDownDialog />
           </Paper>
         }
 
