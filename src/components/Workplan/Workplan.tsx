@@ -392,7 +392,20 @@ export const Workplan: React.FC = () => {
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Plan_Details")}</Divider></Grid>
-                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")}
+                        value={planObj.planningYear}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (/^\d{0,4}(-\d{0,2})?$/.test(value)) {
+                                setplanObj({ ...planObj, planningYear: value });
+                            }
+                        }}
+                        inputProps={{ maxLength: 7, placeholder: 'yyyy-yy' }}
+                    />
+                </Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
