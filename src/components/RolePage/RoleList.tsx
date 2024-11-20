@@ -125,14 +125,19 @@ export default function RoleList() {
 
 
     const filteredData = sortedData.filter(user => {
-        const matchesSearchQuery = Object.values(user).some(value => {
-            if (typeof value === 'string') {
-                return value.toLowerCase().includes(searchQuery.toLowerCase());
-            }
-            return false;
-        });
 
-        return matchesSearchQuery;
+        // const matchesSearchQuery = Object.values(user).some(value => {
+        //     if (typeof value === 'string') {
+        //         return value.toLowerCase().includes(searchQuery.toLowerCase());
+        //     }
+        //     return false;
+        // });
+
+        return (
+            user.roleName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) || user.roleDescription?.toString().toLowerCase().includes(searchQuery.toLowerCase()));
+
+
+        // return matchesSearchQuery;
     });
 
     return (<>

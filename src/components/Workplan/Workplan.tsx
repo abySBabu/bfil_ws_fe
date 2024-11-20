@@ -115,9 +115,18 @@ export const Workplan: React.FC = () => {
         })
         .sort((a, b) => {
             if (!sortBy) return 0;
-            const valueA = a[sortBy];
-            const valueB = b[sortBy];
-
+            let valueA: any;
+            let valueB: any;
+            if (sortBy === 'watershedId') {
+                valueA = WsName(a.watershedId)?.toLowerCase();
+                valueB = WsName(b.watershedId)?.toLowerCase();
+            } else if (sortBy === 'interventionType_Components') {
+                valueA = IntTypeName(a.interventionType_Components)?.toLowerCase();
+                valueB = IntTypeName(b.interventionType_Components)?.toLowerCase();
+            } else {
+                valueA = a[sortBy];
+                valueB = b[sortBy];
+            }
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
             return 0;
@@ -383,13 +392,48 @@ export const Workplan: React.FC = () => {
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Plan_Details")}</Divider></Grid>
-                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")}
+                        value={planObj.planningYear}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (/^\d{0,4}(-\d{0,2})?$/.test(value)) {
+                                setplanObj({ ...planObj, planningYear: value });
+                            }
+                        }}
+                        inputProps={{ maxLength: 7, placeholder: 'yyyy-yy' }}
+                    />
+                </Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")} value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        select
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")}
+                        value={planObj.activityId}
+                        onChange={(e) => {
+                            const selectedActivity = actOps.find((o) => o.activityId === e.target.value);
+                            if (selectedActivity) {
+                                setplanObj({
+                                    ...planObj,
+                                    activityId: selectedActivity.activityId,
+                                    unitofMeasurement: selectedActivity.uom,
+                                });
+                            }
+                        }}
+                        disabled={actOps?.length <= 0}
+                    >
+                        {actOps?.map((o, i) => (
+                            <MenuItem key={i} value={o.activityId}>
+                                {o.activityName}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Land_Type")} value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
@@ -405,7 +449,7 @@ export const Workplan: React.FC = () => {
 
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Physical_Plan")}</Divider></Grid>
                 <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Value")} value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} disabled /></Grid>
 
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Details")}</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
