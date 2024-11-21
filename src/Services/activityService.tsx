@@ -74,7 +74,7 @@ export async function DashSupply() {
 
 export async function actFlowNext(status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/Activity Work Flow/Submit/${status}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${localStorage.getItem("userRole")}/Submit/${status}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -87,7 +87,7 @@ export async function actFlowNext(status: any) {
 
 export async function actFlowPrev(status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/Activity Work Flow/Reject/${status}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${localStorage.getItem("userRole")}/Reject/${status}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,

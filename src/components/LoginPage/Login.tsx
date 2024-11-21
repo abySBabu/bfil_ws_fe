@@ -143,9 +143,9 @@ const Login: React.FC = () => {
 
                                 <Grid container>
                                     <Grid item xs>
-                                        <Link href="#" variant="body2">
+                                        <Button variant='text' onClick={() => navigate('/forgotpassword')}>
                                             Forgot password?
-                                        </Link>
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </Box>

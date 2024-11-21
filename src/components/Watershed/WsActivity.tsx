@@ -27,7 +27,7 @@ export const actDef = {
         activityDescription: '',
         activityWorkflowStatus: 'New',
         interventionType: 0,
-        activityImage: '',
+        activityImage: [],
         activityFormData: '',
         watershedId: '',
         farmerId: '',
@@ -41,7 +41,7 @@ export const actDef = {
         waterConserved: '',
         amountSpend: '',
         sourceExpenditure: '',
-        geotaggedPhoto: '',
+        geotaggedPhoto: [],
         capacitytypeEvent: '',
         participantsType: '',
         capacitynameEvent: '',
@@ -116,6 +116,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [imgM, setimgM] = React.useState('');
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
+    const uName = sessionStorage.getItem("userName")
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -597,9 +598,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(uRole === 'Community Resource person' &&
-                                                    (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
-                                                    (a.workActivity.activityWorkflowStatus === uStatus) ? (
+                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress'))
+                                                    || (a.workActivity.activityWorkflowStatus === uStatus)
+                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); setprogM(true); }}>
                                                         <PlayArrow />
                                                     </IconButton>
@@ -870,18 +871,35 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
-                                <TableCell><img
-                                    src={(() => {
-                                        try { return JSON.parse(a.activityImage).activityImage }
-                                        catch (error) { return "" }
+                                <TableCell>
+                                    {(() => {
+                                        try {
+                                            const imageLinks: string[] = JSON.parse(a.activityImage).activityImage.split(',');
+                                            if (imageLinks.length > 0)
+                                                return imageLinks.map((link: string, index: number) => (
+                                                    <img
+                                                        key={index}
+                                                        src={link.trim()}
+                                                        alt={`Activity ${index + 1}`}
+                                                        style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
+                                                        onClick={() => {
+                                                            try {
+                                                                setimgM(link.trim());
+                                                            } catch (error) {
+                                                                console.error("Error setting image modal--", link.trim());
+                                                            }
+                                                        }}
+                                                    />
+                                                ));
+                                            else
+                                                return ''
+                                        } catch (error) {
+                                            console.error("JSON error--", a.activityImage);
+                                            return null;
+                                        }
                                     })()}
-                                    alt="Activity"
-                                    style={{ height: '24px', objectFit: 'contain', cursor: 'pointer' }}
-                                    onClick={() => {
-                                        try { setimgM(JSON.parse(a.activityImage).activityImage) }
-                                        catch (error) { console.error("JSON error--", a.activityImage) }
-                                    }}
-                                /></TableCell>
+                                </TableCell>
+
                             </TableRow>)
                             )}</TableBody>
                         </Table></TableContainer>

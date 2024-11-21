@@ -8,6 +8,7 @@ import { bfilTheme } from './theme';
 import Login from './components/LoginPage/Login';
 import { Home } from './Home';
 import { MyProfile } from './components/Profile/MyProfile';
+import { ForgotPass } from './components/LoginPage/ForgotPass';
 import './i18n';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                     <Route path="/" element={<Login />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/profile" element={<MyProfile />} />
+                    <Route path="/forgotpassword" element={<ForgotPass />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </Box></ThemeProvider>
