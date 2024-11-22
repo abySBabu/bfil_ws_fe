@@ -150,7 +150,9 @@ export default function (props: mapTypeProps) {
                 createdUser: fetchUserData(userId),
                 updatedUser: '',
                 remarks: value.remarks,
-                roleId: roleListTemp[0].roleId
+                roleId: roleListTemp[0].roleId,
+                roleName: roleListTemp[0].roleName
+
             }
             // const mapData = selectedWs.map(ws => ({
             //     userId: value.user,
