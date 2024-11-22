@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Avatar } from '@mui/material';
+import { TextField, Button, Box, Grid, Link, Paper, Snackbar, Alert, CircularProgress } from '@mui/material';
 import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
 import { serverPath, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
-import { Height } from '@mui/icons-material';
-
 
 interface ILoginFormInput {
     userName: string;
@@ -143,9 +141,9 @@ const Login: React.FC = () => {
 
                                 <Grid container>
                                     <Grid item xs>
-                                        <Button variant='text' onClick={() => navigate('/forgotpassword')}>
+                                        <Link onClick={() => navigate('/forgotpassword')}>
                                             Forgot password?
-                                        </Button>
+                                        </Link>
                                     </Grid>
                                 </Grid>
                             </Box>

@@ -161,6 +161,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         .sort((a, b) => {
             if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
             if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+            if (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) return -1;
+            if (b.workActivity.activityWorkflowStatus === 'New' && b.workActivity.createdUser === uName) return 1;
             return 0;
         })
         .sort((a, b) => {
@@ -592,7 +594,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                                            <TableCell>{a.workActivity.updatedUser}</TableCell>
+                                            <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
