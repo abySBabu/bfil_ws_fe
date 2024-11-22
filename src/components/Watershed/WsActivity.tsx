@@ -23,7 +23,7 @@ export const actDef = {
         activityId: '',
         activityName: '',
         activityCode: 0,
-        userId: '',
+        userId: sessionStorage.getItem("userId"),
         roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
@@ -350,6 +350,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 ...actObj.workActivity,
                 village: vList,
                 createdUser: sessionStorage.getItem("userName"),
+                updatedUser: '',
                 roleId: localStorage.getItem("userRoleId")
             })
             if (resp1.status === 'success') {
