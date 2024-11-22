@@ -616,5 +616,119 @@
             },
             "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
         }
+    },
+    "p_WorkPlan": {
+        "ss_WorkPlan_Header": "ಕೆಲಸದ ಯೋಜನೆ",
+        "ss_Search_Label": "ಹುಡುಕು",
+        "Add_WorkPlan_Link": {
+            "Add_WorkPlan_Link_Text": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸೇರಿಸಿ",
+            "Add_WorkPlan_Popup": {
+                "Add_WorkPlan_Label": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸೇರಿಸಿ",
+                "Plan_Details": "ಯೋಜನೆ ವಿವರಗಳು",
+                "Financial_Year": "ಆರ್ಥಿಕ ವರ್ಷ",
+                "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+                "Activity": "ಚಟುವಟಿಕೆ",
+                "Land_Type": "ಭೂಮಿಯ ಪ್ರಕಾರ",
+                "Watershed_Details": "ಜಲಾನಯನ ವಿವರಗಳು",
+                "Watershed": "ಜಲಾನಯನ",
+                "State": "ರಾಜ್ಯ",
+                "District": "ಜಿಲ್ಲೆ",
+                "Taluka": "ತಾಲೂಕು",
+                "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                "Physical_Plan": "ಭೌತಿಕ ಯೋಜನೆ",
+                "Value": "ಮೌಲ್ಯ",
+                "UOM": "UOM",
+                "Financial_Details": "ಹಣಕಾಸಿನ ವಿವರಗಳು",
+                "Bfil": "BFIL",
+                "Gov_Schemes": "ಸರ್ಕಾರದ ಯೋಜನೆಗಳು",
+                "Other": "ಇತರೆ",
+                "MGNREGA": "MGNREGA",
+                "IBL": "IBL",
+                "Community": "ಸಮುದಾಯ",
+                "Total": "ಒಟ್ಟು",
+                "Cancel_Button": "ರದ್ದುಮಾಡು",
+                "Add_Button": "ಸೇರಿಸಿ"
+            },
+            "Add_Success_Message": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+        },
+        "ss_WorkplanList": {
+            "Watershed": "ಜಲಾನಯನ",
+            "Year": "ವರ್ಷ",
+            "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+            "Activity": "ಚಟುವಟಿಕೆ",
+            "Physical": "ಭೌತಿಕ",
+            "Financial": "ಹಣಕಾಸು",
+            "Action": {
+                "Action_Text": "ಕ್ರಿಯೆ",
+                "Action_Tooltip": {
+                    "Edit_Tooltip": {
+                        "Edit_Tooltip_Text": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸಂಪಾದಿಸಿ",
+                        "Edit_WorkPlan_Popup": {
+                            "Edit_WorkPlan_Label": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಸಂಪಾದಿಸಿ",
+                            "Plan_Details": "ಯೋಜನೆ ವಿವರಗಳು",
+                            "Financial_Year": "ಆರ್ಥಿಕ ವರ್ಷ",
+                            "Intervention": "ಮಧ್ಯಸ್ಥಿಕೆ/ಘಟಕ",
+                            "Activity": "ಚಟುವಟಿಕೆ",
+                            "Land_Type": "ಭೂಮಿಯ ಪ್ರಕಾರ",
+                            "Watershed_Details": "ಜಲಾನಯನ ವಿವರಗಳು",
+                            "Watershed": "ಜಲಾನಯನ",
+                            "State": "ರಾಜ್ಯ",
+                            "District": "ಜಿಲ್ಲೆ",
+                            "Taluka": "ತಾಲೂಕು",
+                            "Grampanchayat": "ಗ್ರಾಮಪಂಚಾಯತ್",
+                            "Physical_Plan": "ಭೌತಿಕ ಯೋಜನೆ",
+                            "Value": "ಮೌಲ್ಯ",
+                            "UOM": "UOM",
+                            "Financial_Details": "ಹಣಕಾಸಿನ ವಿವರಗಳು",
+                            "Bfil": "BFIL",
+                            "Gov_Schemes": "ಸರ್ಕಾರದ ಯೋಜನೆಗಳು",
+                            "Other": "ಇತರೆ",
+                            "MGNREGA": "MGNREGA",
+                            "IBL": "IBL",
+                            "Community": "ಸಮುದಾಯ",
+                            "Total": "ಒಟ್ಟು",
+                            "Cancel_Button": "ರದ್ದುಮಾಡು",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Edit_Success_Message": "ಕಾರ್ಯಯೋಜನೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    }
+                }
+            },
+            "Rows_per_page": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಸಾಲುಗಳು :"
+        }
+    },
+    "ss_Avatar_Icon_Link": {
+        "Avatar_Menu": {
+            "My_Profile_Text": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+            "p_MyProfile": {
+                "MyProfile_Header": "ನನ್ನ ಪ್ರೊಫೈಲ್",
+                "Name": "ಹೆಸರು",
+                "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+                "Role": "ಪಾತ್ರ",
+                "EditProfile_Link_Text": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+                "ResetPassword_Link_Text": "ಪಾಸ್ವರ್ಡ್ ಮರುಹೊಂದಿಸಿ",
+                "ss_Edit_Profile": {
+                    "Name": "ಹೆಸರು",
+                    "Mobile_Number": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+                    "Role": "ಪಾತ್ರ",
+                    "Cancel": "ರದ್ದುಮಾಡಿ",
+                    "Update_Link_Text": "ನವೀಕರಿಸಿ",
+                    "Update_Sucess_Message": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                },
+                "ss_ResetPassword": {
+                    "Current_Password": "ಪ್ರಸ್ತುತ ಪಾಸ್ವರ್ಡ್",
+                    "New_Password": "ಹೊಸ ಪಾಸ್ವರ್ಡ್",
+                    "Cancel": "ರದ್ದುಮಾಡಿ",
+                    "Update_Link_Text": "ನವೀಕರಿಸಿ",
+                    "Update_Sucess_Message": "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                }
+            },
+            "Language_Text": "ಭಾಷೆಗಳು",
+            "Language_Submenu": {
+                "English": "ಇಂಗ್ಲೀಷ್",
+                "Kannada": "ಕನ್ನಡ"
+            },
+            "Logout_Text": "ಲಾಗ್ಔಟ್"
+        }
     }
 }

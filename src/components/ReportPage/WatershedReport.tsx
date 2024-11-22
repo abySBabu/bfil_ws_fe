@@ -1,94 +1,276 @@
-import React from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Box, Typography, FormControl, Select, MenuItem, InputLabel, SelectChangeEvent } from '@mui/material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { useReactToPrint } from 'react-to-print';
+import * as XLSX from 'xlsx';
+import { listWP } from 'src/Services/workplanService';
+import { watershedReport } from 'src/Services/reportService';
+import { PhysicalData,FinancialData,WatershedActivities,Watershed,Activity,LandType,WorkPlan } from './DonerReportTypes';
 
-// Define the type for each row of data
-interface DataRow {
-  slNo: number;
-  typeOfWork: string;
-  landType: string;
-  uom: string;
-  annualTarget: string;
-  physical: {
-    ws1Plan: number;
-    ws1Progress: number;
-    ws2Plan: number;
-    ws2Progress: number;
-    total: number;
-    remarks: string;
+const WatershedReport: React.FC = () => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [reportData, setReportData] = useState<Activity[]>([]);
+  const [watershedNames, setWatershedNames] = useState<string[]>([]); 
+  const [selectedYear, setSelectedYear] = useState<string>('');
+  const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
+  const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Watershed Report' });
+  const exportToPDF = () => { handlePrint(); };
+
+  const handleYearChange = (event: SelectChangeEvent<string>) => {
+    setSelectedYear(event.target.value);
   };
-  financial: {
-    ws1Plan: number;
-    ws1Progress: number;
-    ws2Plan: number;
-    ws2Progress: number;
-    total: number;
-    remarks: string;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await listWP(); 
+        const data = response.data; 
+        if (Array.isArray(data)) {
+            const planningYears = data.map((item: WorkPlan) => item.planningYear);
+            const uniquePlanningYearsSet = new Set(planningYears);
+            setUniquePlanningYears(Array.from(uniquePlanningYearsSet));
+          } else {
+          console.error('Error: Response data is not an array');
+        }
+      } catch (error) {
+        console.log('Error fetching workplan:', error);
+      }
+    };
+    fetchData(); 
+  }, []);
+
+  const fetchReport = async () => {
+    if (!selectedYear) return;
+  
+    try {
+      const reportData = await watershedReport(selectedYear); 
+      setReportData(reportData);
+      //console.log("Report data:", reportData);
+      const uniqueWatershedNames = new Set<string>();
+      reportData.forEach((activity: Activity) => {
+        const { landTypeMap } = activity;
+        ['Private', 'Public'].forEach((landType) => {
+          const landTypeData = landTypeMap[landType as keyof typeof landTypeMap];
+          if (landTypeData) {
+            Object.values(landTypeData).forEach((watershed: Watershed) => {
+              uniqueWatershedNames.add(watershed.watershedName);
+            });
+          }
+        });
+      });
+  
+      setWatershedNames(Array.from(uniqueWatershedNames));
+    } catch (error) {
+      console.error('Error fetching report:', error);
+    }
   };
-}
+  
+  
+  useEffect(() => {
+    fetchReport();
+  }, [selectedYear]);
 
-interface WatershedReportProps {
-  data: DataRow[];
-}
-
-const WatershedReport: React.FC<WatershedReportProps> = ({ data }) => {
+  
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell align="center" rowSpan={3}>Sl. No.</TableCell>
-            <TableCell align="center" rowSpan={3}>Type of Work</TableCell>
-            <TableCell align="center" rowSpan={3}>Land Type</TableCell>
-            <TableCell align="center" rowSpan={3}>UoM</TableCell>
-            <TableCell align="center" rowSpan={3}>Annual Target As per MoU</TableCell>
-            <TableCell align="center" rowSpan={3}>Progress Type</TableCell>
-            <TableCell align="center" colSpan={2}>WS 1 (Baleri)</TableCell>
-            <TableCell align="center" colSpan={2}>WS 2</TableCell>
-            <TableCell align="center" rowSpan={3}>Total</TableCell>
-            <TableCell align="center" rowSpan={3}>Remarks</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="center">Plan</TableCell>
-            <TableCell align="center">Progress</TableCell>
-            <TableCell align="center">Plan</TableCell>
-            <TableCell align="center">Progress</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row, index) => (
-            <>
-              {/* Physical row */}
-              <TableRow key={`physical-${index}`}>
-                <TableCell align="center" rowSpan={2}>{row.slNo}</TableCell>
-                <TableCell align="center" rowSpan={2}>{row.typeOfWork}</TableCell>
-                <TableCell align="center" rowSpan={2}>{row.landType}</TableCell>
-                <TableCell align="center" rowSpan={2}>{row.uom}</TableCell>
-                <TableCell align="center" rowSpan={2}>{row.annualTarget}</TableCell>
-                <TableCell align="center">Physical</TableCell>
-                <TableCell align="center">{row.physical.ws1Plan}</TableCell>
-                <TableCell align="center">{row.physical.ws1Progress}</TableCell>
-                <TableCell align="center">{row.physical.ws2Plan}</TableCell>
-                <TableCell align="center">{row.physical.ws2Progress}</TableCell>
-                <TableCell align="center">{row.physical.total}</TableCell>
-                <TableCell align="center">{row.physical.remarks}</TableCell>
+    <div>
+      <Typography variant="h5" align="center" style={{ padding: '15px'}}>
+        Watershed Wise Works undertaken {selectedYear}
+      </Typography>
+      <Box sx={{ display: 'flex',justifyContent: 'space-between',ml:3,alignItems: 'center',width: '100%',mb: 2,flexDirection: { xs: 'column', sm: 'row' }}} >
+        <FormControl sx={{ width: 200,marginBottom:'15px' }}>
+                <InputLabel id="select-year-label">Select Year</InputLabel>
+                <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
+                <MenuItem value="">Select Year</MenuItem> 
+                    {uniquePlanningYears.map((year, index) => (
+                    <MenuItem key={index} value={year}>
+                    {year}
+                </MenuItem>
+                    ))}
+                </Select>
+        </FormControl>
+      <Box display="flex" alignItems="end" justifyContent="flex-end" sx={{ marginRight: { md: '30px' }, mb: 3, flexDirection: { sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
+        <FileDownloadIcon sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
+        <PictureAsPdfIcon onClick={exportToPDF} sx={{ cursor: 'pointer' }} />
+      </Box>
+    </Box>
+    
+      <div ref={contentRef}>
+      <Typography className="pdf-title">Watershed Wise Works undertaken {selectedYear}.</Typography>
+        <TableContainer component={Paper} className="scrollable-table">
+          <Table sx={{maxWidth:'100%'}}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{lineHeight: '1',maxWidth: '40px',border: '1px solid #ccc' }} rowSpan={2} align="center">Sl. No.</TableCell>
+                <TableCell sx={{ lineHeight: '1',maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={2}>Activity Name</TableCell>
+                <TableCell sx={{lineHeight: '1',maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={2}>UOM</TableCell>
+                <TableCell sx={{ lineHeight: '1',maxWidth: '200px', border: '1px solid #ccc'}} align="center" rowSpan={2}>LandType</TableCell>
+                <TableCell sx={{lineHeight: '1',maxWidth: '200px', border: '1px solid #ccc' }} rowSpan={2}>Process Type</TableCell>
+                  {watershedNames.map((watershedName, idx) => (
+                <TableCell key={idx} colSpan={2} sx={{lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center">
+                    {watershedName}
+                </TableCell>
+                  ))}
+                <TableCell sx={{lineHeight: '1', maxWidth: '40px', border: '1px solid #ccc' }} rowSpan={2} align="center">Total</TableCell>
               </TableRow>
+              <TableRow>
+                {watershedNames.map((watershedName, idx) => (
+                <React.Fragment key={watershedName + idx}>
+                  <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1',textAlign: 'center', maxWidth: '70px', width: '70px' }}>Plan</TableCell>
+                  <TableCell sx={{ border: '1px solid #ccc',lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+                 
+                </React.Fragment>
+                 ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reportData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5 + watershedNames.length * 4 + 1} align="center" sx={{ border: '1px solid #ccc' }}>
+                  No records available
+                </TableCell>
+              </TableRow>
+                ) : (
+                reportData.map((activity, activityIndex) => {
+                let totalPublicPhysical=0;
+                let totalPublicFinancial=0;
+                let totalPrivatePhysical=0;
+                let totalPrivateFinancial=0;
+                return (
+                <React.Fragment key={activityIndex}>
+                  <TableRow>
+                    <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', maxWidth: '40px' }} align="center" rowSpan={4}>{activityIndex + 1}</TableCell>
+                    <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px', maxHeight: '100px' }} align="center" rowSpan={4}>
+                      {activity.activityName}
+                    </TableCell>
+                    <TableCell sx={{ lineHeight: '1',maxWidth: '200px', border: '1px solid #ccc', maxHeight: '100px' }} align="center" rowSpan={4}>
+                      {activity.uom}</TableCell> 
+                    <TableCell align="center" rowSpan={2} sx={{lineHeight: '1',border: '1px solid #ccc'}}>Public</TableCell>
+                    <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px' }} align="center">Physical</TableCell>
+                      {watershedNames.map((watershedName) => {
+                    const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+                    const publicphysicalplan = watershed?.physical?.plan ?? 0;
+                    const publicphysicalprogress = watershed?.physical?.progress ?? 0;
+                    totalPublicPhysical += publicphysicalplan + publicphysicalprogress;
+                      return (
+                          <React.Fragment key={watershedName}>
+                            <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicphysicalplan)}
+                             </TableCell>
+                            <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicphysicalprogress)}
+                            </TableCell>
+                          
+                          
+                          </React.Fragment>
+                          );
+                        })}
+                        <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px',fontWeight:'bold' }}>
+                          {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicPhysical)}
+                        </TableCell>
+                  </TableRow>
 
-              {/* Financial row */}
-              <TableRow key={`financial-${index}`}>
-                <TableCell align="center">Financial</TableCell>
-                <TableCell align="center">{row.financial.ws1Plan}</TableCell>
-                <TableCell align="center">{row.financial.ws1Progress}</TableCell>
-                <TableCell align="center">{row.financial.ws2Plan}</TableCell>
-                <TableCell align="center">{row.financial.ws2Progress}</TableCell>
-                <TableCell align="center">{row.financial.total}</TableCell>
-                <TableCell align="center">{row.financial.remarks}</TableCell>
-              </TableRow>
-            </>
-          ))}
+                  <TableRow>
+                
+                    <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px',width:'100px' }} align="center">Financial</TableCell>
+                      {watershedNames.map((watershedName) => {
+                      const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+                      const publicFinacialplan = watershed?.financial?.plan ?? 0;
+                      const publicFinacialprogress = watershed?.financial?.progress ?? 0;
+                      totalPublicFinancial += publicFinacialplan + publicFinacialprogress;
+                      return (
+                        <React.Fragment key={watershedName}>
+                          <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicFinacialplan)}
+                          </TableCell>
+                          <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicFinacialprogress)}
+                          </TableCell>
+                        </React.Fragment>
+                        );
+                      })}
+                    <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px',width:'100px',fontWeight:'bold' }}>
+                      {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicFinancial)}
+                    </TableCell>
+                  </TableRow>
+                  
+                  
+                  <TableRow>
+                  <TableCell rowSpan={2} sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px',width:'100px' }} align="center">Private</TableCell>
+                  <TableCell sx={{ border: '1px solid #ccc', maxWidth: '100px',width:'100px' }} align="center">Physical</TableCell>
+                  {watershedNames.map((watershedName) => {
+                    const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+                    const privatePhysicalplan = watershed?.physical?.plan ?? 0;
+                    const privateFinancialprogress = watershed?.physical?.progress ?? 0;
+                    totalPrivatePhysical += privatePhysicalplan + privateFinancialprogress;
+                      return (
+                          <React.Fragment key={watershedName}>
+                            <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privatePhysicalplan)}
+                             </TableCell>
+                            <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinancialprogress)}
+                            </TableCell>
+                          
+                          
+                          </React.Fragment>
+                          );
+                        })}
+                        <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px',fontWeight:'bold' }}>
+                          {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivatePhysical)}
+                        </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', maxWidth: '100px',width:'100px' }} align="center">Financial</TableCell>
+                    {watershedNames.map((watershedName) => {
+                      const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+                      const privateFinacialplan = watershed?.financial?.plan ?? 0;
+                      const privateFinacialprogress = watershed?.financial?.progress ?? 0;
+                      totalPrivateFinancial += privateFinacialplan + privateFinacialprogress;
+                      return (
+                        <React.Fragment key={watershedName}>
+                          <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinacialplan)}
+                          </TableCell>
+                          <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinacialprogress)}
+                          </TableCell>
+                        </React.Fragment>
+                        );
+                      })}
+                    <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px',fontWeight:'bold',width:'100px'}}>
+                      {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivateFinancial)}
+                    </TableCell>
+                    </TableRow>
+              </React.Fragment>
+              );
+            })
+          )}
         </TableBody>
       </Table>
     </TableContainer>
+
+    </div>
+    <style>
+            {`
+                .scrollable-table {
+                 max-height: 550px;
+                 overflow-y: auto;
+                }
+
+                @media print {
+                    .scrollable-table {
+                    max-height: none;
+                    overflow-y: visible;
+                    }   
+                }
+                .pdf-title {display: none;text-align: center;}
+                @media print {.pdf-title {display: block;margin-top:30px; font-size: 20px;  margin-bottom: 20px;}} 
+            `}
+            </style>
+  </div>
   );
 };
 
 export default WatershedReport;
+
+

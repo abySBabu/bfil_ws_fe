@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter,
-    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper,
+    Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
+    IconButton, DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Tooltip,
     Typography, InputAdornment, MenuItem, CircularProgress
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
@@ -11,56 +11,58 @@ import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocNa
 import { listWP, addWP, editWP } from '../../Services/workplanService';
 import { ListLand, ListInter, ListDonor, ListPara } from '../../Services/dashboardService';
 import { listWS } from '../../Services/wsService';
-
-const wpDef = {
-    planningId: "",
-    planningYear: "",
-    watershedId: "",
-    interventionType_Components: "",
-    activityId: "",
-    activityName: "",
-    planlandType: "",
-    planRemarks: "",
-    createdUser: "",
-    updatedUser: "",
-    unitofMeasurement: "",
-    plan: "",
-    value: 0,
-    financialDetails: [
-        {
-            wfsId: 101,
-            wfsName: "BFIL",
-            wfsValue: 0,
-        },
-        {
-            wfsId: 102,
-            wfsName: "Other Gov Scheme",
-            wfsValue: 0,
-        },
-        {
-            wfsId: 103,
-            wfsName: "Other",
-            wfsValue: 0,
-        },
-        {
-            wfsId: 104,
-            wfsName: "MGNREGA",
-            wfsValue: 0,
-        },
-        {
-            wfsId: 105,
-            wfsName: "IBL",
-            wfsValue: 0,
-        },
-        {
-            wfsId: 106,
-            wfsName: "Community",
-            wfsValue: 0,
-        }
-    ]
-}
+import { useTranslation } from 'react-i18next';
 
 export const Workplan: React.FC = () => {
+    const { t } = useTranslation();
+
+    const wpDef = {
+        planningId: "",
+        planningYear: "",
+        watershedId: "",
+        interventionType_Components: "",
+        activityId: "",
+        activityName: "",
+        planlandType: "",
+        planRemarks: "",
+        createdUser: "",
+        updatedUser: "",
+        unitofMeasurement: "",
+        plan: "",
+        value: 0,
+        financialDetails: [
+            {
+                wfsId: 101,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Bfil"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 102,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Gov_Schemes"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 103,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Other"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 104,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.MGNREGA"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 105,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.IBL"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 106,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Community"),
+                wfsValue: 0,
+            }
+        ]
+    }
     const [loadingResponse, setloadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
     const [loading, setloading] = React.useState(false);
@@ -80,19 +82,55 @@ export const Workplan: React.FC = () => {
     const [alertClr, setalertClr] = React.useState(false);
     const [finTotal, setfinTotal] = React.useState(0);
 
-    const planListF = planList.filter((w) => {
-        const searchTerm = search?.toLowerCase();
-        return (
-            w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
-            WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
-            w.interventionType_Components?.toString().toLowerCase().includes(searchTerm) ||
-            w.activityName?.toString().toLowerCase().includes(searchTerm) ||
-            w.value?.toString().toLowerCase().includes(searchTerm) ||
-            w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
-            w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
-        )
-    });
+    const IntTypeName = (code: number | string | undefined) => {
+        const int = intOps.find(x => x.parameterId == code);
+        return int ? int.parameterName : code || "";
+    };
 
+    //Sorting, filtering, and pagination
+    const [sortBy, setSortBy] = React.useState<keyof typeof planList[0] | null>(null);
+    const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (column: keyof typeof planList[0]) => {
+        if (sortBy === column) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(column);
+            setSortOrder('asc');
+        }
+    };
+
+    const planListF = planList
+        .filter((w) => {
+            const searchTerm = search?.toLowerCase();
+            return (
+                w.planningYear?.toString().toLowerCase().includes(searchTerm) ||
+                WsName(w.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
+                IntTypeName(w.interventionType_Components)?.toString().toLowerCase().includes(searchTerm) ||
+                w.activityName?.toString().toLowerCase().includes(searchTerm) ||
+                w.value?.toString().toLowerCase().includes(searchTerm) ||
+                w.unitofMeasurement?.toString().toLowerCase().includes(searchTerm) ||
+                w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)?.toString().toLowerCase().includes(searchTerm)
+            )
+        })
+        .sort((a, b) => {
+            if (!sortBy) return 0;
+            let valueA: any;
+            let valueB: any;
+            if (sortBy === 'watershedId') {
+                valueA = WsName(a.watershedId)?.toLowerCase();
+                valueB = WsName(b.watershedId)?.toLowerCase();
+            } else if (sortBy === 'interventionType_Components') {
+                valueA = IntTypeName(a.interventionType_Components)?.toLowerCase();
+                valueB = IntTypeName(b.interventionType_Components)?.toLowerCase();
+            } else {
+                valueA = a[sortBy];
+                valueB = b[sortBy];
+            }
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
     const addCheck = loading || !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityId || !planObj.planlandType || !planObj.watershedId || !planObj.value || !planObj.unitofMeasurement || finTotal <= 0
@@ -120,7 +158,10 @@ export const Workplan: React.FC = () => {
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
             setserverDown(false);
         }
-        catch (error) { console.log(error); setserverDown(true); }
+        catch (error: any) {
+            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            else console.log(error);
+        }
         setloadingResponse(false);
     }
 
@@ -128,8 +169,20 @@ export const Workplan: React.FC = () => {
 
     const ActSet = async () => {
         try {
-            if (planObj.interventionType_Components) {
-                const resp1 = await ListPara(planObj.interventionType_Components);
+            if (planObj.interventionType_Components == '22') {
+                const resp1 = await ListPara('Supply Side Interventions');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '23') {
+                const resp1 = await ListPara('Demand Side Interventions');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '31') {
+                const resp1 = await ListPara('Administration Cost');
+                if (resp1) { setactOps(resp1.data) }
+            }
+            else if (planObj.interventionType_Components == '32') {
+                const resp1 = await ListPara('Post Watershed Management');
                 if (resp1) { setactOps(resp1.data) }
             }
             else {
@@ -145,7 +198,7 @@ export const Workplan: React.FC = () => {
             const resp1 = await addWP(planObj)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Plan added`);
+                setalert(t("p_WorkPlan.Add_WorkPlan_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -167,7 +220,7 @@ export const Workplan: React.FC = () => {
             const resp1 = await editWP(planObj, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(`Plan updated`);
+                setalert(t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -204,7 +257,7 @@ export const Workplan: React.FC = () => {
                             fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.7rem' }, // Responsive font size
                             mb: { xs: 2, sm: 0 } // Margin-bottom on small screens
                         }}>
-                            Work Plan
+                            {t("p_WorkPlan.ss_WorkPlan_Header")}
                         </Typography>
 
                         <Box sx={{
@@ -214,7 +267,7 @@ export const Workplan: React.FC = () => {
                             gap: { xs: 1, sm: 2 } // Space between search and button
                         }}>
                             <TextField
-                                label="Search"
+                                label={t("p_WorkPlan.ss_Search_Label")}
                                 fullWidth={false}
                                 value={search}
                                 onChange={(e) => { setsearch(e.target.value); setPage(0); }}
@@ -241,7 +294,7 @@ export const Workplan: React.FC = () => {
                                         ml: { xs: 0, sm: '4px' }
                                     }}
                                 >
-                                    Add Plan
+                                    {t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Link_Text")}
                                 </Button>
                             )}
                         </Box>
@@ -252,13 +305,57 @@ export const Workplan: React.FC = () => {
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Watershed</TableCell>
-                                        <TableCell>Year</TableCell>
-                                        <TableCell>Intervention/Component</TableCell>
-                                        <TableCell>Activity</TableCell>
-                                        <TableCell>Physical</TableCell>
-                                        <TableCell align='center'>Financial</TableCell>
-                                        {PerChk('EDIT_Work Plan') && <TableCell width='5%'>Actions</TableCell>}
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'watershedId'}
+                                                direction={sortBy === 'watershedId' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('watershedId')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Watershed")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'planningYear'}
+                                                direction={sortBy === 'planningYear' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('planningYear')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Year")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'interventionType_Components'}
+                                                direction={sortBy === 'interventionType_Components' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('interventionType_Components')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Intervention")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'activityName'}
+                                                direction={sortBy === 'activityName' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('activityName')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Activity")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>
+                                            <TableSortLabel
+                                                active={sortBy === 'value'}
+                                                direction={sortBy === 'value' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('value')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Physical")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {t("p_WorkPlan.ss_WorkplanList.Financial")}
+                                        </TableCell>
+                                        {PerChk('EDIT_Work Plan') && <TableCell width="5%">
+                                            {t("p_WorkPlan.ss_WorkplanList.Action.Action_Text")}
+                                        </TableCell>}
                                     </TableRow>
                                 </TableHead>
 
@@ -266,12 +363,13 @@ export const Workplan: React.FC = () => {
                                     <TableRow key={i}>
                                         <TableCell>{WsName(w.watershedId)}</TableCell>
                                         <TableCell>{w.planningYear}</TableCell>
-                                        <TableCell>{w.interventionType_Components}</TableCell>
+                                        <TableCell>{IntTypeName(w.interventionType_Components)}</TableCell>
                                         <TableCell>{w.activityName}</TableCell>
                                         <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                                         <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
                                         {PerChk('EDIT_Work Plan') && <TableCell>
-                                            <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton>
+                                            <Tooltip title={t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
+                                                <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton></Tooltip>
                                         </TableCell>}
                                     </TableRow>
                                 ))}</TableBody>
@@ -284,40 +382,76 @@ export const Workplan: React.FC = () => {
                                     rowsPerPageOptions={[5, 10, 15]}
                                     onRowsPerPageChange={(e) => { setPage(0); setrPP(parseInt(e.target.value)); }}
                                     ActionsComponent={TPA}
+                                    labelRowsPerPage={t("p_WorkPlan.ss_WorkplanList.Rows_per_page")}
                                 /></TableRow></TableFooter>
                             </Table></TableContainer>}
                 </>}
 
         <Dialog open={addM || editM}>
-            <DialogTitle>{addM ? 'Add Plan' : editM ? 'Edit Plan' : ''}</DialogTitle>
+            <DialogTitle>{addM ? t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Add_WorkPlan_Label") : editM ? t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_WorkPlan_Popup.Edit_WorkPlan_Label") : ''}</DialogTitle>
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
-                <Grid item xs={15}><Divider>Plan Details</Divider></Grid>
-                <Grid item xs={15} md={5}><TextField required label="Financial Year" value={planObj.planningYear} onChange={(e) => { if (/^[\d-]{0,7}$/.test(e.target.value)) { setplanObj({ ...planObj, planningYear: e.target.value }) } }} inputProps={{ maxLength: 7 }} /></Grid>
-                <Grid item xs={15} md={5}><TextField required select label="Intervention/Component" value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
-                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Plan_Details")}</Divider></Grid>
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")}
+                        value={planObj.planningYear}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (/^\d{0,4}(-\d{0,2})?$/.test(value)) {
+                                setplanObj({ ...planObj, planningYear: value });
+                            }
+                        }}
+                        inputProps={{ maxLength: 7, placeholder: 'yyyy-yy' }}
+                    />
+                </Grid>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                    {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label="Activity" value={planObj.activityId} onChange={(e) => setplanObj({ ...planObj, activityId: e.target.value })} disabled={actOps?.length <= 0}>
-                    {actOps?.map((o, i) => (<MenuItem key={i} value={o.activityId}>{o.activityName}</MenuItem>))}
-                </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label="Land Type" value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
-                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                <Grid item xs={15} md={5}>
+                    <TextField
+                        required
+                        select
+                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Activity")}
+                        value={planObj.activityId}
+                        onChange={(e) => {
+                            const selectedActivity = actOps.find((o) => o.activityId === e.target.value);
+                            if (selectedActivity) {
+                                setplanObj({
+                                    ...planObj,
+                                    activityId: selectedActivity.activityId,
+                                    unitofMeasurement: selectedActivity.uom,
+                                });
+                            }
+                        }}
+                        disabled={actOps?.length <= 0}
+                    >
+                        {actOps?.map((o, i) => (
+                            <MenuItem key={i} value={o.activityId}>
+                                {o.activityName}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Land_Type")} value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
+                    {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
 
-                <Grid item xs={15}><Divider>Watershed Details</Divider></Grid>
-                <Grid item xs={15} md={5}><TextField required select label="Watershed" value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
+                <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed_Details")}</Divider></Grid>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed")} value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
                     {wsOps.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required label='State' value={StateName(1)} disabled /></Grid>
-                <Grid item xs={15} md={5}><TextField required label="District" value={DistrictName(wsObj.districtId)} disabled /></Grid>
-                <Grid item xs={15} md={5}><TextField required label="Taluk" value={TalukName(wsObj.talukId)} disabled /></Grid>
-                <Grid item xs={15} md={5}><TextField required label="Panchayat" value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.State")} value={StateName(1)} disabled /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.District")} value={DistrictName(wsObj.districtId)} disabled /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Taluka")} value={TalukName(wsObj.talukId)} disabled /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Grampanchayat")} value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
 
-                <Grid item xs={15}><Divider>Physical Plan</Divider></Grid>
-                <Grid item xs={15} md={5}><TextField required label='Value' value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
-                <Grid item xs={15} md={5}><TextField required label="UOM" value={planObj.unitofMeasurement} onChange={(e) => setplanObj({ ...planObj, unitofMeasurement: e.target.value })} /></Grid>
+                <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Physical_Plan")}</Divider></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Value")} value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
+                <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} disabled /></Grid>
 
-                <Grid item xs={15}><Divider>Financial Plan</Divider></Grid>
+                <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Details")}</Divider></Grid>
                 {planObj.financialDetails?.map((detail, index) => (<React.Fragment key={index}>
                     <Grid item xs={14} md={4}><TextField
                         type='number'
@@ -337,13 +471,13 @@ export const Workplan: React.FC = () => {
                 </React.Fragment>))}
 
                 <Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>=</Grid>
-                <Grid item xs={15} md={5}><TextField required label="Total" value={finTotal} disabled /></Grid>
+                <Grid item xs={15} md={4}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Total")} value={finTotal} disabled /></Grid>
             </Grid></DialogContent>
 
             <DialogActions>
-                <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>Close</Button>
-                {addM ? <Button onClick={PlanAdd} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>Add</Button>
-                    : editM ? <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>Update</Button>
+                <Button onClick={() => { setaddM(false); seteditM(false); }} disabled={loading}>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Cancel_Button")}</Button>
+                {addM ? <Button onClick={PlanAdd} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Add_Button")}</Button>
+                    : editM ? <Button onClick={() => { PlanEdit(planObj.planningId) }} disabled={addCheck} startIcon={loading ? <CircularProgress /> : null}>{t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_WorkPlan_Popup.Update_Button")}</Button>
                         : null}
             </DialogActions>
         </Dialog>

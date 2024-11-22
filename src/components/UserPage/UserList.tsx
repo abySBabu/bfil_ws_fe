@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
-    Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination,
+    Box, Typography, TableHead, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination, TableSortLabel,
     TableRow, Paper, FormControl, Button, useMediaQuery, TextField, Tooltip, InputAdornment, IconButton
 } from '@mui/material';
 import { usersList } from '../../Services/userService';
-import { TPA, PerChk } from '../../common';
+import { TPA, PerChk, ServerDownDialog } from '../../common';
 import { allUserType, selectOptions } from "../UserPage/UserManagementType";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,8 +20,10 @@ import UserDelete from './UserDelete';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios, { AxiosError } from 'axios';
 
 
+type Order = 'asc' | 'desc';
 export default function UserList() {
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
@@ -45,6 +47,10 @@ export default function UserList() {
     let userId: any;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    const [serverDown, setserverDown] = React.useState(false);
+
+    const [sortColumn, setSortColumn] = useState<string>('');
+    const [sortOrder, setSortOrder] = useState<Order>('asc');
 
     if (companyIdFromLocalStorage !== null) {
         companyID = parseInt(companyIdFromLocalStorage);
@@ -78,7 +84,15 @@ export default function UserList() {
             let resp = await usersList(companyID);
             setuserData(resp);
         } catch (error) {
-            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.code === 'ERR_NETWORK') {
+                    setserverDown(true)
+                } else {
+                    console.error('Error fetching data:', error.message);
+                }
+            } else {
+                console.error('Unexpected error:', error);
+            }
         }
         setLoadingResponse(false);
     };
@@ -112,20 +126,67 @@ export default function UserList() {
         fetchUserData();
     }
 
+    const handleSort = (column: string) => {
+        const isAsc = sortColumn === column && sortOrder === 'asc';
+        setSortOrder(isAsc ? 'desc' : 'asc');
+        setSortColumn(column);
+    };
+    const sortedData = [...userData].sort((a, b) => {
+        if (sortColumn === '') return 0;
 
-    const filteredData = userData.filter(user => {
-        const matchesSearchQuery = Object.values(user).some(value => {
-            if (typeof value === 'string') {
-                return value.toLowerCase().includes(searchQuery.toLowerCase());
-            }
-            return false;
-        });
+        let aValue: string | number = '';
+        let bValue: string | number = '';
+
+        if (sortColumn === 'roleName') {
+            aValue = a.userRoleList[0]?.roleName || '';
+            bValue = b.userRoleList[0]?.roleName || '';
+        } else if (sortColumn === 'userBlockedFlag') {
+            const aOption = blockedUserOptions.find(option => option.value === a.userBlockedFlag);
+            const bOption = blockedUserOptions.find(option => option.value === b.userBlockedFlag);
+            aValue = aOption ? aOption.dispalyValue : '';
+            bValue = bOption ? bOption.dispalyValue : '';
+        } else if (typeof a[sortColumn as keyof allUserType] === 'string' || typeof a[sortColumn as keyof allUserType] === 'number') {
+            aValue = a[sortColumn as keyof allUserType] as string | number;
+            bValue = b[sortColumn as keyof allUserType] as string | number;
+        } else {
+            return 0;
+        }
+
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+            return aValue.localeCompare(bValue) * (sortOrder === 'asc' ? 1 : -1);
+        }
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return (aValue - bValue) * (sortOrder === 'asc' ? 1 : -1);
+        }
+
+        return 0;
+    });
+
+
+    const filteredData = sortedData.filter(user => {
+        // const matchesSearchQuery = Object.values(user).some(value => {
+        //     if (typeof value === 'string') {
+        //         return value.toLowerCase().includes(searchQuery.toLowerCase());
+        //     }
+        //     return false;
+        // });
 
         const roleMatchesSearchQuery = user.userRoleList.some(role =>
             role.roleName.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        return matchesSearchQuery || roleMatchesSearchQuery;
+        const statusMatchesSearchQuery = blockedUserOptions.some(option =>
+            option.value === user.userBlockedFlag &&
+            option.dispalyValue.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return (
+            user.userName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.mobileNumber?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.managerName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+            roleMatchesSearchQuery || statusMatchesSearchQuery);
+
+        // return matchesSearchQuery || roleMatchesSearchQuery || statusMatchesSearchQuery;
     });
 
     return (<>
@@ -139,7 +200,7 @@ export default function UserList() {
                 }}
             >
                 <CircularProgress size={80} />
-            </Box> : <>
+            </Box> : serverDown ? <ServerDownDialog /> : <>
                 {showAddModal ? <UserAdd show={true} hide={hideAddModal} action='Add' userList={userData} /> : null}
                 {showEditModal ? <UserEdit show={true} hide={hideEditModal} action='Edit' userDetails={selectedRow} userList={userData} /> : null}
                 {showDisableModal ? <UserDisable show={true} hide={hideDisableModal} userDetails={selectedRow} userList={userData} /> : null}
@@ -173,11 +234,46 @@ export default function UserList() {
                     <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table sx={{ width: '100%' }}>
                         <TableHead>
                             <TableRow sx={{ alignItems: 'center' }}>
-                                <TableCell >{t("p_User_Management.ss_UserList.Name")}</TableCell>
-                                <TableCell >{t("p_User_Management.ss_UserList.Mobile_Number")}</TableCell>
-                                <TableCell >{t("p_User_Management.ss_UserList.Role")}</TableCell>
-                                <TableCell >{t("p_User_Management.ss_UserList.Manager_Name")}</TableCell>
-                                <TableCell >{t("p_User_Management.ss_UserList.Status")}</TableCell>
+                                <TableCell >
+                                    <TableSortLabel
+                                        active={sortColumn === 'userName'}
+                                        direction={sortColumn === 'userName' ? sortOrder : 'asc'}
+                                        onClick={() => handleSort('userName')}>
+                                        {t("p_User_Management.ss_UserList.Name")}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell >
+                                    <TableSortLabel
+                                        active={sortColumn === 'mobileNumber'}
+                                        direction={sortColumn === 'mobileNumber' ? sortOrder : 'asc'}
+                                        onClick={() => handleSort('mobileNumber')}>
+                                        {t("p_User_Management.ss_UserList.Mobile_Number")}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell >
+                                    <TableSortLabel
+                                        active={sortColumn === 'roleName'}
+                                        direction={sortColumn === 'roleName' ? sortOrder : 'asc'}
+                                        onClick={() => handleSort('roleName')}>
+                                        {t("p_User_Management.ss_UserList.Role")}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell >
+                                    <TableSortLabel
+                                        active={sortColumn === 'managerName'}
+                                        direction={sortColumn === 'managerName' ? sortOrder : 'asc'}
+                                        onClick={() => handleSort('managerName')}>
+                                        {t("p_User_Management.ss_UserList.Manager_Name")}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell >
+                                    <TableSortLabel
+                                        active={sortColumn === 'userBlockedFlag'}
+                                        direction={sortColumn === 'userBlockedFlag' ? sortOrder : 'asc'}
+                                        onClick={() => handleSort('userBlockedFlag')}>
+                                        {t("p_User_Management.ss_UserList.Status")}
+                                    </TableSortLabel>
+                                </TableCell>
                                 {PerChk('EDIT_User Management') && (
                                     <TableCell sx={{ textAlign: 'center' }}>{t("p_User_Management.ss_UserList.Action.Action_Text")}</TableCell>)}
                             </TableRow>
@@ -257,6 +353,7 @@ export default function UserList() {
                             </TableRow>
                         </TableFooter>
                     </Table></TableContainer> : <Typography variant='h6' sx={{ textAlign: 'center' }}>No records</Typography>}
-            </>}
+            </>
+        }
     </>)
 }

@@ -58,3 +58,16 @@ export async function logout() {
     }
     catch (error) { throw (error) }
 }
+
+export async function PassReset(data: any) {
+    const config = {
+        url: serverPath.authserver + "user-profile-service/resetPassword",
+        method: "post",
+        data: data
+    }
+    try {
+        const response = await axios(config)
+        if (response) { return response.data }
+    }
+    catch (error) { throw (error) }
+}
