@@ -24,10 +24,12 @@ export const actDef = {
         activityName: '',
         activityCode: 0,
         userId: '',
+        roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
         interventionType: 0,
         activityImage: '',
+        mobileImage: '',
         activityFormData: '',
         watershedId: '',
         farmerId: '',
@@ -344,7 +346,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActAdd = async () => {
         setLoading(true);
         try {
-            const resp1 = await addAct({ ...actObj.workActivity, village: vList, createdUser: sessionStorage.getItem("userName") as string })
+            const resp1 = await addAct({
+                ...actObj.workActivity,
+                village: vList,
+                createdUser: sessionStorage.getItem("userName"),
+                roleId: localStorage.getItem("userRoleId")
+            })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
@@ -365,7 +372,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '', updatedUser: sessionStorage.getItem("userName") as string }, id)
+            const resp1 = await editAct({
+                ...actObj.workActivity,
+                village: vList,
+                remarks: '',
+                updatedUser: sessionStorage.getItem("userName")
+            }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));

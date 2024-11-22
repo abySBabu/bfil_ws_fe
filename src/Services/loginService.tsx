@@ -22,7 +22,7 @@ export async function login(data: any) {
         sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
         sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
         localStorage.setItem("userRole", response.data.user.userRoleList[0].roleName);
-
+        localStorage.setItem("userRoleId", response.data.user.userRoleList[0].roleId);
 
         return response.data;
         // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);

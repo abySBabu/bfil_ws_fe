@@ -1,14 +1,11 @@
 import React from 'react';
-import { Box, Typography, Toolbar, Paper, Button, IconButton, TextField, Modal } from '@mui/material';
-import { ArrowBack, Password } from '@mui/icons-material';
+import { Box, Typography, Toolbar, IconButton } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { sd } from '../../common';
-import { useTranslation } from 'react-i18next';
-import { PassReset } from 'src/Services/loginService';
 import { useNavigate } from 'react-router-dom';
 
 export const ForgotPass: React.FC = () => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
     const [passObj, setpassObj] = React.useState('');
     const [emailObj, setemailObj] = React.useState('');
     const [otpServer, setotpServer] = React.useState('');
