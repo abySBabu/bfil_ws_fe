@@ -70,10 +70,84 @@ const WatershedReport: React.FC = () => {
     fetchReport();
   }, [selectedYear]);
 
+  const exportToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheetData = [];
+    const headerRow1 = ['Sl. No.', 'Activity Name', 'UOM', 'Land Type', 'Process Type',...watershedNames.flatMap((name) => [name, '']), 'Total'];
+    worksheetData.push(headerRow1);
+    const headerRow2 = ['', '', '', '', '',...watershedNames.flatMap(() => ['Plan', 'Progress'])]; 
+    worksheetData.push(headerRow2);
+  
+    const merges = [{ s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },{ s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },{ s: { r: 0, c: 2 }, e: { r: 1, c: 2 } },{ s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, 
+      ...watershedNames.map((_, i) => ({ s: { r: 0, c: 5 + i * 2 },e: { r: 0, c: 6 + i * 2 } })),
+      { s: { r: 0, c: 5 + watershedNames.length * 2 }, e: { r: 1, c: 5 + watershedNames.length * 2 } } 
+    ];
+  
+    let currentRow = 2; 
+    reportData.forEach((activity, activityIndex) => {
+      let totalPublicPhysical = 0;
+      let totalPublicFinancial = 0;
+      let totalPrivatePhysical = 0;
+      let totalPrivateFinancial = 0;
+  
+      const publicPhysicalRow = [activityIndex + 1,activity.activityName,activity.uom, 'Public','Physical', ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+          const publicPhysicalPlan = watershed?.physical?.plan ?? 0;
+          const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
+          totalPublicPhysical += publicPhysicalPlan + publicPhysicalProgress;
+          return [publicPhysicalPlan, publicPhysicalProgress];
+        }),
+        totalPublicPhysical
+      ];
+      worksheetData.push(publicPhysicalRow);
+  
+      const publicFinancialRow = ['','','','Public','Financial',...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+          const publicFinancialPlan = watershed?.financial?.plan ?? 0;
+          const publicFinancialProgress = watershed?.financial?.progress ?? 0;
+          totalPublicFinancial += publicFinancialPlan + publicFinancialProgress;
+          return [publicFinancialPlan, publicFinancialProgress];
+        }),
+        totalPublicFinancial
+      ];
+      worksheetData.push(publicFinancialRow);
+  
+      const privatePhysicalRow = ['','', '', 'Private','Physical', ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+          const privatePhysicalPlan = watershed?.physical?.plan ?? 0;
+          const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
+          totalPrivatePhysical += privatePhysicalPlan + privatePhysicalProgress;
+          return [privatePhysicalPlan, privatePhysicalProgress];
+        }),
+        totalPrivatePhysical
+      ];
+      worksheetData.push(privatePhysicalRow);
+  
+      const privateFinancialRow = ['','','','Private','Financial',...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+          const privateFinancialPlan = watershed?.financial?.plan ?? 0;
+          const privateFinancialProgress = watershed?.financial?.progress ?? 0;
+          totalPrivateFinancial += privateFinancialPlan + privateFinancialProgress;
+          return [privateFinancialPlan, privateFinancialProgress];
+        }),
+        totalPrivateFinancial
+      ];
+      worksheetData.push(privateFinancialRow);
+      merges.push({ s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } },{ s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } },  { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }  
+      );
+      currentRow += 4; 
+    });
+     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+     worksheet['!cols'] = [{ wpx: 40 },{ wpx: 200 },{ wpx: 100 },{ wpx: 100 },{ wpx: 120 },...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]),{ wpx: 100 }];
+     worksheet['!merges'] = merges;
+     XLSX.utils.book_append_sheet(workbook, worksheet, 'Watershed Report');
+    XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
+  };
+  
   
   return (
     <div>
-      <Typography variant="h5" align="center" style={{ padding: '15px'}}>
+      <Typography variant="h5" align="center" sx={{ padding: '15px'}}>
         Watershed Wise Works undertaken {selectedYear}
       </Typography>
       <Box sx={{ display: 'flex',justifyContent: 'space-between',ml:3,alignItems: 'center',width: '100%',mb: 2,flexDirection: { xs: 'column', sm: 'row' }}} >
@@ -89,7 +163,7 @@ const WatershedReport: React.FC = () => {
                 </Select>
         </FormControl>
       <Box display="flex" alignItems="end" justifyContent="flex-end" sx={{ marginRight: { md: '30px' }, mb: 3, flexDirection: { sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
-        <FileDownloadIcon sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
+        <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
         <PictureAsPdfIcon onClick={exportToPDF} sx={{ cursor: 'pointer' }} />
       </Box>
     </Box>
