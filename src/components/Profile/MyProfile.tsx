@@ -35,7 +35,7 @@ export const MyProfile: React.FC = () => {
                     helperText={passObj.length > 0 && passObj?.length < 4 && 'Password must be at least 4 characters long'} />
                 <Box>
                     <Button sx={{ mr: '4px' }} onClick={() => setpassEdit(false)}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Cancel')}</Button>
-                    <Button sx={{ ml: '4px' }} onClick={ResetPass} disabled={passObj?.length <= 4}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Update_Link_Text')}</Button>
+                    <Button sx={{ ml: '4px' }} onClick={ResetPass} disabled={passObj?.length < 4}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Update_Link_Text')}</Button>
                 </Box>
             </>
                 : <>
