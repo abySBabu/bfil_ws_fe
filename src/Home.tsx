@@ -24,6 +24,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
+import { TokenRefresh } from './Services/loginService';
 
 interface SideItem {
   screenName: string;
@@ -72,6 +73,19 @@ export const Home: React.FC = () => {
     });
 
   }, [setTimeoutsecs, message, tokenExpired])
+
+  useEffect(() => {
+    const TknRfr = async () => {
+      if (tokenExpired) {
+        try {
+          const resp = await TokenRefresh();
+          if (resp) { console.log("Tokens refreshed") }
+        }
+        catch (error) { console.log(error) }
+        setTokenExpired(false);
+      }
+    }; TknRfr();
+  }, [tokenExpired])
 
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);

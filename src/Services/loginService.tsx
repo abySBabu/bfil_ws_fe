@@ -26,10 +26,10 @@ export async function login(data: any) {
         localStorage.setItem("userRoleId", response.data.user.userRoleList[0].roleId);
 
         Cookies.set('Ta2-jwt-refresh', response.data.jwtRefresh, {
-            expires: 7, // Set expiration to 7 days (or adjust as needed)
-            secure: true, // Ensure secure cookies in production
-            sameSite: 'none', // Prevent cross-site attacks
-            path: '/', // Make cookie available across the app
+            expires: 1,
+            secure: true,
+            sameSite: 'strict',
+            path: '/'
         });
 
         return response.data;
@@ -72,18 +72,21 @@ export async function PassReset(data: any) {
 }
 
 export async function TokenRefresh() {
-    console.log("Cookie token--", Cookies.get('Ta2-jwt-refresh'))
-    const jwtRefreshCookie = `Ta2-jwt-refresh=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5NDQ5NTQwMTg1IiwiaWF0IjoxNzMyNTE3Mzg1LCJleHAiOjE3MzI1OTczODV9.NdCdsACryfTbemibdRMjP2XLEK2PlpqlLnOT2Bhu9s1Wm951_7s0iPomYgA63nZE0EwBb8wU5cgWq--JfwpHRg;`;
+    const refToken = sessionStorage.getItem('refToken');
     const config = {
         url: `${serverPath.authserver}user-profile-service/loginRefreshBasedOnCompany/${serverPath.companyID}`,
         method: "post",
-        withCredentials: true,
-        headers: { Cookie: jwtRefreshCookie }
+        params: { jwtRefreshCookie: refToken }
     };
 
     try {
         const response = await axios(config);
-        if (response) { return response.data }
+        if (response) {
+            sessionStorage.setItem("token", response.data.jwtBearer);
+            sessionStorage.setItem("refToken", response.data.jwtRefresh);
+            return response.data;
+        }
+    } catch (error) {
+        throw error;
     }
-    catch (error) { throw error }
 }
