@@ -1,5 +1,6 @@
 import axios from "axios";
 import { serverPath } from '../common';
+import Cookies from 'js-cookie';
 
 export async function login(data: any) {
     const configuration = {
@@ -24,20 +25,18 @@ export async function login(data: any) {
         localStorage.setItem("userRole", response.data.user.userRoleList[0].roleName);
         localStorage.setItem("userRoleId", response.data.user.userRoleList[0].roleId);
 
+        Cookies.set('Ta2-jwt-refresh', response.data.jwtRefresh, {
+            expires: 7, // Set expiration to 7 days (or adjust as needed)
+            secure: true, // Ensure secure cookies in production
+            sameSite: 'none', // Prevent cross-site attacks
+            path: '/', // Make cookie available across the app
+        });
+
         return response.data;
-        // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);
-        // sessionStorage.setItem("companyName", response.data.user.userCompanyList[0].companyName);
-        // sessionStorage.setItem("loggedInUserNumber", response.data.user.mobileNumber);
-        // sessionStorage.setItem("permissionList", response.data.permissionList.toString());
-        // sessionStorage.setItem("companyFeature", response.data.companyFeature.admin_List.toString());
-        // sessionStorage.setItem("dashBoardFeatures", response.data.companyFeature.feature.toString());
-        // sessionStorage.setItem("companyReportList", response.data.companyFeature.report_List.toString());
-        // sessionStorage.setItem("subScribedUserCount", response.data.user.userCompanyList[0].subScribedUserCount);
     } catch (error) {
         throw (error)
     }
-
-};
+}
 
 export async function logout() {
     const configuration = {
@@ -70,4 +69,18 @@ export async function PassReset(data: any) {
         if (response) { return response.data }
     }
     catch (error) { throw (error) }
+}
+
+export async function TokenRefresh() {
+    const config = {
+        url: `${serverPath.authserver}user-profile-service/loginRefreshBasedOnCompany/${serverPath.companyID}`,
+        method: "post",
+        withCredentials: true
+    };
+
+    try {
+        const response = await axios(config);
+        if (response) { return response.data }
+    }
+    catch (error) { throw error }
 }
