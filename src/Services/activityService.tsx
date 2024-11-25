@@ -74,7 +74,7 @@ export async function DashSupply() {
 
 export async function actFlowNext(status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${localStorage.getItem("userRole")}/Submit/${status}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${(localStorage.getItem("userRole") as string).replace(/\s+/g, "_")}/Submit/${status}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
