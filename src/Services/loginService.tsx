@@ -60,9 +60,9 @@ export async function logout() {
 
 export async function PassReset(data: any) {
     const config = {
-        url: serverPath.authserver + "user-profile-service/resetPassword",
+        url: serverPath.authserver + "user-profile-service/resetPasswordByCompanyId",
         method: "post",
-        data: data
+        data: { ...data, companyId: serverPath.companyID }
     }
     try {
         const response = await axios(config)
@@ -72,10 +72,13 @@ export async function PassReset(data: any) {
 }
 
 export async function TokenRefresh() {
+    console.log("Cookie token--", Cookies.get('Ta2-jwt-refresh'))
+    const jwtRefreshCookie = `Ta2-jwt-refresh=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5NDQ5NTQwMTg1IiwiaWF0IjoxNzMyNTE3Mzg1LCJleHAiOjE3MzI1OTczODV9.NdCdsACryfTbemibdRMjP2XLEK2PlpqlLnOT2Bhu9s1Wm951_7s0iPomYgA63nZE0EwBb8wU5cgWq--JfwpHRg;`;
     const config = {
         url: `${serverPath.authserver}user-profile-service/loginRefreshBasedOnCompany/${serverPath.companyID}`,
         method: "post",
-        withCredentials: true
+        withCredentials: true,
+        headers: { Cookie: jwtRefreshCookie }
     };
 
     try {
