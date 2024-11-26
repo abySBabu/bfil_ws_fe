@@ -66,26 +66,35 @@ export const Home: React.FC = () => {
   useEffect(() => {
     const tokenresult = checkTknExpiry((expired) => {
       if (expired) {
-        setTokenExpired(expired);
+        setTokenExpired(true);
         setMessage("Your token has expired");
         setOpenSnackbar(true);
-      };
+      }
     });
 
-  }, [setTimeoutsecs, message, tokenExpired])
+    return () => {
+      if (tokenresult?.timerRef) {
+        clearTimeout(tokenresult.timerRef);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const TknRfr = async () => {
       if (tokenExpired) {
         try {
           const resp = await TokenRefresh();
-          if (resp) { console.log("Tokens refreshed") }
+          if (resp) {
+            console.log("Tokens refreshed");
+            setTokenExpired(false);
+          }
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+          window.location.href = "/signin";
         }
-        catch (error) { console.log(error) }
-        setTokenExpired(false);
       }
     }; TknRfr();
-  }, [tokenExpired])
+  }, [tokenExpired]);
 
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);
@@ -468,7 +477,7 @@ export const Home: React.FC = () => {
         </Box>
       </Box>}
 
-    {tokenExpired && <Dialog
+    {/* {tokenExpired && <Dialog
       open={openSnackbar} maxWidth={'xs'}>
       <DialogContent sx={{ mt: 2 }}>
         {message}
@@ -476,7 +485,7 @@ export const Home: React.FC = () => {
       <DialogActions>
         <Button onClick={handleClose}>Okay</Button>
       </DialogActions>
-    </Dialog>}
+    </Dialog>} */}
 
     <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
       <Box sx={{ padding: '8px 16px' }}>
