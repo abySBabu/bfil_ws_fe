@@ -11,7 +11,7 @@ import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
-import { listFarmer } from '../../Services/farmerService';
+import { listFarmer, listFarmerByUser } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
@@ -243,7 +243,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         setLoadingResponse(true);
         try {
             const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
-            const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
+            const resp2 = await listFarmerByUser(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }

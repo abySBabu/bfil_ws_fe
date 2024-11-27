@@ -23,7 +23,7 @@ export default function UserPassword(props: userTypeProps) {
     const [newPass, setnewPass] = useState('');
     const [conPass, setconPass] = useState('');
 
-    const addCheck = loading || newPass?.length <= 0 || conPass?.length <= 0 || newPass !== conPass
+    const addCheck = loading || newPass?.length < 4 || conPass?.length < 4 || newPass !== conPass
 
     const EditPass = async () => {
         setLoading(true);
