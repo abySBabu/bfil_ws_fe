@@ -23,11 +23,13 @@ export const actDef = {
         activityId: '',
         activityName: '',
         activityCode: 0,
-        userId: '',
+        userId: sessionStorage.getItem("userId"),
+        roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
         interventionType: 0,
         activityImage: '',
+        mobileImage: '',
         activityFormData: '',
         watershedId: '',
         farmerId: '',
@@ -116,6 +118,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [imgM, setimgM] = React.useState('');
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
+    const uName = sessionStorage.getItem("userName")
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -160,6 +163,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         .sort((a, b) => {
             if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
             if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+            if (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) return -1;
+            if (b.workActivity.activityWorkflowStatus === 'New' && b.workActivity.createdUser === uName) return 1;
             return 0;
         })
         .sort((a, b) => {
@@ -341,7 +346,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActAdd = async () => {
         setLoading(true);
         try {
-            const resp1 = await addAct({ ...actObj.workActivity, village: vList, createdUser: sessionStorage.getItem("userName") as string })
+            const resp1 = await addAct({
+                ...actObj.workActivity,
+                village: vList,
+                createdUser: sessionStorage.getItem("userName"),
+                updatedUser: '',
+                roleId: localStorage.getItem("userRoleId")
+            })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
@@ -362,7 +373,12 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '', updatedUser: sessionStorage.getItem("userName") as string }, id)
+            const resp1 = await editAct({
+                ...actObj.workActivity,
+                village: vList,
+                remarks: '',
+                updatedUser: sessionStorage.getItem("userName")
+            }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
@@ -591,15 +607,15 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                                            <TableCell>{a.workActivity.updatedUser}</TableCell>
+                                            <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(uRole === 'Community Resource person' &&
-                                                    (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress')) ||
-                                                    (a.workActivity.activityWorkflowStatus === uStatus) ? (
+                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress'))
+                                                    || (a.workActivity.activityWorkflowStatus === uStatus)
+                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); setprogM(true); }}>
                                                         <PlayArrow />
                                                     </IconButton>
@@ -628,7 +644,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             <DialogTitle>{addM ? t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Add_Activity_Label") : editM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Activity_Popup.Edit_Activity_Label") : ''}</DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
-                <Grid item xs={12} sm={3}><TextField disabled={editM} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Intervention")} value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: parseInt(e.target.value), activityCode: 0 } })}>
+                <Grid item xs={12} sm={3}><TextField disabled={editM} required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Intervention")} value={actObj.workActivity.interventionType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, interventionType: parseInt(e.target.value), activityCode: 0, unit: '' } })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={12} sm={3}>
@@ -870,18 +886,35 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
-                                <TableCell><img
-                                    src={(() => {
-                                        try { return JSON.parse(a.activityImage).activityImage }
-                                        catch (error) { return "" }
+                                <TableCell>
+                                    {(() => {
+                                        try {
+                                            const imageLinks: string[] = JSON.parse(a.activityImage).activityImage.split(',');
+                                            if (imageLinks.length > 0)
+                                                return imageLinks.map((link: string, index: number) => (
+                                                    <img
+                                                        key={index}
+                                                        src={link.trim()}
+                                                        alt={`Activity ${index + 1}`}
+                                                        style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
+                                                        onClick={() => {
+                                                            try {
+                                                                setimgM(link.trim());
+                                                            } catch (error) {
+                                                                console.error("Error setting image modal--", link.trim());
+                                                            }
+                                                        }}
+                                                    />
+                                                ));
+                                            else
+                                                return ''
+                                        } catch (error) {
+                                            console.error("JSON error--", a.activityImage);
+                                            return null;
+                                        }
                                     })()}
-                                    alt="Activity"
-                                    style={{ height: '24px', objectFit: 'contain', cursor: 'pointer' }}
-                                    onClick={() => {
-                                        try { setimgM(JSON.parse(a.activityImage).activityImage) }
-                                        catch (error) { console.error("JSON error--", a.activityImage) }
-                                    }}
-                                /></TableCell>
+                                </TableCell>
+
                             </TableRow>)
                             )}</TableBody>
                         </Table></TableContainer>

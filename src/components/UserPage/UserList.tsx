@@ -11,6 +11,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import UserEdit from './UserEdit';
 import UserAdd from './UserAdd';
+import UserPassword from './UserPassword';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,6 +19,7 @@ import UserDisable from './UserDisable';
 import UserEnable from './UserEnable';
 import UserDelete from './UserDelete';
 import SearchIcon from '@mui/icons-material/Search';
+import { Password } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios, { AxiosError } from 'axios';
@@ -33,6 +35,7 @@ export default function UserList() {
     const [showEnableModal, setShowEnableModal] = useState(false);
     const [showDisableModal, setShowDisableModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showPassModal, setshowPassModal] = useState(false);
     const [loading, setLoading] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [userData, setuserData] = useState<allUserType[]>([]);
@@ -45,6 +48,7 @@ export default function UserList() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     let companyID: any;
     let userId: any;
+    const userRole = localStorage.getItem("userRole") as string;
     const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
     const userIdFromLocalStorage = sessionStorage.getItem("userId");
     const [serverDown, setserverDown] = React.useState(false);
@@ -206,6 +210,7 @@ export default function UserList() {
                 {showDisableModal ? <UserDisable show={true} hide={hideDisableModal} userDetails={selectedRow} userList={userData} /> : null}
                 {showEnableModal ? <UserEnable show={true} hide={hideEnableModal} userDetails={selectedRow} userList={userData} /> : null}
                 {showDeleteModal ? <UserDelete show={true} hide={hideDeleteModal} userDetails={selectedRow} userList={userData} /> : null}
+                {showPassModal && <UserPassword hide={() => setshowPassModal(false)} action='Edit' userDetails={selectedRow} />}
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '4px', mb: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
                     <Typography variant="h5" sx={{
@@ -331,6 +336,10 @@ export default function UserList() {
                                             {row.userBlockedFlag === 'Y' &&
                                                 <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
                                                     <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
+                                                </Tooltip>}
+                                            {userRole === 'Chief Manager Head Office' &&
+                                                <Tooltip title='Change user password'>
+                                                    <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setshowPassModal(true) }}><Password /></IconButton>
                                                 </Tooltip>}
                                         </TableCell>
                                     )}

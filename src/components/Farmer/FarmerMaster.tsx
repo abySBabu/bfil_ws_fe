@@ -190,13 +190,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to add beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
+        catch (error: any) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to add beneficiary");
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setaddM(false);
@@ -213,13 +213,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to edit beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
+        catch (error: any) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to edit beneficiary");
+            setalert(error.response.data.message);
         }
         setLoading(false);
         seteditM(false);
@@ -235,12 +235,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to delete beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to delete beneficiary");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setdeleteM('');

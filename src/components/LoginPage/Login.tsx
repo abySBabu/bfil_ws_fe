@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Avatar } from '@mui/material';
+import { TextField, Button, Box, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Typography } from '@mui/material';
 import { login } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
 import { serverPath, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
-import { Height } from '@mui/icons-material';
-
 
 interface ILoginFormInput {
     userName: string;
@@ -18,6 +16,7 @@ const Login: React.FC = () => {
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [forgotPass, setforgotPass] = useState(false);
 
     const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<ILoginFormInput>({
         mode: 'onChange',
@@ -142,11 +141,14 @@ const Login: React.FC = () => {
                                 </Button>
 
                                 <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#" variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </Grid>
+                                    <Grid item xs>{
+                                        forgotPass ?
+                                            <Typography>Please contact your admin for a password reset</Typography>
+                                            :
+                                            <Link onClick={() => setforgotPass(true)}>
+                                                Forgot password?
+                                            </Link>
+                                    }</Grid>
                                 </Grid>
                             </Box>
                         </Box>
