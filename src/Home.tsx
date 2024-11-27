@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
@@ -14,7 +14,7 @@ import { ListSide, ListStatus } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -31,11 +31,13 @@ interface SideItem {
 }
 interface Section {
   name: string;
+  path: string;
   permission: string;
   component: JSX.Element;
 }
 
 export const Home: React.FC = () => {
+  const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
   const [message, setMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -46,7 +48,7 @@ export const Home: React.FC = () => {
   const [avatarAnchor, setavatarAnchor] = useState<any>(null);
   const [languageAnchor, setLanguageAnchor] = useState<any>(null);
   const [sideList, setsideList] = React.useState<any[]>([]);
-  const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
+  const [sections, setSections] = useState<Array<{ name: string, path: string, permission: string, component: JSX.Element }> | null>(null);
   const [uName, setuName] = React.useState('');
   const [actCount, setactCount] = useState(0);
   const { t } = useTranslation();
@@ -56,12 +58,30 @@ export const Home: React.FC = () => {
   const [serverDown, setserverDown] = React.useState(false);
   sessionStorage.setItem("multiLanguage", "en");
 
+
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
       <Typography>{t(textKey)}</Typography>
       <Badge badgeContent={badgeCount} overlap="circular" sx={{ '& .MuiBadge-badge': { backgroundColor: '#fff', color: sd('--text-color-special') } }} />
     </Box>)
   }
+
+  useEffect(() => {
+    if (sections) {
+      // Find the index of the section corresponding to the current path
+      const currentIndex = sections.findIndex((section) => section.path === location.pathname);
+      if (currentIndex !== -1) {
+        setdIndex(currentIndex);
+      } else {
+        setdIndex(0); // Reset if no matching path
+      }
+    }
+  }, [location.pathname, sections]);
+
+  const handleMenuClick = (index: number, path: string) => {
+    setdIndex(index);
+    navigate(path);
+  };
 
   useEffect(() => {
     const tokenresult = checkTknExpiry((expired) => {
@@ -128,18 +148,6 @@ export const Home: React.FC = () => {
     navigate('/')
   };
 
-  // const sections = [
-  //     { name: sideList[0]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
-  //     { name: sideList[1]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
-  //     { name: sideList[2]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
-  //     { name: sideList[3]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-  //     { name: sideList[4]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-  //     { name: sideList[5]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-  //     { name: sideList[6]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-  //     { name: sideList[7]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
-  // ];
-
-
   React.useEffect(() => {
     const fetchLoc = async () => {
       setuName((sessionStorage.getItem("userName") as string)[0] || '')
@@ -159,23 +167,23 @@ export const Home: React.FC = () => {
                 const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
                   switch (sideItem.screenName) {
                     case 'Dashboard':
-                      return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/dashboard", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
                     case 'User Management':
-                      return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+                      return { name: t('p_Home.SM_BE_User_Management_Link'), path: "/users", permission: 'VIEW_User Management', component: <UserList /> };
                     case 'Role Management':
-                      return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+                      return { name: t('p_Home.SM_BE_Role_Management_Link'), path: "/roles", permission: 'VIEW_Role Management', component: <RoleList /> };
                     case 'Watershed Master':
-                      return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+                      return { name: t('p_Home.SM_BE_Watershed_Master_Link'), path: "/wsMaster", permission: 'VIEW_Watershed Master', component: <WsMaster /> };
                     case 'Beneficiary Master':
-                      return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
+                      return { name: t('p_Home.SM_BE_Farmer_Master_Link'), path: "/beneficiaryMastaer", permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
                     case 'Watershed Mapping':
-                      return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+                      return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), path: "/wsMapping", permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                     case 'Watershed Activity':
-                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
+                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
                     case 'Work Plan':
-                      return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                      return { name: t('p_Home.SM_BE_Work_Plan_Link'), path: "/workplan", permission: 'VIEW_Work Plan', component: <Workplan /> };
                     case 'Report':
-                      return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Report /> };
+                      return { name: t('p_Home.SM_BE_Report_Link'), path: "/report", permission: 'VIEW_Report', component: <Report /> };
                     default:
                       return null;
                   }
@@ -185,6 +193,7 @@ export const Home: React.FC = () => {
                 const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
                 if (defaultIndex !== -1) {
                   setdIndex(defaultIndex);
+                  navigate(generatedSections[defaultIndex].path);
                 } else {
                   setHasPermission(true);
                   setMessage("You do not have permission to view any sections.");
@@ -242,6 +251,9 @@ export const Home: React.FC = () => {
       setMobileOpen(!mobileOpen);
     }
   };
+
+
+
   const drawer = (
     <Box sx={{ marginLeft: '10px', mt: 5 }}>
       <List>
@@ -263,9 +275,8 @@ export const Home: React.FC = () => {
                     },
                   },
                 }}
-
-                onClick={() => setdIndex(index)}
                 selected={dIndex === index}
+                onClick={() => handleMenuClick(index, section.path)}
               >
                 <ListItemText primary={section.name} />
               </ListItemButton>
@@ -275,7 +286,6 @@ export const Home: React.FC = () => {
       </List>
     </Box>
   );
-
 
   return (<>
     {loadingResponse ? <Box
@@ -439,7 +449,8 @@ export const Home: React.FC = () => {
             <Card sx={{ color: sd('--page-nav-txtcolor'), display: { xs: 'none', sm: 'block' }, bgcolor: sd('--page-nav-bgcolor'), width: { md: '25%', lg: '15%' }, borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
               <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                 PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
-                  <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                  <ListItemButton onClick={() => handleMenuClick(index, section.path)}
+                    selected={dIndex === index}>
                     <ListItemText primary={section.name} />
                   </ListItemButton>
                 </ListItem>)
@@ -450,7 +461,7 @@ export const Home: React.FC = () => {
                         {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
                     </Box> */}
 
-            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+            <Box component="main" sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
               {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
             </Box>
           </Paper>
