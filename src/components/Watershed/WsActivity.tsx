@@ -948,10 +948,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (
                                     <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
-                                        Reject to {prev} </Button>)}
+                                        Reject to {prev.replace(/_/g, " ")} </Button>)}
                                 {next && (
                                     <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
-                                        Send to {next}</Button>)}
+                                        Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>
                     </DialogActions>
