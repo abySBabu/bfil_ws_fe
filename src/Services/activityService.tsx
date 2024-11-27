@@ -97,3 +97,15 @@ export async function actFlowPrev(status: any) {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function userDeleteCheck(id: any) {
+    const configs = {
+        url: serverPath.bfil + `data_capture/userDeleteOrNot/${id}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
