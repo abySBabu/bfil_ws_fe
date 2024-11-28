@@ -1,4 +1,4 @@
-import React, { useState, useEffect, startTransition } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
@@ -83,8 +83,9 @@ export const Home: React.FC = () => {
     navigate(path);
   };
 
-  useEffect(() => {
-    const tokenresult = checkTknExpiry((expired) => {
+  // Function to initiate token monitoring
+  const monitorTokenExpiry = useCallback(() => {
+    const tokenResult = checkTknExpiry((expired) => {
       if (expired) {
         setTokenExpired(true);
         setMessage("Your token has expired");
@@ -93,28 +94,37 @@ export const Home: React.FC = () => {
     });
 
     return () => {
-      if (tokenresult?.timerRef) {
-        clearTimeout(tokenresult.timerRef);
+      if (tokenResult?.timerRef) {
+        clearTimeout(tokenResult.timerRef);
       }
     };
   }, []);
 
+  // Initial token monitoring on component mount
+  useEffect(() => {
+    const cleanup = monitorTokenExpiry();
+    return cleanup; // Cleanup timer on unmount
+  }, [monitorTokenExpiry]);
+
+  // Refresh token and restart monitoring after successful refresh
   useEffect(() => {
     const TknRfr = async () => {
       if (tokenExpired) {
         try {
-          const resp = await TokenRefresh();
+          const resp = await TokenRefresh(); // Call your refresh service
           if (resp) {
             console.log("Tokens refreshed");
-            setTokenExpired(false);
+            setTokenExpired(false); // Reset expiration state
+            monitorTokenExpiry(); // Restart token monitoring
           }
         } catch (error) {
           console.error("Token refresh failed:", error);
-          window.location.href = "/signin";
         }
       }
-    }; TknRfr();
-  }, [tokenExpired]);
+    };
+
+    TknRfr();
+  }, [tokenExpired, monitorTokenExpiry]);
 
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);

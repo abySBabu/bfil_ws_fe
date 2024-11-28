@@ -21,9 +21,9 @@ const checkTknExpiry = (onExpireCallback: (expired: boolean) => void, delay = 10
                 }
                 // window.alert('Token Expired');
                 setTimeout(() => {
-                    sessionStorage.clear();
-                    localStorage.clear();
-                    // window.location.href = '/bfilreact';
+                    //sessionStorage.clear();
+                    //localStorage.clear();
+                    //window.location.href = '/bfilreactdev/dashboard';
                 }, delay);
             };
 
