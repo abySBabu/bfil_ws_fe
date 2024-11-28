@@ -359,12 +359,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp1.message) || "Failed to add activity");
+                setalert(resp1.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to add activity");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setaddM(false);
@@ -385,12 +386,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp1.message) || "Failed to update activity");
+                setalert(resp1.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update activity");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         seteditM(false);
@@ -410,7 +412,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 }
                 else {
                     setalertClr(false);
-                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
+                    setalert(resp2.message);
                 }
             }
             else {
@@ -418,9 +420,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 setalert("Failed to update work flow status");
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update work flow status");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setprogM(false);
     }
@@ -439,7 +442,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 }
                 else {
                     setalertClr(false);
-                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
+                    setalert(resp2.message);
                 }
             }
             else {
@@ -447,9 +450,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 setalert("Failed to update work flow status");
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update work flow status");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setprogM(false);
     }
@@ -612,7 +616,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
-                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
+                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
