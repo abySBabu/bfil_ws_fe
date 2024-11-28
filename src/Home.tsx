@@ -39,8 +39,7 @@ interface Section {
 export const Home: React.FC = () => {
   const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
-  const [message, setMessage] = useState('');
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [expiryDialog, setexpiryDialog] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(false);
   const navigate = useNavigate();
   const [dIndex, setdIndex] = useState<number | null>(null);
@@ -87,8 +86,6 @@ export const Home: React.FC = () => {
     const tokenResult = checkTknExpiry((expired) => {
       if (expired) {
         setTokenExpired(true);
-        setMessage("Your token has expired");
-        setOpenSnackbar(true);
       }
     });
 
@@ -116,6 +113,7 @@ export const Home: React.FC = () => {
           }
         } catch (error) {
           console.error("Token refresh failed:", error);
+          setexpiryDialog(true);
         }
       }
     };
@@ -129,10 +127,6 @@ export const Home: React.FC = () => {
     setLanguageAnchor(null);
     setavatarAnchor(null);
   }
-
-  const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
-    setLanguageAnchor(event.currentTarget);
-  };
 
   const logOut = async () => {
     try {
@@ -149,11 +143,6 @@ export const Home: React.FC = () => {
   const myProfile = async () => {
     navigate('/profile');
   }
-
-  const handleClose = async () => {
-    setOpenSnackbar(false);
-    navigate('/')
-  };
 
   React.useEffect(() => {
     const fetchLoc = async () => {
@@ -201,7 +190,6 @@ export const Home: React.FC = () => {
                   navigate(generatedSections[defaultIndex].path);
                 } else {
                   setHasPermission(true);
-                  setMessage("You do not have permission to view any sections.");
                 }
               }
               // else { setserverDown(true) }
@@ -250,14 +238,11 @@ export const Home: React.FC = () => {
     setIsClosing(false);
   };
 
-
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
   };
-
-
 
   const drawer = (
     <Box sx={{ marginLeft: '10px', mt: 5 }}>
@@ -493,15 +478,14 @@ export const Home: React.FC = () => {
         </Box>
       </Box>}
 
-    {/* {tokenExpired && <Dialog
-      open={openSnackbar} maxWidth={'xs'}>
+    <Dialog open={expiryDialog} maxWidth={'xs'}>
       <DialogContent sx={{ mt: 2 }}>
-        {message}
+        Your session has expired. Please sign in again.
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Okay</Button>
+        <Button onClick={() => navigate('/')}>Okay</Button>
       </DialogActions>
-    </Dialog>} */}
+    </Dialog>
 
     <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
       <Box sx={{ padding: '8px 16px' }}>
