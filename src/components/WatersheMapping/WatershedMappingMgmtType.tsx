@@ -6,7 +6,8 @@ export type mapDataType = {
 	updatedUser: number,
 	remarks: string,
 	createdTime: string,
-	updatedTime: string
+	updatedTime: string,
+	roleId: number
 };
 
 districtId

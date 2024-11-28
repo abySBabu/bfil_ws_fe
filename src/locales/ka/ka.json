@@ -239,6 +239,7 @@
         },
         "ss_MappingList": {
             "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
+            "Role": "ಪಾತ್ರ",
             "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
             "Remarks": "ಟೀಕೆಗಳು",
             "Action": {
