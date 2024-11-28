@@ -83,7 +83,6 @@ export const Home: React.FC = () => {
     navigate(path);
   };
 
-  // Function to initiate token monitoring
   const monitorTokenExpiry = useCallback(() => {
     const tokenResult = checkTknExpiry((expired) => {
       if (expired) {

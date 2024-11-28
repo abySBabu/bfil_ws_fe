@@ -402,7 +402,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1.replace(/_/g, " "), remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -432,7 +432,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1.replace(/_/g, " "), remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
