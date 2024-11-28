@@ -49,15 +49,15 @@ export const Home: React.FC = () => {
   const [languageAnchor, setLanguageAnchor] = useState<any>(null);
   const [sideList, setsideList] = React.useState<any[]>([]);
   const [sections, setSections] = useState<Array<{ name: string, path: string, permission: string, component: JSX.Element }> | null>(null);
-  const [uName, setuName] = React.useState('');
   const [actCount, setactCount] = useState(0);
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [serverDown, setserverDown] = React.useState(false);
+  const uName = sessionStorage.getItem("userName") as string
+  const uRole = localStorage.getItem("userRole") as string
   sessionStorage.setItem("multiLanguage", "en");
-
 
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
@@ -100,22 +100,20 @@ export const Home: React.FC = () => {
     };
   }, []);
 
-  // Initial token monitoring on component mount
   useEffect(() => {
     const cleanup = monitorTokenExpiry();
-    return cleanup; // Cleanup timer on unmount
+    return cleanup;
   }, [monitorTokenExpiry]);
 
-  // Refresh token and restart monitoring after successful refresh
   useEffect(() => {
     const TknRfr = async () => {
       if (tokenExpired) {
         try {
-          const resp = await TokenRefresh(); // Call your refresh service
+          const resp = await TokenRefresh();
           if (resp) {
             console.log("Tokens refreshed");
-            setTokenExpired(false); // Reset expiration state
-            monitorTokenExpiry(); // Restart token monitoring
+            setTokenExpired(false);
+            monitorTokenExpiry();
           }
         } catch (error) {
           console.error("Token refresh failed:", error);
@@ -160,8 +158,6 @@ export const Home: React.FC = () => {
 
   React.useEffect(() => {
     const fetchLoc = async () => {
-      setuName((sessionStorage.getItem("userName") as string)[0] || '')
-      const uRole = localStorage.getItem("userRole")
       try {
         const resp = await ListStatus();
         if (resp) {
@@ -397,7 +393,7 @@ export const Home: React.FC = () => {
                 onClick={(event) => setavatarAnchor(event.currentTarget)}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName}
+                {uName[0]}
               </Avatar>
             </Box>
           </Toolbar>
@@ -510,8 +506,8 @@ export const Home: React.FC = () => {
 
     <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
       <Box sx={{ padding: '8px 16px' }}>
-        <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
-        <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+        <Typography fontWeight='bold'>{uName}</Typography>
+        <Typography variant='body2'>{uRole}</Typography>
       </Box>
       <Divider />
       <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
