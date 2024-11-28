@@ -320,37 +320,42 @@ export default function EditRole(props: RoleTypeProps) {
                                                 <Grid item xs={4}>
                                                     <Typography sx={{ fontWeight: 'bold' }}>{screendata.screenName}</Typography>
                                                 </Grid>
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("VIEW"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`view-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                            />
-                                                        </Grid>
-                                                    ))}
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`edit-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                            />
-                                                        </Grid>
-                                                    ))}
-                                                {screendata.permission
-                                                    .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <Grid item xs={4} key={`other-${perm.permissionId}`}>
-                                                            <Checkbox
-                                                                checked={isPermissionChecked(perm)}
-                                                                onChange={handleCheckboxChange(perm)}
-                                                                disabled
-                                                            />
-                                                        </Grid>
-                                                    ))}
+                                                {screendata.permission.some(perm => perm.permissionName.startsWith("VIEW")) ? (
+                                                    screendata.permission
+                                                        .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                                        .map((perm: permissionByAppID) => (
+                                                            <React.Fragment key={perm.permissionId}>
+                                                                <Grid item xs={4} key={`view-${perm.permissionId}`}>
+                                                                    <Checkbox
+                                                                        checked={isPermissionChecked(perm)}
+                                                                        onChange={handleCheckboxChange(perm)}
+                                                                    />
+                                                                </Grid>
+                                                            </React.Fragment>
+                                                        ))
+                                                ) : (
+                                                    <Grid item xs={4}>
+                                                        <Checkbox disabled />
+                                                    </Grid>
+                                                )}
+                                                {screendata.permission.some(perm => perm.permissionName.startsWith("EDIT")) ? (
+                                                    screendata.permission
+                                                        .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                                        .map((perm: permissionByAppID) => (
+                                                            <React.Fragment key={perm.permissionId}>
+                                                                <Grid item xs={4} key={`edit-${perm.permissionId}`}>
+                                                                    <Checkbox
+                                                                        checked={isPermissionChecked(perm)}
+                                                                        onChange={handleCheckboxChange(perm)}
+                                                                    />
+                                                                </Grid>
+                                                            </React.Fragment>
+                                                        ))
+                                                ) : (
+                                                    <Grid item xs={4}>
+                                                        <Checkbox disabled />
+                                                    </Grid>
+                                                )}
                                             </React.Fragment>
                                         ))}
                                     </Box>
