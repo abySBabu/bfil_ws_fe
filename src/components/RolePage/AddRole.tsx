@@ -253,7 +253,7 @@ export default function AddRole(props: userTypeProps) {
                         <DialogTitle>{t("p_Role_Management.Add_Role_Link.Add_Role_Popup.Add_Role_Label")}</DialogTitle>
                         <DialogContent>
                             <Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
-                               <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6}>
                                     <TextField
                                         margin="normal"
                                         required
@@ -322,43 +322,43 @@ export default function AddRole(props: userTypeProps) {
                                                 <Grid item xs={4}>
                                                     <Typography sx={{ fontWeight: 'bold' }} >{screendata.screenName}</Typography>
                                                 </Grid>
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("VIEW"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <React.Fragment key={perm.permissionId}>
-                                                            <Grid item xs={4}>
-                                                                <Checkbox
-                                                                    checked={checkedPermissions.includes(perm)}
-                                                                    onChange={handleCheckboxChange(perm, false)}
-                                                                />
-                                                            </Grid>
-                                                        </React.Fragment>
-                                                    ))}
+                                                {screendata.permission.some(perm => perm.permissionName.startsWith("VIEW")) ? (
+                                                    screendata.permission
+                                                        .filter(perm => perm.permissionName.startsWith("VIEW"))
+                                                        .map((perm: permissionByAppID) => (
+                                                            <React.Fragment key={perm.permissionId}>
+                                                                <Grid item xs={4}>
+                                                                    <Checkbox
+                                                                        checked={checkedPermissions.includes(perm)}
+                                                                        onChange={handleCheckboxChange(perm, false)}
+                                                                    />
+                                                                </Grid>
+                                                            </React.Fragment>
+                                                        ))
+                                                ) : (
+                                                    <Grid item xs={4}>
+                                                        <Checkbox disabled />
+                                                    </Grid>
+                                                )}
                                                 {/* Filter and map EDIT permissions */}
-                                                {screendata.permission
-                                                    .filter(perm => perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <React.Fragment key={perm.permissionId}>
-                                                            <Grid item xs={4}>
-                                                                <Checkbox
-                                                                    checked={checkedPermissions.includes(perm)}
-                                                                    onChange={handleCheckboxChange(perm, true)}
-                                                                />
-                                                            </Grid>
-                                                        </React.Fragment>
-                                                    ))}
-                                                {screendata.permission
-                                                    .filter(perm => !perm.permissionName.startsWith("VIEW") && !perm.permissionName.startsWith("EDIT"))
-                                                    .map((perm: permissionByAppID) => (
-                                                        <React.Fragment key={perm.permissionId}>
-                                                            <Grid item xs={4}>
-                                                                <Checkbox
-                                                                    onChange={handleCheckboxChange(perm, false)}
-                                                                    disabled
-                                                                />
-                                                            </Grid>
-                                                        </React.Fragment>
-                                                    ))}
+                                                {screendata.permission.some(perm => perm.permissionName.startsWith("EDIT")) ? (
+                                                    screendata.permission
+                                                        .filter(perm => perm.permissionName.startsWith("EDIT"))
+                                                        .map((perm: permissionByAppID) => (
+                                                            <React.Fragment key={perm.permissionId}>
+                                                                <Grid item xs={4}>
+                                                                    <Checkbox
+                                                                        checked={checkedPermissions.includes(perm)}
+                                                                        onChange={handleCheckboxChange(perm, true)}
+                                                                    />
+                                                                </Grid>
+                                                            </React.Fragment>
+                                                        ))
+                                                ) : (
+                                                    <Grid item xs={4}>
+                                                        <Checkbox disabled />
+                                                    </Grid>
+                                                )}
                                             </React.Fragment>))}
                                     </Box>
                                     {/* </Card> */}

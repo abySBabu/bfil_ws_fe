@@ -239,6 +239,7 @@
         },
         "ss_MappingList": {
             "Ws_Name": "Watershed",
+            "Role": "Role",
             "User_Name": "User",
             "Remarks": "Remarks",
             "Action": {

@@ -11,7 +11,7 @@ import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
-import { listFarmer } from '../../Services/farmerService';
+import { listFarmer, listFarmerByUser } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
@@ -23,11 +23,13 @@ export const actDef = {
         activityId: '',
         activityName: '',
         activityCode: 0,
-        userId: '',
+        userId: sessionStorage.getItem("userId"),
+        roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
         interventionType: 0,
         activityImage: '',
+        mobileImage: '',
         activityFormData: '',
         watershedId: '',
         farmerId: '',
@@ -123,6 +125,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         return act ? act.activityName : code || "";
     };
 
+    const IntTypeName = (code: number | string | undefined) => {
+        const int = intOps.find(x => x.parameterId == code);
+        return int ? int.parameterName : code || "";
+    };
+
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
             target: { value },
@@ -161,6 +168,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         .sort((a, b) => {
             if (a.workActivity.activityWorkflowStatus === uStatus) return -1;
             if (b.workActivity.activityWorkflowStatus === uStatus) return 1;
+            if (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) return -1;
+            if (b.workActivity.activityWorkflowStatus === 'New' && b.workActivity.createdUser === uName) return 1;
             return 0;
         })
         .sort((a, b) => {
@@ -239,7 +248,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         setLoadingResponse(true);
         try {
             const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
-            const resp2 = await listFarmer(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
+            const resp2 = await listFarmerByUser(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }
@@ -342,19 +351,26 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActAdd = async () => {
         setLoading(true);
         try {
-            const resp1 = await addAct({ ...actObj.workActivity, village: vList, createdUser: sessionStorage.getItem("userName") as string })
+            const resp1 = await addAct({
+                ...actObj.workActivity,
+                village: vList,
+                createdUser: sessionStorage.getItem("userName"),
+                updatedUser: '',
+                roleId: localStorage.getItem("userRoleId")
+            })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp1.message) || "Failed to add activity");
+                setalert(resp1.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to add activity");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setaddM(false);
@@ -363,19 +379,25 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActEdit = async (id: any) => {
         setLoading(true);
         try {
-            const resp1 = await editAct({ ...actObj.workActivity, village: vList, remarks: '', updatedUser: sessionStorage.getItem("userName") as string }, id)
+            const resp1 = await editAct({
+                ...actObj.workActivity,
+                village: vList,
+                remarks: '',
+                updatedUser: sessionStorage.getItem("userName")
+            }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp1.message) || "Failed to update activity");
+                setalert(resp1.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update activity");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         seteditM(false);
@@ -395,7 +417,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 }
                 else {
                     setalertClr(false);
-                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
+                    setalert(resp2.message);
                 }
             }
             else {
@@ -403,9 +425,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 setalert("Failed to update work flow status");
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update work flow status");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setprogM(false);
     }
@@ -424,7 +447,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 }
                 else {
                     setalertClr(false);
-                    setalert(("Failed: " + resp2.message) || "Failed to update work flow status");
+                    setalert(resp2.message);
                 }
             }
             else {
@@ -432,9 +455,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                 setalert("Failed to update work flow status");
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update work flow status");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setprogM(false);
     }
@@ -592,13 +616,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus}</TableCell>
-                                            <TableCell>{a.workActivity.updatedUser}</TableCell>
+                                            <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
-                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed') && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress'))
+                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
+                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); setprogM(true); }}>
@@ -792,7 +816,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             </DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {actObj.workActivity.interventionType}</Grid>
+                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {IntTypeName(actObj.workActivity.interventionType)}</Grid>
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Type")}:</b> {ActTypeName(actObj.workActivity.activityCode)}</Grid>
                 <Grid item xs={12} sm={6}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
@@ -933,10 +957,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (
                                     <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
-                                        Reject to {prev} </Button>)}
+                                        Reject to {prev.replace(/_/g, " ")} </Button>)}
                                 {next && (
                                     <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
-                                        Send to {next}</Button>)}
+                                        Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>
                     </DialogActions>

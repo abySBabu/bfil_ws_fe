@@ -11,6 +11,16 @@ export async function listFarmer() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function listFarmerByUser() {
+    const configs = {
+        url: serverPath.bfil + `ws_farmers/getFarmerbyUserId/${sessionStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function idFarmer(id: any) {
     const configs = {
         url: serverPath.bfil + `ws_farmers/getFarmerById/${id}`,

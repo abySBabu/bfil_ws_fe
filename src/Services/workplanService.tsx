@@ -38,3 +38,13 @@ export async function editWP(data: any, id: any) {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function listFinYear() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Financial Year",
+        method: 'get',
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}

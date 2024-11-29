@@ -168,7 +168,8 @@ export default function (props: mapTypeProps) {
                 createdUser: props.mapDetails.createdUser,
                 updatedUser: fetchUserData(userId),
                 remarks: value.remarks,
-                roleId: roleListTemp[0].roleId
+                roleId: roleListTemp[0].roleId,
+                roleName: roleListTemp[0].roleName
             }
 
             let resp = await editWS(mapData, props.mapDetails.mappingId);

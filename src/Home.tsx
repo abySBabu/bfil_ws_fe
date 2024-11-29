@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
@@ -14,7 +14,7 @@ import { ListSide, ListStatus } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
 import { logout } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
 import Check from '@mui/icons-material/Check';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -24,20 +24,22 @@ import MenuIcon from '@mui/icons-material/Menu';
 import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
+import { TokenRefresh } from './Services/loginService';
 
 interface SideItem {
   screenName: string;
 }
 interface Section {
   name: string;
+  path: string;
   permission: string;
   component: JSX.Element;
 }
 
 export const Home: React.FC = () => {
+  const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
-  const [message, setMessage] = useState('');
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [expiryDialog, setexpiryDialog] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(false);
   const navigate = useNavigate();
   const [dIndex, setdIndex] = useState<number | null>(null);
@@ -45,14 +47,15 @@ export const Home: React.FC = () => {
   const [avatarAnchor, setavatarAnchor] = useState<any>(null);
   const [languageAnchor, setLanguageAnchor] = useState<any>(null);
   const [sideList, setsideList] = React.useState<any[]>([]);
-  const [sections, setSections] = useState<Array<{ name: string, permission: string, component: JSX.Element }> | null>(null);
-  const [uName, setuName] = React.useState('');
+  const [sections, setSections] = useState<Array<{ name: string, path: string, permission: string, component: JSX.Element }> | null>(null);
   const [actCount, setactCount] = useState(0);
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [serverDown, setserverDown] = React.useState(false);
+  const uName = sessionStorage.getItem("userName") as string
+  const uRole = localStorage.getItem("userRole") as string
   sessionStorage.setItem("multiLanguage", "en");
 
   const countHeader = (textKey: string, badgeCount: number) => {
@@ -63,15 +66,64 @@ export const Home: React.FC = () => {
   }
 
   useEffect(() => {
-    const tokenresult = checkTknExpiry((expired) => {
+    if (sections) {
+      // Find the index of the section corresponding to the current path
+      const currentIndex = sections.findIndex((section) => section.path === location.pathname);
+      if (currentIndex !== -1) {
+        setdIndex(currentIndex);
+      } else {
+        setdIndex(0); // Reset if no matching path
+      }
+    }
+  }, [location.pathname, sections]);
+
+  const handleMenuClick = (index: number, path: string) => {
+    setdIndex(index);
+    navigate(path);
+  };
+
+  const monitorTokenExpiry = useCallback(() => {
+    const tokenResult = checkTknExpiry((expired) => {
       if (expired) {
-        setTokenExpired(expired);
-        setMessage("Your token has expired");
-        setOpenSnackbar(true);
-      };
+        setTokenExpired(true);
+      }
     });
 
-  }, [setTimeoutsecs, message, tokenExpired])
+    return () => {
+      if (tokenResult?.timerRef) {
+        clearTimeout(tokenResult.timerRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const cleanup = monitorTokenExpiry();
+    return cleanup;
+  }, [monitorTokenExpiry]);
+
+  useEffect(() => {
+    const TknRfr = async () => {
+      if (tokenExpired) {
+        try {
+          const resp = await TokenRefresh();
+          if (resp) {
+            console.log("Tokens refreshed");
+            setTokenExpired(false);
+            monitorTokenExpiry();
+          }
+          else{
+            console.log("No response for token refresh");
+            setexpiryDialog(true);
+          }
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+          setexpiryDialog(true);
+        }
+      }
+    };
+
+    TknRfr();
+  }, [tokenExpired, monitorTokenExpiry]);
 
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);
@@ -79,10 +131,6 @@ export const Home: React.FC = () => {
     setLanguageAnchor(null);
     setavatarAnchor(null);
   }
-
-  const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
-    setLanguageAnchor(event.currentTarget);
-  };
 
   const logOut = async () => {
     try {
@@ -100,27 +148,8 @@ export const Home: React.FC = () => {
     navigate('/profile');
   }
 
-  const handleClose = async () => {
-    setOpenSnackbar(false);
-    navigate('/')
-  };
-
-  // const sections = [
-  //     { name: sideList[0]?.screenName, permission: 'VIEW_Dashboard', component: <Dashboard /> },
-  //     { name: sideList[1]?.screenName, permission: 'VIEW_User Management', component: <UserList /> },
-  //     { name: sideList[2]?.screenName, permission: 'VIEW_Role Management', component: <RoleList /> },
-  //     { name: sideList[3]?.screenName, permission: 'VIEW_Watershed Master', component: <WsMaster /> },
-  //     { name: sideList[4]?.screenName, permission: 'VIEW_Farmer Master', component: <FarmerMaster /> },
-  //     { name: sideList[5]?.screenName, permission: 'VIEW_Watershed Mapping', component: <MappingList /> },
-  //     { name: sideList[6]?.screenName, permission: 'VIEW_Watershed Activity', component: <WsActivity /> },
-  //     { name: sideList[7]?.screenName, permission: 'VIEW_Work Plan', component: <Workplan /> }
-  // ];
-
-
   React.useEffect(() => {
     const fetchLoc = async () => {
-      setuName((sessionStorage.getItem("userName") as string)[0] || '')
-      const uRole = localStorage.getItem("userRole")
       try {
         const resp = await ListStatus();
         if (resp) {
@@ -136,23 +165,23 @@ export const Home: React.FC = () => {
                 const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
                   switch (sideItem.screenName) {
                     case 'Dashboard':
-                      return { name: t('p_Home.SM_BE_Dashboard_Link'), permission: 'VIEW_Dashboard', component: <Dashboard /> };
+                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/dashboard", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
                     case 'User Management':
-                      return { name: t('p_Home.SM_BE_User_Management_Link'), permission: 'VIEW_User Management', component: <UserList /> };
+                      return { name: t('p_Home.SM_BE_User_Management_Link'), path: "/users", permission: 'VIEW_User Management', component: <UserList /> };
                     case 'Role Management':
-                      return { name: t('p_Home.SM_BE_Role_Management_Link'), permission: 'VIEW_Role Management', component: <RoleList /> };
+                      return { name: t('p_Home.SM_BE_Role_Management_Link'), path: "/roles", permission: 'VIEW_Role Management', component: <RoleList /> };
                     case 'Watershed Master':
-                      return { name: t('p_Home.SM_BE_Watershed_Master_Link'), permission: 'VIEW_Watershed Master', component: <WsMaster /> };
+                      return { name: t('p_Home.SM_BE_Watershed_Master_Link'), path: "/wsMaster", permission: 'VIEW_Watershed Master', component: <WsMaster /> };
                     case 'Beneficiary Master':
-                      return { name: t('p_Home.SM_BE_Farmer_Master_Link'), permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
+                      return { name: t('p_Home.SM_BE_Farmer_Master_Link'), path: "/beneficiaryMastaer", permission: 'VIEW_Beneficiary Master', component: <FarmerMaster /> };
                     case 'Watershed Mapping':
-                      return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
+                      return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), path: "/wsMapping", permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                     case 'Watershed Activity':
-                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
+                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
                     case 'Work Plan':
-                      return { name: t('p_Home.SM_BE_Work_Plan_Link'), permission: 'VIEW_Work Plan', component: <Workplan /> };
+                      return { name: t('p_Home.SM_BE_Work_Plan_Link'), path: "/workplan", permission: 'VIEW_Work Plan', component: <Workplan /> };
                     case 'Report':
-                      return { name: t('p_Home.SM_BE_Report_Link'), permission: 'VIEW_Report', component: <Report /> };
+                      return { name: t('p_Home.SM_BE_Report_Link'), path: "/report", permission: 'VIEW_Report', component: <Report /> };
                     default:
                       return null;
                   }
@@ -162,9 +191,9 @@ export const Home: React.FC = () => {
                 const defaultIndex = generatedSections.findIndex((section: Section) => PerChk(section.permission));
                 if (defaultIndex !== -1) {
                   setdIndex(defaultIndex);
+                  navigate(generatedSections[defaultIndex].path);
                 } else {
                   setHasPermission(true);
-                  setMessage("You do not have permission to view any sections.");
                 }
               }
               // else { setserverDown(true) }
@@ -213,12 +242,12 @@ export const Home: React.FC = () => {
     setIsClosing(false);
   };
 
-
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
   };
+
   const drawer = (
     <Box sx={{ marginLeft: '10px', mt: 5 }}>
       <List>
@@ -240,9 +269,8 @@ export const Home: React.FC = () => {
                     },
                   },
                 }}
-
-                onClick={() => setdIndex(index)}
                 selected={dIndex === index}
+                onClick={() => handleMenuClick(index, section.path)}
               >
                 <ListItemText primary={section.name} />
               </ListItemButton>
@@ -252,7 +280,6 @@ export const Home: React.FC = () => {
       </List>
     </Box>
   );
-
 
   return (<>
     {loadingResponse ? <Box
@@ -354,7 +381,7 @@ export const Home: React.FC = () => {
                 onClick={(event) => setavatarAnchor(event.currentTarget)}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName}
+                {uName[0]}
               </Avatar>
             </Box>
           </Toolbar>
@@ -416,7 +443,8 @@ export const Home: React.FC = () => {
             <Card sx={{ color: sd('--page-nav-txtcolor'), display: { xs: 'none', sm: 'block' }, bgcolor: sd('--page-nav-bgcolor'), width: { md: '25%', lg: '15%' }, borderRadius: sd('--page-bradius-left'), overflow: 'auto' }}>
               <List sx={{ mt: 1, bgcolor: sd('--page-nav-bgcolor') }}>{sections && sections.map((section, index) => (
                 PerChk(section.permission) && (<ListItem key={section.name} disablePadding>
-                  <ListItemButton onClick={() => setdIndex(index)} selected={dIndex === index}>
+                  <ListItemButton onClick={() => handleMenuClick(index, section.path)}
+                    selected={dIndex === index}>
                     <ListItemText primary={section.name} />
                   </ListItemButton>
                 </ListItem>)
@@ -427,7 +455,7 @@ export const Home: React.FC = () => {
                         {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
                     </Box> */}
 
-            <Box sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
+            <Box component="main" sx={{ p: sd('--page-body-padding'), bgcolor: sd('--page-body-bgcolor'), width: '100%', borderRadius: sd('--page-bradius-right'), overflow: 'auto' }}>
               {dIndex !== null && sections && sections[dIndex] && sections[dIndex].component}
             </Box>
           </Paper>
@@ -454,20 +482,19 @@ export const Home: React.FC = () => {
         </Box>
       </Box>}
 
-    {tokenExpired && <Dialog
-      open={openSnackbar} maxWidth={'xs'}>
+    <Dialog open={expiryDialog} maxWidth={'xs'}>
       <DialogContent sx={{ mt: 2 }}>
-        {message}
+        Your session has expired. Please sign in again.
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Okay</Button>
+        <Button onClick={() => navigate('/')}>Okay</Button>
       </DialogActions>
-    </Dialog>}
+    </Dialog>
 
     <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
       <Box sx={{ padding: '8px 16px' }}>
-        <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
-        <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+        <Typography fontWeight='bold'>{uName}</Typography>
+        <Typography variant='body2'>{uRole}</Typography>
       </Box>
       <Divider />
       <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>

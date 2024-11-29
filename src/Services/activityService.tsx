@@ -74,7 +74,7 @@ export async function DashSupply() {
 
 export async function actFlowNext(status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${localStorage.getItem("userRole")}/Submit/${status}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${(localStorage.getItem("userRole") as string).replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -87,12 +87,24 @@ export async function actFlowNext(status: any) {
 
 export async function actFlowPrev(status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${localStorage.getItem("userRole")}/Reject/${status}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${(localStorage.getItem("userRole") as string).replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function userDeleteCheck(id: any) {
+    const configs = {
+        url: serverPath.bfil + `data_capture/userDeleteOrNot/${id}`,
+        method: 'get',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
