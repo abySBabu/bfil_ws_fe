@@ -125,6 +125,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         return act ? act.activityName : code || "";
     };
 
+    const IntTypeName = (code: number | string | undefined) => {
+        const int = intOps.find(x => x.parameterId == code);
+        return int ? int.parameterName : code || "";
+    };
+
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
             target: { value },
@@ -811,7 +816,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             </DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
-                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {actObj.workActivity.interventionType}</Grid>
+                <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Intervention")}:</b> {IntTypeName(actObj.workActivity.interventionType)}</Grid>
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Type")}:</b> {ActTypeName(actObj.workActivity.activityCode)}</Grid>
                 <Grid item xs={12} sm={6}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
