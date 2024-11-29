@@ -111,6 +111,10 @@ export const Home: React.FC = () => {
             setTokenExpired(false);
             monitorTokenExpiry();
           }
+          else{
+            console.log("No response for token refresh");
+            setexpiryDialog(true);
+          }
         } catch (error) {
           console.error("Token refresh failed:", error);
           setexpiryDialog(true);
