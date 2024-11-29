@@ -28,8 +28,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route element={<Home />}>
-                        <Route path="/home" element={<Home />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
+                        {/* <Route path="/home" element={<Home />} /> */}
+                        <Route path="/home" element={<Dashboard />} />
                         <Route path="/users" element={<UserList />} />
                         <Route path="/roles" element={<RoleList />} />
                         <Route path="/wsMaster" element={<WsMaster />} />
