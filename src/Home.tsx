@@ -165,7 +165,7 @@ export const Home: React.FC = () => {
                 const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
                   switch (sideItem.screenName) {
                     case 'Dashboard':
-                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/dashboard", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
+                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/home", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
                     case 'User Management':
                       return { name: t('p_Home.SM_BE_User_Management_Link'), path: "/users", permission: 'VIEW_User Management', component: <UserList /> };
                     case 'Role Management':
