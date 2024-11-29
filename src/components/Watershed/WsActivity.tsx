@@ -617,7 +617,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In Progress'))
+                                                {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); setprogM(true); }}>
