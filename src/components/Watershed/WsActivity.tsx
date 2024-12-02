@@ -384,7 +384,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             const resp1 = await editAct({
                 ...actObj.workActivity,
                 village: vList,
-                remarks: '',
+                remarks: rmk,
                 updatedUser: sessionStorage.getItem("userName")
             }, id)
             if (resp1.status === 'success') {
