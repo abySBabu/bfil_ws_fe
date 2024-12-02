@@ -17,6 +17,7 @@ import { talukById, panchayatById, VillageById } from '../../Services/locationSe
 import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 import { useTranslation } from 'react-i18next';
+import { getRolesByRole } from 'src/Services/roleService';
 
 export const actDef = {
     workActivity: {
@@ -106,6 +107,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [vilOps, setvilOps] = React.useState<any[]>([]);
     const [vilOps2, setvilOps2] = React.useState<string[]>([]);
     const [allAct, setallAct] = React.useState<any[]>([]);
+    const [actFlowRole, setactFlowRole] = React.useState('');
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [viewM, setviewM] = React.useState(false);
@@ -202,6 +204,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => { FlowRoleSet(actObj.workActivity.roleId) }, [actObj.workActivity.roleId])
+
     React.useEffect(() => { FmrSet(actObj.workActivity.farmerId) }, [actObj.workActivity.farmerId])
 
     React.useEffect(() => { WsSet(actObj.workActivity.watershedId) }, [actObj.workActivity.watershedId])
@@ -264,6 +268,16 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         }
         setLoadingResponse(false);
     };
+
+    const FlowRoleSet = async (id: any) => {
+        try {
+            const resp1 = await getRolesByRole(id);
+            if (resp1) {
+                setactFlowRole(resp1.roleName)
+            }
+        }
+        catch (error) { console.log(error) }
+    }
 
     const FmrSet = async (id: any) => {
         try {
@@ -408,7 +422,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActFlowNext = async (status: any, id: any) => {
         setLoading(true);
         try {
-            const resp1 = await actFlowNext(status)
+            const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
                 const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
@@ -440,7 +454,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const ActFlowPrev = async (status: any, id: any) => {
         setLoading(true);
         try {
-            const resp1 = await actFlowPrev(status)
+            const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
                 const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
@@ -471,10 +485,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     const ActFlowSet = async (status: any) => {
         try {
-            const resp1 = await actFlowNext(status)
+            const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) { setnext(resp1); } else { setnext('') }
 
-            const resp2 = await actFlowPrev(status)
+            const resp2 = await actFlowPrev(actFlowRole, status)
             if (resp2) { setprev(resp2); } else { setprev('') }
         }
         catch (error) { console.log(error) }
