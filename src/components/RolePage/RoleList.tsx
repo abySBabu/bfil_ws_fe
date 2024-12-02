@@ -66,7 +66,7 @@ export default function RoleList() {
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.code === 'ERR_NETWORK') {
-                    setserverDown(true)
+                    // setserverDown(true)
                 } else {
                     console.error('Error fetching data:', error.message);
                 }

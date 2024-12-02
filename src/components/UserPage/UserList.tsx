@@ -90,7 +90,8 @@ export default function UserList() {
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.code === 'ERR_NETWORK') {
-                    setserverDown(true)
+                    console.error('Error ERR_NETWORK:');
+                    // setserverDown(true)
                 } else {
                     console.error('Error fetching data:', error.message);
                 }
