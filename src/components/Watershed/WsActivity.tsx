@@ -406,6 +406,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     }
 
     const ActFlowNext = async (status: any, id: any) => {
+        setLoading(true);
         try {
             const resp1 = await actFlowNext(status)
             if (resp1) {
@@ -433,9 +434,11 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             setalert(error.response.data.message);
         }
         setprogM(false);
+        setLoading(false);
     }
 
     const ActFlowPrev = async (status: any, id: any) => {
+        setLoading(true);
         try {
             const resp1 = await actFlowPrev(status)
             if (resp1) {
@@ -463,6 +466,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             setalert(error.response.data.message);
         }
         setprogM(false);
+        setLoading(false);
     }
 
     const ActFlowSet = async (status: any) => {
@@ -905,7 +909,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     <img
                                                         key={index}
                                                         src={link.trim()}
-                                                        alt={`Activity ${index + 1}`}
+                                                        //alt={`Activity ${index + 1}`}
                                                         style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
                                                         onClick={() => {
                                                             try {
@@ -917,7 +921,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     />
                                                 ));
                                             } else {
-                                                return null
+                                                return "No images"
                                             }
                                         } catch (error) {
                                             console.error("JSON error--", a.activityImage);
@@ -958,10 +962,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (
-                                    <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
+                                    <Button startIcon={<ArrowBack />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
                                         Reject to {prev.replace(/_/g, " ")} </Button>)}
                                 {next && (
-                                    <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
+                                    <Button endIcon={<ArrowForward />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
                                         Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>
