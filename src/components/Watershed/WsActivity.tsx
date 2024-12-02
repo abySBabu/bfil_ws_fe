@@ -814,7 +814,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         <Dialog open={viewM || progM} maxWidth='lg'>
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div>{viewM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.View_Tooltip_Text") : progM ? t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Activity_Popup.Progress_Tooltip_Text") : ''}</div>
-                <div><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Status")}:</b> {actObj.workActivity.activityWorkflowStatus}</div>
+                <div><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Status")}:</b> {actObj.workActivity.activityWorkflowStatus.replace(/_/g, " ")}</div>
             </DialogTitle>
 
             <DialogContent><Grid container spacing={2} sx={{ my: 1 }}>
