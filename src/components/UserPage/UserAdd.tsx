@@ -104,7 +104,7 @@ export default function (props: userTypeProps) {
         props.hide();
     };
 
-    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<UserFormInput>({
+    const { register, handleSubmit, trigger, formState: { errors, isValid }, watch, setValue } = useForm<UserFormInput>({
         mode: 'onChange',
         defaultValues: {
             userName: '',
@@ -119,6 +119,15 @@ export default function (props: userTypeProps) {
         }
     });
     const formValues = watch();
+    const role = watch('role');
+    const loginType = watch('loginType');
+    useEffect(() => {
+        if (role === 'Community Resource person') {
+            setValue('loginType', 'Mobile');
+        } else if (role !== 'Community Resource person') {
+            setValue('loginType', '');
+        }
+    }, [role, setValue]);
 
 
     const addUser: SubmitHandler<UserFormInput> = async (value) => {
@@ -305,7 +314,7 @@ export default function (props: userTypeProps) {
                                 helperText={errors.mobileNo ? errors.mobileNo.message : ''}
                             />
                         </Grid>
-                        <Grid item  xs={12} md={4}>
+                        <Grid item xs={12} md={4}>
                             <TextField
                                 margin="normal"
                                 required
@@ -364,6 +373,8 @@ export default function (props: userTypeProps) {
                                 }}
                                 error={!!errors.loginType}
                                 helperText={errors.loginType ? errors.loginType.message : ''}
+                                disabled={role === 'Community Resource person'}
+                                value={loginType}
                             >
                                 {loginTypeOptions.map((option, index) => (<MenuItem key={index} value={option.value}>{option.value}</MenuItem>))}
                             </TextField>
