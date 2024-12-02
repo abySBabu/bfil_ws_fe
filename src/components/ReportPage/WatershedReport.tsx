@@ -4,7 +4,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
-import { listWP } from 'src/Services/workplanService';
+import { listWP, listFinYear } from 'src/Services/workplanService';
 import { watershedReport } from 'src/Services/reportService';
 import { PhysicalData,FinancialData,WatershedActivities,Watershed,Activity,LandType,WorkPlan } from './DonerReportTypes';
 
@@ -13,6 +13,7 @@ const WatershedReport: React.FC = () => {
   const [reportData, setReportData] = useState<Activity[]>([]);
   const [watershedNames, setWatershedNames] = useState<string[]>([]); 
   const [selectedYear, setSelectedYear] = useState<string>('');
+  const [yearOptions, setYearOptions] = useState<any[]>([]);
   const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
   const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Watershed Report' });
   const exportToPDF = () => { handlePrint(); };
@@ -32,6 +33,7 @@ const WatershedReport: React.FC = () => {
           } else {
           console.error('Error: Response data is not an array');
         }
+        const response2 = await listFinYear(); if (response2.status === 'success') { setYearOptions(response2.data) }
       } catch (error) {
         console.log('Error fetching workplan:', error);
       }
@@ -155,9 +157,9 @@ const WatershedReport: React.FC = () => {
                 <InputLabel id="select-year-label">Select Year</InputLabel>
                 <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
                 <MenuItem value="">Select Year</MenuItem> 
-                    {uniquePlanningYears.map((year, index) => (
-                    <MenuItem key={index} value={year}>
-                    {year}
+                    {yearOptions.map((year, index) => (
+                    <MenuItem key={index} value={year.parameterName}>
+                    {year.parameterName}
                 </MenuItem>
                     ))}
                 </Select>

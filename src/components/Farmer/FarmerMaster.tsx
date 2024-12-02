@@ -139,7 +139,7 @@ export const FarmerMaster: React.FC = () => {
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            if (error.code === 'ERR_NETWORK') setserverDown(false);
             else console.log(error);
         }
         setLoadingResponse(false);
