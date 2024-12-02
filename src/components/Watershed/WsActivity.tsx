@@ -17,6 +17,7 @@ import { talukById, panchayatById, VillageById } from '../../Services/locationSe
 import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
 import { useTranslation } from 'react-i18next';
+import { getRolesByRole } from 'src/Services/roleService';
 
 export const actDef = {
     workActivity: {
@@ -106,6 +107,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     const [vilOps, setvilOps] = React.useState<any[]>([]);
     const [vilOps2, setvilOps2] = React.useState<string[]>([]);
     const [allAct, setallAct] = React.useState<any[]>([]);
+    const [actFlowRole, setactFlowRole] = React.useState('');
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [viewM, setviewM] = React.useState(false);
@@ -202,6 +204,8 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     React.useEffect(() => { fetchData() }, [])
 
+    React.useEffect(() => { FlowRoleSet(actObj.workActivity.roleId, actObj.workActivity.activityWorkflowStatus) }, [actObj.workActivity.roleId, actObj.workActivity.activityWorkflowStatus])
+
     React.useEffect(() => { FmrSet(actObj.workActivity.farmerId) }, [actObj.workActivity.farmerId])
 
     React.useEffect(() => { WsSet(actObj.workActivity.watershedId) }, [actObj.workActivity.watershedId])
@@ -264,6 +268,32 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         }
         setLoadingResponse(false);
     };
+
+    const FlowRoleSet = async (id: any, status: any) => {
+        try {
+            const resp1 = await getRolesByRole(id);
+            if (resp1) {
+                setactFlowRole(resp1.roleName)
+                const resp2 = await actFlowNext(resp1.roleName, status)
+                if (resp2) { setnext(resp2); } else { setnext('') }
+
+                const resp3 = await actFlowPrev(resp1.roleName, status)
+                if (resp3) { setprev(resp3); } else { setprev('') }
+            }
+        }
+        catch (error) { console.log(error) }
+    }
+
+    const ActFlowSet = async (status: any) => {
+        try {
+            const resp1 = await actFlowNext(actFlowRole, status)
+            if (resp1) { setnext(resp1); } else { setnext('') }
+
+            const resp2 = await actFlowPrev(actFlowRole, status)
+            if (resp2) { setprev(resp2); } else { setprev('') }
+        }
+        catch (error) { console.log(error) }
+    }
 
     const FmrSet = async (id: any) => {
         try {
@@ -406,8 +436,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     }
 
     const ActFlowNext = async (status: any, id: any) => {
+        setLoading(true);
         try {
-            const resp1 = await actFlowNext(status)
+            const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
                 const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
@@ -433,11 +464,13 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             setalert(error.response.data.message);
         }
         setprogM(false);
+        setLoading(false);
     }
 
     const ActFlowPrev = async (status: any, id: any) => {
+        setLoading(true);
         try {
-            const resp1 = await actFlowPrev(status)
+            const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
                 const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
@@ -463,17 +496,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
             setalert(error.response.data.message);
         }
         setprogM(false);
-    }
-
-    const ActFlowSet = async (status: any) => {
-        try {
-            const resp1 = await actFlowNext(status)
-            if (resp1) { setnext(resp1); } else { setnext('') }
-
-            const resp2 = await actFlowPrev(status)
-            if (resp2) { setprev(resp2); } else { setprev('') }
-        }
-        catch (error) { console.log(error) }
+        setLoading(false);
     }
 
     return (<>
@@ -905,7 +928,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     <img
                                                         key={index}
                                                         src={link.trim()}
-                                                        alt={`Activity ${index + 1}`}
+                                                        //alt={`Activity ${index + 1}`}
                                                         style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
                                                         onClick={() => {
                                                             try {
@@ -917,7 +940,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                     />
                                                 ));
                                             } else {
-                                                return null
+                                                return "No images"
                                             }
                                         } catch (error) {
                                             console.error("JSON error--", a.activityImage);
@@ -958,10 +981,10 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (
-                                    <Button startIcon={<ArrowBack />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
+                                    <Button startIcon={<ArrowBack />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
                                         Reject to {prev.replace(/_/g, " ")} </Button>)}
                                 {next && (
-                                    <Button endIcon={<ArrowForward />} disabled={!rmk} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
+                                    <Button endIcon={<ArrowForward />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
                                         Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>

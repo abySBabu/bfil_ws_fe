@@ -72,9 +72,9 @@ export async function DashSupply() {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function actFlowNext(status: any) {
+export async function actFlowNext(role: any, status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${(localStorage.getItem("userRole") as string).replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -85,9 +85,9 @@ export async function actFlowNext(status: any) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function actFlowPrev(status: any) {
+export async function actFlowPrev(role: any, status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${(localStorage.getItem("userRole") as string).replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
+        url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
