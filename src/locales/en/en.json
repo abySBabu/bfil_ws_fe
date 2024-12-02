@@ -40,9 +40,9 @@
                 }
             },
             "FarmersImpacted_Subheader": {
-                "FarmersImpacted_Subheader_Text": "Farmers Impacted",
+                "FarmersImpacted_Subheader_Text": "Beneficiary Impacted",
                 "FarmersImpacted_Piechart": {
-                    "Piechart_Header": "Farmers Impacted",
+                    "Piechart_Header": "Beneficiary Impacted",
                     "Bunding_data": "Bunding",
                     "NalaTreatment_data": "Nala Treatment",
                     "CheckDam_data": "Check Dam"
