@@ -900,7 +900,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                     {(() => {
                                         try {
                                             const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
-                                            if (imageLinks.length > 0)
+                                            if (imageLinks.length > 0) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
                                                         key={index}
@@ -916,8 +916,9 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                         }}
                                                     />
                                                 ));
-                                            else
-                                                return ''
+                                            } else {
+                                                return null
+                                            }
                                         } catch (error) {
                                             console.error("JSON error--", a.activityImage);
                                             return null;
