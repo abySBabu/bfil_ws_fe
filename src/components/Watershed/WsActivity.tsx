@@ -134,7 +134,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         const {
             target: { value },
         } = event;
-        setvList(typeof value === 'string' ? value.split(',') : value);
+        setvList(typeof value === 'string' ? value?.split(',') : value);
     };
 
     const totalP = (actObj.workActivity.participantsFemale || 0) + (actObj.workActivity.participantsMale || 0)
@@ -276,23 +276,25 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
     }
 
     const WsSet = async (id: any) => {
-        try {
-            const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
-            if (resp1) {
-                const found: typeof wsDef = resp1.find((x: typeof wsDef) => x.watershedId === id) || wsDef
-                setactObj({
-                    ...actObj, workActivity: {
-                        ...actObj.workActivity,
-                        state: 1,
-                        district: found.districtId,
-                        taluk: found.talukId,
-                        gramPanchayat: found.gramPanchayatId,
-                    }
-                })
-                setvilOps2(found.villages)
+        if (id !== 59 || id !== 53) {
+            try {
+                const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
+                if (resp1) {
+                    const found: typeof wsDef = resp1.find((x: typeof wsDef) => x.watershedId === id) || wsDef
+                    setactObj({
+                        ...actObj, workActivity: {
+                            ...actObj.workActivity,
+                            state: 1,
+                            district: found.districtId,
+                            taluk: found.talukId,
+                            gramPanchayat: found.gramPanchayatId,
+                        }
+                    })
+                    setvilOps2(found.villages)
+                }
             }
+            catch (error) { console.log(error) }
         }
-        catch (error) { console.log(error) }
     }
 
     const ActSet = async () => {
@@ -621,7 +623,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
-                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
+                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === 'Community Resource person' && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
@@ -850,7 +852,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.District")}:</b> {DistrictName(actObj.workActivity.district)}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Taluka")}:</b> {TalukName(actObj.workActivity.taluk)}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Grampanchayat")}:</b> {PanName(actObj.workActivity.gramPanchayat)}</Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Villages")}:</b> {actObj.workActivity.village.split(',').map(id => VillageName(id)).join(', ')}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Villages")}:</b> {actObj.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Survey_No")}:</b> {actObj.workActivity.surveyNo}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Physical_Details")}</Divider></Grid>
@@ -897,7 +899,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                                 <TableCell>
                                     {(() => {
                                         try {
-                                            const imageLinks: string[] = JSON.parse(a.activityImage).activityImage.split(',');
+                                            const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
                                             if (imageLinks.length > 0)
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
