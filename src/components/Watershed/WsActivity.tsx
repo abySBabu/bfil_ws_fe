@@ -204,7 +204,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
 
     React.useEffect(() => { fetchData() }, [])
 
-    React.useEffect(() => { FlowRoleSet(actObj.workActivity.roleId) }, [actObj.workActivity.roleId])
+    React.useEffect(() => { FlowRoleSet(actObj.workActivity.roleId, actObj.workActivity.activityWorkflowStatus) }, [actObj.workActivity.roleId, actObj.workActivity.activityWorkflowStatus])
 
     React.useEffect(() => { FmrSet(actObj.workActivity.farmerId) }, [actObj.workActivity.farmerId])
 
@@ -269,12 +269,28 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         setLoadingResponse(false);
     };
 
-    const FlowRoleSet = async (id: any) => {
+    const FlowRoleSet = async (id: any, status: any) => {
         try {
             const resp1 = await getRolesByRole(id);
             if (resp1) {
                 setactFlowRole(resp1.roleName)
+                const resp2 = await actFlowNext(resp1.roleName, status)
+                if (resp2) { setnext(resp2); } else { setnext('') }
+
+                const resp3 = await actFlowPrev(resp1.roleName, status)
+                if (resp3) { setprev(resp3); } else { setprev('') }
             }
+        }
+        catch (error) { console.log(error) }
+    }
+
+    const ActFlowSet = async (status: any) => {
+        try {
+            const resp1 = await actFlowNext(actFlowRole, status)
+            if (resp1) { setnext(resp1); } else { setnext('') }
+
+            const resp2 = await actFlowPrev(actFlowRole, status)
+            if (resp2) { setprev(resp2); } else { setprev('') }
         }
         catch (error) { console.log(error) }
     }
@@ -481,17 +497,6 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
         }
         setprogM(false);
         setLoading(false);
-    }
-
-    const ActFlowSet = async (status: any) => {
-        try {
-            const resp1 = await actFlowNext(actFlowRole, status)
-            if (resp1) { setnext(resp1); } else { setnext('') }
-
-            const resp2 = await actFlowPrev(actFlowRole, status)
-            if (resp2) { setprev(resp2); } else { setprev('') }
-        }
-        catch (error) { console.log(error) }
     }
 
     return (<>
