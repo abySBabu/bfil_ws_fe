@@ -132,6 +132,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         return int ? int.parameterName : code || "";
     };
 
+    const LandTypeName = (code: number | string | undefined) => {
+        const land = landOps.find(x => x.parameterId == code);
+        return land ? land.parameterName : code || "";
+    };
+
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
             target: { value },
@@ -882,7 +887,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Total_Value")}:</b> {actObj.workActivity.total}  {actObj.workActivity.unit}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Area_Treated")}:</b> {actObj.workActivity.areaTreated}</Grid>
                     {actObj.workActivity.interventionType !== 23 && <>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Land_Type")}:</b> {actObj.workActivity.landType}</Grid>
+                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Land_Type")}:</b> {LandTypeName(actObj.workActivity.landType)}</Grid>
                         <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.WaterConserved")}:</b> {actObj.workActivity.waterConserved}</Grid>
                     </>}
 
