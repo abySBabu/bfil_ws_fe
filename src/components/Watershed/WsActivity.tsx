@@ -7,7 +7,6 @@ import {
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
-import { DateTime } from '../../LocName';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
@@ -15,7 +14,7 @@ import { listFarmer, listFarmerByUser } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
-import { StateName, DistrictName, TalukName, PanName, VillageName, WsName } from '../../LocName';
+import { StateName, DistrictName, TalukName, PanName, VillageName, WsName, DateTime, DateString } from '../../LocName';
 import { useTranslation } from 'react-i18next';
 import { getRolesByRole } from 'src/Services/roleService';
 
@@ -418,7 +417,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await editAct({
                 ...actObj.workActivity,
-                village: vList,
+                village: vList || [actObj.workActivity.habitationsCovered],
                 remarks: rmk,
                 updatedUser: sessionStorage.getItem("userName")
             }, id)
@@ -720,7 +719,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Name")} value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Type")} value={actObj.workActivity.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitytypeEvent: e.target.value } })} /></Grid>
-                    <Grid item xs={12} sm={3}><TextField required type='date' label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Date")} value={actObj.workActivity.eventDate} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, eventDate: e.target.value } })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
+                    <Grid item xs={12} sm={3}><TextField required type='date' label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Date")} value={actObj.workActivity.eventDate?.split('T')[0]} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, eventDate: e.target.value } })} onKeyDown={(e) => e.preventDefault()} InputLabelProps={{ shrink: true }} /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Target_Group")} value={actObj.workActivity.participantsType} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, participantsType: e.target.value } })} /></Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
@@ -855,7 +854,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Name")}:</b> {actObj.workActivity.capacitynameEvent}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Type")}:</b> {actObj.workActivity.capacitytypeEvent}</Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Date")}:</b> {actObj.workActivity.eventDate}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Date")}:</b> {DateString(actObj.workActivity.eventDate)}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Target_Group")}:</b> {actObj.workActivity.participantsType}</Grid>
 
                     <Grid item xs={12}><Divider /></Grid>
