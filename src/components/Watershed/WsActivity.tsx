@@ -537,7 +537,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                 label={t("p_Watershed_Activity.ss_Search_Label")}
                                 fullWidth={false}
                                 value={search}
-                                onChange={(e) => setsearch(e.target.value)}
+                                onChange={(e) => { setPage(0); setsearch(e.target.value); }}
                                 variant="outlined"
                                 size="small"
                                 InputProps={{
@@ -928,12 +928,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {(() => {
                                         try {
                                             const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
-                                            if (imageLinks.length > 0) {
+                                            if (imageLinks.length > 1) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
                                                         key={index}
                                                         src={link.trim()}
-                                                        //alt={`Activity ${index + 1}`}
+                                                        alt={`Activity ${index + 1}`}
                                                         style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
                                                         onClick={() => {
                                                             try {
