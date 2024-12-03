@@ -111,7 +111,7 @@ export const Home: React.FC = () => {
             setTokenExpired(false);
             monitorTokenExpiry();
           }
-          else{
+          else {
             console.log("No response for token refresh");
             setexpiryDialog(true);
           }
@@ -177,7 +177,7 @@ export const Home: React.FC = () => {
                     case 'Watershed Mapping':
                       return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), path: "/wsMapping", permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                     case 'Watershed Activity':
-                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
+                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity setactCount={setactCount} /> };
                     case 'Work Plan':
                       return { name: t('p_Home.SM_BE_Work_Plan_Link'), path: "/workplan", permission: 'VIEW_Work Plan', component: <Workplan /> };
                     case 'Report':

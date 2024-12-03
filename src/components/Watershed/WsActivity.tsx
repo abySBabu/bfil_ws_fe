@@ -83,7 +83,7 @@ export const actDef = {
     ]
 }
 
-export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatch<React.SetStateAction<number>>; }> = ({ actCount, setactCount }) => {
+export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAction<number>> }> = ({ setactCount }) => {
     const { t } = useTranslation();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
@@ -446,7 +446,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    setactCount(actCount - 1);
+                    setactCount(c => c - 1);
                 }
                 else {
                     setalertClr(false);
@@ -478,7 +478,7 @@ export const WsActivity: React.FC<{ actCount: number; setactCount: React.Dispatc
                     fetchData();
                     setalertClr(true);
                     setalert(`Updated activity status to ${resp1}`);
-                    setactCount(actCount - 1);
+                    setactCount(c => c - 1);
                 }
                 else {
                     setalertClr(false);

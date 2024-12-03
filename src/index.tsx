@@ -35,7 +35,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                         <Route path="/wsMaster" element={<WsMaster />} />
                         <Route path="/beneficiaryMastaer" element={<FarmerMaster />} />
                         <Route path="/wsMapping" element={<MappingList />} />
-                        <Route path="/wsActivity" element={<WsActivity actCount={0} setactCount={() => { }} />} />
+                        <Route path="/wsActivity" element={<WsActivity setactCount={() => { }} />} />
                         <Route path="/workplan" element={<Workplan />} />
                         <Route path="/report" element={<Report />} />
                     </Route>
