@@ -198,14 +198,10 @@ export const Home: React.FC = () => {
               }
               // else { setserverDown(true) }
             }
-            catch (error) {
-              if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                  console.error('ERR_NETWORK error:', error);
-                } else {
-                  console.error('Error fetching data:', error.message);
-                }
-              } else {
+            catch (error: any) {
+              if (error.response?.status >= 500)
+                console.error('Server error:', error);
+              else {
                 console.error('Unexpected error:', error);
               }
             }
@@ -217,14 +213,8 @@ export const Home: React.FC = () => {
         const resp4 = await listPanchayat(); if (resp4.status === 'success') localStorage.setItem("PanList", JSON.stringify(resp4.data));
         const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
         const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.code === 'ERR_NETWORK') {
-            // setserverDown(true)
-          } else {
-            console.error('Error fetching data:', error.message);
-          }
-        } else {
+      } catch (error: any) {
+        if (error.response?.status >= 500) setserverDown(true); else {
           console.error('Unexpected error:', error);
         }
       }

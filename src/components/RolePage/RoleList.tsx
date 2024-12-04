@@ -63,14 +63,8 @@ export default function RoleList() {
             let resp = await getRolesByCompany(CompanyId);
             let sorData = resp;
             setRoleData(sorData.reverse());
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    // setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

@@ -56,14 +56,8 @@ export default function MappingList() {
             if (wsDatalist.status === 'success') {
                 setWsList(wsDatalist.data);
             }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    // setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }
