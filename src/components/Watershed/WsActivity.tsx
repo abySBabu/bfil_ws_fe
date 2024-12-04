@@ -23,7 +23,7 @@ export const actDef = {
         activityId: '',
         activityName: '',
         activityCode: 0,
-        userId: sessionStorage.getItem("userId"),
+        userId: sessionStorage.getItem("userId") as string,
         roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
@@ -267,7 +267,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(false);
+            if (error.response?.status >= 500) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);

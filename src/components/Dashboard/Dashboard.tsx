@@ -4,7 +4,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { sd } from '../../common';
+import { sd, ServerDownDialog } from '../../common';
 import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
 import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
@@ -29,6 +29,7 @@ export const Dashboard: React.FC = () => {
     const isMidScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
 
     const [loadingResponse, setLoadingResponse] = React.useState(true);
+    const [serverDown, setserverDown] = React.useState(false);
     const { t } = useTranslation();
     const [gMod, setgMod] = React.useState("");
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
@@ -39,6 +40,7 @@ export const Dashboard: React.FC = () => {
 
     React.useEffect(() => {
         const fetchData = async () => {
+            setLoadingResponse(true);
             try {
                 const Supplyresp = await ListSupply();
                 if (Supplyresp) {
@@ -64,92 +66,96 @@ export const Dashboard: React.FC = () => {
                     //Edited by lakshmi- fetch resp.data
                     setdemandList(resp3.data)
                 }
+                setserverDown(false)
             }
-            catch (error) { console.log(error) }
+            catch (error: any) {
+                if (error.response?.status >= 500) setserverDown(true);
+                else console.log(error);
+            }
             setLoadingResponse(false);
         }; fetchData();
     }, [])
+
     const chartHeight = isSmallScreen ? 150 : isMidScreen ? 180 : 200;
     const chartWidth = isSmallScreen ? 300 : isMidScreen ? 500 : 600;
-  
+
     return (<>
         <div>
-            {loadingResponse ?
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <CircularProgress size={80} />
-                </Box > : <>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Subheader_Text")}</Typography>
-                                <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
-                            </Box>
-                        </Card></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WaterConserved_Subheader_Text")}</Typography>
-                                <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
-                            </Box>
-                        </Card></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Subheader_Text")}</Typography>
-                                <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
-                            </Box>
-                        </Card></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Subheader_Text")}</Typography>
-                                <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
-                            </Box>
-                        </Card></Grid>
+            {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress size={80} /></Box >
+                : serverDown ? <ServerDownDialog />
+                    : <>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
+                            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Subheader_Text")}</Typography>
+                                    <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
+                                    <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                </Box>
+                            </Card></Grid>
+                            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WaterConserved_Subheader_Text")}</Typography>
+                                    <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
+                                    <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                </Box>
+                            </Card></Grid>
+                            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Subheader_Text")}</Typography>
+                                    <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
+                                    <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                </Box>
+                            </Card></Grid>
+                            <Grid item xs={12} md={3}><Card sx={keyCard}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Subheader_Text")}</Typography>
+                                    <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
+                                    <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                </Box>
+                            </Card></Grid>
 
-                        <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
-                        <Grid item xs={12} md={8}>
-                            <Grid container spacing={1}>
-                                {expectedSupplyActivities.map((activity, i) => {
-                                    const data = supplyList[activity];
-                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
-                                    return (
-                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
-                                    );
-                                })}
-                                <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
-                                {expectedDemandActivities.map((activity, i) => {
-                                    const data = demandList[activity];
-                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
-                                    return (
-                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
-                                    );
-                                })}
+                            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
+                            <Grid item xs={12} md={8}>
+                                <Grid container spacing={1}>
+                                    {expectedSupplyActivities.map((activity, i) => {
+                                        const data = supplyList[activity];
+                                        const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                        return (
+                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                        );
+                                    })}
+                                    <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
+                                    {expectedDemandActivities.map((activity, i) => {
+                                        const data = demandList[activity];
+                                        const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                        return (
+                                            <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                        );
+                                    })}
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12} md={4}>
-                            <EsriMap />
-                        </Grid>
-                    </Grid >
+                            <Grid item xs={12} md={4}>
+                                <EsriMap />
+                            </Grid>
+                        </Grid >
 
 
-                    <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
-                        <Card sx={{ outline: 'none' }}>
-                            <CardHeader title={gMod} sx={{ color: '#fff', bgcolor: sd('--text-color-special') }} />
+                        <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
+                            <Card sx={{ outline: 'none' }}>
+                                <CardHeader title={gMod} sx={{ color: '#fff', bgcolor: sd('--text-color-special') }} />
                                 <CardContent sx={{ gap: '8px', p: 1 }}>
                                     <Box sx={{ overflowX: 'auto' }}>
                                         <LineChart
@@ -159,25 +165,25 @@ export const Dashboard: React.FC = () => {
                                             width={chartWidth}
                                         />
                                     </Box>
-                                    <Box sx={{mt: 2,width: "100%" }}>
-                                    <PieChart
-                                    margin={{ right: 170 }}
-                                    series={[
-                                    {
-                                        data: [
-                                    { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
-                                    { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
-                                    { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
-                                    ],
-                                    }
-                                    ]}
-                                    height={chartHeight}
-                                    //width={chartWidth}
-                                     />
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Modal> 
-                </>}</div>
+                                    <Box sx={{ mt: 2, width: "100%" }}>
+                                        <PieChart
+                                            margin={{ right: 170 }}
+                                            series={[
+                                                {
+                                                    data: [
+                                                        { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
+                                                        { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
+                                                        { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
+                                                    ],
+                                                }
+                                            ]}
+                                            height={chartHeight}
+                                        //width={chartWidth}
+                                        />
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Modal>
+                    </>}</div>
     </>)
 }
