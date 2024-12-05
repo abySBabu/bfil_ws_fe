@@ -3,11 +3,11 @@ export const StateName = (id) => {
         const list = JSON.parse(localStorage.getItem("StateList")) || null;
         if (list) {
             const obj = list.find(x => x.stateId == id);
-            return obj ? obj.stateName : id;
+            return obj ? obj.stateName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const DistrictName = (id) => {
@@ -15,11 +15,11 @@ export const DistrictName = (id) => {
         const list = JSON.parse(localStorage.getItem("DistrictList")) || null;
         if (list) {
             const obj = list.find(x => x.districtId == id);
-            return obj ? obj.districtName : id;
+            return obj ? obj.districtName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const TalukName = (id) => {
@@ -27,11 +27,11 @@ export const TalukName = (id) => {
         const list = JSON.parse(localStorage.getItem("TalukList")) || null;
         if (list) {
             const obj = list.find(x => x.talukId == id);
-            return obj ? obj.talukName : id;
+            return obj ? obj.talukName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const PanName = (id) => {
@@ -39,11 +39,11 @@ export const PanName = (id) => {
         const list = JSON.parse(localStorage.getItem("PanList")) || null;
         if (list) {
             const obj = list.find(x => x.panchayatId == id);
-            return obj ? obj.panchayatName : id;
+            return obj ? obj.panchayatName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const WsName = (id) => {
@@ -51,11 +51,11 @@ export const WsName = (id) => {
         const list = JSON.parse(localStorage.getItem("WsList")) || null;
         if (list) {
             const obj = list.find(x => x.watershedId == id);
-            return obj ? obj.wsName : id;
+            return obj ? obj.wsName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const VillageName = (id) => {
@@ -63,11 +63,11 @@ export const VillageName = (id) => {
         const list = JSON.parse(localStorage.getItem("VillageList")) || null;
         if (list) {
             const obj = list.find(x => x.villageId == id);
-            return obj ? obj.villageName : id;
+            return obj ? obj.villageName : '-';
         }
-        return id;
+        return '-';
     }
-    return ("")
+    return '-';
 }
 
 export const DateTime = (dt) => new Date(dt).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })

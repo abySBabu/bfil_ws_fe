@@ -128,7 +128,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                         </Card></Grid>
 
-                        <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
+                        {Object.keys(supplyList).length > 0 && <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>}
                         <Grid item xs={12} md={8}><Grid container spacing={1}>
                             {Object.keys(supplyList).map((activity, i) => {
                                 const data = supplyList[activity];
@@ -136,7 +136,7 @@ export const Dashboard: React.FC = () => {
                                 return <ActCard key={i} activity={activity} value={value} unit={unit} />;
                             })}
 
-                            <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
+                            {Object.keys(demandList).length > 0 && <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>}
                             {Object.keys(demandList).map((activity, i) => {
                                 const data = demandList[activity];
                                 const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
