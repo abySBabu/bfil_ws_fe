@@ -57,7 +57,7 @@ export default function MappingList() {
                 setWsList(wsDatalist.data);
             }
         } catch (error: any) {
-            if (error.response?.status >= 500) setserverDown(true); else {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

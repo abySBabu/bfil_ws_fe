@@ -64,7 +64,7 @@ export default function RoleList() {
             let sorData = resp;
             setRoleData(sorData.reverse());
         } catch (error: any) {
-            if (error.response?.status >= 500) setserverDown(true); else {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

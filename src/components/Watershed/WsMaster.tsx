@@ -143,7 +143,7 @@ export const WsMaster: React.FC = () => {
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.response?.status >= 500) setserverDown(true);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);

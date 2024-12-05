@@ -267,7 +267,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.response?.status >= 500) setserverDown(true);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);
@@ -640,7 +640,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {actListP.map((a, i) => (
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
-                                            <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo}</TableCell>
+                                            <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo || '-'}</TableCell>
                                             <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>

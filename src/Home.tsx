@@ -199,7 +199,7 @@ export const Home: React.FC = () => {
               // else { setserverDown(true) }
             }
             catch (error: any) {
-              if (error.response?.status >= 500)
+              if (error.response?.status >= 500 || !error.response?.status)
                 console.error('Server error:', error);
               else {
                 console.error('Unexpected error:', error);
@@ -214,7 +214,7 @@ export const Home: React.FC = () => {
         const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
         const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
       } catch (error: any) {
-        if (error.response?.status >= 500) setserverDown(true); else {
+        if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
           console.error('Unexpected error:', error);
         }
       }
