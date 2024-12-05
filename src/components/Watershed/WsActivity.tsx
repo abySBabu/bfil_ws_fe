@@ -5,7 +5,7 @@ import {
     MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
-import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward } from '@mui/icons-material';
+import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Close } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
@@ -310,7 +310,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     }
 
     const WsSet = async (id: any) => {
-        if (id !== 59 || id !== 53) {
+        if (actObj.workActivity.activityCode !== 13) {
             try {
                 const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
                 if (resp1) {
@@ -927,7 +927,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {(() => {
                                         try {
                                             const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
-                                            if (imageLinks.length > 1) {
+                                            if (imageLinks.length > 0) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
                                                         key={index}
@@ -999,6 +999,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         </Dialog>
 
         <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
+            <IconButton sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }} onClick={() => setimgM('')}><Close /></IconButton>
             <img src={imgM} style={{ objectFit: 'contain', height: '80vh', width: 'auto' }} />
         </Dialog>
     </>)

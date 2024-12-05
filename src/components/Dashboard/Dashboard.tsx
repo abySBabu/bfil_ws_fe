@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton, Button, useMediaQuery } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton, useMediaQuery } from '@mui/material';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
@@ -180,6 +180,7 @@ export const Dashboard: React.FC = () => {
                             </CardContent>
                         </Card>
                     </Modal>
-                </>}
+                </>
+        }
     </>)
 }
