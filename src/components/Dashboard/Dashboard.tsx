@@ -22,6 +22,8 @@ export const Dashboard: React.FC = () => {
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
+    const [expectedSupplyActivities, setExpectedSupplyActivities] = React.useState<string[]>([]);
+    const [expectedDemandActivities, setExpectedDemandActivities] = React.useState<string[]>([]);
     const [allAct, setallAct] = React.useState<any[]>([]);
 
     React.useEffect(() => {
@@ -29,31 +31,35 @@ export const Dashboard: React.FC = () => {
             setLoadingResponse(true);
             try {
                 const Supplyresp = await ListSupply();
+                if (Supplyresp) {
+                    const activities = Supplyresp.data.map((item: any) => item.activityId);
+                    setExpectedSupplyActivities(activities);
+                }
                 const Demandresp = await ListDemand();
+                if (Demandresp) {
+                    const activities = Demandresp.data.map((item: any) => item.activityId);
+                    setExpectedDemandActivities(activities);
+                }
                 if (Supplyresp && Demandresp)
                     setallAct([...Supplyresp.data, ...Demandresp.data])
-
                 const resp1 = await DashKey();
                 if (resp1) {
                     setkeyList(resp1);
                 }
-
                 const resp2 = await DashSupply();
                 if (resp2.status === 'success') {
                     //Edited by lakshmi- fetch resp.data
                     setsupplyList(resp2.data)
                 }
-
                 const resp3 = await DashDemand();
                 if (resp3.status === 'success') {
                     //Edited by lakshmi- fetch resp.data
                     setdemandList(resp3.data)
                 }
-
                 setserverDown(false)
             }
             catch (error: any) {
-                if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
+                if (error.response?.status >= 500) setserverDown(true);
                 else console.log(error);
             }
             setLoadingResponse(false);
@@ -128,22 +134,26 @@ export const Dashboard: React.FC = () => {
                             </Box>
                         </Card></Grid>
 
-                        {Object.keys(supplyList).length > 0 && <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>}
-                        <Grid item xs={12} md={8}><Grid container spacing={1}>
-                            {Object.keys(supplyList).map((activity, i) => {
-                                const data = supplyList[activity];
-                                const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
-                                return <ActCard key={i} activity={activity} value={value} unit={unit} />;
-                            })}
-
-                            {Object.keys(demandList).length > 0 && <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>}
-                            {Object.keys(demandList).map((activity, i) => {
-                                const data = demandList[activity];
-                                const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
-                                return <ActCard key={i} activity={activity} value={value} unit={unit} />;
-                            })}
-                        </Grid></Grid>
-
+                        <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
+                        <Grid item xs={12} md={8}>
+                            <Grid container spacing={1}>
+                                {expectedSupplyActivities.map((activity, i) => {
+                                    const data = supplyList[activity];
+                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                    return (
+                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                    );
+                                })}
+                                <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
+                                {expectedDemandActivities.map((activity, i) => {
+                                    const data = demandList[activity];
+                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                    return (
+                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                    );
+                                })}
+                            </Grid>
+                        </Grid>
                         <Grid item xs={12} md={4}>
                             <EsriMap />
                         </Grid>
