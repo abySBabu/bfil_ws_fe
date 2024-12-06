@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -324,9 +324,9 @@ export const Home: React.FC = () => {
                 style={{ height: '100%', maxHeight: '60px' }}
               />
               <img
-                src={`${process.env.PUBLIC_URL}/images/bfil.png`}
+                src={`${process.env.PUBLIC_URL}/images/bfil.jpg`}
                 alt="BFIL"
-                style={{ height: '100%', maxHeight: '40px' }}
+                style={{ height: '100%', maxHeight: '60px' }}
               />
             </Box>
 
@@ -358,11 +358,17 @@ export const Home: React.FC = () => {
                   display: { xs: 'none', md: 'none', lg: 'block' },
                   height: '100%',
                   maxHeight: '60px',
+                  gap: '8px'
                 }}
               >
                 <img
-                  src={`${process.env.PUBLIC_URL}/images/pragat.png`}
-                  alt="Pragat"
+                  src={`${process.env.PUBLIC_URL}/images/ktgov.png`}
+                  alt="Karnataka Gov"
+                  style={{ height: '100%' }}
+                />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/mgnrega.jpg`}
+                  alt="MGNREGA"
                   style={{ height: '100%' }}
                 />
               </Box>
@@ -403,8 +409,8 @@ export const Home: React.FC = () => {
                 ml: 2,
               }}
             >
-              <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
-              <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+              <img src={`${process.env.PUBLIC_URL}/images/bfil.jpg`} alt="BFIL" height="100%" />
+              <img src={`${process.env.PUBLIC_URL}/images/ktgov.png`} alt="Karnataka Gov" height='80%' />
             </Box>
 
             <Box sx={{ height: '100vh', backgroundColor: '#bb4d53' }}>
@@ -465,7 +471,13 @@ export const Home: React.FC = () => {
           </Paper>
         }
 
-        <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '4%' }}>
+        <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4%', px: 2 }}>
+          <Tooltip title={<Box component="img" src={`${process.env.PUBLIC_URL}/images/myrada.jpg`} alt="MYRADA" sx={{ width: 100, height: 'auto' }} />} arrow>
+            <Typography variant="body2" sx={{ color: 'var(--page-foot-txtcolor)' }}>
+              Implementation Partner: MYRADA
+            </Typography>
+          </Tooltip>
+
           <Typography variant='body2' sx={{ color: sd('--page-foot-txtcolor') }}>
             {t("p_Home.Pragat_Watershed_Footer")}
           </Typography>
