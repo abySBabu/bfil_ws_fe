@@ -985,10 +985,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (
-                                    <Button startIcon={<ArrowBack />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
+                                    <Button startIcon={loading ? <CircularProgress /> : <ArrowBack />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
                                         Reject to {prev.replace(/_/g, " ")} </Button>)}
                                 {next && (
-                                    <Button endIcon={<ArrowForward />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
+                                    <Button endIcon={loading ? <CircularProgress /> : <ArrowForward />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
                                         Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>
