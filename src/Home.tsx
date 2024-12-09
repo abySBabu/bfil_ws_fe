@@ -472,7 +472,11 @@ export const Home: React.FC = () => {
         }
 
         <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4%', px: 2 }}>
-          <Tooltip title={<Box component="img" src={`${process.env.PUBLIC_URL}/images/myrada.jpg`} alt="MYRADA" sx={{ width: 100, height: 'auto' }} />} arrow>
+          <Tooltip
+            title={<img src={`${process.env.PUBLIC_URL}/images/myrada.jpg`} alt="MYRADA" style={{ width: 125, height: 'auto', display: 'block' }} />}
+            arrow
+            componentsProps={{ tooltip: { sx: { padding: 0, bgcolor: 'transparent', ml: '35px' } }, arrow: { sx: { color: '#fff' } } }}
+          >
             <Typography variant="body2" sx={{ color: 'var(--page-foot-txtcolor)' }}>
               Implementation Partner: MYRADA
             </Typography>
