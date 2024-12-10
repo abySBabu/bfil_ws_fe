@@ -930,12 +930,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {(() => {
                                         try {
                                             const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
-                                            if (imageLinks.length > 0) {
+                                            if (imageLinks[0].length > 0) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
                                                         key={index}
                                                         src={link.trim()}
-                                                        //alt={`Activity ${index + 1}`}
+                                                        alt={`Image ${index + 1}`}
                                                         style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
                                                         onClick={() => {
                                                             try {
@@ -950,7 +950,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 return "No images"
                                             }
                                         } catch (error) {
-                                            console.error("JSON error--", a.activityImage);
                                             return null;
                                         }
                                     })()}
