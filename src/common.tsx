@@ -6,6 +6,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { tpaTheme } from './theme';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 
 
 export const setTimeoutsecs = 3000;
@@ -97,9 +98,11 @@ export const SnackAlert: React.FC<{ alert: string | null; setalert: () => void; 
 </Snackbar>)
 
 export const ServerDownDialog = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const handleClose = () => {
+        logout();
         navigate('/');
     };
 

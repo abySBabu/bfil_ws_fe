@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext, useState, createContext } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import './sd/build/bfil/web.css';
 import './index.css';
@@ -19,31 +19,44 @@ import Report from './components/ReportPage/Report';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import UserList from './components/UserPage/UserList';
 import RoleList from './components/RolePage/RoleList';
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { isLoggedIn } = useAuth();
+    if (!isLoggedIn) {
+        return <Navigate to="/" replace />;
+    }
+
+    return <>{children}</>;
+};
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        {/* <Router basename='/bfilreact'> */}
-        <Router basename='/bfilreactdev'>
-            <ThemeProvider theme={bfilTheme}><Box sx={{ m: '-8px' }}>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route element={<Home />}>
-                        {/* <Route path="/home" element={<Home />} /> */}
-                        <Route path="/home" element={<Dashboard />} />
-                        <Route path="/users" element={<UserList />} />
-                        <Route path="/roles" element={<RoleList />} />
-                        <Route path="/wsMaster" element={<WsMaster />} />
-                        <Route path="/beneficiaryMastaer" element={<FarmerMaster />} />
-                        <Route path="/wsMapping" element={<MappingList />} />
-                        <Route path="/wsActivity" element={<WsActivity setactCount={() => { }} />} />
-                        <Route path="/workplan" element={<Workplan />} />
-                        <Route path="/report" element={<Report />} />
-                    </Route>
-                    <Route path="/profile" element={<MyProfile />} />
-                    <Route path="/forgotpassword" element={<ForgotPass />} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            </Box></ThemeProvider>
-        </Router >
+        <AuthProvider>
+            <Router basename="/bfilreactdev">
+                <ThemeProvider theme={bfilTheme}>
+                    <Box sx={{ m: '-8px' }}>
+                        <Routes>
+                            <Route path="/" element={<Login />} />
+                            <Route element={<PrivateRoute><Home /></PrivateRoute>}>
+                                <Route path="/home" element={<Dashboard />} />
+                                <Route path="/users" element={<UserList />} />
+                                <Route path="/roles" element={<RoleList />} />
+                                <Route path="/wsMaster" element={<WsMaster />} />
+                                <Route path="/beneficiaryMastaer" element={<FarmerMaster />} />
+                                <Route path="/wsMapping" element={<MappingList />} />
+                                <Route path="/wsActivity" element={<WsActivity setactCount={() => { }} />} />
+                                <Route path="/workplan" element={<Workplan />} />
+                                <Route path="/report" element={<Report />} />
+                            </Route>
+                            <Route path="/profile" element={<PrivateRoute><MyProfile /></PrivateRoute>} />
+                            <Route path="/forgotpassword" element={<ForgotPass />} />
+                            <Route path="*" element={<Navigate to="/" />} />
+                        </Routes>
+                    </Box>
+                </ThemeProvider>
+            </Router>
+        </AuthProvider>
     </React.StrictMode>
-)
+);

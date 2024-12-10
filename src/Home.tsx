@@ -12,7 +12,7 @@ import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 import { ListSide, ListStatus } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
-import { logout } from './Services/loginService';
+import { logout as logoutService } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
@@ -25,6 +25,8 @@ import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
 import { TokenRefresh } from './Services/loginService';
+import { useAuth } from './context/AuthContext';
+
 
 interface SideItem {
   screenName: string;
@@ -37,6 +39,7 @@ interface Section {
 }
 
 export const Home: React.FC = () => {
+  const { logout } = useAuth();
   const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
   const [expiryDialog, setexpiryDialog] = useState(false);
@@ -125,6 +128,12 @@ export const Home: React.FC = () => {
     TknRfr();
   }, [tokenExpired, monitorTokenExpiry]);
 
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (event.currentTarget) {
+      setavatarAnchor(event.currentTarget);
+    }
+  };
+
   const handleLanguageChange = (lng: string) => {
     sessionStorage.setItem("multiLanguage", lng);
     i18n.changeLanguage(lng);
@@ -134,11 +143,17 @@ export const Home: React.FC = () => {
 
   const logOut = async () => {
     try {
-      let logoutresp = await logout();
+      let logoutresp = await logoutService();
       handleLanguageChange('en');
       if (logoutresp) {
+        logout();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userRole');
+        localStorage.clear();
+        sessionStorage.clear();
         navigate('/');
       }
+
     } catch (error: any) {
       console.log('error', error);
     }
@@ -149,6 +164,7 @@ export const Home: React.FC = () => {
   }
 
   React.useEffect(() => {
+    if (!localStorage.getItem('isLoggedIn')) return;
     const fetchLoc = async () => {
       try {
         const resp = await ListStatus();
@@ -374,10 +390,10 @@ export const Home: React.FC = () => {
               </Box>
 
               <Avatar
-                onClick={(event) => setavatarAnchor(event.currentTarget)}
+                onClick={handleAvatarClick}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName[0]}
+                {uName ? uName[0] : ''}
               </Avatar>
             </Box>
           </Toolbar>

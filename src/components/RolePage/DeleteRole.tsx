@@ -7,6 +7,7 @@ import { rolesByCompanyId } from './RoleManagement';
 import { deleteRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 
 type RoleTypeProps = {
@@ -17,6 +18,8 @@ type RoleTypeProps = {
 
 
 export default function DeleteRole(props: RoleTypeProps) {
+    const { logout } = useAuth();
+
     const { show, hide, roleDetails } = props;
     const navigate = useNavigate();
 
@@ -43,6 +46,7 @@ export default function DeleteRole(props: RoleTypeProps) {
                 setMessage("Role Deleted successfully");
                 setOpenSnackbar(true);
                 setTimeout(() => {
+                    logout();
                     setOpenSnackbar(false);
                     setLoading(false);
                     handleClose();
@@ -78,7 +82,7 @@ export default function DeleteRole(props: RoleTypeProps) {
             >
                 <DialogTitle>Delete Role</DialogTitle>
                 <DialogContent sx={{ mt: 2 }}>
-                    Are you sure you want to delete {roleDetails?.roleName} ? 
+                    Are you sure you want to delete {roleDetails?.roleName} ?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancel</Button>

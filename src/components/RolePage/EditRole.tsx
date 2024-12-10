@@ -8,9 +8,11 @@ import { permissionByAppID, rolesByCompanyId } from './RoleManagement'; // Ensur
 import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../Services/loginService';
+import { logout as logoutService } from '../../Services/loginService';
 import { ListSide, ListStatus } from '../../Services/dashboardService';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthContext';
+
 
 type RoleTypeProps = {
     show: boolean;
@@ -31,6 +33,7 @@ interface ScreenPermissionMapping {
 }
 
 export default function EditRole(props: RoleTypeProps) {
+    const { logout } = useAuth();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
     const { show, hide, roleDetails } = props;
@@ -114,8 +117,9 @@ export default function EditRole(props: RoleTypeProps) {
     }
 
     const handleClosedialog = async () => {
-        let logoutresp = await logout();
+        let logoutresp = await logoutService();
         if (logoutresp) {
+            logout();
             setOpenDialog(false);
             handleClose();
             navigate('/')
