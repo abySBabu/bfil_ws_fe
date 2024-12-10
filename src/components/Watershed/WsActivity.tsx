@@ -188,6 +188,9 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             } else if (sortBy === 'watershedId') {
                 valueA = WsName(a.workActivity.watershedId)?.toLowerCase();
                 valueB = WsName(b.workActivity.watershedId)?.toLowerCase();
+            } else if (sortBy === 'village') {
+                valueA = (a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered))?.toLowerCase();
+                valueB = (b.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(b.workActivity.habitationsCovered))?.toLowerCase();
             } else {
                 valueA = a.workActivity[sortBy];
                 valueB = b.workActivity[sortBy];
@@ -643,7 +646,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo || '-'}</TableCell>
                                             <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
-                                            <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')}</TableCell>
+                                            <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered)}</TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
