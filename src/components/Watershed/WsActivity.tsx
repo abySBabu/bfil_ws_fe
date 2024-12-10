@@ -925,7 +925,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
                             <TableBody>{actObj.history?.slice().sort((a, b) => new Date(b.createdTime).getTime() - new Date(a.createdTime).getTime()).map((a, i) => (<TableRow key={i}>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.remarks || '-'}</TableCell>
-                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus}</TableCell>
+                                <TableCell sx={{ borderRight: '1px solid black' }}>{a.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{a.createdUser}</TableCell>
                                 <TableCell sx={{ borderRight: '1px solid black' }}>{DateTime(a.createdTime)}</TableCell>
                                 <TableCell>
