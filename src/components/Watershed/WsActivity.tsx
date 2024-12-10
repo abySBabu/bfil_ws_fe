@@ -87,6 +87,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [loadingApprove, setloadingApprove] = React.useState(false);
+    const [loadingReject, setloadingReject] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rPP, setrPP] = React.useState(10);
     const [search, setsearch] = React.useState("");
@@ -443,7 +445,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     }
 
     const ActFlowNext = async (status: any, id: any) => {
-        setLoading(true);
+        setloadingApprove(true);
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
@@ -471,11 +473,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             setalert(error.response.data.message);
         }
         setprogM(false);
-        setLoading(false);
+        setloadingApprove(false);
     }
 
     const ActFlowPrev = async (status: any, id: any) => {
-        setLoading(true);
+        setloadingReject(true);
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
@@ -503,7 +505,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             setalert(error.response.data.message);
         }
         setprogM(false);
-        setLoading(false);
+        setloadingReject(false);
     }
 
     return (<>
@@ -986,12 +988,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
                                 <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
-                                {prev && (
-                                    <Button startIcon={loading ? <CircularProgress /> : <ArrowBack />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
-                                        Reject to {prev.replace(/_/g, " ")} </Button>)}
-                                {next && (
-                                    <Button endIcon={loading ? <CircularProgress /> : <ArrowForward />} disabled={!rmk || loading} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
-                                        Send to {next.replace(/_/g, " ")}</Button>)}
+                                {prev && (<Button startIcon={loadingReject ? <CircularProgress /> : <ArrowBack />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
+                                    Reject to {prev.replace(/_/g, " ")}</Button>)}
+                                {next && (<Button endIcon={loadingApprove ? <CircularProgress /> : <ArrowForward />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
+                                    Send to {next.replace(/_/g, " ")}</Button>)}
                             </Box>
                         </Box>
                     </DialogActions>
