@@ -9,9 +9,17 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-        return localStorage.getItem('isLoggedIn') === 'true';
-    });
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    useEffect(() => {
+        const token = sessionStorage.getItem("token");
+        const refreshToken = sessionStorage.getItem("refToken");
+        if (token && refreshToken) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);
 
     const login = () => {
         setIsLoggedIn(true);
