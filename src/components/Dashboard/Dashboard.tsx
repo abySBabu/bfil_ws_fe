@@ -100,7 +100,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
-                                {/* <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton> */}
+                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -110,7 +110,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
-                                {/* <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton> */}
+                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -120,7 +120,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
-                                {/* <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton> */}
+                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -130,7 +130,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
-                                {/* <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton> */}
+                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
 
