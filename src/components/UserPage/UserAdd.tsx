@@ -36,15 +36,15 @@ export default function (props: userTypeProps) {
     const locationNeededOptions = selectOptions.locationNeededOptions;
     const [modalShow, setModalShow] = useState(props.show);
     const [rolesListFromService, setRolesListFromService] = useState<allRoles[]>([]);
-    const featuresString = sessionStorage.getItem("features");
+    const featuresString = localStorage.getItem("features");
     const features = featuresString ? featuresString.split(',') : [];
     const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
     const [managerList, setManagerList] = useState<allUserType[]>([]);
     const loginTypeOptions = selectOptions.loginTypeOptions;
     let companyID: any;
     let userId: any;
-    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
-    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    const companyIdFromLocalStorage = localStorage.getItem("companyId");
+    const userIdFromLocalStorage = localStorage.getItem("userId");
 
     if (companyIdFromLocalStorage !== null) {
         companyID = parseInt(companyIdFromLocalStorage);
@@ -136,7 +136,7 @@ export default function (props: userTypeProps) {
             let loginTypeTemp = loginTypeOptions.find(option => option.value === value.loginType)?.id;
             let roleListTemp = rolesListFromService.filter(option => option.roleName === value.role);
             let tempList: allUserType[] = props.userList;
-            let currentUser: allUserType[] = tempList.filter(user => (user.userId).toString() === sessionStorage.getItem("userId"));
+            let currentUser: allUserType[] = tempList.filter(user => (user.userId).toString() === localStorage.getItem("userId"));
             let userCreatDataOne = {
                 userEmailId: value.email,
                 userPassword: value.password,

@@ -48,8 +48,8 @@ export default function EditRole(props: RoleTypeProps) {
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(show);
 
-    const userId = sessionStorage.getItem("userId");
-    const companyID = sessionStorage.getItem("companyId");
+    const userId = localStorage.getItem("userId");
+    const companyID = localStorage.getItem("companyId");
     const [screenNameList, setscreenNameList] = React.useState<any[]>([]);
 
     // const screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
@@ -131,7 +131,7 @@ export default function EditRole(props: RoleTypeProps) {
         setModalShow(show);
         const fetchData = async () => {
             try {
-                const applicationID = sessionStorage.getItem("applicationId");
+                const applicationID = localStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
                 let temporaryPermList: permissionByAppID[] = resp;
                 if (roleDetails) {

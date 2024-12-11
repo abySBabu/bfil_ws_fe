@@ -57,9 +57,9 @@ export const Home: React.FC = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [serverDown, setserverDown] = React.useState(false);
-  const uName = sessionStorage.getItem("userName") as string
+  const uName = localStorage.getItem("userName") as string
   const uRole = localStorage.getItem("userRole") as string
-  sessionStorage.setItem("multiLanguage", "en");
+  localStorage.setItem("multiLanguage", "en");
 
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
@@ -135,7 +135,7 @@ export const Home: React.FC = () => {
   };
 
   const handleLanguageChange = (lng: string) => {
-    sessionStorage.setItem("multiLanguage", lng);
+    localStorage.setItem("multiLanguage", lng);
     i18n.changeLanguage(lng);
     setLanguageAnchor(null);
     setavatarAnchor(null);
@@ -150,7 +150,7 @@ export const Home: React.FC = () => {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('userRole');
         localStorage.clear();
-        sessionStorage.clear();
+        localStorage.clear();
         navigate('/');
       }
 

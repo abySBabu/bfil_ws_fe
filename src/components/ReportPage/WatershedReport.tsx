@@ -47,7 +47,7 @@ const WatershedReport: React.FC = () => {
     if (!selectedYear) return;
   
     try {
-      const userId = sessionStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
       if (userId !== null) {
         uId = parseInt(userId);
     }

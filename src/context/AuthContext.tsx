@@ -12,8 +12,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("token");
-        const refreshToken = sessionStorage.getItem("refToken");
+        const token = localStorage.getItem("token");
+        const refreshToken = localStorage.getItem("refToken");
         if (token && refreshToken) {
             setIsLoggedIn(true);
         } else {

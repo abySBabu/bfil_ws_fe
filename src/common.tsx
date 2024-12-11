@@ -17,7 +17,7 @@ export const setAutoHideDurationTimeoutsecs = 3000;
 export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/", companyID: "137" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
-    const permList = sessionStorage.getItem('permList');
+    const permList = localStorage.getItem('permList');
     const parsedPermList = permList ? JSON.parse(permList) : ['Null'];
 
     return parsedPermList.map((p: string) => p.trim()).includes(per);

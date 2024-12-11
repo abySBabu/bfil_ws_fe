@@ -23,7 +23,7 @@ export const actDef = {
         activityId: '',
         activityName: '',
         activityCode: 0,
-        userId: sessionStorage.getItem("userId") as string,
+        userId: localStorage.getItem("userId") as string,
         roleId: '',
         activityDescription: '',
         activityWorkflowStatus: 'New',
@@ -54,9 +54,9 @@ export const actDef = {
         gramPanchayat: '',
         village: '',
         createdTime: '',
-        createdUser: sessionStorage.getItem("userName") as string,
+        createdUser: localStorage.getItem("userName") as string,
         updatedTime: '',
-        updatedUser: sessionStorage.getItem("userName") as string,
+        updatedUser: localStorage.getItem("userName") as string,
         eventDate: '',
         participantsMale: 0,
         participantsFemale: 0,
@@ -121,7 +121,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const [imgM, setimgM] = React.useState('');
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
-    const uName = sessionStorage.getItem("userName")
+    const uName = localStorage.getItem("userName")
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -395,7 +395,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             const resp1 = await addAct({
                 ...actObj.workActivity,
                 village: vList,
-                createdUser: sessionStorage.getItem("userName"),
+                createdUser: localStorage.getItem("userName"),
                 updatedUser: '',
                 roleId: localStorage.getItem("userRoleId")
             })
@@ -424,7 +424,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 ...actObj.workActivity,
                 village: vList || [actObj.workActivity.habitationsCovered],
                 remarks: rmk,
-                updatedUser: sessionStorage.getItem("userName")
+                updatedUser: localStorage.getItem("userName")
             }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
@@ -449,7 +449,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -481,7 +481,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: sessionStorage.getItem("userName") as string }
+                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();

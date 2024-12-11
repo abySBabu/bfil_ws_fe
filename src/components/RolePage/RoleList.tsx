@@ -37,7 +37,7 @@ export default function RoleList() {
     const [selectedRow, setSelectedRow] = useState<rolesByCompanyId>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    let CompanyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let CompanyId = parseInt(localStorage.getItem("companyId") || '0');
     const [serverDown, setserverDown] = React.useState(false);
 
 

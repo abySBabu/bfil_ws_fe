@@ -49,8 +49,8 @@ export default function UserList() {
     let companyID: any;
     let userId: any;
     const userRole = localStorage.getItem("userRole") as string;
-    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
-    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    const companyIdFromLocalStorage = localStorage.getItem("companyId");
+    const userIdFromLocalStorage = localStorage.getItem("userId");
     const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
