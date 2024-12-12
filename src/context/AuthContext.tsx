@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import checkTknExpiry from '../TokenCheck';
+import { TokenRefresh } from '../Services/loginService';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -10,11 +12,57 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [tokenExpired, setTokenExpired] = useState(false);
+    const [expiryDialog, setexpiryDialog] = useState(false);
+
+    const monitorTokenExpiry = useCallback(() => {
+        const tokenResult = checkTknExpiry((expired) => {
+            if (expired) {
+                setTokenExpired(true);
+            }
+        });
+
+        return () => {
+            if (tokenResult?.timerRef) {
+                clearTimeout(tokenResult.timerRef);
+            }
+        };
+    }, []);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const refreshToken = localStorage.getItem("refToken");
-        if (token && refreshToken) {
+        const cleanup = monitorTokenExpiry();
+        return cleanup;
+    }, [monitorTokenExpiry]);
+
+    useEffect(() => {
+        const TknRfr = async () => {
+            if (tokenExpired) {
+                try {
+                    const resp = await TokenRefresh();
+                    if (resp) {
+                        console.log("Tokens refreshed");
+                        setTokenExpired(false);
+                        monitorTokenExpiry();
+                    }
+                    else {
+                        console.log("No response for token refresh");
+                        setexpiryDialog(true);
+                    }
+                } catch (error) {
+                    console.error("Token refresh failed:", error);
+                    setexpiryDialog(true);
+                }
+            }
+        };
+
+        TknRfr();
+    }, [tokenExpired, monitorTokenExpiry]);
+
+
+    useEffect(() => {
+        // const token = localStorage.getItem("token");
+        // const refreshToken = localStorage.getItem("refToken");
+        if (expiryDialog) {
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
