@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import WatershedReport from './WatershedReport';
 import DonerReport from './DonerReport';
+import ActivityDetailsReport from './ActivityDetailsReport';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -70,6 +71,7 @@ function Report() {
         >
           <Tab label="WatershedReport" {...a11yProps(0)} />
           <Tab label="DonerReport" {...a11yProps(1)} />
+          <Tab label="ActivityReport" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -80,6 +82,11 @@ function Report() {
       {value === 1 && (
         <TabPanel value={value} index={1} dir={theme.direction}>
           <DonerReport />
+        </TabPanel>
+      )}
+         {value === 2 && (
+        <TabPanel value={value} index={2} dir={theme.direction}>
+          <ActivityDetailsReport />
         </TabPanel>
       )}
     </Box>
