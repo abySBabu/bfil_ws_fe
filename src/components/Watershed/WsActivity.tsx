@@ -871,10 +871,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
 
                 <Grid item xs={12}><Divider /></Grid>
-                <Grid item xs={12} sm={3}><b>Latitude: </b>{geoData.latitude}</Grid>
-                <Grid item xs={12} sm={3}><b>Longitude: </b>{geoData.longitude}</Grid>
-                <Grid item xs={12} sm={3}><b>Altitude: </b>{geoData.altitude}</Grid>
-                <Grid item xs={12} sm={3}><b>Accuracy: </b>{geoData.accuracy}</Grid>
+                <Grid item xs={12} sm={3}><b>Latitude: </b>{geoData.latitude || 'N/A'}</Grid>
+                <Grid item xs={12} sm={3}><b>Longitude: </b>{geoData.longitude || 'N/A'}</Grid>
+                <Grid item xs={12} sm={3}><b>Altitude: </b>{geoData.altitude || 'N/A'}</Grid>
+                <Grid item xs={12} sm={3}><b>Accuracy: </b>{geoData.accuracy || 'N/A'}</Grid>
 
                 {actObj.workActivity.activityCode === 13 ? <>
                     <Grid item xs={12}><Divider /></Grid>
