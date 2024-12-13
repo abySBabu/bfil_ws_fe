@@ -69,7 +69,8 @@ export const actDef = {
         other: 0,
         mgnrega: 0,
         ibl: 0,
-        community: 0
+        community: 0,
+        geoCoordinates: ''
     },
     history: [
         {
@@ -508,6 +509,20 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         setloadingReject(false);
     }
 
+    const parseGeoCoordinates = (geoString: string) => {
+        try {
+            const parsed = JSON.parse(geoString);
+            const coords = JSON.parse(parsed.coords).coords;
+            const { accuracy, latitude, longitude, altitude } = coords;
+            return { accuracy, latitude, longitude, altitude };
+        } catch (error) {
+            console.error("Error parsing geoCoordinates:", error);
+            return { accuracy: null, latitude: null, longitude: null, altitude: null };
+        }
+    };
+
+    const geoData = parseGeoCoordinates(actObj.workActivity.geoCoordinates);
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
@@ -854,6 +869,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Type")}:</b> {ActTypeName(actObj.workActivity.activityCode)}</Grid>
                 <Grid item xs={12} sm={6}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity")}:</b> {actObj.workActivity.activityName}</Grid>
                 <Grid item xs={12}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Description")}:</b> {actObj.workActivity.activityDescription}</Grid>
+
+                <Grid item xs={12}><Divider /></Grid>
+                <Grid item xs={12} sm={3}><b>Latitude: </b>{geoData.latitude}</Grid>
+                <Grid item xs={12} sm={3}><b>Longitude: </b>{geoData.longitude}</Grid>
+                <Grid item xs={12} sm={3}><b>Altitude: </b>{geoData.altitude}</Grid>
+                <Grid item xs={12} sm={3}><b>Accuracy: </b>{geoData.accuracy}</Grid>
 
                 {actObj.workActivity.activityCode === 13 ? <>
                     <Grid item xs={12}><Divider /></Grid>
