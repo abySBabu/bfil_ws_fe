@@ -3,7 +3,7 @@ import { serverPath } from "../common";
 
 export async function listAct() {
     const configs = {
-        url: serverPath.bfil + `data_capture/getalldataCapture/${localStorage.getItem("userId")}/${localStorage.getItem("userRole")}`, //
+        url: serverPath.bfil + `data_capture/getalldataCapture/${localStorage.getItem("userId")}/${localStorage.getItem("userRole")}`,
         method: 'get',
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
@@ -105,6 +105,16 @@ export async function userDeleteCheck(id: any) {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function DashGraph() {
+    const configs = {
+        url: serverPath.bfil + `data_capture/getChartData/${localStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

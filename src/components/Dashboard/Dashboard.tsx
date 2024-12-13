@@ -1,11 +1,10 @@
 import React from 'react';
-import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Grid, Modal, IconButton, useMediaQuery } from '@mui/material';
-import { LineChart } from '@mui/x-charts/LineChart';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { Box, Card, CardContent, CardMedia, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { BarChart } from '@mui/x-charts';
 import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd, ServerDownDialog } from '../../common';
-import { DashKey, DashSupply, DashDemand } from '../../Services/activityService';
+import { DashKey, DashSupply, DashDemand, DashGraph } from '../../Services/activityService';
 import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -14,7 +13,8 @@ import { ListDemand, ListSupply } from 'src/Services/dashboardService';
 export const Dashboard: React.FC = () => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
     const isMidScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
-
+    const chartHeight = isSmallScreen ? 200 : isMidScreen ? 300 : 400;
+    const chartWidth = isSmallScreen ? 300 : isMidScreen ? 500 : 600;
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
     const { t } = useTranslation();
@@ -56,6 +56,10 @@ export const Dashboard: React.FC = () => {
                     //Edited by lakshmi- fetch resp.data
                     setdemandList(resp3.data)
                 }
+                const resp4 = await DashGraph();
+                if (resp4) {
+                    console.log('Graph--', resp4)
+                }
                 setserverDown(false)
             }
             catch (error: any) {
@@ -65,9 +69,6 @@ export const Dashboard: React.FC = () => {
             setLoadingResponse(false);
         }; fetchData();
     }, [])
-
-    const chartHeight = isSmallScreen ? 150 : isMidScreen ? 180 : 200;
-    const chartWidth = isSmallScreen ? 300 : isMidScreen ? 500 : 600;
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -159,37 +160,16 @@ export const Dashboard: React.FC = () => {
                         </Grid>
                     </Grid >
 
-                    <Modal open={Boolean(gMod)} onClose={() => setgMod('')} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
-                        <Card sx={{ outline: 'none' }}>
-                            <CardHeader title={gMod} sx={{ color: '#fff', bgcolor: sd('--text-color-special') }} />
-                            <CardContent sx={{ gap: '8px', p: 1 }}>
-                                <Box sx={{ overflowX: 'auto' }}>
-                                    <LineChart
-                                        xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                                        series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
-                                        height={chartHeight}
-                                        width={chartWidth}
-                                    />
-                                </Box>
-                                <Box sx={{ mt: 2, width: "100%" }}>
-                                    <PieChart
-                                        margin={{ right: 170 }}
-                                        series={[
-                                            {
-                                                data: [
-                                                    { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
-                                                    { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
-                                                    { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
-                                                ],
-                                            }
-                                        ]}
-                                        height={chartHeight}
-                                    //width={chartWidth}
-                                    />
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Modal>
+                    <Dialog open={Boolean(gMod)} onClose={() => setgMod('')}>
+                        <DialogTitle sx={{ color: '#fff', bgcolor: sd('--text-color-special') }}>{gMod}</DialogTitle>
+                        <DialogContent>
+                            <BarChart
+                                height={chartHeight}
+                                series={[{ data: [3500, 4400, 2400, 3400, 7800, 2890] }]}
+                                xAxis={[{ data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], scaleType: 'band' }]}
+                            />
+                        </DialogContent>
+                    </Dialog>
                 </>
         }
     </>)
