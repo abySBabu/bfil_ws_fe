@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { activityReport} from 'src/Services/reportService';
-import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,FormControl,InputLabel,Select,MenuItem,SelectChangeEvent, FormControlLabel,} from '@mui/material';
+import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,FormControl,InputLabel,Select,MenuItem,SelectChangeEvent, FormControlLabel, Checkbox, Box,} from '@mui/material';
 import { Activity, fmrDef } from './Activitytypes';
 import { listFinYear } from 'src/Services/workplanService';
 import { ListDemand, ListSupply } from 'src/Services/dashboardService';
 import { listState, listVillage } from 'src/Services/locationService';
 import { DistrictName, StateName, TalukName, VillageName } from 'src/LocName';
 import { listFarmer } from 'src/Services/farmerService';
+import { CheckBox } from '@mui/icons-material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { useReactToPrint } from 'react-to-print';
+import * as XLSX from 'xlsx';
+
 
 const ActivityDetailsReport = () => {
   const [data, setData] = useState<Activity[]>([]);
@@ -17,6 +23,13 @@ const ActivityDetailsReport = () => {
   const [selectedActivity, setSelectedActivity] = useState<string>('');
   const [fmrList, setfmrList] = React.useState<typeof fmrDef[]>([]);
   const [allAct, setallAct] = React.useState<any[]>([]);
+  const [showAreaTreated, setShowAreaTreated] = useState(false);
+  const [showAmountSpent, setShowAmountSpent] = useState(false);
+  const [isInitialFetchDone, setIsInitialFetchDone] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Activity Report' });
+  const exportToPDF = () => { handlePrint(); };
+  
   let uId: any;
   const handleYearChange = (event: SelectChangeEvent<string>) => {setSelectedYear(event.target.value); };
   
@@ -27,50 +40,112 @@ const ActivityDetailsReport = () => {
         if (selectedActivity) {setActId(selectedActivity.activityId);}
             else {setActId(undefined);}
     };
-    
-    const fetchData = async () => {
-    try {
-        const userId = sessionStorage.getItem("userId");
-      if (userId !== null) {uId = parseInt(userId);}
-      if (selectedYear && uId !== undefined && actId !== undefined)
-      {const resp1 = await activityReport(selectedYear,uId,actId); setData(resp1[actId]); }
-      const resp5 = await listFarmer(); if (resp5.status === 'success') { setfmrList(resp5.data.reverse()) }
-    } 
-    catch (error) {console.error('Error:', error);}
-  };
-
-  useEffect(() => {
+    useEffect(() => {
     const fetchReport = async () => {
     const response2 = await listFinYear(); 
     if (response2.status === 'success') { setYearOptions(response2.data) }
     const resp3a = await ListSupply();
       const resp3b = await ListDemand();
+      console.log("the response :",resp3b);
       if (resp3a && resp3b) { 
         // setActivityOptions([...resp3a.data, ...resp3b.data]) 
         const combinedOptions = [...resp3a.data, ...resp3b.data].filter(
             option => option.activityName !== "Members Capacitated");
         setActivityOptions(combinedOptions);}
+
+        const resp5 = await listFarmer(); if (resp5.status === 'success') { setfmrList(resp5.data.reverse()) }
+        setIsInitialFetchDone(true);
     };
-    if (selectedYear && actId) {fetchData();}
+    if (!isInitialFetchDone) {
       fetchReport();
-   }, [selectedYear,selectedActivity,actId]);
- 
-  function checkFarmerInList(farmerId: any): JSX.Element {
-  const farmer = fmrList.find(f => f.wsfarmerId === farmerId);
-   return farmer ? (
-      <>
-        <p>{farmer.wsfarmerName}</p>
-        <p>{farmer.relationalIdentifiers}</p>
-        <p>{farmer.identifierName}</p>
-        <p>Mobile no: {farmer.mobileNumber}</p>
-      </>
-    ) : ( <p>N/A.</p>);
     }
+   }, [isInitialFetchDone]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+        const userId = sessionStorage.getItem("userId");
+      if (userId !== null) {uId = parseInt(userId);}
+      if (selectedYear && uId !== undefined && actId !== undefined)
+      {const resp1 = await activityReport(selectedYear,uId,actId); setData(resp1[actId]); }
+      } 
+    catch (error) {console.error('Error:', error);}
+  };
+  if (selectedYear && actId) {
+    fetchData();
+  }
+}, [selectedYear,selectedActivity,actId]);
+
+
+   const getFarmerDetails = (farmerId: any): string => {
+    const farmer = fmrList.find(f => f.wsfarmerId === farmerId);
+    return farmer ? `${farmer.wsfarmerName}, ${farmer.relationalIdentifiers}, ${farmer.identifierName}, Mobile no: ${farmer.mobileNumber}` : "N/A";
+  };
+  
+  const exportToExcel = () => {
+    if (!data || data.length === 0) {
+      alert("No data available to export.");
+      return;
+    }
+    const formattedData = data.map((activity, index) => {
+      let latitude = 'N/A';
+      let longitude = 'N/A';
+      let altitude = 'N/A';
+      let accuracy = 'N/A';
+      try {
+        const locationData = activity.Location ? JSON.parse(activity.Location) : null;
+        if (locationData && locationData.coords) {
+          const coords = JSON.parse(locationData.coords);
+          if (coords && coords.coords) {
+            latitude = coords.coords.latitude || 'N/A';
+            longitude = coords.coords.longitude || 'N/A';
+            altitude = coords.coords.altitude || 'N/A';
+            accuracy = coords.coords.accuracy || 'N/A';
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing location:', error);
+      }
+  
+      return {
+        "S.No": index + 1,
+        "Activity Location": `Survey No: ${activity['Survey No']}, Village: ${VillageName(activity.Village)}, Taluk: ${TalukName(activity.Taluk)}, District: ${DistrictName(activity.District)}, State: ${StateName(activity.State)}`,
+        "Latitude": latitude,
+        "Longitude": longitude,
+        "Altitude": altitude,
+        "Accuracy": accuracy,
+        "Beneficiary": getFarmerDetails(activity.Farmer),
+       
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const columnWidths = [{ wch: 5 },  { wch: 60 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 50 }, ];
+    worksheet["!cols"] = columnWidths;
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Activity Report");
+    const fileName = `Activity_Report_${selectedYear || "Year"}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+  };
+  
+ 
+  // function checkFarmerInList(farmerId: any): JSX.Element {
+  // const farmer = fmrList.find(f => f.wsfarmerId === farmerId);
+  //  return farmer ? (
+  //     <>
+  //       <p>{farmer.wsfarmerName}</p>
+  //       <p>{farmer.relationalIdentifiers}</p>
+  //       <p>{farmer.identifierName}</p>
+  //       <p>Mobile no: {farmer.mobileNumber}</p>
+  //     </>
+  //   ) : ( <p>N/A.</p>);
+  //   }
 
   return (
     <div>
       <h1>Activity Report</h1>
-      <FormControl sx={{ width: 200,marginBottom:'15px',marginRight:'20px'}}>
+      <Box sx={{ display: 'flex',alignItems: 'center',width: '100%',mb: 2,flexDirection: { xs: 'column', sm: 'row' }}} >
+      <FormControl sx={{ width: 200,marginBottom:'15px',mr:3}}>
         <InputLabel id="select-year-label">Select Year</InputLabel>
         <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
             <MenuItem value="">Select Year</MenuItem> 
@@ -81,7 +156,7 @@ const ActivityDetailsReport = () => {
             ))}
         </Select>
         </FormControl>
-        <FormControl sx={{ width: 230,marginBottom:'15px'}}>
+        <FormControl sx={{ width: 230,marginBottom:'15px',mr:3}}>
             <InputLabel id="select-year-label">Select Activity</InputLabel>
             <Select labelId="select-year-label" value={selectedActivity} onChange={handleActivityChange} label="Select Activity">
                 <MenuItem value="">Select Activity</MenuItem> 
@@ -91,6 +166,31 @@ const ActivityDetailsReport = () => {
                 </MenuItem>))}
             </Select>
         </FormControl>
+        <Box sx={{mr:3}}>
+        <Checkbox
+        checked={showAreaTreated}
+        onChange={(e) => {
+          console.log("Checkbox state:", e.target.checked);
+          setShowAreaTreated(e.target.checked);
+        }}
+      />{' '}
+      Area Treated
+<Checkbox
+  checked={showAmountSpent}
+  onChange={(e) => {
+    setShowAmountSpent(e.target.checked);
+    console.log("Amount Spent Checkbox:", e.target.checked);
+  }}
+/>{' '}
+Amount Spent
+</Box>
+<Box display="flex" sx={{marginLeft: 'auto',marginRight: { md: '20px' },flexDirection: { sm: 'row' },gap: { xs: 1, sm: 3 }}}>
+        <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
+        <PictureAsPdfIcon  onClick={exportToPDF} sx={{ cursor: 'pointer' }} />
+      </Box>
+      </Box>
+        {/* <CheckBox></CheckBox> */}
+        <div ref={contentRef}>
       <TableContainer component={Paper} style={{ marginTop: '20px' }}>
         <Table>
           <TableHead>
@@ -98,6 +198,16 @@ const ActivityDetailsReport = () => {
               <TableCell sx={{textAlign: 'center',border: '1px solid #ccc'}}>Activity Location</TableCell>
               <TableCell sx={{textAlign: 'center',border: '1px solid #ccc'}}>Activity Location Coordinates</TableCell>
               <TableCell sx={{textAlign: 'center',border: '1px solid #ccc'}}>Activity Beneficiary</TableCell>
+              {showAreaTreated && (
+                <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                  Area Treated
+                </TableCell>
+              )}
+              {showAmountSpent && (
+                <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                  Amount Spent
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
             <TableBody>
@@ -138,15 +248,24 @@ const ActivityDetailsReport = () => {
                         ) : (<p>No location available</p>
                         )}
                     </TableCell>
-                    <TableCell sx={{textAlign: 'center'}}>{checkFarmerInList(activity.Farmer)}</TableCell>
+                    <TableCell sx={{textAlign: 'center'}}>{getFarmerDetails(activity.Farmer)}</TableCell>
+                    {showAreaTreated && (
+                  <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                    {activity['Area Treated'] || 'N/A'}
+                  </TableCell>
+                )}
+                {showAmountSpent && (
+                  <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                    {activity['Amount Spend'] || 'N/A'}
+                  </TableCell>
+                )}
                 </TableRow>);})}
             </TableBody>
         </Table>
       </TableContainer>
+      </div>
     </div>
   );
 };
 
 export default ActivityDetailsReport;
-
-
