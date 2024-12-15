@@ -30,7 +30,7 @@ const ActivityDetailsReport = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Activity Report' });
   const exportToPDF = () => { handlePrint(); };
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   
   let uId: any;
   const handleYearChange = (event: SelectChangeEvent<string>) => {setSelectedYear(event.target.value); };
@@ -78,15 +78,14 @@ const ActivityDetailsReport = () => {
   
 useEffect(() => {
   const fetchData = async () => {
-    try {
+  
+        try {
       
-       // const userId = sessionStorage.getItem("userId");
-        //console.log(userId);
-      if (userId !== null) {uId = parseInt(userId);}
-     
+        if (userId !== null) {uId = parseInt(userId);}
+     //console.log("the user is",userId,actId,selectedYear);
       if (selectedYear && uId !== undefined && actId !== undefined)
       {const resp1 = await activityReport(selectedYear,uId,actId); 
-      
+        // console.log("The report response :",resp1);
         setData(resp1[actId]); }
       } 
     catch (error) {console.error('Error:', error);}
