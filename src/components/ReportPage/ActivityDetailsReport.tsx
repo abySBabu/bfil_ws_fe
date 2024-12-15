@@ -15,6 +15,7 @@ import * as XLSX from 'xlsx';
 
 
 const ActivityDetailsReport = () => {
+  
   const [data, setData] = useState<Activity[]>([]);
   const [yearOptions, setYearOptions] = useState<any[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>('');
@@ -29,6 +30,7 @@ const ActivityDetailsReport = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Activity Report' });
   const exportToPDF = () => { handlePrint(); };
+  const userId = sessionStorage.getItem("userId");
   
   let uId: any;
   const handleYearChange = (event: SelectChangeEvent<string>) => {setSelectedYear(event.target.value); };
@@ -41,34 +43,50 @@ const ActivityDetailsReport = () => {
             else {setActId(undefined);}
     };
     useEffect(() => {
-    const fetchReport = async () => {
-    const response2 = await listFinYear(); 
-    if (response2.status === 'success') { setYearOptions(response2.data) }
-    const resp3a = await ListSupply();
-      const resp3b = await ListDemand();
-      console.log("the response :",resp3b);
-      if (resp3a && resp3b) { 
-        // setActivityOptions([...resp3a.data, ...resp3b.data]) 
-        const combinedOptions = [...resp3a.data, ...resp3b.data].filter(
-            option => option.activityName !== "Members Capacitated");
-        setActivityOptions(combinedOptions);}
-
-        const resp5 = await listFarmer(); if (resp5.status === 'success') { setfmrList(resp5.data.reverse()) }
-        setIsInitialFetchDone(true);
-    };
-    if (!isInitialFetchDone) {
-      fetchReport();
-    }
-   }, [isInitialFetchDone]);
-
+      const fetchReport = async () => {
+          try {
+              const response2 = await listFinYear();
+              if (response2?.status === 'success') {
+                  setYearOptions(response2.data);
+              }
+  
+              const resp3a = await ListSupply();
+              const resp3b = await ListDemand();
+  
+              if (resp3a && resp3b) {
+                  const combinedOptions = [...resp3a.data, ...resp3b.data].filter(
+                      option => option.activityName !== "Members Capacitated"
+                  );
+                  setActivityOptions(combinedOptions);
+              }
+  
+              const resp5 = await listFarmer();
+              if (resp5?.status === 'success') {
+                  setfmrList(resp5.data.reverse());
+              }
+  
+              setIsInitialFetchDone(true);
+          } catch (error) {
+              console.error("Error fetching data in fetchReport:", error);
+          }
+      };
+  
+      if (!isInitialFetchDone) {
+          fetchReport();
+      }
+  }, [isInitialFetchDone]);
+  
 useEffect(() => {
   const fetchData = async () => {
     try {
-        const userId = sessionStorage.getItem("userId");
+      
+       // const userId = sessionStorage.getItem("userId");
+        //console.log(userId);
       if (userId !== null) {uId = parseInt(userId);}
+     
       if (selectedYear && uId !== undefined && actId !== undefined)
       {const resp1 = await activityReport(selectedYear,uId,actId); 
-       // console.log("The activity response:",resp1);
+      
         setData(resp1[actId]); }
       } 
     catch (error) {console.error('Error:', error);}
