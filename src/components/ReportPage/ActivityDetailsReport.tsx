@@ -52,7 +52,6 @@ const ActivityDetailsReport = () => {
   
               const resp3a = await ListSupply();
               const resp3b = await ListDemand();
-  
               if (resp3a && resp3b) {
                   const combinedOptions = [...resp3a.data, ...resp3b.data].filter(
                       option => option.activityName !== "Members Capacitated"
