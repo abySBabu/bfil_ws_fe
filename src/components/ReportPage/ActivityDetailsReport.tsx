@@ -67,7 +67,9 @@ useEffect(() => {
         const userId = sessionStorage.getItem("userId");
       if (userId !== null) {uId = parseInt(userId);}
       if (selectedYear && uId !== undefined && actId !== undefined)
-      {const resp1 = await activityReport(selectedYear,uId,actId); setData(resp1[actId]); }
+      {const resp1 = await activityReport(selectedYear,uId,actId); 
+       // console.log("The activity response:",resp1);
+        setData(resp1[actId]); }
       } 
     catch (error) {console.error('Error:', error);}
   };
@@ -167,17 +169,31 @@ useEffect(() => {
             </Select>
         </FormControl>
         <Box sx={{mr:3}}>
-        <Checkbox checked={showAreaTreated} onChange={(e) => {setShowAreaTreated(e.target.checked);}}/>{' '}Area Treated
-        <Checkbox checked={showAmountSpent} onChange={(e) => { setShowAmountSpent(e.target.checked);}}/>{' '}Amount Spent
-      </Box>
-      <Box display="flex" sx={{marginLeft: 'auto',marginRight: { md: '20px' },flexDirection: { sm: 'row' },gap: { xs: 1, sm: 3 }}}>
+        <Checkbox
+        checked={showAreaTreated}
+        onChange={(e) => {
+          console.log("Checkbox state:", e.target.checked);
+          setShowAreaTreated(e.target.checked);
+        }}
+      />{' '}
+      Area Treated
+<Checkbox
+  checked={showAmountSpent}
+  onChange={(e) => {
+    setShowAmountSpent(e.target.checked);
+    console.log("Amount Spent Checkbox:", e.target.checked);
+  }}
+/>{' '}
+Amount Spent
+</Box>
+<Box display="flex" sx={{marginLeft: 'auto',marginRight: { md: '20px' },flexDirection: { sm: 'row' },gap: { xs: 1, sm: 3 }}}>
         <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
         <PictureAsPdfIcon  onClick={exportToPDF} sx={{ cursor: 'pointer' }} />
       </Box>
-    </Box>
+      </Box>
         {/* <CheckBox></CheckBox> */}
         <div ref={contentRef}>
-       <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+      <TableContainer component={Paper} style={{ marginTop: '20px' }}>
         <Table>
           <TableHead>
             <TableRow>
