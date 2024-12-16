@@ -265,11 +265,11 @@ export const Dashboard: React.FC = () => {
                                     margin={{ right: 170 }}
                                     series={[
                                         {
-                                            data: [
-                                                { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
-                                                { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
-                                                { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
-                                            ],
+                                            data: Object.entries(pieChartData["farmer impacted"]).map(([key, value], index) => ({
+                                                id: index,
+                                                value,
+                                                label: ActTypeName(key)
+                                            }))
                                         }
                                     ]}
                                     height={chartHeight}
@@ -281,3 +281,4 @@ export const Dashboard: React.FC = () => {
         }
     </>)
 }
+
