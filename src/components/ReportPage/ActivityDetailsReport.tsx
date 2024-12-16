@@ -81,10 +81,8 @@ useEffect(() => {
         try {
       
         if (userId !== null) {uId = parseInt(userId);}
-     //console.log("the user is",userId,actId,selectedYear);
-      if (selectedYear && uId !== undefined && actId !== undefined)
-      {const resp1 = await activityReport(selectedYear,uId,actId); 
-        // console.log("The report response :",resp1);
+        if (selectedYear && uId !== undefined && actId !== undefined)
+        {const resp1 = await activityReport(selectedYear,uId,actId); 
         setData(resp1[actId]); }
       } 
     catch (error) {console.error('Error:', error);}
@@ -100,30 +98,41 @@ useEffect(() => {
     return farmer ? `${farmer.wsfarmerName}, ${farmer.relationalIdentifiers}, ${farmer.identifierName}, Mobile no: ${farmer.mobileNumber}` : "N/A";
   };
   
+  function parseLocationData(location: string | null): {
+    latitude: string;
+    longitude: string;
+    altitude: string;
+    accuracy: string;
+  } {
+    let latitude = 'N/A';
+    let longitude = 'N/A';
+    let altitude = 'N/A';
+    let accuracy = 'N/A';
+  
+    try {
+      if (location) {
+        const locationData = JSON.parse(location);
+        if (locationData && locationData.coords) {
+          const coords = JSON.parse(locationData.coords);
+          latitude = coords.latitude || 'N/A';
+          longitude = coords.longitude || 'N/A';
+          altitude = coords.altitude || 'N/A';
+          accuracy = coords.accuracy || 'N/A';
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing location:', error);
+    }
+  
+    return { latitude, longitude, altitude, accuracy };
+  }
   const exportToExcel = () => {
     if (!data || data.length === 0) {
       alert("No data available to export.");
       return;
     }
     const formattedData = data.map((activity, index) => {
-      let latitude = 'N/A';
-      let longitude = 'N/A';
-      let altitude = 'N/A';
-      let accuracy = 'N/A';
-      try {
-        const locationData = activity.Location ? JSON.parse(activity.Location) : null;
-        if (locationData && locationData.coords) {
-          const coords = JSON.parse(locationData.coords);
-          if (coords && coords.coords) {
-            latitude = coords.coords.latitude || 'N/A';
-            longitude = coords.coords.longitude || 'N/A';
-            altitude = coords.coords.altitude || 'N/A';
-            accuracy = coords.coords.accuracy || 'N/A';
-          }
-        }
-      } catch (error) {
-        console.error('Error parsing location:', error);
-      }
+  const { latitude, longitude, altitude, accuracy } = parseLocationData(activity.Location || null);
   
       return {
         "S.No": index + 1,
@@ -230,21 +239,7 @@ Amount Spent
           </TableHead>
             <TableBody>
                 {data?.map((activity, index) => {
-                let latitude = 'N/A';
-                let longitude = 'N/A';
-                let altitude = 'N/A';
-                let accuracy ='N/A';
-                try {
-                const locationData = activity.Location ? JSON.parse(activity.Location) : null;
-                if (locationData && locationData.coords) {
-                const coords = JSON.parse(locationData.coords);
-                if (coords && coords.coords) {
-                latitude = coords.coords.latitude || 'N/A';
-                longitude = coords.coords.longitude || 'N/A';
-                altitude = coords.coords.altitude || 'N/A';
-                accuracy = coords.coords.accuracy || 'N/A';
-                }}} catch (error) {console.error('Error parsing location:', error);
-                }
+                const { latitude, longitude, altitude, accuracy } = parseLocationData(activity.Location || null);
 
                 return (
                 <TableRow key={index}>
