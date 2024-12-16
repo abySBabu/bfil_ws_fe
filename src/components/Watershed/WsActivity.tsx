@@ -953,7 +953,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {(() => {
                                         try {
                                             const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
-                                            if (imageLinks[0].length > 0) {
+                                            if (imageLinks[0]?.length > 0) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
                                                         key={index}

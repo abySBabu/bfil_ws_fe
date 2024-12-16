@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Card, CardContent, CardMedia, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
-import { Square, Water, Agriculture, CurrencyRupee } from '@mui/icons-material';
+import { BarChart, PieChart } from '@mui/x-charts';
+import { Square, Water, Agriculture, CurrencyRupee, Close } from '@mui/icons-material';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd, ServerDownDialog } from '../../common';
 import { DashKey, DashSupply, DashDemand, DashGraph } from '../../Services/activityService';
@@ -13,18 +13,19 @@ import { ListDemand, ListSupply } from 'src/Services/dashboardService';
 export const Dashboard: React.FC = () => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
     const isMidScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
-    const chartHeight = isSmallScreen ? 200 : isMidScreen ? 300 : 400;
+    const chartHeight = isSmallScreen ? 150 : isMidScreen ? 180 : 200;
     const chartWidth = isSmallScreen ? 300 : isMidScreen ? 500 : 600;
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
     const { t } = useTranslation();
-    const [gMod, setgMod] = React.useState("");
+    const [graphM, setgraphM] = React.useState("");
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [expectedSupplyActivities, setExpectedSupplyActivities] = React.useState<string[]>([]);
     const [expectedDemandActivities, setExpectedDemandActivities] = React.useState<string[]>([]);
     const [allAct, setallAct] = React.useState<any[]>([]);
+    const [graphData, setgraphData] = React.useState<any>({});
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -58,7 +59,7 @@ export const Dashboard: React.FC = () => {
                 }
                 const resp4 = await DashGraph();
                 if (resp4) {
-                    console.log('Graph--', resp4)
+                    setgraphData(resp4)
                 }
                 setserverDown(false)
             }
@@ -88,6 +89,92 @@ export const Dashboard: React.FC = () => {
         </Grid>
     )
 
+    type IndicatorValues = {
+        [key: string]: number;
+    };
+
+    type Activity = {
+        "farmer impacted"?: { [key: string]: number };
+        "WaterConserved"?: { [key: string]: number };
+        "totalArea"?: { [key: string]: number };
+        "Goverment Amount"?: { [key: string]: number };
+    };
+
+    type RawData = {
+        [activityId: string]: Activity;
+    };
+
+    type Totals = {
+        "farmer impacted": IndicatorValues;
+        "WaterConserved": IndicatorValues;
+        "totalArea": IndicatorValues;
+        "Goverment Amount": IndicatorValues;
+    };
+
+    const isEmptyObject = (obj: any): boolean => {
+        return obj && typeof obj === 'object' && Object.getOwnPropertyNames(obj).length === 0;
+    };
+
+    const processByMonth = (data: RawData): Totals => {
+        const totals: Totals = {
+            "farmer impacted": {},
+            "WaterConserved": {},
+            "totalArea": {},
+            "Goverment Amount": {},
+        };
+
+        // Check if data is null or undefined, and ensure it's an object
+        if (!data || typeof data !== 'object' || isEmptyObject(data)) {
+            return totals; // Return totals (empty object) if data is null, undefined, or empty
+        }
+
+        Object.values(data).forEach((activity) => {
+            Object.entries(activity).forEach(([indicator, values]) => {
+                if (totals[indicator as keyof Totals] && values) {
+                    Object.entries(values as IndicatorValues).forEach(([month, value]) => {
+                        if (value != null) {
+                            totals[indicator as keyof Totals][month] =
+                                (totals[indicator as keyof Totals][month] || 0) + value;
+                        }
+                    });
+                }
+            });
+        });
+
+        return totals;
+    };
+
+    const processByActivityId = (data: RawData): Totals => {
+        const totals: Totals = {
+            "farmer impacted": {},
+            "WaterConserved": {},
+            "totalArea": {},
+            "Goverment Amount": {},
+        };
+
+        // Check if data is null or undefined, and ensure it's an object
+        if (!data || typeof data !== 'object' || isEmptyObject(data)) {
+            return totals; // Return totals (empty object) if data is null, undefined, or empty
+        }
+
+        Object.entries(data).forEach(([activityId, activity]) => {
+            Object.entries(activity).forEach(([indicator, values]) => {
+                if (values) {
+                    const totalForActivity = Object.values(values as { [key: string]: number }).reduce(
+                        (sum, value) => sum + (value || 0), // Handle undefined/null values safely in the sum
+                        0
+                    );
+                    totals[indicator as keyof Totals][activityId] = totalForActivity;
+                }
+            });
+        });
+
+        return totals;
+    };
+
+    const barChartData = processByMonth(graphData);
+    const pieChartData = processByActivityId(graphData);
+
     return (<>
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress size={80} /></Box >
             : serverDown ? <ServerDownDialog />
@@ -101,7 +188,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -111,7 +198,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -121,7 +208,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -131,7 +218,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgMod(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
 
@@ -160,14 +247,34 @@ export const Dashboard: React.FC = () => {
                         </Grid>
                     </Grid >
 
-                    <Dialog open={Boolean(gMod)} onClose={() => setgMod('')}>
-                        <DialogTitle sx={{ color: '#fff', bgcolor: sd('--text-color-special') }}>{gMod}</DialogTitle>
-                        <DialogContent>
-                            <BarChart
-                                height={chartHeight}
-                                series={[{ data: [3500, 4400, 2400, 3400, 7800, 2890] }]}
-                                xAxis={[{ data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], scaleType: 'band' }]}
-                            />
+                    <Dialog open={Boolean(graphM)} onClose={() => setgraphM('')}>
+                        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            {graphM}
+                            <IconButton onClick={() => setgraphM('')}><Close /></IconButton>
+                        </DialogTitle>
+                        <DialogContent sx={{ gap: '8px', p: 1 }}>
+                            <Box sx={{ overflowX: 'auto' }}>
+                                <BarChart
+                                    height={chartHeight}
+                                    series={[{ data: Object.values(barChartData["farmer impacted"]) }]}
+                                    xAxis={[{ data: (Object.keys(barChartData["farmer impacted"])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
+                                />
+                            </Box>
+                            <Box sx={{ mt: 2, width: "100%" }}>
+                                <PieChart
+                                    margin={{ right: 170 }}
+                                    series={[
+                                        {
+                                            data: [
+                                                { id: 0, value: 10, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Bunding_data") },
+                                                { id: 1, value: 15, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.NalaTreatment_data") },
+                                                { id: 2, value: 20, label: t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.CheckDam_data") },
+                                            ],
+                                        }
+                                    ]}
+                                    height={chartHeight}
+                                />
+                            </Box>
                         </DialogContent>
                     </Dialog>
                 </>
