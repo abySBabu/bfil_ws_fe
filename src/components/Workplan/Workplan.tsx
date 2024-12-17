@@ -457,6 +457,7 @@ export const Workplan: React.FC = () => {
                             })
                         }
                         inputProps={{ min: 0 }}
+                        InputProps={{startAdornment: <InputAdornment position="start">₹</InputAdornment>}}
                     /></Grid>
                     {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
                 </React.Fragment>))}

@@ -252,29 +252,33 @@ export const Dashboard: React.FC = () => {
                             {graphM}
                             <IconButton onClick={() => setgraphM('')}><Close /></IconButton>
                         </DialogTitle>
+                        
                         <DialogContent sx={{ gap: '8px', p: 1 }}>
-                            <Box sx={{ overflowX: 'auto' }}>
-                                <BarChart
-                                    height={chartHeight}
-                                    series={[{ data: Object.values(barChartData["farmer impacted"]) }]}
-                                    xAxis={[{ data: (Object.keys(barChartData["farmer impacted"])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
-                                />
-                            </Box>
-                            <Box sx={{ mt: 2, width: "100%" }}>
-                                <PieChart
-                                    margin={{ right: 170 }}
-                                    series={[
-                                        {
+                            <Box sx={{ overflow: 'auto' }}>{
+                                Object.entries(barChartData["farmer impacted"]).length > 0 ?
+                                    <BarChart
+                                        height={chartHeight}
+                                        series={[{ data: Object.values(barChartData["farmer impacted"]) }]}
+                                        xAxis={[{ data: (Object.keys(barChartData["farmer impacted"])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
+                                    />
+                                    :
+                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
+                            }</Box>
+                            <Box sx={{ overflow: 'auto' }}>{
+                                Object.entries(pieChartData["farmer impacted"]).length > 0 ?
+                                    <PieChart
+                                        height={chartHeight}
+                                        series={[{
                                             data: Object.entries(pieChartData["farmer impacted"]).map(([key, value], index) => ({
                                                 id: index,
                                                 value,
                                                 label: ActTypeName(key)
                                             }))
-                                        }
-                                    ]}
-                                    height={chartHeight}
-                                />
-                            </Box>
+                                        }]}
+                                    />
+                                    :
+                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
+                            }</Box>
                         </DialogContent>
                     </Dialog>
                 </>
