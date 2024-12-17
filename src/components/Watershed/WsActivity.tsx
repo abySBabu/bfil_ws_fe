@@ -198,8 +198,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 valueA = (a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered))?.toLowerCase();
                 valueB = (b.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(b.workActivity.habitationsCovered))?.toLowerCase();
             } else {
-                valueA = a.workActivity[sortBy];
-                valueB = b.workActivity[sortBy];
+                valueA = a.workActivity[sortBy]?.toString()?.toLowerCase();
+                valueB = b.workActivity[sortBy]?.toString()?.toLowerCase();
             }
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
@@ -590,7 +590,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>
+                                        <TableCell sx={{width:'35%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityName'}
                                                 direction={sortBy === 'activityName' ? sortOrder : 'asc'}
@@ -599,7 +599,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Activity")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'surveyNo'}
                                                 direction={sortBy === 'surveyNo' ? sortOrder : 'asc'}
@@ -608,7 +608,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityCode'}
                                                 direction={sortBy === 'activityCode' ? sortOrder : 'asc'}
@@ -617,7 +617,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Activity_Type")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'watershedId'}
                                                 direction={sortBy === 'watershedId' ? sortOrder : 'asc'}
@@ -626,7 +626,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Watershed")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'village'}
                                                 direction={sortBy === 'village' ? sortOrder : 'asc'}
@@ -635,7 +635,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Villages")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityWorkflowStatus'}
                                                 direction={sortBy === 'activityWorkflowStatus' ? sortOrder : 'asc'}
@@ -644,7 +644,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Status")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'10%'}}>
                                             <TableSortLabel
                                                 active={sortBy === 'updatedUser'}
                                                 direction={sortBy === 'updatedUser' ? sortOrder : 'asc'}
@@ -653,7 +653,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{width:'5%'}}>
                                             {t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}
                                         </TableCell>
                                     </TableRow>
@@ -939,11 +939,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Remark")}</TableCell>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Status")}</TableCell>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_By")}</TableCell>
-                                    <TableCell sx={{ borderRight: '1px solid black' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_On")}</TableCell>
-                                    <TableCell>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Images")}</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black', width: '60%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Remark")}</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Status")}</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_By")}</TableCell>
+                                    <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_On")}</TableCell>
+                                    <TableCell sx={{ width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Images")}</TableCell>
                                 </TableRow>
                             </TableHead>
 
