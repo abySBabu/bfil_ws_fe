@@ -845,11 +845,17 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Community")} value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: parseInt(e.target.value) } })} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} /></Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12} sm={3}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Name")} value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
-                        {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>{o.wsfarmerName}</MenuItem>))}
+                    <Grid item xs={12} sm={6}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Name")} value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
+                        {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>
+                            <Box display="flex" gap={1} alignItems="center">
+                                <span>{o.wsfarmerName},</span>
+                                <span style={{ fontWeight: 300 }}>{o.relationalIdentifiers}</span>
+                                <span>{o.identifierName}</span>
+                            </Box>
+                        </MenuItem>))}
                     </TextField></Grid>
                     <Grid item xs={12} sm={3}><TextField required disabled label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Mobile_Number")} value={fmrObj.mobileNumber} /></Grid>
-                    <Grid item xs={12} sm={6}><TextField required disabled label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Relation")} value={`${fmrObj.relationalIdentifiers} ${fmrObj.identifierName}`} /></Grid>
+                    {/* <Grid item xs={12} sm={6}><TextField required disabled label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Relation")} value={`${fmrObj.relationalIdentifiers} ${fmrObj.identifierName}`} /></Grid> */}
                 </>}
             </Grid></DialogContent>
 
@@ -928,9 +934,9 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Name")}:</b> {fmrObj.wsfarmerName} </Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Name")}:</b> {fmrObj.wsfarmerName}, {fmrObj.relationalIdentifiers} {fmrObj.identifierName}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Mobile_Number")}:</b> {fmrObj.mobileNumber}</Grid>
-                    <Grid item xs={12} sm={3}><b>{fmrObj.relationalIdentifiers}</b> {fmrObj.identifierName}</Grid>
+                    {/* <Grid item xs={12} sm={3}><b>{fmrObj.relationalIdentifiers}</b> {fmrObj.identifierName}</Grid> */}
                 </>}
 
                 <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_History_Header")}</Divider></Grid>

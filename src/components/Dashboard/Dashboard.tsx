@@ -111,6 +111,8 @@ export const Dashboard: React.FC = () => {
         "Goverment Amount": IndicatorValues;
     };
 
+    const [graphIndicator, setGraphIndicator] = React.useState<keyof Totals>("farmer impacted");
+
     const isEmptyObject = (obj: any): boolean => {
         return obj && typeof obj === 'object' && Object.getOwnPropertyNames(obj).length === 0;
     };
@@ -188,7 +190,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("totalArea"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -198,7 +200,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("WaterConserved"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -208,7 +210,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header")); setGraphIndicator("farmer impacted"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
                         <Grid item xs={12} md={3}><Card sx={keyCard}>
@@ -218,7 +220,7 @@ export const Dashboard: React.FC = () => {
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
-                                <IconButton onClick={() => setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header"))}><BarChartIcon /></IconButton>
+                                <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header")); setGraphIndicator("Goverment Amount") }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
 
@@ -252,24 +254,24 @@ export const Dashboard: React.FC = () => {
                             {graphM}
                             <IconButton onClick={() => setgraphM('')}><Close /></IconButton>
                         </DialogTitle>
-                        
+
                         <DialogContent sx={{ gap: '8px', p: 1 }}>
                             <Box sx={{ overflow: 'auto' }}>{
-                                Object.entries(barChartData["farmer impacted"]).length > 0 ?
+                                Object.entries(barChartData[graphIndicator]).length > 0 ?
                                     <BarChart
                                         height={chartHeight}
-                                        series={[{ data: Object.values(barChartData["farmer impacted"]) }]}
-                                        xAxis={[{ data: (Object.keys(barChartData["farmer impacted"])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
+                                        series={[{ data: Object.values(barChartData[graphIndicator]) }]}
+                                        xAxis={[{ data: (Object.keys(barChartData[graphIndicator])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
                                     />
                                     :
                                     <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
                             }</Box>
                             <Box sx={{ overflow: 'auto' }}>{
-                                Object.entries(pieChartData["farmer impacted"]).length > 0 ?
+                                Object.entries(pieChartData[graphIndicator]).length > 0 ?
                                     <PieChart
                                         height={chartHeight}
                                         series={[{
-                                            data: Object.entries(pieChartData["farmer impacted"]).map(([key, value], index) => ({
+                                            data: Object.entries(pieChartData[graphIndicator]).map(([key, value], index) => ({
                                                 id: index,
                                                 value,
                                                 label: ActTypeName(key)
