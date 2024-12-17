@@ -14,6 +14,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [tokenExpired, setTokenExpired] = useState(false);
     const [expiryDialog, setexpiryDialog] = useState(false);
+    const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refToken");
 
     const monitorTokenExpiry = useCallback(() => {
         const tokenResult = checkTknExpiry((expired) => {
@@ -52,22 +54,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     console.error("Token refresh failed:", error);
                     setexpiryDialog(true);
                 }
+            } else if (token && refreshToken && !tokenExpired) {
+                setexpiryDialog(true);
             }
         };
 
         TknRfr();
-    }, [tokenExpired, monitorTokenExpiry]);
+    }, [tokenExpired, token, refreshToken, monitorTokenExpiry]);
 
 
     useEffect(() => {
-        // const token = localStorage.getItem("token");
-        // const refreshToken = localStorage.getItem("refToken");
+
         if (expiryDialog) {
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
         }
-    }, []);
+    }, [expiryDialog]);
 
     const login = () => {
         setIsLoggedIn(true);
