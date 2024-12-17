@@ -124,17 +124,20 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const uStatus = localStorage.getItem("userStatus");
     const uName = localStorage.getItem("userName")
 
-    const ActTypeName = (code: number | string | undefined) => {
+    const ActTypeName = (code: any) => {
+        if (!code) return "";
         const act = allAct.find(x => x.activityId == code);
         return act ? act.activityName : code || "";
     };
 
-    const IntTypeName = (code: number | string | undefined) => {
+    const IntTypeName = (code: any) => {
+        if (!code) return "";
         const int = intOps.find(x => x.parameterId == code);
         return int ? int.parameterName : code || "";
     };
 
-    const LandTypeName = (code: number | string | undefined) => {
+    const LandTypeName = (code: any) => {
+        if (!code) return "";
         const land = landOps.find(x => x.parameterId == code);
         return land ? land.parameterName : code || "";
     };
@@ -186,11 +189,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             let valueA: any;
             let valueB: any;
             if (sortBy === 'activityCode') {
-                valueA = ActTypeName(a.workActivity.activityCode)?.toLowerCase();
-                valueB = ActTypeName(b.workActivity.activityCode)?.toLowerCase();
+                valueA = ActTypeName(a.workActivity.activityCode)?.toString()?.toLowerCase();
+                valueB = ActTypeName(b.workActivity.activityCode)?.toString()?.toLowerCase();
             } else if (sortBy === 'watershedId') {
-                valueA = WsName(a.workActivity.watershedId)?.toLowerCase();
-                valueB = WsName(b.workActivity.watershedId)?.toLowerCase();
+                valueA = WsName(a.workActivity.watershedId)?.toString()?.toLowerCase();
+                valueB = WsName(b.workActivity.watershedId)?.toString()?.toLowerCase();
             } else if (sortBy === 'village') {
                 valueA = (a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered))?.toLowerCase();
                 valueB = (b.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(b.workActivity.habitationsCovered))?.toLowerCase();
@@ -512,7 +515,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const parseGeoCoordinates = (geoString: string) => {
         try {
             const parsed = JSON.parse(geoString);
-            const coords = JSON.parse(parsed.coords).coords;
+            const coords = JSON.parse(parsed.coords);
             const { accuracy, latitude, longitude, altitude } = coords;
             return { accuracy, latitude, longitude, altitude };
         } catch (error) {
@@ -973,7 +976,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 return "No images"
                                             }
                                         } catch (error) {
-                                            return null;
+                                            return "No images"
                                         }
                                     })()}
                                 </TableCell>
