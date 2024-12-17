@@ -15,8 +15,8 @@ export const fmrDef = {
     "wsfarmerId": "",
     "mobileNumber": "",
     "wsfarmerName": "",
-    "createdUser": sessionStorage.getItem("userName") as string,
-    "updatedUser": sessionStorage.getItem("userName") as string,
+    "createdUser": localStorage.getItem("userName") as string,
+    "updatedUser": localStorage.getItem("userName") as string,
     "state": '1',
     "district": '',
     "taluk": '',
@@ -139,7 +139,7 @@ export const FarmerMaster: React.FC = () => {
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(false);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);

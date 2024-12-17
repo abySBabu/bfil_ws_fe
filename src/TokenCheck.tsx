@@ -5,7 +5,7 @@ interface DecodedToken {
 }
 
 const checkTknExpiry = (onExpireCallback: (expired: boolean) => void, delay = 1000) => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
     if (token) {
         const decodedToken: DecodedToken = jwtDecode(token);
@@ -21,7 +21,7 @@ const checkTknExpiry = (onExpireCallback: (expired: boolean) => void, delay = 10
                 }
                 // window.alert('Token Expired');
                 setTimeout(() => {
-                    //sessionStorage.clear();
+                    //localStorage.clear();
                     //localStorage.clear();
                     //window.location.href = '/bfilreactdev/dashboard';
                 }, delay);
@@ -36,7 +36,7 @@ const checkTknExpiry = (onExpireCallback: (expired: boolean) => void, delay = 10
         } else {
             console.error('Token does not have an expiration date.');
             onExpireCallback(true);
-            sessionStorage.clear();
+            localStorage.clear();
             localStorage.clear();
             window.location.href = '/signin';
         }

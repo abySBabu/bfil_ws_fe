@@ -3,9 +3,9 @@ import { serverPath } from "../common";
 
 export async function listAct() {
     const configs = {
-        url: serverPath.bfil + `data_capture/getalldataCapture/${sessionStorage.getItem("userId")}/${localStorage.getItem("userRole")}`, //
+        url: serverPath.bfil + `data_capture/getalldataCapture/${localStorage.getItem("userId")}/${localStorage.getItem("userRole")}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -17,7 +17,7 @@ export async function addAct(data: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -31,7 +31,7 @@ export async function editAct(data: any, id: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -41,9 +41,9 @@ export async function editAct(data: any, id: any) {
 
 export async function DashKey() {
     const configs = {
-        url: serverPath.bfil + `data_capture/getAllDashboardData/${sessionStorage.getItem("userId")}/${localStorage.getItem("userRole")}`,
+        url: serverPath.bfil + `data_capture/getAllDashboardData/${localStorage.getItem("userId")}/${localStorage.getItem("userRole")}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try {
         const response = await axios(configs);
@@ -54,9 +54,9 @@ export async function DashKey() {
 
 export async function DashDemand() {
     const configs = {
-        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=23&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
+        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=23&userid=${localStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -64,9 +64,9 @@ export async function DashDemand() {
 
 export async function DashSupply() {
     const configs = {
-        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=22&userid=${sessionStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
+        url: serverPath.bfil + `data_capture/dashboard-data?interventionType=22&userid=${localStorage.getItem("userId")}&type=${localStorage.getItem("userRole")}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -77,7 +77,7 @@ export async function actFlowNext(role: any, status: any) {
         url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -90,7 +90,7 @@ export async function actFlowPrev(role: any, status: any) {
         url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -103,8 +103,18 @@ export async function userDeleteCheck(id: any) {
         url: serverPath.bfil + `data_capture/userDeleteOrNot/${id}`,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function DashGraph() {
+    const configs = {
+        url: serverPath.bfil + `data_capture/getChartData/${localStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

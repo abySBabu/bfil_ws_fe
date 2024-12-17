@@ -39,9 +39,9 @@ export default function (props: mapTypeProps) {
     const [selectedRoleName, setSelectedRoleName] = useState<string>('');
     let companyID: any;
     let userId: any;
-    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
-    const userIdFromLocalStorage = sessionStorage.getItem("userId");
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    const companyIdFromLocalStorage = localStorage.getItem("companyId");
+    const userIdFromLocalStorage = localStorage.getItem("userId");
+    let companyId = parseInt(localStorage.getItem("companyId") || '0');
 
     const { register, handleSubmit, setValue, trigger, watch, formState: { errors, isValid } } = useForm<MapFormInput>(
         {

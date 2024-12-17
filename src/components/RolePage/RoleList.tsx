@@ -37,7 +37,7 @@ export default function RoleList() {
     const [selectedRow, setSelectedRow] = useState<rolesByCompanyId>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    let CompanyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let CompanyId = parseInt(localStorage.getItem("companyId") || '0');
     const [serverDown, setserverDown] = React.useState(false);
 
 
@@ -63,14 +63,8 @@ export default function RoleList() {
             let resp = await getRolesByCompany(CompanyId);
             let sorData = resp;
             setRoleData(sorData.reverse());
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    // setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

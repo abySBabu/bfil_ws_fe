@@ -10,18 +10,18 @@ export async function login(data: any) {
     };
     try {
         const response = await axios(configuration);
-        sessionStorage.setItem("token", response.data.jwtBearer);
-        sessionStorage.setItem("refToken", response.data.jwtRefresh);
-        sessionStorage.setItem("userId", response.data.user.userId);
-        sessionStorage.setItem("userName", response.data.user.userName);
-        sessionStorage.setItem("userNumber", response.data.user.mobileNumber);
-        sessionStorage.setItem("userType", response.data.user.userType);
-        sessionStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
-        sessionStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
-        sessionStorage.setItem("totalUser", response.data.totalUser);
-        sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
-        sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
-        sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
+        localStorage.setItem("token", response.data.jwtBearer);
+        localStorage.setItem("refToken", response.data.jwtRefresh);
+        localStorage.setItem("userId", response.data.user.userId);
+        localStorage.setItem("userName", response.data.user.userName);
+        localStorage.setItem("userNumber", response.data.user.mobileNumber);
+        localStorage.setItem("userType", response.data.user.userType);
+        localStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
+        localStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
+        localStorage.setItem("totalUser", response.data.totalUser);
+        localStorage.setItem("loggedInUser", response.data.loggedInUser);
+        localStorage.setItem("features", response.data.user.userCompanyList[0].feature);
+        localStorage.setItem("permList", JSON.stringify(response.data.permissionList));
         localStorage.setItem("userRole", response.data.user.userRoleList[0].roleName);
         localStorage.setItem("userRoleId", response.data.user.userRoleList[0].roleId);
 
@@ -44,13 +44,13 @@ export async function logout() {
         method: "post",
         data: {
             address: "address",
-            loginId: sessionStorage.getItem("userNumber") || "",
+            loginId: localStorage.getItem("userNumber") || "",
             companyId: serverPath.companyID
         }
     };
     try {
         const response = await axios(configuration); if (response) {
-            sessionStorage.clear();
+            localStorage.clear();
             localStorage.clear();
             return response.data;
         }
@@ -72,7 +72,7 @@ export async function PassReset(data: any) {
 }
 
 export async function TokenRefresh() {
-    const refToken = sessionStorage.getItem('refToken');
+    const refToken = localStorage.getItem('refToken');
     const config = {
         url: `${serverPath.authserver}user-profile-service/loginRefreshBasedOnCompany/${serverPath.companyID}`,
         method: "post",
@@ -82,8 +82,8 @@ export async function TokenRefresh() {
     try {
         const response = await axios(config);
         if (response) {
-            sessionStorage.setItem("token", response.data.jwtBearer);
-            sessionStorage.setItem("refToken", response.data.jwtRefresh);
+            localStorage.setItem("token", response.data.jwtBearer);
+            localStorage.setItem("refToken", response.data.jwtRefresh);
             return response.data;
         }
     } catch (error) {

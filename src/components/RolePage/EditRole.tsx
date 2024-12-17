@@ -8,9 +8,11 @@ import { permissionByAppID, rolesByCompanyId } from './RoleManagement'; // Ensur
 import { permissionByAppId, addRolePermission, updateRolePermission, getRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../Services/loginService';
+import { logout as logoutService } from '../../Services/loginService';
 import { ListSide, ListStatus } from '../../Services/dashboardService';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthContext';
+
 
 type RoleTypeProps = {
     show: boolean;
@@ -31,6 +33,7 @@ interface ScreenPermissionMapping {
 }
 
 export default function EditRole(props: RoleTypeProps) {
+    const { logout } = useAuth();
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const { t } = useTranslation();
     const { show, hide, roleDetails } = props;
@@ -45,8 +48,8 @@ export default function EditRole(props: RoleTypeProps) {
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(show);
 
-    const userId = sessionStorage.getItem("userId");
-    const companyID = sessionStorage.getItem("companyId");
+    const userId = localStorage.getItem("userId");
+    const companyID = localStorage.getItem("companyId");
     const [screenNameList, setscreenNameList] = React.useState<any[]>([]);
 
     // const screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
@@ -114,8 +117,9 @@ export default function EditRole(props: RoleTypeProps) {
     }
 
     const handleClosedialog = async () => {
-        let logoutresp = await logout();
+        let logoutresp = await logoutService();
         if (logoutresp) {
+            logout();
             setOpenDialog(false);
             handleClose();
             navigate('/')
@@ -127,7 +131,7 @@ export default function EditRole(props: RoleTypeProps) {
         setModalShow(show);
         const fetchData = async () => {
             try {
-                const applicationID = sessionStorage.getItem("applicationId");
+                const applicationID = localStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
                 let temporaryPermList: permissionByAppID[] = resp;
                 if (roleDetails) {

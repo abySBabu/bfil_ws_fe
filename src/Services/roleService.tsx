@@ -6,7 +6,7 @@ export async function getRolesByCompany(companyID: any) {
         url: serverPath.authserver + 'role-service/getRolesByCompany/' + companyID,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
     try {
@@ -23,7 +23,7 @@ export async function getRolesByRole(roleID: any) {
         url: serverPath.authserver + 'role-service/roles/' + roleID,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
     try {
@@ -40,7 +40,7 @@ export async function deleteRolesByRole(roleID: any) {
         url: serverPath.authserver + 'role-service/roles/' + roleID,
         method: 'delete',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
     try {
@@ -57,7 +57,7 @@ export async function permissionByAppId(applicationId: any) {
         url: serverPath.authserver + 'role-service/permissionByAppId/' + applicationId,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
 
@@ -75,7 +75,7 @@ export async function addRolePermission(data: any) {
         url: serverPath.authserver + 'role-service/roles',
         method: 'post',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };
@@ -94,7 +94,7 @@ export async function updateRolePermission(data: any, roleId: any) {
         url: serverPath.authserver + 'role-service/roles/' + roleId,
         method: 'put',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };

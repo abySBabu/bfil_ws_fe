@@ -43,7 +43,7 @@ export default function UserForm(props: userTypeProps) {
     const [userTypeOptions, setUserTypeOptions] = useState<UserTypeOption[]>([]);
     const [managerList, setManagerList] = useState<allUserType[]>([]);
     const loginTypeOptions = selectOptions.loginTypeOptions;
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let companyId = parseInt(localStorage.getItem("companyId") || '0');
     let userId: any;
     const [isRolesLoading, setRolesLoading] = useState(true);
 
@@ -80,7 +80,7 @@ export default function UserForm(props: userTypeProps) {
         };
 
         const setUserFeatureList = () => {
-            const featuresString = sessionStorage.getItem("features");
+            const featuresString = localStorage.getItem("features");
             const features = featuresString ? featuresString.split(',') : [];
             const featuresWithIdAndValue = features.map((feature, i) => ({ id: i, value: feature }));
             setUserTypeOptions(featuresWithIdAndValue);
@@ -116,7 +116,7 @@ export default function UserForm(props: userTypeProps) {
         try {
             let loginTypeTemp = loginTypeOptions.find(option => option.value === value.loginType)?.id;
             let roleListTemp = rolesListFromService.filter(option => option.roleName === value.role);
-            let currentUser = props.userList.find(user => (user.userId).toString() === sessionStorage.getItem("userId"));
+            let currentUser = props.userList.find(user => (user.userId).toString() === localStorage.getItem("userId"));
             let userCreatDataOne = {
                 userEmailId: value.email,
                 userPassword: value.password,

@@ -35,7 +35,7 @@ export default function MappingList() {
     const [tableDialog, setTableDialog] = useState(false);
     const [selectedRow, setSelectedRow] = useState<mapDataType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let companyId = parseInt(localStorage.getItem("companyId") || '0');
     const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
@@ -56,14 +56,8 @@ export default function MappingList() {
             if (wsDatalist.status === 'success') {
                 setWsList(wsDatalist.data);
             }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    // setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

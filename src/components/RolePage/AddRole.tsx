@@ -37,8 +37,8 @@ export default function AddRole(props: userTypeProps) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(props.show);
-    let userId = sessionStorage.getItem("userId");
-    let companyID = sessionStorage.getItem("companyId");
+    let userId = localStorage.getItem("userId");
+    let companyID = localStorage.getItem("companyId");
     const [screenNameList, setscreenNameList] = React.useState<any[]>([]);
 
     // let screenNameList = ['User Management', 'Dashboard', 'Role Management', 'Watershed Master', 'Farmer Master', 'Watershed Mapping', 'Watershed Activity', 'Work Plan'];
@@ -108,7 +108,7 @@ export default function AddRole(props: userTypeProps) {
         setModalShow(props.show)
         const fetchData = async () => {
             try {
-                let applicationID = sessionStorage.getItem("applicationId");
+                let applicationID = localStorage.getItem("applicationId");
                 let resp = await permissionByAppId(applicationID);
                 let temporaryPermList: permissionByAppID[] = resp;
                 const uRole = localStorage.getItem("userRole")
