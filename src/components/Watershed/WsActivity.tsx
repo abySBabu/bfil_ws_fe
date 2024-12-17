@@ -590,7 +590,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                             : <TableContainer component={Paper} sx={{ maxHeight: '90%' }}><Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell sx={{width:'35%'}}>
+                                        <TableCell sx={{ width: '35%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityName'}
                                                 direction={sortBy === 'activityName' ? sortOrder : 'asc'}
@@ -599,7 +599,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Activity")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'surveyNo'}
                                                 direction={sortBy === 'surveyNo' ? sortOrder : 'asc'}
@@ -608,7 +608,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Survey_No")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityCode'}
                                                 direction={sortBy === 'activityCode' ? sortOrder : 'asc'}
@@ -617,7 +617,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Activity_Type")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'watershedId'}
                                                 direction={sortBy === 'watershedId' ? sortOrder : 'asc'}
@@ -626,7 +626,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Watershed")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'village'}
                                                 direction={sortBy === 'village' ? sortOrder : 'asc'}
@@ -635,7 +635,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Villages")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'activityWorkflowStatus'}
                                                 direction={sortBy === 'activityWorkflowStatus' ? sortOrder : 'asc'}
@@ -644,7 +644,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Status")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'10%'}}>
+                                        <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
                                                 active={sortBy === 'updatedUser'}
                                                 direction={sortBy === 'updatedUser' ? sortOrder : 'asc'}
@@ -653,7 +653,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell sx={{width:'5%'}}>
+                                        <TableCell sx={{ width: '5%' }}>
                                             {t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}
                                         </TableCell>
                                     </TableRow>
@@ -955,7 +955,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                 <TableCell>
                                     {(() => {
                                         try {
-                                            const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
+                                            //const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
+                                            const imageLinks: string[] = a.activityImage?.split(',');
                                             if (imageLinks[0]?.length > 0) {
                                                 return imageLinks.map((link: string, index: number) => (
                                                     <img
