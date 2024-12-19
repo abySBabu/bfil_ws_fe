@@ -34,17 +34,9 @@ export const Dashboard: React.FC = () => {
     const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
     const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
     const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
-<<<<<<< HEAD
-    const expectedSupplyActivities = [
-        "Farm Ponds", "Recharge Structures", "Check Dams", "Bunding",
-        "Pebble/Boulder Bund", "Open Well Renovation", "Waste Weirs",
-        "Nala Treatment", "Kalyani Renovation"
-    ];
-=======
     const [expectedSupplyActivities, setExpectedSupplyActivities] = React.useState<string[]>([]);
     const [expectedDemandActivities, setExpectedDemandActivities] = React.useState<string[]>([]);
 
->>>>>>> refs/heads/dev
     React.useEffect(() => {
         const fetchData = async () => {
             try {
@@ -132,11 +124,7 @@ export const Dashboard: React.FC = () => {
                         <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
                         <Grid item xs={12} md={8}>
                             <Grid container spacing={1}>
-<<<<<<< HEAD
-                            {expectedSupplyActivities.map((activity, i) => {
-=======
                                 {expectedSupplyActivities.map((activity, i) => {
->>>>>>> refs/heads/dev
                                     const data = supplyList[activity];
                                     const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
                                     return (
