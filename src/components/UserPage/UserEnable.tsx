@@ -23,7 +23,7 @@ export default function UserDisable(props: userTypeProps) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(props.show);
-    let userId = sessionStorage.getItem("userId");
+    let userId = localStorage.getItem("userId");
     const handleClose = () => {
         setModalShow(false);
         props.hide();
@@ -33,7 +33,7 @@ export default function UserDisable(props: userTypeProps) {
         setLoading(true);
         try {
             let tempList: allUserType[] = props.userList;
-            let currentUser: allUserType[] = tempList.filter(user => (user.userId).toString() === sessionStorage.getItem("userId"));
+            let currentUser: allUserType[] = tempList.filter(user => (user.userId).toString() === localStorage.getItem("userId"));
             let blockParams = {
                 updatedByUserId: userId,
                 userId: props.userDetails?.userId,

@@ -15,8 +15,8 @@ export const fmrDef = {
     "wsfarmerId": "",
     "mobileNumber": "",
     "wsfarmerName": "",
-    "createdUser": sessionStorage.getItem("userName") as string,
-    "updatedUser": sessionStorage.getItem("userName") as string,
+    "createdUser": localStorage.getItem("userName") as string,
+    "updatedUser": localStorage.getItem("userName") as string,
     "state": '1',
     "district": '',
     "taluk": '',
@@ -139,7 +139,7 @@ export const FarmerMaster: React.FC = () => {
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);
@@ -190,13 +190,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to add beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
+        catch (error: any) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to add beneficiary");
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setaddM(false);
@@ -213,13 +213,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to edit beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
+        catch (error: any) {
             console.log(error);
             setalertClr(false);
-            setalert("Failed to edit beneficiary");
+            setalert(error.response.data.message);
         }
         setLoading(false);
         seteditM(false);
@@ -235,12 +235,13 @@ export const FarmerMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to delete beneficiary");
+                setalert(resp.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to delete beneficiary");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setdeleteM('');

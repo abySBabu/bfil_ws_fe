@@ -143,7 +143,7 @@ export const WsMaster: React.FC = () => {
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setLoadingResponse(false);
@@ -196,12 +196,13 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to add watershed");
+                setalert(resp.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to add watershed");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setaddM(false);
@@ -227,12 +228,13 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to update watershed");
+                setalert(resp.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to update watershed");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         seteditM(false);
@@ -248,12 +250,13 @@ export const WsMaster: React.FC = () => {
             }
             else {
                 setalertClr(false);
-                setalert(("Failed: " + resp.message) || "Failed to delete watershed");
+                setalert(resp.message);
             }
         }
-        catch (error) {
-            console.log(error); setalertClr(false);
-            setalert("Failed to delete watershed");
+        catch (error: any) {
+            console.log(error);
+            setalertClr(false);
+            setalert(error.response.data.message);
         }
         setLoading(false);
         setdeleteM('');

@@ -6,7 +6,7 @@ export async function listWSMap() {
         url: serverPath.bfil + "ws_mapping/GetAllMappings",
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     }
     try { const response = await axios(configs); return response.data; }
@@ -19,7 +19,7 @@ export async function addWS(data: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -34,7 +34,7 @@ export async function editWS(data: any, id: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }

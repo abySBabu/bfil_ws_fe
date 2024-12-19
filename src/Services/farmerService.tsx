@@ -5,7 +5,17 @@ export async function listFarmer() {
     const configs = {
         url: serverPath.bfil + "ws_farmers/getallFarmers",
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function listFarmerByUser() {
+    const configs = {
+        url: serverPath.bfil + `ws_farmers/getFarmerbyUserId/${localStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -15,7 +25,7 @@ export async function idFarmer(id: any) {
     const configs = {
         url: serverPath.bfil + `ws_farmers/getFarmerById/${id}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -27,7 +37,7 @@ export async function addFarmer(data: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -41,7 +51,7 @@ export async function editFarmer(data: any, id: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -54,7 +64,7 @@ export async function deleteFarmer(id: any) {
         url: serverPath.bfil + `ws_farmers/deleteFarmerById/${id}`,
         method: 'delete',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }

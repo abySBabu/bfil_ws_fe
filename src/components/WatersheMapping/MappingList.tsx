@@ -35,7 +35,7 @@ export default function MappingList() {
     const [tableDialog, setTableDialog] = useState(false);
     const [selectedRow, setSelectedRow] = useState<mapDataType>();
     const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
-    let companyId = parseInt(sessionStorage.getItem("companyId") || '0');
+    let companyId = parseInt(localStorage.getItem("companyId") || '0');
     const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
@@ -56,14 +56,8 @@ export default function MappingList() {
             if (wsDatalist.status === 'success') {
                 setWsList(wsDatalist.data);
             }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }
@@ -101,6 +95,9 @@ export default function MappingList() {
         } else if (sortColumn === 'wsName') {
             aValue = fetchWsData(a.watershedId) || '';
             bValue = fetchWsData(b.watershedId) || '';
+        } else if (sortColumn === 'roleName') {
+            aValue = fetchRoleData(a.roleId) || '';
+            bValue = fetchRoleData(b.roleId) || '';
         } else if (typeof a[sortColumn as keyof mapDataType] === 'string' || typeof a[sortColumn as keyof mapDataType] === 'number') {
             aValue = a[sortColumn as keyof mapDataType] as string | number;
             bValue = b[sortColumn as keyof mapDataType] as string | number;
@@ -119,6 +116,8 @@ export default function MappingList() {
     const filteredData = sortedData.filter(user => {
         const UserName = fetchUserData(user.userId);
         const matchesUserName = UserName && UserName.toLowerCase().includes(searchQuery.toLowerCase());
+        const RoleName = fetchRoleData(user.roleId);
+        const matchesRoleName = RoleName && RoleName.toLowerCase().includes(searchQuery.toLowerCase());
 
         const WsName = fetchWsData(user.watershedId);
         const matchesWatershedName = WsName && WsName.toLowerCase().includes(searchQuery.toLowerCase());
@@ -131,7 +130,7 @@ export default function MappingList() {
         // });
 
         return (
-            user.remarks?.toString().toLowerCase().includes(searchQuery.toLowerCase()) || matchesUserName || matchesWatershedName);
+            user.remarks?.toString().toLowerCase().includes(searchQuery.toLowerCase()) || matchesUserName || matchesWatershedName || matchesRoleName);
 
 
         // return matchesSearchQuery || matchesUserName || matchesWatershedName;
@@ -140,6 +139,12 @@ export default function MappingList() {
     function fetchUserData(userid: number) {
         const user = userList.find(user => user.userId === userid);
         return user ? user.userName : null;
+
+    };
+
+    function fetchRoleData(roleid: number) {
+        const user = userList.find(user => user.userRoleList[0].roleId === roleid);
+        return user ? user.userRoleList[0].roleName : null;
 
     };
 
@@ -238,6 +243,14 @@ export default function MappingList() {
                                     </TableCell>
                                     <TableCell >
                                         <TableSortLabel
+                                            active={sortColumn === 'roleName'}
+                                            direction={sortColumn === 'roleName' ? sortOrder : 'asc'}
+                                            onClick={() => handleSort('roleName')}>
+                                            {t("p_Watershed_Mapping.ss_MappingList.Role")}
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell >
+                                        <TableSortLabel
                                             active={sortColumn === 'wsName'}
                                             direction={sortColumn === 'wsName' ? sortOrder : 'asc'}
                                             onClick={() => handleSort('wsName')}>
@@ -264,6 +277,9 @@ export default function MappingList() {
                                     <TableRow key={id} onClick={() => handleRowClick(row)}>
                                         <TableCell>
                                             {fetchUserData(row.userId)}
+                                        </TableCell>
+                                        <TableCell>
+                                            {fetchRoleData(row.roleId)}
                                         </TableCell>
                                         <TableCell sx={{ textWrap: 'wrap', width: '50%' }}>
                                             {fetchWsData(row.watershedId)}

@@ -5,7 +5,7 @@ export async function listWP() {
     const configs = {
         url: serverPath.bfil + "workplan/getAllWorkplan",
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -17,7 +17,7 @@ export async function addWP(data: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -31,9 +31,19 @@ export async function editWP(data: any, id: any) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
+export async function listFinYear() {
+    const configs = {
+        url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Financial Year",
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

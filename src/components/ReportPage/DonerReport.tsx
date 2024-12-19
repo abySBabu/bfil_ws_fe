@@ -7,7 +7,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
 import { ActivitySources, ComponentData } from './DonerReportTypes';
 import DonerSummaryReport from './DonerSummaryReport';
-import { listWP } from 'src/Services/workplanService';
+import { listWP,listFinYear } from 'src/Services/workplanService';
 import { useNavigate } from 'react-router-dom';
 interface WorkPlan {
     planningYear: string;
@@ -15,15 +15,16 @@ interface WorkPlan {
     activityName?: string; 
     }
 
-const DonerReport: React.FC = () => {
+    const DonerReport: React.FC = () => {
     const navigate = useNavigate();
     const [data, setData] = useState<ComponentData[]>([]);
     const [showReport, setShowReport] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
+    const [yearOptions, setYearOptions] = useState<any[]>([]);
     const [selectedYear, setSelectedYear] = useState<string>('');
     const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Funds Disbursement Report' });
     const exportToPDF = () => { handlePrint(); };
-  const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
+    const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
  
   const fetchData = async (year: any) => {
     if (!selectedYear) return; 
@@ -55,7 +56,12 @@ const DonerReport: React.FC = () => {
               } else {
               console.error('Error: Response data is not an array');
             }
-          } catch (error) {
+            const response2 = await listFinYear(); 
+            if (response2.status === 'success') 
+                { setYearOptions(response2.data) }
+            } 
+          
+          catch (error) {
             console.log('Error fetching workplan:', error);
           }
         };
@@ -194,7 +200,7 @@ const DonerReport: React.FC = () => {
     
     return (
         <div>
-            <Typography variant="h5" align="center" style={{ padding: '5px' }}>
+            <Typography variant="h5" align="center" sx={{ padding: '5px' }}>
                 Funds Disbursement Year on Year {selectedYear}.
             </Typography>
             {/* <Button sx={{mb:3,ml:3}} onClick={handleBackClick}>Back</Button> */}
@@ -203,9 +209,9 @@ const DonerReport: React.FC = () => {
                 <InputLabel id="select-year-label">Select Year</InputLabel>
                 <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
                 <MenuItem value="">Select Year</MenuItem> 
-                    {uniquePlanningYears.map((year, index) => (
-                    <MenuItem key={index} value={year}>
-                    {year}
+                    {yearOptions.map((year, index) => (
+                    <MenuItem key={index} value={year.parameterName}>
+                    {year.parameterName}
                 </MenuItem>
                     ))}
                 </Select>

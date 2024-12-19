@@ -40,9 +40,9 @@
                 }
             },
             "FarmersImpacted_Subheader": {
-                "FarmersImpacted_Subheader_Text": "ರೈತರು ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
+                "FarmersImpacted_Subheader_Text": "ಫಲಾನುಭವಿ ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
                 "FarmersImpacted_Piechart": {
-                    "Piechart_Header": "ರೈತರು ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
+                    "Piechart_Header": "ಫಲಾನುಭವಿ ಪ್ರಭಾವಿತರಾಗಿದ್ದಾರೆ",
                     "Bunding_data": "ಕಟ್ಟುವಿಕೆ",
                     "NalaTreatment_data": "ನಾಲಾ ಚಿಕಿತ್ಸೆ",
                     "CheckDam_data": "ಚೆಕ್ ಡ್ಯಾಂ"
@@ -239,6 +239,7 @@
         },
         "ss_MappingList": {
             "Ws_Name": "ಜಲಾನಯನ ಹೆಸರು",
+            "Role": "ಪಾತ್ರ",
             "User_Name": "ಬಳಕೆದಾರ ಹೆಸರು",
             "Remarks": "ಟೀಕೆಗಳು",
             "Action": {
@@ -725,7 +726,7 @@
             },
             "Language_Text": "ಭಾಷೆಗಳು",
             "Language_Submenu": {
-                "English": "ಇಂಗ್ಲೀಷ್",
+                "English": "English",
                 "Kannada": "ಕನ್ನಡ"
             },
             "Logout_Text": "ಲಾಗ್ಔಟ್"

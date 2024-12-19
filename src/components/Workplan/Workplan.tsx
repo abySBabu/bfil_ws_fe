@@ -8,7 +8,7 @@ import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
 import { wsDef } from '../Watershed/WsMaster';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
-import { listWP, addWP, editWP } from '../../Services/workplanService';
+import { listWP, addWP, editWP, listFinYear } from '../../Services/workplanService';
 import { ListLand, ListInter, ListDonor, ListPara } from '../../Services/dashboardService';
 import { listWS } from '../../Services/wsService';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +75,7 @@ export const Workplan: React.FC = () => {
     const [landOps, setlandOps] = React.useState<any[]>([]);
     const [intOps, setintOps] = React.useState<any[]>([]);
     const [actOps, setactOps] = React.useState<any[]>([]);
+    const [finOps, setfinOps] = React.useState<any[]>([]);
     const [addM, setaddM] = React.useState(false);
     const [editM, seteditM] = React.useState(false);
     const [search, setsearch] = React.useState("");
@@ -156,10 +157,11 @@ export const Workplan: React.FC = () => {
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
             const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
+            const resp6 = await listFinYear(); if (resp6.status === 'success') { setfinOps(resp6.data) }
             setserverDown(false);
         }
         catch (error: any) {
-            if (error.code === 'ERR_NETWORK') setserverDown(true);
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
         setloadingResponse(false);
@@ -392,20 +394,9 @@ export const Workplan: React.FC = () => {
 
             <DialogContent><Grid container columns={15} spacing={2} sx={{ my: '4px' }}>
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Plan_Details")}</Divider></Grid>
-                <Grid item xs={15} md={5}>
-                    <TextField
-                        required
-                        label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")}
-                        value={planObj.planningYear}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            if (/^\d{0,4}(-\d{0,2})?$/.test(value)) {
-                                setplanObj({ ...planObj, planningYear: value });
-                            }
-                        }}
-                        inputProps={{ maxLength: 7, placeholder: 'yyyy-yy' }}
-                    />
-                </Grid>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })}>
+                    {finOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
+                </TextField></Grid>
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
@@ -466,6 +457,7 @@ export const Workplan: React.FC = () => {
                             })
                         }
                         inputProps={{ min: 0 }}
+                        InputProps={{startAdornment: <InputAdornment position="start">₹</InputAdornment>}}
                     /></Grid>
                     {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
                 </React.Fragment>))}

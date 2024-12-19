@@ -1,5 +1,6 @@
 import axios from "axios";
 import { serverPath } from '../common';
+import Cookies from 'js-cookie';
 
 export async function login(data: any) {
     const configuration = {
@@ -9,35 +10,33 @@ export async function login(data: any) {
     };
     try {
         const response = await axios(configuration);
-        sessionStorage.setItem("token", response.data.jwtBearer);
-        sessionStorage.setItem("refToken", response.data.jwtRefresh);
-        sessionStorage.setItem("userId", response.data.user.userId);
-        sessionStorage.setItem("userName", response.data.user.userName);
-        sessionStorage.setItem("userNumber", response.data.user.mobileNumber);
-        sessionStorage.setItem("userType", response.data.user.userType);
-        sessionStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
-        sessionStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
-        sessionStorage.setItem("totalUser", response.data.totalUser);
-        sessionStorage.setItem("loggedInUser", response.data.loggedInUser);
-        sessionStorage.setItem("features", response.data.user.userCompanyList[0].feature);
-        sessionStorage.setItem("permList", JSON.stringify(response.data.permissionList));
+        localStorage.setItem("token", response.data.jwtBearer);
+        localStorage.setItem("refToken", response.data.jwtRefresh);
+        localStorage.setItem("userId", response.data.user.userId);
+        localStorage.setItem("userName", response.data.user.userName);
+        localStorage.setItem("userNumber", response.data.user.mobileNumber);
+        localStorage.setItem("userType", response.data.user.userType);
+        localStorage.setItem("applicationId", response.data.user.userCompanyList[0].applicationId);
+        localStorage.setItem("companyId", response.data.user.userCompanyList[0].companyId);
+        localStorage.setItem("totalUser", response.data.totalUser);
+        localStorage.setItem("loggedInUser", response.data.loggedInUser);
+        localStorage.setItem("features", response.data.user.userCompanyList[0].feature);
+        localStorage.setItem("permList", JSON.stringify(response.data.permissionList));
         localStorage.setItem("userRole", response.data.user.userRoleList[0].roleName);
+        localStorage.setItem("userRoleId", response.data.user.userRoleList[0].roleId);
 
+        Cookies.set('Ta2-jwt-refresh', response.data.jwtRefresh, {
+            expires: 1,
+            secure: true,
+            sameSite: 'strict',
+            path: '/'
+        });
 
         return response.data;
-        // sessionStorage.setItem("roleName", response.data.user.userRoleList[0].roleName);
-        // sessionStorage.setItem("companyName", response.data.user.userCompanyList[0].companyName);
-        // sessionStorage.setItem("loggedInUserNumber", response.data.user.mobileNumber);
-        // sessionStorage.setItem("permissionList", response.data.permissionList.toString());
-        // sessionStorage.setItem("companyFeature", response.data.companyFeature.admin_List.toString());
-        // sessionStorage.setItem("dashBoardFeatures", response.data.companyFeature.feature.toString());
-        // sessionStorage.setItem("companyReportList", response.data.companyFeature.report_List.toString());
-        // sessionStorage.setItem("subScribedUserCount", response.data.user.userCompanyList[0].subScribedUserCount);
     } catch (error) {
         throw (error)
     }
-
-};
+}
 
 export async function logout() {
     const configuration = {
@@ -45,13 +44,13 @@ export async function logout() {
         method: "post",
         data: {
             address: "address",
-            loginId: sessionStorage.getItem("userNumber") || "",
+            loginId: localStorage.getItem("userNumber") || "",
             companyId: serverPath.companyID
         }
     };
     try {
         const response = await axios(configuration); if (response) {
-            sessionStorage.clear();
+            localStorage.clear();
             localStorage.clear();
             return response.data;
         }
@@ -61,13 +60,33 @@ export async function logout() {
 
 export async function PassReset(data: any) {
     const config = {
-        url: serverPath.authserver + "user-profile-service/resetPassword",
+        url: serverPath.authserver + "user-profile-service/resetPasswordByCompanyId",
         method: "post",
-        data: data
+        data: { ...data, companyId: serverPath.companyID }
     }
     try {
         const response = await axios(config)
         if (response) { return response.data }
     }
     catch (error) { throw (error) }
+}
+
+export async function TokenRefresh() {
+    const refToken = localStorage.getItem('refToken');
+    const config = {
+        url: `${serverPath.authserver}user-profile-service/loginRefreshBasedOnCompany/${serverPath.companyID}`,
+        method: "post",
+        params: { jwtRefreshCookie: refToken }
+    };
+
+    try {
+        const response = await axios(config);
+        if (response) {
+            localStorage.setItem("token", response.data.jwtBearer);
+            localStorage.setItem("refToken", response.data.jwtRefresh);
+            return response.data;
+        }
+    } catch (error) {
+        throw error;
+    }
 }
