@@ -4,7 +4,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
-import { listWP } from 'src/Services/workplanService';
+import { listWP, listFinYear } from 'src/Services/workplanService';
 import { watershedReport } from 'src/Services/reportService';
 import { PhysicalData,FinancialData,WatershedActivities,Watershed,Activity,LandType,WorkPlan } from './DonerReportTypes';
 
@@ -13,7 +13,9 @@ const WatershedReport: React.FC = () => {
   const [reportData, setReportData] = useState<Activity[]>([]);
   const [watershedNames, setWatershedNames] = useState<string[]>([]); 
   const [selectedYear, setSelectedYear] = useState<string>('');
+  const [yearOptions, setYearOptions] = useState<any[]>([]);
   const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
+  let uId: any;
   const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Watershed Report' });
   const exportToPDF = () => { handlePrint(); };
 
@@ -32,6 +34,8 @@ const WatershedReport: React.FC = () => {
           } else {
           console.error('Error: Response data is not an array');
         }
+        const response2 = await listFinYear(); 
+        if (response2.status === 'success') { setYearOptions(response2.data) }
       } catch (error) {
         console.log('Error fetching workplan:', error);
       }
@@ -43,7 +47,11 @@ const WatershedReport: React.FC = () => {
     if (!selectedYear) return;
   
     try {
-      const reportData = await watershedReport(selectedYear); 
+      const userId = localStorage.getItem("userId");
+      if (userId !== null) {
+        uId = parseInt(userId);
+    }
+      const reportData = await watershedReport(selectedYear,uId); 
       setReportData(reportData);
       //console.log("Report data:", reportData);
       const uniqueWatershedNames = new Set<string>();
@@ -89,15 +97,15 @@ const WatershedReport: React.FC = () => {
       let totalPublicFinancial = 0;
       let totalPrivatePhysical = 0;
       let totalPrivateFinancial = 0;
-  
+      const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(num);
       const publicPhysicalRow = [activityIndex + 1,activity.activityName,activity.uom, 'Public','Physical', ...watershedNames.flatMap((watershedName) => {
           const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
           const publicPhysicalPlan = watershed?.physical?.plan ?? 0;
           const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
           totalPublicPhysical += publicPhysicalPlan + publicPhysicalProgress;
-          return [publicPhysicalPlan, publicPhysicalProgress];
+          return [publicPhysicalPlan, publicPhysicalProgress].map(formatNumber);
         }),
-        totalPublicPhysical
+        formatNumber(totalPublicPhysical)
       ];
       worksheetData.push(publicPhysicalRow);
   
@@ -106,9 +114,9 @@ const WatershedReport: React.FC = () => {
           const publicFinancialPlan = watershed?.financial?.plan ?? 0;
           const publicFinancialProgress = watershed?.financial?.progress ?? 0;
           totalPublicFinancial += publicFinancialPlan + publicFinancialProgress;
-          return [publicFinancialPlan, publicFinancialProgress];
+          return [publicFinancialPlan, publicFinancialProgress].map(formatNumber);
         }),
-        totalPublicFinancial
+        formatNumber(totalPublicFinancial)
       ];
       worksheetData.push(publicFinancialRow);
   
@@ -117,9 +125,9 @@ const WatershedReport: React.FC = () => {
           const privatePhysicalPlan = watershed?.physical?.plan ?? 0;
           const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
           totalPrivatePhysical += privatePhysicalPlan + privatePhysicalProgress;
-          return [privatePhysicalPlan, privatePhysicalProgress];
+          return [privatePhysicalPlan, privatePhysicalProgress].map(formatNumber);
         }),
-        totalPrivatePhysical
+        formatNumber(totalPrivatePhysical)
       ];
       worksheetData.push(privatePhysicalRow);
   
@@ -128,9 +136,9 @@ const WatershedReport: React.FC = () => {
           const privateFinancialPlan = watershed?.financial?.plan ?? 0;
           const privateFinancialProgress = watershed?.financial?.progress ?? 0;
           totalPrivateFinancial += privateFinancialPlan + privateFinancialProgress;
-          return [privateFinancialPlan, privateFinancialProgress];
+          return [privateFinancialPlan, privateFinancialProgress].map(formatNumber);
         }),
-        totalPrivateFinancial
+        formatNumber(totalPrivateFinancial)
       ];
       worksheetData.push(privateFinancialRow);
       merges.push({ s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } },{ s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } },  { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }  
@@ -144,7 +152,6 @@ const WatershedReport: React.FC = () => {
     XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
   };
   
-  
   return (
     <div>
       <Typography variant="h5" align="center" sx={{ padding: '15px'}}>
@@ -155,9 +162,9 @@ const WatershedReport: React.FC = () => {
                 <InputLabel id="select-year-label">Select Year</InputLabel>
                 <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
                 <MenuItem value="">Select Year</MenuItem> 
-                    {uniquePlanningYears.map((year, index) => (
-                    <MenuItem key={index} value={year}>
-                    {year}
+                    {yearOptions.map((year, index) => (
+                    <MenuItem key={index} value={year.parameterName}>
+                    {year.parameterName}
                 </MenuItem>
                     ))}
                 </Select>
@@ -197,10 +204,10 @@ const WatershedReport: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reportData.length === 0 ? (
+              {watershedNames.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5 + watershedNames.length * 4 + 1} align="center" sx={{ border: '1px solid #ccc' }}>
-                  No records available
+                No watersheds available
                 </TableCell>
               </TableRow>
                 ) : (
@@ -332,6 +339,11 @@ const WatershedReport: React.FC = () => {
                 }
 
                 @media print {
+                table {
+                      border: 1px solid black;
+                      border-collapse: collapse;
+                }
+                th, td { border: 1px solid black;}
                     .scrollable-table {
                     max-height: none;
                     overflow-y: visible;

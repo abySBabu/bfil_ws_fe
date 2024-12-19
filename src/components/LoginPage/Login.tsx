@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Box, Grid, Link, Paper, Snackbar, Alert, CircularProgress, Typography } from '@mui/material';
-import { login } from '../../Services/loginService';
+import { login as loginService } from '../../Services/loginService';
 import { useNavigate } from 'react-router-dom';
 import { serverPath, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
-
+import { useAuth } from '../../context/AuthContext';
 interface ILoginFormInput {
     userName: string;
     password: string;
 }
 
 const Login: React.FC = () => {
+    const { isLoggedIn, login } = useAuth();
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<any>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [loading, setLoading] = useState(false);
     const [forgotPass, setforgotPass] = useState(false);
+
+    React.useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/home'); // Redirect to dashboard if already logged in
+        }
+    }, [isLoggedIn, navigate]);
 
     const { register, handleSubmit, trigger, formState: { errors, isValid }, watch } = useForm<ILoginFormInput>({
         mode: 'onChange',
@@ -36,7 +43,7 @@ const Login: React.FC = () => {
                 companyId: serverPath.companyID,
             };
 
-            const response = await login(data);
+            const response = await loginService(data);
             if (response) {
                 setSeverityColor("success");
                 setMessage("Login successfully");
@@ -44,6 +51,7 @@ const Login: React.FC = () => {
                 setTimeout(() => {
                     setOpenSnackbar(false);
                     setLoading(false);
+                    login();
                     navigate('/home');
                 }, setTimeoutsecs);
             }

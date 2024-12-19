@@ -1,5 +1,5 @@
-import React, { useState, useEffect, startTransition } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Link, AppBar, IconButton, Drawer, Card } from '@mui/material';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -12,7 +12,7 @@ import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
 import { ListSide, ListStatus } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
-import { logout } from './Services/loginService';
+import { logout as logoutService } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import checkTknExpiry from './TokenCheck';
@@ -25,6 +25,8 @@ import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
 import { TokenRefresh } from './Services/loginService';
+import { useAuth } from './context/AuthContext';
+
 
 interface SideItem {
   screenName: string;
@@ -37,10 +39,10 @@ interface Section {
 }
 
 export const Home: React.FC = () => {
+  const { logout } = useAuth();
   const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
-  const [message, setMessage] = useState('');
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [expiryDialog, setexpiryDialog] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(false);
   const navigate = useNavigate();
   const [dIndex, setdIndex] = useState<number | null>(null);
@@ -49,15 +51,15 @@ export const Home: React.FC = () => {
   const [languageAnchor, setLanguageAnchor] = useState<any>(null);
   const [sideList, setsideList] = React.useState<any[]>([]);
   const [sections, setSections] = useState<Array<{ name: string, path: string, permission: string, component: JSX.Element }> | null>(null);
-  const [uName, setuName] = React.useState('');
   const [actCount, setactCount] = useState(0);
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [serverDown, setserverDown] = React.useState(false);
-  sessionStorage.setItem("multiLanguage", "en");
-
+  const uName = localStorage.getItem("userName") as string
+  const uRole = localStorage.getItem("userRole") as string
+  localStorage.setItem("multiLanguage", "en");
 
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
@@ -83,21 +85,24 @@ export const Home: React.FC = () => {
     navigate(path);
   };
 
-  useEffect(() => {
-    const tokenresult = checkTknExpiry((expired) => {
+  const monitorTokenExpiry = useCallback(() => {
+    const tokenResult = checkTknExpiry((expired) => {
       if (expired) {
         setTokenExpired(true);
-        setMessage("Your token has expired");
-        setOpenSnackbar(true);
       }
     });
 
     return () => {
-      if (tokenresult?.timerRef) {
-        clearTimeout(tokenresult.timerRef);
+      if (tokenResult?.timerRef) {
+        clearTimeout(tokenResult.timerRef);
       }
     };
   }, []);
+
+  useEffect(() => {
+    const cleanup = monitorTokenExpiry();
+    return cleanup;
+  }, [monitorTokenExpiry]);
 
   useEffect(() => {
     const TknRfr = async () => {
@@ -107,33 +112,48 @@ export const Home: React.FC = () => {
           if (resp) {
             console.log("Tokens refreshed");
             setTokenExpired(false);
+            monitorTokenExpiry();
+          }
+          else {
+            console.log("No response for token refresh");
+            setexpiryDialog(true);
           }
         } catch (error) {
           console.error("Token refresh failed:", error);
-          window.location.href = "/signin";
+          setexpiryDialog(true);
         }
       }
-    }; TknRfr();
-  }, [tokenExpired]);
+    };
+
+    TknRfr();
+  }, [tokenExpired, monitorTokenExpiry]);
+
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (event.currentTarget) {
+      setavatarAnchor(event.currentTarget);
+    }
+  };
 
   const handleLanguageChange = (lng: string) => {
-    sessionStorage.setItem("multiLanguage", lng);
+    localStorage.setItem("multiLanguage", lng);
     i18n.changeLanguage(lng);
     setLanguageAnchor(null);
     setavatarAnchor(null);
   }
 
-  const handleLanguageClick = (event: React.MouseEvent<HTMLElement>) => {
-    setLanguageAnchor(event.currentTarget);
-  };
-
   const logOut = async () => {
     try {
-      let logoutresp = await logout();
+      let logoutresp = await logoutService();
       handleLanguageChange('en');
       if (logoutresp) {
+        logout();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userRole');
+        localStorage.clear();
+        localStorage.clear();
         navigate('/');
       }
+
     } catch (error: any) {
       console.log('error', error);
     }
@@ -143,15 +163,9 @@ export const Home: React.FC = () => {
     navigate('/profile');
   }
 
-  const handleClose = async () => {
-    setOpenSnackbar(false);
-    navigate('/')
-  };
-
   React.useEffect(() => {
+    if (!localStorage.getItem('isLoggedIn')) return;
     const fetchLoc = async () => {
-      setuName((sessionStorage.getItem("userName") as string)[0] || '')
-      const uRole = localStorage.getItem("userRole")
       try {
         const resp = await ListStatus();
         if (resp) {
@@ -167,7 +181,7 @@ export const Home: React.FC = () => {
                 const generatedSections = sortscreenlist.map((sideItem: SideItem) => {
                   switch (sideItem.screenName) {
                     case 'Dashboard':
-                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/dashboard", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
+                      return { name: t('p_Home.SM_BE_Dashboard_Link'), path: "/home", permission: 'VIEW_Dashboard', component: <div><Dashboard /></div> };
                     case 'User Management':
                       return { name: t('p_Home.SM_BE_User_Management_Link'), path: "/users", permission: 'VIEW_User Management', component: <UserList /> };
                     case 'Role Management':
@@ -179,7 +193,7 @@ export const Home: React.FC = () => {
                     case 'Watershed Mapping':
                       return { name: t('p_Home.SM_BE_Watershed_Mapping_Link'), path: "/wsMapping", permission: 'VIEW_Watershed Mapping', component: <MappingList /> };
                     case 'Watershed Activity':
-                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity actCount={actCount} setactCount={setactCount} /> };
+                      return { name: countHeader('p_Home.SM_BE_Watershed_Activity_Link', actCount), path: "/wsActivity", permission: 'VIEW_Watershed Activity', component: <WsActivity setactCount={setactCount} /> };
                     case 'Work Plan':
                       return { name: t('p_Home.SM_BE_Work_Plan_Link'), path: "/workplan", permission: 'VIEW_Work Plan', component: <Workplan /> };
                     case 'Report':
@@ -196,19 +210,14 @@ export const Home: React.FC = () => {
                   navigate(generatedSections[defaultIndex].path);
                 } else {
                   setHasPermission(true);
-                  setMessage("You do not have permission to view any sections.");
                 }
               }
               // else { setserverDown(true) }
             }
-            catch (error) {
-              if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                  console.error('ERR_NETWORK error:', error);
-                } else {
-                  console.error('Error fetching data:', error.message);
-                }
-              } else {
+            catch (error: any) {
+              if (error.response?.status >= 500 || !error.response?.status)
+                console.error('Server error:', error);
+              else {
                 console.error('Unexpected error:', error);
               }
             }
@@ -220,14 +229,8 @@ export const Home: React.FC = () => {
         const resp4 = await listPanchayat(); if (resp4.status === 'success') localStorage.setItem("PanList", JSON.stringify(resp4.data));
         const resp5 = await listWS(); if (resp5.status === 'success') localStorage.setItem("WsList", JSON.stringify(resp5.data));
         const resp6 = await listVillage(); if (resp6.status === 'success') localStorage.setItem("VillageList", JSON.stringify(resp6.data));
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.code === 'ERR_NETWORK') {
-            setserverDown(true)
-          } else {
-            console.error('Error fetching data:', error.message);
-          }
-        } else {
+      } catch (error: any) {
+        if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
           console.error('Unexpected error:', error);
         }
       }
@@ -245,14 +248,11 @@ export const Home: React.FC = () => {
     setIsClosing(false);
   };
 
-
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
   };
-
-
 
   const drawer = (
     <Box sx={{ marginLeft: '10px', mt: 5 }}>
@@ -340,9 +340,9 @@ export const Home: React.FC = () => {
                 style={{ height: '100%', maxHeight: '60px' }}
               />
               <img
-                src={`${process.env.PUBLIC_URL}/images/bfil.png`}
+                src={`${process.env.PUBLIC_URL}/images/bfil.jpg`}
                 alt="BFIL"
-                style={{ height: '100%', maxHeight: '40px' }}
+                style={{ height: '100%', maxHeight: '60px' }}
               />
             </Box>
 
@@ -374,20 +374,26 @@ export const Home: React.FC = () => {
                   display: { xs: 'none', md: 'none', lg: 'block' },
                   height: '100%',
                   maxHeight: '60px',
+                  gap: '8px'
                 }}
               >
                 <img
-                  src={`${process.env.PUBLIC_URL}/images/pragat.png`}
-                  alt="Pragat"
+                  src={`${process.env.PUBLIC_URL}/images/ktgov.png`}
+                  alt="Karnataka Gov"
+                  style={{ height: '100%' }}
+                />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/mgnrega.jpg`}
+                  alt="MGNREGA"
                   style={{ height: '100%' }}
                 />
               </Box>
 
               <Avatar
-                onClick={(event) => setavatarAnchor(event.currentTarget)}
+                onClick={handleAvatarClick}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName}
+                {uName ? uName[0] : ''}
               </Avatar>
             </Box>
           </Toolbar>
@@ -419,8 +425,8 @@ export const Home: React.FC = () => {
                 ml: 2,
               }}
             >
-              <img src={`${process.env.PUBLIC_URL}/images/bfil.png`} alt="BFIL" height="100%" />
-              <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Pragat" height='80%' />
+              <img src={`${process.env.PUBLIC_URL}/images/bfil.jpg`} alt="BFIL" height="100%" />
+              <img src={`${process.env.PUBLIC_URL}/images/ktgov.png`} alt="Karnataka Gov" height='80%' />
             </Box>
 
             <Box sx={{ height: '100vh', backgroundColor: '#bb4d53' }}>
@@ -481,27 +487,36 @@ export const Home: React.FC = () => {
           </Paper>
         }
 
-        <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '4%' }}>
+        <Box component='footer' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4%', px: 2 }}>
+          <Tooltip
+            title={<img src={`${process.env.PUBLIC_URL}/images/myrada.jpg`} alt="MYRADA" style={{ width: 125, height: 'auto', display: 'block' }} />}
+            arrow
+            componentsProps={{ tooltip: { sx: { padding: 0, bgcolor: 'transparent', ml: '35px' } }, arrow: { sx: { color: '#fff' } } }}
+          >
+            <Typography variant="body2" sx={{ color: 'var(--page-foot-txtcolor)' }}>
+              Implementation Partner: MYRADA
+            </Typography>
+          </Tooltip>
+
           <Typography variant='body2' sx={{ color: sd('--page-foot-txtcolor') }}>
             {t("p_Home.Pragat_Watershed_Footer")}
           </Typography>
         </Box>
       </Box>}
 
-    {/* {tokenExpired && <Dialog
-      open={openSnackbar} maxWidth={'xs'}>
+    <Dialog open={expiryDialog} maxWidth={'xs'}>
       <DialogContent sx={{ mt: 2 }}>
-        {message}
+        Your session has expired. Please sign in again.
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Okay</Button>
+        <Button onClick={logOut}>Okay</Button>
       </DialogActions>
-    </Dialog>} */}
+    </Dialog>
 
     <Menu anchorEl={avatarAnchor} open={Boolean(avatarAnchor)} onClose={() => setavatarAnchor(null)}>
       <Box sx={{ padding: '8px 16px' }}>
-        <Typography fontWeight='bold'>{sessionStorage.getItem("userName") || 'Name'}</Typography>
-        <Typography variant='body2'>{localStorage.getItem("userRole") || 'Role'}</Typography>
+        <Typography fontWeight='bold'>{uName}</Typography>
+        <Typography variant='body2'>{uRole}</Typography>
       </Box>
       <Divider />
       <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>

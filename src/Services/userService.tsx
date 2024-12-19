@@ -7,7 +7,7 @@ export async function usersList(companyId: any) {
         url: serverPath.authserver + 'user-service/getUserByCompanyId/' + companyId,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
     try { const response = await axios(configuration); return response.data; }
@@ -19,7 +19,7 @@ export async function getRolesByCompany(companyId: any) {
         url: serverPath.authserver + 'role-service/getRolesByCompany/' + companyId,
         method: 'get',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
     };
 
@@ -37,7 +37,7 @@ export async function createUser(data: any) {
         url: serverPath.authserver + 'user-service/users',
         method: 'post',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };
@@ -56,7 +56,7 @@ export async function updateUserDetails(data: any, userId: any) {
         url: serverPath.authserver + 'user-service/users/' + userId,
         method: 'put',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };
@@ -75,7 +75,7 @@ export async function blockUser(data: any) {
         url: serverPath.authserver + 'user-service/blockUser',
         method: 'post',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };
@@ -95,7 +95,7 @@ export async function addOrUpdateUserDetails(data: any) {
         url: serverPath.authserver + 'userDetails-service/addOrUpdateUserDetails',
         method: 'post',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         data: data
     };

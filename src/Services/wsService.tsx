@@ -3,9 +3,9 @@ import { serverPath } from "../common";
 
 export async function listWSbyUserId() {
     const configs = {
-        url: serverPath.bfil + `wsmaster/getWatershedByUser/${sessionStorage.getItem("userId")}`,
+        url: serverPath.bfil + `wsmaster/getWatershedByUser/${localStorage.getItem("userId")}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -15,7 +15,7 @@ export async function listWS() {
     const configs = {
         url: serverPath.bfil + "wsmaster/getallwatershed",
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -25,7 +25,7 @@ export async function idWS(id: any) {
     const configs = {
         url: serverPath.bfil + `wsmaster/getWsById/${id}`,
         method: 'get',
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
@@ -37,7 +37,7 @@ export async function addWS(data: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -51,7 +51,7 @@ export async function editWS(data: any, id: any) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }
@@ -64,7 +64,7 @@ export async function deleteWS(id: any) {
         url: serverPath.bfil + `wsmaster/deleteWsById/${id}`,
         method: 'delete',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             'Content-Type': 'application/vnd.api+json'
         }
     }

@@ -49,8 +49,8 @@ export default function UserList() {
     let companyID: any;
     let userId: any;
     const userRole = localStorage.getItem("userRole") as string;
-    const companyIdFromLocalStorage = sessionStorage.getItem("companyId");
-    const userIdFromLocalStorage = sessionStorage.getItem("userId");
+    const companyIdFromLocalStorage = localStorage.getItem("companyId");
+    const userIdFromLocalStorage = localStorage.getItem("userId");
     const [serverDown, setserverDown] = React.useState(false);
 
     const [sortColumn, setSortColumn] = useState<string>('');
@@ -87,14 +87,8 @@ export default function UserList() {
         try {
             let resp = await usersList(companyID);
             setuserData(resp);
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.code === 'ERR_NETWORK') {
-                    setserverDown(true)
-                } else {
-                    console.error('Error fetching data:', error.message);
-                }
-            } else {
+        } catch (error: any) {
+            if (error.response?.status >= 500 || !error.response?.status) setserverDown(true); else {
                 console.error('Unexpected error:', error);
             }
         }

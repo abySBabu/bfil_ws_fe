@@ -21,7 +21,7 @@ export const MyProfile: React.FC = () => {
         setLoading(true);
         const payload = {
             password: passObj,
-            userName: sessionStorage.getItem("userNumber")
+            userName: localStorage.getItem("userNumber")
         }
         try {
             const resp1 = await PassReset(payload)
@@ -58,8 +58,8 @@ export const MyProfile: React.FC = () => {
                 </Box>
             </>
                 : <>
-                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Name')}: </b>{sessionStorage.getItem("userName")}</Typography>
-                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Mobile_Number')}: </b>{sessionStorage.getItem("userNumber")}</Typography>
+                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Name')}: </b>{localStorage.getItem("userName")}</Typography>
+                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Mobile_Number')}: </b>{localStorage.getItem("userNumber")}</Typography>
                     <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Role')}: </b>{localStorage.getItem("userRole")}</Typography>
                     <Box>
                         <Button startIcon={<Password fontSize='inherit' />} onClick={() => { setpassObj(''); setconPass(''); setpassEdit(true); }}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ResetPassword_Link_Text')}</Button>
