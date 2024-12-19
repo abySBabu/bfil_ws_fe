@@ -509,7 +509,7 @@ export const Home: React.FC = () => {
         Your session has expired. Please sign in again.
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => navigate('/')}>Okay</Button>
+        <Button onClick={logOut}>Okay</Button>
       </DialogActions>
     </Dialog>
 
