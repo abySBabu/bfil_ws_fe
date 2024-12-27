@@ -306,7 +306,7 @@ export const FarmerMaster: React.FC = () => {
                                 <Table sx={{ width: '100%' }}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ width: '45%' }}>
+                                            <TableCell sx={{ width: '30%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'wsfarmerName'}
                                                     direction={sortBy === 'wsfarmerName' ? sortOrder : 'asc'}
@@ -315,7 +315,7 @@ export const FarmerMaster: React.FC = () => {
                                                     {t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell sx={{ width: '45%' }}>
+                                            <TableCell sx={{ width: '30%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'identifierName'}
                                                     direction={sortBy === 'identifierName' ? sortOrder : 'asc'}
@@ -324,7 +324,7 @@ export const FarmerMaster: React.FC = () => {
                                                     Relation
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell sx={{ width: '45%' }}>
+                                            <TableCell sx={{ width: '30%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'mobileNumber'}
                                                     direction={sortBy === 'mobileNumber' ? sortOrder : 'asc'}
