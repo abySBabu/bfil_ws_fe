@@ -82,8 +82,8 @@ export const FarmerMaster: React.FC = () => {
         })
         .sort((a, b) => {
             if (!sortBy) return 0;
-            const valueA = a[sortBy];
-            const valueB = b[sortBy];
+            const valueA = a[sortBy]?.toString()?.toLowerCase();
+            const valueB = b[sortBy]?.toString()?.toLowerCase();
 
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
@@ -317,6 +317,15 @@ export const FarmerMaster: React.FC = () => {
                                             </TableCell>
                                             <TableCell sx={{ width: '45%' }}>
                                                 <TableSortLabel
+                                                    active={sortBy === 'identifierName'}
+                                                    direction={sortBy === 'identifierName' ? sortOrder : 'asc'}
+                                                    onClick={() => handleSort('identifierName')}
+                                                >
+                                                    Relation
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell sx={{ width: '45%' }}>
+                                                <TableSortLabel
                                                     active={sortBy === 'mobileNumber'}
                                                     direction={sortBy === 'mobileNumber' ? sortOrder : 'asc'}
                                                     onClick={() => handleSort('mobileNumber')}
@@ -334,6 +343,7 @@ export const FarmerMaster: React.FC = () => {
                                         {fmrListP.map((w, i) => (
                                             <TableRow key={i}>
                                                 <TableCell>{w.wsfarmerName}</TableCell>
+                                                <TableCell>{w.relationalIdentifiers} {w.identifierName}</TableCell>
                                                 <TableCell>{w.mobileNumber}</TableCell>
                                                 {PerChk('EDIT_Beneficiary Master') && (
                                                     <TableCell>

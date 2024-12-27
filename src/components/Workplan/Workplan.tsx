@@ -119,14 +119,14 @@ export const Workplan: React.FC = () => {
             let valueA: any;
             let valueB: any;
             if (sortBy === 'watershedId') {
-                valueA = WsName(a.watershedId)?.toLowerCase();
-                valueB = WsName(b.watershedId)?.toLowerCase();
+                valueA = WsName(a.watershedId)?.toString()?.toLowerCase();
+                valueB = WsName(b.watershedId)?.toString()?.toLowerCase();
             } else if (sortBy === 'interventionType_Components') {
-                valueA = IntTypeName(a.interventionType_Components)?.toLowerCase();
-                valueB = IntTypeName(b.interventionType_Components)?.toLowerCase();
+                valueA = IntTypeName(a.interventionType_Components)?.toString()?.toLowerCase();
+                valueB = IntTypeName(b.interventionType_Components)?.toString()?.toLowerCase();
             } else {
-                valueA = a[sortBy];
-                valueB = b[sortBy];
+                valueA = a[sortBy]?.toString()?.toLowerCase();
+                valueB = b[sortBy]?.toString()?.toLowerCase();
             }
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
