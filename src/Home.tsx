@@ -10,7 +10,7 @@ import MappingList from './components/WatersheMapping/MappingList';
 import { FarmerMaster } from './components/Farmer/FarmerMaster';
 import { Workplan } from './components/Workplan/Workplan';
 import { listState, listDistrict, listTaluk, listPanchayat, listVillage } from './Services/locationService';
-import { ListSide, ListStatus } from './Services/dashboardService';
+import { ListSide, ListStatus, generateKML } from './Services/dashboardService';
 import { listWS } from './Services/wsService';
 import { logout as logoutService } from './Services/loginService';
 import { useTranslation } from 'react-i18next';
@@ -60,6 +60,7 @@ export const Home: React.FC = () => {
   const uName = localStorage.getItem("userName") as string
   const uRole = localStorage.getItem("userRole") as string
   localStorage.setItem("multiLanguage", "en");
+  const userId = localStorage.getItem("userId");
 
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
@@ -220,6 +221,22 @@ export const Home: React.FC = () => {
               else {
                 console.error('Unexpected error:', error);
               }
+            }
+          }
+          try {
+            let data = {
+              userId: userId,
+            };
+            const response = await generateKML(data);
+            if (response) {
+              localStorage.setItem("kmlData", response.KML);
+              console.log('kml response', response.KML);
+            }
+          } catch (error: any) {
+            if (error.response?.status >= 500 || !error.response?.status)
+              console.error('Server error:', error);
+            else {
+              console.error('Unexpected error:', error);
             }
           }
         }

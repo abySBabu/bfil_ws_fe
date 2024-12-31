@@ -11,6 +11,26 @@ export async function ListPara(para: any) {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function generateKML(data: any) {
+    const formData = new FormData();
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            formData.append(key, data[key]);
+        }
+    }
+    const config = {
+        url: serverPath.bfil + "data_capture/generateKML",
+        method: "post",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        data: formData
+    }
+    try {
+        const response = await axios(config)
+        if (response) { return response.data }
+    }
+    catch (error) { throw (error) }
+}
+
 export async function ListKey() {
     const configs = {
         url: serverPath.bfil + "parameter/getParameterByType?parameterType=Indicators",
