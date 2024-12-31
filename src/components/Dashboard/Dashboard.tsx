@@ -189,7 +189,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("totalArea"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -199,7 +199,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("WaterConserved"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -209,7 +209,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header")); setGraphIndicator("farmer impacted"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -219,7 +219,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h4'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header")); setGraphIndicator("Goverment Amount") }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
