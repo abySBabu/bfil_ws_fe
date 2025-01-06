@@ -86,8 +86,8 @@ export const WsMaster: React.FC = () => {
         );
     }).sort((a, b) => {
         if (!sortBy) return 0;
-        const valueA = a[sortBy];
-        const valueB = b[sortBy];
+        const valueA = a[sortBy]?.toString()?.toLowerCase();
+        const valueB = b[sortBy]?.toString()?.toLowerCase();
 
         if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
         if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;

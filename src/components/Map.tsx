@@ -16,11 +16,11 @@ import { defaults } from 'ol/control/defaults';
 import { defaults as interactionDefaults } from 'ol/interaction/defaults';
 import { sd } from '../common';
 
-
 const EsriMap: React.FC = () => {
     const mapDiv = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<Map | null>(null);
     const [view, setView] = useState<View | null>(null);
+    const kmlData: any = localStorage.getItem("kmlData");
 
     useEffect(() => {
         if (mapDiv.current) {
@@ -30,7 +30,8 @@ const EsriMap: React.FC = () => {
 
             const kmlLayer = new VectorLayer({
                 source: new VectorSource({
-                    url: 'http://139.162.45.53:9091/TA2/2024/10/18/1729256165530Kalaburagi3.kml',
+                    // url: 'http://139.162.45.53:9091/TA2/2024/10/18/1729256165530Kalaburagi3.kml',
+                    url: kmlData,
                     format: new KML(),
                 }),
             });

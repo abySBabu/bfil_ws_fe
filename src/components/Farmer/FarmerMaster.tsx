@@ -82,8 +82,8 @@ export const FarmerMaster: React.FC = () => {
         })
         .sort((a, b) => {
             if (!sortBy) return 0;
-            const valueA = a[sortBy];
-            const valueB = b[sortBy];
+            const valueA = a[sortBy]?.toString()?.toLowerCase();
+            const valueB = b[sortBy]?.toString()?.toLowerCase();
 
             if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
             if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
@@ -306,7 +306,7 @@ export const FarmerMaster: React.FC = () => {
                                 <Table sx={{ width: '100%' }}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ width: '45%' }}>
+                                            <TableCell sx={{ width: '30%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'wsfarmerName'}
                                                     direction={sortBy === 'wsfarmerName' ? sortOrder : 'asc'}
@@ -315,7 +315,16 @@ export const FarmerMaster: React.FC = () => {
                                                     {t("p_Beneficiary_Master.ss_BeneficiaryList.Name")}
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell sx={{ width: '45%' }}>
+                                            <TableCell sx={{ width: '30%' }}>
+                                                <TableSortLabel
+                                                    active={sortBy === 'identifierName'}
+                                                    direction={sortBy === 'identifierName' ? sortOrder : 'asc'}
+                                                    onClick={() => handleSort('identifierName')}
+                                                >
+                                                    Relation
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell sx={{ width: '30%' }}>
                                                 <TableSortLabel
                                                     active={sortBy === 'mobileNumber'}
                                                     direction={sortBy === 'mobileNumber' ? sortOrder : 'asc'}
@@ -334,6 +343,7 @@ export const FarmerMaster: React.FC = () => {
                                         {fmrListP.map((w, i) => (
                                             <TableRow key={i}>
                                                 <TableCell>{w.wsfarmerName}</TableCell>
+                                                <TableCell>{w.relationalIdentifiers} {w.identifierName}</TableCell>
                                                 <TableCell>{w.mobileNumber}</TableCell>
                                                 {PerChk('EDIT_Beneficiary Master') && (
                                                     <TableCell>
