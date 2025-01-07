@@ -1,7 +1,7 @@
 {
   "name": "bfil-ws",
   "version": "0.1.0",
-  "homepage": "/bfilreact",
+  "homepage": "/uat",
   "private": true,
   "dependencies": {
     "@arcgis/core": "^4.30.9",
