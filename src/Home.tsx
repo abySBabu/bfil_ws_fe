@@ -410,7 +410,7 @@ export const Home: React.FC = () => {
                 onClick={handleAvatarClick}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName ? uName[0] : ''}
+                {uName ? uName?.split(" ").map((word) => word[0]?.toUpperCase()).join("") : ''}
               </Avatar>
             </Box>
           </Toolbar>
