@@ -11,8 +11,10 @@ import { useAuth } from './context/AuthContext';
 
 export const setTimeoutsecs = 3000;
 export const setAutoHideDurationTimeoutsecs = 3000;
+//Uat
+export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "1" }
 // Serverport
-export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
+// export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
 // export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbedev.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/", companyID: "137" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
