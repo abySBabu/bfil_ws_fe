@@ -134,7 +134,7 @@ export default function UserForm(props: userTypeProps) {
             let resp = await updateUserDetails(userCreatDataOne, props.userDetails?.userId);
             if (resp) {
                 setSeverityColor("success");
-                setMessage(t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
+                setMessage(value.userName + " " + t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);

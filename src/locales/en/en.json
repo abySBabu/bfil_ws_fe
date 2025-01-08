@@ -80,7 +80,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "User created successfully"
+            "Add_Success_Message": "user created successfully"
         },
         "ss_UserList": {
             "Name": "Name",
@@ -106,7 +106,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "User updated successfully"
+                        "Edit_Success_Message": "user updated successfully"
                     },
                     "Block_Tooltip": {
                         "Block_Tooltip_Text": "Block User",
@@ -116,7 +116,7 @@
                             "Cancel_Button": "Cancel",
                             "Block_Button": "Block"
                         },
-                        "Block_Success_Message": "User blocked successfully"
+                        "Block_Success_Message": "user blocked successfully"
                     },
                     "Unblock_Tooltip": {
                         "Unblock_Tooltip_Text": "Unblock User",
@@ -126,7 +126,7 @@
                             "Cancel_Button": "Cancel",
                             "Unblock_Button": "Unblock"
                         },
-                        "Unblock_Success_Message": "User unblocked successfully"
+                        "Unblock_Success_Message": "user unblocked successfully"
                     },
                     "Delete_Tooltip": {
                         "Delete_Tooltip_Text": "Delete User",
@@ -136,7 +136,7 @@
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
-                        "Delete_Success_Message": "User deleted successfully"
+                        "Delete_Success_Message": "user deleted successfully"
                     }
                 }
             },

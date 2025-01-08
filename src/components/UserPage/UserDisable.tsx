@@ -42,7 +42,7 @@ export default function UserDisable(props: userTypeProps) {
             let resp = await blockUser(blockParams);
             if (resp) {
                 setSeverityColor("success");
-                setMessage(t("p_User_Management.ss_UserList.Action.Action_Tooltip.Block_Tooltip.Block_Success_Message"));
+                setMessage(props.userDetails?.userName + " " + t("p_User_Management.ss_UserList.Action.Action_Tooltip.Block_Tooltip.Block_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
