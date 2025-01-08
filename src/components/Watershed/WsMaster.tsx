@@ -192,7 +192,7 @@ export const WsMaster: React.FC = () => {
             const resp = await addWS(addObj)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(t("p_Watershed_Master.Add_Watershed_Link.Add_Success_Message"));
+                setalert(wsObj.wsName + t("p_Watershed_Master.Add_Watershed_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -224,7 +224,7 @@ export const WsMaster: React.FC = () => {
             const resp = await editWS(editObj, id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
+                setalert(wsObj.wsName + t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -246,7 +246,7 @@ export const WsMaster: React.FC = () => {
             const resp = await deleteWS(id)
             if (resp.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
+                setalert(wsObj.wsName + t("p_Watershed_Master.ss_WatershedList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
             }
             else {
                 setalertClr(false);
