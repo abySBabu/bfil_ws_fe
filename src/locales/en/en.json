@@ -167,7 +167,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "Role created successfully"
+            "Add_Success_Message": "role created successfully"
         },
         "ss_RoleList": {
             "Role_Name": "Role Name",
@@ -196,7 +196,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "Role updated successfully",
+                        "Edit_Success_Message": "role updated successfully",
                         "Goback_Login_PopUp_Text": "Screen permission has changed. Please login",
                         "Goback_Login_PopUp_Button": "Okay"
                     },
@@ -208,7 +208,7 @@
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
-                        "Delete_Success_Message": "Role deleted successfully"
+                        "Delete_Success_Message": "role deleted successfully"
                     }
                 }
             },

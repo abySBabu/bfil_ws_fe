@@ -82,7 +82,7 @@ export default function AddRole(props: userTypeProps) {
                 let resp = await addRolePermission(mappingData);
                 if (resp) {
                     setSeverityColor("success");
-                    setMessage("Role created successfully");
+                    setMessage(value.roleName + " " + t("p_Role_Management.Add_Role_Link.Add_Success_Message"));
                     setOpenSnackbar(true);
                     setTimeout(() => {
                         setOpenSnackbar(false);
