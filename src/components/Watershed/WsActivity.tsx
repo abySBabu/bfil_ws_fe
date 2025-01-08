@@ -405,7 +405,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(actObj.workActivity.activityName + t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
+                setalert(actObj.workActivity.activityName + ' ' + t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -432,7 +432,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(actObj.workActivity.activityName + t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
+                setalert(actObj.workActivity.activityName + ' ' + t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
