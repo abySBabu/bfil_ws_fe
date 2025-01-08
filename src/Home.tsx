@@ -226,6 +226,7 @@ export const Home: React.FC = () => {
           try {
             let data = {
               userId: userId,
+              activityStatus: "Completed",
             };
             const response = await generateKML(data);
             if (response) {
