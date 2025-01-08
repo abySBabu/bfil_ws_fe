@@ -289,7 +289,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "Beneficiary master created successfully"
+            "Add_Success_Message": "added successfully"
         },
         "ss_BeneficiaryList": {
             "Name": "Name",
@@ -314,7 +314,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "Beneficiary Master updated successfully"
+                        "Edit_Success_Message": "updated successfully"
                     },
                     "Delete_Tooltip": {
                         "Delete_Tooltip_Text": "Delete Beneficiary",
@@ -324,7 +324,7 @@
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
-                        "Delete_Success_Message": "Beneficiary Master deleted successfully"
+                        "Delete_Success_Message": "deleted successfully"
                     }
                 }
             },
@@ -349,7 +349,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "Watershed master created successfully"
+            "Add_Success_Message": "watershed created successfully"
         },
         "ss_WatershedList": {
             "Watershed": "Watershed",
@@ -372,7 +372,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "Watershed Master updated successfully"
+                        "Edit_Success_Message": "watershed updated successfully"
                     },
                     "Delete_Tooltip": {
                         "Delete_Tooltip_Text": "Delete Watershed",
@@ -382,7 +382,7 @@
                             "Cancel_Button": "Cancel",
                             "Delete_Button": "Delete"
                         },
-                        "Delete_Success_Message": "Watershed Master deleted successfully"
+                        "Delete_Success_Message": "watershed deleted successfully"
                     }
                 }
             },
@@ -438,7 +438,7 @@
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
-            "Add_Success_Message": "Watershed Activity created successfully"
+            "Add_Success_Message": "activity created successfully"
         },
         "ss_WatershedActivityList": {
             "Activity": "Activity Name",
@@ -499,7 +499,7 @@
                             "Cancel_Button": "Cancel",
                             "Update_Button": "Update"
                         },
-                        "Edit_Success_Message": "Watershed Activity updated successfully"
+                        "Edit_Success_Message": "activity updated successfully"
                     },
                     "View_Tooltip": {
                         "View_Tooltip_Text": "View Activity",
