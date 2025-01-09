@@ -108,6 +108,17 @@
                         },
                         "Edit_Success_Message": "ಬಳಕೆದಾರ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
                     },
+                    "Password_Tooltip": {
+                        "Password_Tooltip_Text": "ಬಳಕೆದಾರ ಗುಪ್ತಪದವನ್ನು ಮರುಹೊಂದಿಸಿ",
+                        "Password_User_Popup": {
+                            "Password_User_Label": "ಬಳಕೆದಾರ ಗುಪ್ತಪದವನ್ನು ಮರುಹೊಂದಿಸಿ",
+                            "New_Password": "ಹೊಸ ಪಾಸ್ವರ್ಡ್",
+                            "Confirm_Password": "ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ದೃಢೀಕರಿಸಿ",
+                            "Cancel_Button": "ರದ್ದುಮಾಡಿ",
+                            "Update_Button": "ನವೀಕರಿಸಿ"
+                        },
+                        "Password_Success_Message": "ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ"
+                    },
                     "Block_Tooltip": {
                         "Block_Tooltip_Text": "ಬಳಕೆದಾರರನ್ನು ನಿರ್ಬಂಧಿಸಿ",
                         "Block_User_Popup": {

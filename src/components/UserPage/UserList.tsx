@@ -331,8 +331,8 @@ export default function UserList() {
                                                 <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
                                                     <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                                 </Tooltip>}
-                                            {userRole === 'Chief Manager Head Office' &&
-                                                <Tooltip title='Change user password'>
+                                            {userRole === 'Chief Manager Head Office' && row.userBlockedFlag === 'N' &&
+                                                <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_Tooltip_Text")}>
                                                     <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setshowPassModal(true) }}><Password /></IconButton>
                                                 </Tooltip>}
                                         </TableCell>

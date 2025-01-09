@@ -35,7 +35,7 @@ export default function UserPassword(props: userTypeProps) {
             const resp = await PassReset(payload);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("Sucessfully updated password for user");
+                setMessage(props.userDetails?.userName + " " + t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -56,13 +56,13 @@ export default function UserPassword(props: userTypeProps) {
 
     return (<>
         <Dialog open>
-            <DialogTitle>Edit User Password</DialogTitle>
+            <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.Password_User_Label")}</DialogTitle>
 
             <DialogContent><Box component={Grid} container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12}><TextField
                     type='password'
                     required
-                    label='New Password'
+                    label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.New_Password")}
                     autoFocus
                     value={newPass}
                     onChange={(e) => setnewPass(e.target.value)}
@@ -71,7 +71,7 @@ export default function UserPassword(props: userTypeProps) {
                 <Grid item xs={12}><TextField
                     type='password'
                     required
-                    label='Confirm Password'
+                    label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.Confirm_Password")}
                     disabled={newPass.length < 4}
                     value={conPass}
                     onChange={(e) => setconPass(e.target.value)}
@@ -80,9 +80,9 @@ export default function UserPassword(props: userTypeProps) {
             </Box></DialogContent>
 
             <DialogActions>
-                <Button disabled={loading} onClick={() => props.hide()}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Cancel_Button")}</Button>
+                <Button disabled={loading} onClick={() => props.hide()}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.Cancel_Button")}</Button>
                 <Button startIcon={loading ? <CircularProgress /> : null} disabled={addCheck} onClick={() => EditPass()}>
-                    {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Edit_Tooltip.Edit_User_Popup.Update_Button")}
+                    {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.Update_Button")}
                 </Button>
             </DialogActions>
         </Dialog>

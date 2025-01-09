@@ -108,6 +108,17 @@
                         },
                         "Edit_Success_Message": "user updated successfully"
                     },
+                    "Password_Tooltip": {
+                        "Password_Tooltip_Text": "Reset User Password",
+                        "Password_User_Popup": {
+                            "Password_User_Label": "Reset User Password",
+                            "New_Password": "New Password",
+                            "Confirm_Password": "Confirm Password",
+                            "Cancel_Button": "Cancel",
+                            "Update_Button": "Update"
+                        },
+                        "Password_Success_Message": "password updated successfully"
+                    },
                     "Block_Tooltip": {
                         "Block_Tooltip_Text": "Block User",
                         "Block_User_Popup": {
