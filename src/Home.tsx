@@ -226,11 +226,13 @@ export const Home: React.FC = () => {
           try {
             let data = {
               userId: userId,
-              activityStatus: "Completed",
+              activityStatus: "All",
+              activityId: 0
             };
             const response = await generateKML(data);
             if (response) {
               localStorage.setItem("kmlData", response.KML);
+              // localStorage.setItem("kmlData", "https://abimgsvr1down.abynet.xyz//BFIL//2024/12/31/1735621648258290.kml");
               console.log('kml response', response.KML);
             }
           } catch (error: any) {
