@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import WatershedReport from './WatershedReport';
 import DonerReport from './DonerReport';
 import ActivityDetailsReport from './ActivityDetailsReport';
+import MapReport from './MapReport';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -72,6 +73,7 @@ function Report() {
           <Tab label="WatershedReport" {...a11yProps(0)} />
           <Tab label="DonerReport" {...a11yProps(1)} />
           <Tab label="ActivityReport" {...a11yProps(2)} />
+          <Tab label="Map Location" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -87,6 +89,11 @@ function Report() {
          {value === 2 && (
         <TabPanel value={value} index={2} dir={theme.direction}>
           <ActivityDetailsReport />
+        </TabPanel>
+      )}
+      {value === 3 && (
+        <TabPanel value={value} index={3} dir={theme.direction}>
+          <MapReport />
         </TabPanel>
       )}
     </Box>

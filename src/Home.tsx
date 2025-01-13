@@ -226,10 +226,13 @@ export const Home: React.FC = () => {
           try {
             let data = {
               userId: userId,
+              activityStatus: "All",
+              activityId: 0
             };
             const response = await generateKML(data);
             if (response) {
               localStorage.setItem("kmlData", response.KML);
+              // localStorage.setItem("kmlData", "https://abimgsvr1down.abynet.xyz//BFIL//2024/12/31/1735621648258290.kml");
               console.log('kml response', response.KML);
             }
           } catch (error: any) {
@@ -410,7 +413,7 @@ export const Home: React.FC = () => {
                 onClick={handleAvatarClick}
                 sx={{ width: { sm: '10', md: '18', lg: '35' }, height: { sm: '10', md: '18', lg: '35' } }}
               >
-                {uName ? uName[0] : ''}
+                {uName ? uName?.split(" ").map((word) => word[0]?.toUpperCase()).join("") : ''}
               </Avatar>
             </Box>
           </Toolbar>

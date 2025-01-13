@@ -8,6 +8,7 @@ import { deleteRolesByRole } from '../../Services/roleService';
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, sd } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 
 type RoleTypeProps = {
@@ -22,7 +23,7 @@ export default function DeleteRole(props: RoleTypeProps) {
 
     const { show, hide, roleDetails } = props;
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     const [message, setMessage] = useState('');
     const [severityColor, setSeverityColor] = useState<'success' | 'error' | 'warning' | 'info' | undefined>(undefined);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -43,7 +44,7 @@ export default function DeleteRole(props: RoleTypeProps) {
             let resp = await deleteRolesByRole(roleDetails?.roleId);
             if (resp) {
                 setSeverityColor("success");
-                setMessage("Role Deleted successfully");
+                setMessage(roleDetails?.roleName + " " + t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     logout();
@@ -80,14 +81,14 @@ export default function DeleteRole(props: RoleTypeProps) {
                 open={modalShow}
                 onClose={handleClose} maxWidth='xs'
             >
-                <DialogTitle>Delete Role</DialogTitle>
+                <DialogTitle>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Role_Popup.Delete_Role_Label")}</DialogTitle>
                 <DialogContent sx={{ mt: 2 }}>
-                    Are you sure you want to delete {roleDetails?.roleName} ?
+                    {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Role_Popup.Delete_Role_Content")} {roleDetails?.roleName} ?
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} disabled={loading}>Cancel</Button>
+                    <Button onClick={handleClose} disabled={loading}>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Role_Popup.Cancel_Button")}</Button>
                     <Button onClick={deleteRole} disabled={loading}>
-                        Delete {loading ? <CircularProgress /> : null}
+                        {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Delete_Tooltip.Delete_Role_Popup.Delete_Button")} {loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

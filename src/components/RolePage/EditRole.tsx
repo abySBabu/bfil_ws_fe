@@ -93,7 +93,7 @@ export default function EditRole(props: RoleTypeProps) {
 
                 if (resp) {
                     setSeverityColor("success");
-                    setMessage("Role updated successfully");
+                    setMessage(value.roleName + " " + t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
                     setOpenSnackbar(true);
                     setTimeout(() => {
                         setOpenSnackbar(false);
@@ -232,10 +232,10 @@ export default function EditRole(props: RoleTypeProps) {
             <Dialog
                 open={openDialog} maxWidth={'xs'}>
                 <DialogContent sx={{ mt: 2 }}>
-                    Screen permission has changed. Please login
+                    {t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Goback_Login_PopUp_Text")}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClosedialog}>Okay</Button>
+                    <Button onClick={handleClosedialog}>{t("p_Role_Management.ss_RoleList.Action.Action_Tooltip.Edit_Tooltip.Goback_Login_PopUp_Button")}</Button>
                 </DialogActions>
             </Dialog>
             <Dialog

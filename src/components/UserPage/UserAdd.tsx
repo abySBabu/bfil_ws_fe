@@ -154,7 +154,7 @@ export default function (props: userTypeProps) {
             let resp = await createUser(userCreatDataOne);
             if (resp) {
                 setSeverityColor("success");
-                setMessage(t("p_User_Management.Add_User_Link.Add_Success_Message"));
+                setMessage(value.userName + " " + t("p_User_Management.Add_User_Link.Add_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);

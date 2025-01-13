@@ -44,7 +44,7 @@ export default function UserDisable(props: userTypeProps) {
             let resp = await blockUser(blockParams);
             if (resp) {
                 setSeverityColor("success");
-                setMessage(t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_Success_Message"));
+                setMessage(props.userDetails?.userName + " " + t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_Success_Message"));
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     setOpenSnackbar(false);
@@ -71,12 +71,12 @@ export default function UserDisable(props: userTypeProps) {
             <Dialog open={modalShow} maxWidth={'xs'}>
                 <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_User_Label")}</DialogTitle>
                 <DialogContent sx={{ mt: 2 }}>
-                {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_User_Content")} {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
+                    {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_User_Content")} {props.userDetails?.userName}-({props.userDetails?.userRoleList[0].roleName})
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Cancel_Button")}</Button>
                     <Button onClick={DisableUser} disabled={loading}>
-                    {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_Button")}{loading ? <CircularProgress /> : null}
+                        {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Unblock_Tooltip.Unblock_User_Popup.Unblock_Button")}{loading ? <CircularProgress /> : null}
                     </Button>
                 </DialogActions>
             </Dialog>

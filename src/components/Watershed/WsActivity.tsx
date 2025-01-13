@@ -405,7 +405,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
+                setalert(actObj.workActivity.activityName + ' ' + t("p_Watershed_Activity.Add_Activity_Link.Add_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -432,7 +432,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             }, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
-                setalert(t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
+                setalert(actObj.workActivity.activityName + ' ' + t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
             }
             else {
                 setalertClr(false);
@@ -458,7 +458,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
-                    setalert(`Updated activity status to ${resp1}`);
+                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1}`);
                     setactCount(c => c - 1);
                 }
                 else {
@@ -490,7 +490,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
-                    setalert(`Updated activity status to ${resp1}`);
+                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1}`);
                     setactCount(c => c - 1);
                 }
                 else {
@@ -519,7 +519,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             const { accuracy, latitude, longitude, altitude } = coords;
             return { accuracy, latitude, longitude, altitude };
         } catch (error) {
-            console.error("Error parsing geoCoordinates:", error);
             return { accuracy: null, latitude: null, longitude: null, altitude: null };
         }
     };
@@ -663,7 +662,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                     {actListP.map((a, i) => (
                                         <TableRow key={i}>
                                             <TableCell>{a.workActivity.activityName}</TableCell>
-                                            <TableCell sx={{ maxWidth: '160px' }}>{a.workActivity.surveyNo || '-'}</TableCell>
+                                            <TableCell>{a.workActivity.surveyNo || '-'}</TableCell>
                                             <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered)}</TableCell>
