@@ -115,7 +115,7 @@ const MapReport = () => {
             </Box>
             {data ? <>
                 <EsriMap />
-            </> : "No Map Found"}
+            </> : `No map found for the ${selectedActivityStatus} status and ${selectedActivity} activity`}
         </div>
     );
 };
