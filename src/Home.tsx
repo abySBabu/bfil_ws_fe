@@ -61,6 +61,8 @@ export const Home: React.FC = () => {
   const uRole = localStorage.getItem("userRole") as string
   const [language, setLanguage] = useState(localStorage.getItem("multiLanguage") || "en");
   const userId = localStorage.getItem("userId");
+  // localStorage.setItem("kmlData", "");
+
 
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
@@ -196,6 +198,31 @@ export const Home: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchKml = async () => {
+      try {
+        let data = {
+          userId: userId,
+          activityStatus: "Completed",
+          activityId: 0
+        };
+        const response = await generateKML(data);
+        if (response) {
+          localStorage.setItem("kmlData", response.KML);
+          // localStorage.setItem("kmlData", "https://abimgsvr1down.abynet.xyz//BFIL//2024/12/31/1735621648258290.kml");
+          console.log('kml response', response.KML);
+        }
+      } catch (error: any) {
+        if (error.response?.status >= 500 || !error.response?.status)
+          console.error('Server error:', error);
+        else {
+          console.error('Unexpected error:', error);
+        }
+      }
+    }
+    fetchKml()
+  })
+
+  useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
 
@@ -278,25 +305,6 @@ export const Home: React.FC = () => {
               else {
                 console.error('Unexpected error:', error);
               }
-            }
-          }
-          try {
-            let data = {
-              userId: userId,
-              activityStatus: "Completed",
-              activityId: 0
-            };
-            const response = await generateKML(data);
-            if (response) {
-              localStorage.setItem("kmlData", response.KML);
-              // localStorage.setItem("kmlData", "https://abimgsvr1down.abynet.xyz//BFIL//2024/12/31/1735621648258290.kml");
-              console.log('kml response', response.KML);
-            }
-          } catch (error: any) {
-            if (error.response?.status >= 500 || !error.response?.status)
-              console.error('Server error:', error);
-            else {
-              console.error('Unexpected error:', error);
             }
           }
         }

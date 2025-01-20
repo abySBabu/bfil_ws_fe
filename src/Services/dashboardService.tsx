@@ -71,6 +71,17 @@ export async function ListDemand() {
     catch (error) { console.error(error); throw error; }
 }
 
+
+export async function ListActivityStatus() {
+    const configs = {
+        url: serverPath.workFlow + `work-service/work-flow1`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function ListFund() {
     const configs = {
         url: serverPath.bfil + "parameter/getParameterByParameterType?parameterType=Fund Source",

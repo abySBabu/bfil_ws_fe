@@ -3,7 +3,7 @@ import { activityReport } from 'src/Services/reportService';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box, Grid, Typography } from '@mui/material';
 import { Activity, fmrDef } from './Activitytypes';
 import { listFinYear } from 'src/Services/workplanService';
-import { ListDemand, ListSupply, generateKML } from 'src/Services/dashboardService';
+import { ListActivityStatus, ListDemand, ListSupply, generateKML } from 'src/Services/dashboardService';
 import { DistrictName, StateName, TalukName, VillageName } from 'src/LocName';
 import { listFarmer } from 'src/Services/farmerService';
 import * as XLSX from 'xlsx';
@@ -21,9 +21,10 @@ const MapReport = () => {
     const userId = localStorage.getItem("userId");
 
     let uId: any;
-    const handleActivityStatus = (event: SelectChangeEvent<string>) => { setSelectedActivityStatus(event.target.value); };
+    const handleActivityStatus = (event: SelectChangeEvent<string>) => { setData(''); setSelectedActivityStatus(event.target.value); };
 
     const handleActivityChange = (event: SelectChangeEvent<string>) => {
+        setData('');
         const selectedActivityName = event.target.value;
         setSelectedActivity(selectedActivityName);
         const selectedActivity = activityOptions.find(activity => activity.activityName === selectedActivityName);
@@ -33,10 +34,9 @@ const MapReport = () => {
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                // const response2 = await listFinYear();
-                // if (response2?.status === 'success') {
-                setActivityStatus(["All", "New", "Completed", "In Progress", "Approver 1", "Approver 2", "Approver 3", "Approver 4", "Approver 5"]);
-                // }
+                const response2 = await ListActivityStatus();
+                const allOption = { id: 0, status: 'All', status_text: 'All' };
+                setActivityStatus([allOption, ...response2]);
 
                 const resp3a = await ListSupply();
                 const resp3b = await ListDemand();
@@ -91,7 +91,7 @@ const MapReport = () => {
 
     return (
         <div>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', mb:2 }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
                 Map Location
             </Typography>
 
@@ -99,11 +99,12 @@ const MapReport = () => {
                 <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
                     <InputLabel id="select-year-label">Select Status</InputLabel>
                     <Select labelId="select-year-label" value={selectedActivityStatus} onChange={handleActivityStatus} label="Select Status">
-                        {activityStatus?.map((status, index) => (
-                            <MenuItem key={index} value={status}>
-                                {status}
-                            </MenuItem>
-                        ))}
+                        {Array.isArray(activityStatus) &&
+                            activityStatus.map((status) => (
+                                <MenuItem key={status.id} value={status.status}>
+                                    {status.status_text}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl sx={{ width: 230, marginBottom: '15px', mr: 3 }}>
