@@ -124,6 +124,9 @@ export const Workplan: React.FC = () => {
             } else if (sortBy === 'interventionType_Components') {
                 valueA = IntTypeName(a.interventionType_Components)?.toString()?.toLowerCase();
                 valueB = IntTypeName(b.interventionType_Components)?.toString()?.toLowerCase();
+            } else if (sortBy === 'financialDetails') {
+                valueA = a.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)
+                valueB = b.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0)
             } else {
                 valueA = a[sortBy]?.toString()?.toLowerCase();
                 valueB = b[sortBy]?.toString()?.toLowerCase();
@@ -353,7 +356,13 @@ export const Workplan: React.FC = () => {
                                             </TableSortLabel>
                                         </TableCell>
                                         <TableCell align="center">
-                                            {t("p_WorkPlan.ss_WorkplanList.Financial")}
+                                            <TableSortLabel
+                                                active={sortBy === 'financialDetails'}
+                                                direction={sortBy === 'financialDetails' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('financialDetails')}
+                                            >
+                                                {t("p_WorkPlan.ss_WorkplanList.Financial")}
+                                            </TableSortLabel>
                                         </TableCell>
                                         {PerChk('EDIT_Work Plan') && <TableCell width="5%">
                                             {t("p_WorkPlan.ss_WorkplanList.Action.Action_Text")}
@@ -457,7 +466,7 @@ export const Workplan: React.FC = () => {
                             })
                         }
                         inputProps={{ min: 0 }}
-                        InputProps={{startAdornment: <InputAdornment position="start">₹</InputAdornment>}}
+                        InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }}
                     /></Grid>
                     {index < planObj.financialDetails.length - 1 && (<Grid item xs={1} sx={{ textAlign: 'center', fontSize: '200%' }}>+</Grid>)}
                 </React.Fragment>))}
