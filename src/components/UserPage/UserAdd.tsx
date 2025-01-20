@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { allUserType, allRoles, selectOptions } from "./UserManagementType";
 import { getRolesByCompany, createUser } from '../../Services/userService';
 import CircularProgress from '@mui/material/CircularProgress';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { CRP, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { useTranslation } from 'react-i18next';
 
 interface UserFormInput {
@@ -122,9 +122,9 @@ export default function (props: userTypeProps) {
     const role = watch('role');
     const loginType = watch('loginType');
     useEffect(() => {
-        if (role === 'Community Resource person') {
+        if (role === CRP) {
             setValue('loginType', 'Mobile');
-        } else if (role !== 'Community Resource person') {
+        } else if (role !== CRP) {
             setValue('loginType', '');
         }
     }, [role, setValue]);
@@ -373,7 +373,7 @@ export default function (props: userTypeProps) {
                                 }}
                                 error={!!errors.loginType}
                                 helperText={errors.loginType ? errors.loginType.message : ''}
-                                disabled={role === 'Community Resource person'}
+                                disabled={role === CRP}
                                 value={loginType}
                             >
                                 {loginTypeOptions.map((option, index) => (<MenuItem key={index} value={option.value}>{option.value}</MenuItem>))}

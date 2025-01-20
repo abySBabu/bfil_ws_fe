@@ -13,7 +13,7 @@ import { addWS, editWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { usersList, getRolesByCompany } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
+import { CRP, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 import { useTranslation } from 'react-i18next';
@@ -81,7 +81,7 @@ export default function (props: mapTypeProps) {
                         return 0;
                     });
 
-                    // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
+                    // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === CRP))
                     setUserList(sorteduserList);
                 }
             } catch (error) {
@@ -124,7 +124,7 @@ export default function (props: mapTypeProps) {
     const handleWatershedChange = (event: SelectChangeEvent<number[] | number>) => {
         const value = event.target.value;
 
-        if (selectedRoleName === 'Community Resource person') {
+        if (selectedRoleName === CRP) {
             // Single selection
             setValue('ws_name', [value as number]); // wrap in an array for consistency
             const selectedWsData = wsList.filter(ws => ws.watershedId === value);
@@ -250,7 +250,7 @@ export default function (props: mapTypeProps) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            {selectedRoleName === 'Community Resource person' ? <>
+                            {selectedRoleName === CRP ? <>
                                 <FormControl fullWidth required>
                                     <InputLabel id="ws_name-label">{t("p_Watershed_Mapping.ss_MappingList.Action.Action_Tooltip.Edit_Tooltip.Edit_Mapping_Popup.Ws_Name")}</InputLabel>
                                     <Select

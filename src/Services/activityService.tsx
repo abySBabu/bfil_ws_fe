@@ -74,7 +74,7 @@ export async function DashSupply() {
 
 export async function actFlowNext(role: any, status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
+        url: serverPath.workFlow + `work-service/work-flow/ ${localStorage.getItem("applicationId")}/${role.replace(/\s+/g, "_")}/Submit/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -87,7 +87,7 @@ export async function actFlowNext(role: any, status: any) {
 
 export async function actFlowPrev(role: any, status: any) {
     const configs = {
-        url: serverPath.workFlow + `work-service/work-flow/2/${role.replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
+        url: serverPath.workFlow + `work-service/work-flow/ ${localStorage.getItem("applicationId")}/${role.replace(/\s+/g, "_")}/Reject/${status.replace(/\s+/g, "_")}`,
         method: 'get',
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

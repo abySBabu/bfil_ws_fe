@@ -13,7 +13,7 @@ import { addWS } from '../../Services/wsMappingService';
 import { listWS } from '../../Services/wsService';
 import { usersList, getRolesByCompany } from '../../Services/userService'
 import CircularProgress from '@mui/material/CircularProgress';
-import { setAutoHideDurationTimeoutsecs, setTimeoutsecs, TPA } from '../../common';
+import { CRP, setAutoHideDurationTimeoutsecs, setTimeoutsecs, TPA } from '../../common';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { StateName, DistrictName, TalukName, PanName, VillageName } from '../../LocName';
 import { useTranslation } from 'react-i18next';
@@ -81,9 +81,9 @@ export default function (props: mapTypeProps) {
                         return 0;
                     });
 
-                    // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === 'Community Resource person'))
+                    // const filterUser = sorteduserList.filter(user => !user.userRoleList.some(role => role.roleName === CRP))
                     const filteredUserList = sorteduserList.filter((user) => {
-                        const isCRP = user.userRoleList[0].roleName === 'Community Resource person';
+                        const isCRP = user.userRoleList[0].roleName === CRP;
 
                         const isInMapList = props.mapList.some((mapItem) => mapItem.userId === user.userId);
 
@@ -115,7 +115,7 @@ export default function (props: mapTypeProps) {
     const handleWatershedChange = (event: SelectChangeEvent<number[] | number>) => {
         const value = event.target.value;
 
-        if (selectedRoleName === 'Community Resource person') {
+        if (selectedRoleName === CRP) {
             // Single selection
             setValue('ws_name', [value as number]); // wrap in an array for consistency
             const selectedWsData = wsList.filter(ws => ws.watershedId === value);
@@ -239,7 +239,7 @@ export default function (props: mapTypeProps) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            {selectedRoleName === 'Community Resource person' ? <>
+                            {selectedRoleName === CRP ? <>
                                 <FormControl fullWidth required>
                                     <InputLabel id="ws_name-label">{t("p_Watershed_Mapping.Add_Mapping_Link.Add_Mapping_Popup.Ws_Name")}</InputLabel>
                                     <Select
@@ -324,7 +324,7 @@ export default function (props: mapTypeProps) {
                                                 <TableCell>
                                                     {row.gramPanchayatName || ''}
                                                 </TableCell>
-                                                <TableCell sx={{textWrap:'wrap', width:'30%'}}>
+                                                <TableCell sx={{ textWrap: 'wrap', width: '30%' }}>
                                                     {row.villages.length > 0 ? (
                                                         row.villages.map(village => VillageName(village)).join(', ')
                                                     ) : (
