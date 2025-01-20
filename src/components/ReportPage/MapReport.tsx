@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { activityReport } from 'src/Services/reportService';
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box, Grid } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box, Grid, Typography } from '@mui/material';
 import { Activity, fmrDef } from './Activitytypes';
 import { listFinYear } from 'src/Services/workplanService';
 import { ListDemand, ListSupply, generateKML } from 'src/Services/dashboardService';
@@ -91,7 +91,10 @@ const MapReport = () => {
 
     return (
         <div>
-            <h1>Map Location</h1>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', mb:2 }}>
+                Map Location
+            </Typography>
+
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
                 <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
                     <InputLabel id="select-year-label">Select Status</InputLabel>
@@ -115,7 +118,7 @@ const MapReport = () => {
             </Box>
             {data ? <>
                 <EsriMap />
-            </> : "No Map Found"}
+            </> : `No map found for the ${selectedActivityStatus} status and ${selectedActivity} activity`}
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card } from '@mui/material';
+import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, FormControlLabel, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card, Switch } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -26,7 +26,7 @@ import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
 import { TokenRefresh } from './Services/loginService';
 import { useAuth } from './context/AuthContext';
-
+import { styled } from "@mui/system";
 
 interface SideItem {
   screenName: string;
@@ -59,9 +59,62 @@ export const Home: React.FC = () => {
   const [serverDown, setserverDown] = React.useState(false);
   const uName = localStorage.getItem("userName") as string
   const uRole = localStorage.getItem("userRole") as string
-  localStorage.setItem("multiLanguage", "en");
+  const [language, setLanguage] = useState(localStorage.getItem("multiLanguage") || "en");
   const userId = localStorage.getItem("userId");
 
+  const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+      margin: 1,
+      padding: 0,
+      transform: 'translateX(6px)',
+      '&.Mui-checked': {
+        color: '#fff',
+        transform: 'translateX(22px)',
+        '& .MuiSwitch-thumb:before': {
+          content: "''",
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          left: 0,
+          top: 0,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          // Convert LanguageIcon to SVG and use it as the backgroundImage
+          backgroundImage: `url(${process.env.PUBLIC_URL}/images/ka.png)`,
+        },
+        '& + .MuiSwitch-track': {
+          backgroundColor: sd('--button-bgcolor-active-brand'),
+          opacity: 1,
+        },
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      backgroundColor: '#001e3c',
+      width: 32,
+      height: 32,
+      '&:before': {
+        content: "''",
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundImage: `url(${process.env.PUBLIC_URL}/images/en.png)`,
+      },
+    },
+    '& .MuiSwitch-track': {
+      opacity: 1,
+      backgroundColor: '#E9E9EA',
+      borderRadius: 20 / 2,
+    },
+  }));
   const countHeader = (textKey: string, badgeCount: number) => {
     return (<Box display="flex" alignItems="center" justifyContent="space-between">
       <Typography>{t(textKey)}</Typography>
@@ -135,17 +188,21 @@ export const Home: React.FC = () => {
     }
   };
 
-  const handleLanguageChange = (lng: string) => {
-    localStorage.setItem("multiLanguage", lng);
-    i18n.changeLanguage(lng);
-    setLanguageAnchor(null);
-    setavatarAnchor(null);
-  }
+  const handleLanguageToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newLanguage = event.target.checked ? "ka" : "en";
+    setLanguage(newLanguage);
+    localStorage.setItem("multiLanguage", newLanguage);
+    i18n.changeLanguage(newLanguage);
+  };
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
 
   const logOut = async () => {
     try {
       let logoutresp = await logoutService();
-      handleLanguageChange('en');
+      // handleLanguageToggle('en');
       if (logoutresp) {
         logout();
         localStorage.removeItem('isLoggedIn');
@@ -226,7 +283,7 @@ export const Home: React.FC = () => {
           try {
             let data = {
               userId: userId,
-              activityStatus: "All",
+              activityStatus: "Completed",
               activityId: 0
             };
             const response = await generateKML(data);
@@ -540,7 +597,29 @@ export const Home: React.FC = () => {
       </Box>
       <Divider />
       <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
-      <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+      <Toolbar>
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              checked={language === "ka"}
+              onChange={handleLanguageToggle}
+            />
+          }
+          label={
+            <Typography>
+              {language === "en" ? "English" : "ಕನ್ನಡ"}            </Typography>
+          }
+          labelPlacement="end"
+        />
+        {/* <Box display="flex" alignItems="center">
+          <Typography>{language === "en" ? "English" : "ಕನ್ನಡ"}</Typography>
+          <Switch
+            checked={language === "ka"}
+            onChange={handleLanguageToggle}
+          />
+        </Box> */}
+      </Toolbar>
+      {/* <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
         <AccordionSummary
           expandIcon={<ArrowDropDownIcon />}
           aria-controls="panel1-content"
@@ -554,7 +633,7 @@ export const Home: React.FC = () => {
           <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> {t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Submenu.Kannada')}</MenuItem>
         </AccordionDetails>
         <Divider />
-      </Accordion>
+      </Accordion> */}
       {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
       <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>
