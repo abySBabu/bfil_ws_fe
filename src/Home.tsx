@@ -86,7 +86,7 @@ export const Home: React.FC = () => {
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           // Convert LanguageIcon to SVG and use it as the backgroundImage
-          backgroundImage: `url(${process.env.PUBLIC_URL}/images/ka.png)`,
+          backgroundImage: `url(${process.env.PUBLIC_URL}/images/en.png)`,
         },
         '& + .MuiSwitch-track': {
           backgroundColor: sd('--button-bgcolor-active-brand'),
@@ -108,7 +108,7 @@ export const Home: React.FC = () => {
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundImage: `url(${process.env.PUBLIC_URL}/images/en.png)`,
+        backgroundImage: `url(${process.env.PUBLIC_URL}/images/ka.png)`,
       },
     },
     '& .MuiSwitch-track': {
