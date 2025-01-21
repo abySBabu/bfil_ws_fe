@@ -119,7 +119,7 @@ const MapReport = () => {
             </Box>
             {data ? <>
                 <EsriMap />
-            </> : `No map found for the ${selectedActivityStatus} status and ${selectedActivity} activity`}
+            </> : `No map found for the ${selectedActivityStatus.replace(/_/g, " ")} status and ${selectedActivity} activity`}
         </div>
     );
 };
