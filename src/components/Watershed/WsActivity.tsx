@@ -29,7 +29,8 @@ export const actDef = {
         activityWorkflowStatus: 'New',
         interventionType: 0,
         activityImage: '',
-        mobileImage: '',
+        mobileImageUrl: '',
+        galleryImage: '',
         activityFormData: '',
         watershedId: '',
         farmerId: '',
@@ -453,7 +454,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string }
+                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -485,7 +486,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string }
+                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
