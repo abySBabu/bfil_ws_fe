@@ -80,7 +80,8 @@ export const actDef = {
             activityWorkflowStatus: '',
             activityImage: '',
             createdUser: '',
-            createdTime: ''
+            createdTime: '',
+            syncStatus: ''
         }
     ]
 }
@@ -965,21 +966,24 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             //const imageLinks: string[] = JSON.parse(a.activityImage).activityImage?.split(',');
                                             const imageLinks: string[] = a.activityImage?.split(',');
                                             if (imageLinks[0]?.length > 0) {
-                                                return imageLinks.map((link: string, index: number) => (
-                                                    <img
-                                                        key={index}
-                                                        src={link.trim()}
-                                                        alt={`Image ${index + 1}`}
-                                                        style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
-                                                        onClick={() => {
-                                                            try {
-                                                                setimgM(link.trim());
-                                                            } catch (error) {
-                                                                console.error("Error setting image modal--", link.trim());
-                                                            }
-                                                        }}
-                                                    />
-                                                ));
+                                                if (a.syncStatus === 'Synced_Images')
+                                                    return imageLinks.map((link: string, index: number) => (
+                                                        <img
+                                                            key={index}
+                                                            src={link.trim()}
+                                                            alt={`Image ${index + 1}`}
+                                                            style={{ height: '24px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px' }}
+                                                            onClick={() => {
+                                                                try {
+                                                                    setimgM(link.trim());
+                                                                } catch (error) {
+                                                                    console.error("Error setting image modal--", link.trim());
+                                                                }
+                                                            }}
+                                                        />
+                                                    ));
+                                                else
+                                                    return <img src={`${process.env.PUBLIC_URL}/images/pragat.png`} alt="Images syncing" style={{ height: '24px', objectFit: 'contain' }} />
                                             } else {
                                                 return "No images"
                                             }
