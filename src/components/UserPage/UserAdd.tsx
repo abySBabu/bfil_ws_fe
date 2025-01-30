@@ -373,7 +373,7 @@ export default function (props: userTypeProps) {
                                 }}
                                 error={!!errors.loginType}
                                 helperText={errors.loginType ? errors.loginType.message : ''}
-                                disabled={role === CRP}
+                                // disabled={role === CRP}
                                 value={loginType}
                             >
                                 {loginTypeOptions.map((option, index) => (<MenuItem key={index} value={option.value}>{option.value}</MenuItem>))}
