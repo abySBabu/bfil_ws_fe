@@ -456,7 +456,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', mobileUniqueId: '', galleryImage: '' }
+                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -488,7 +488,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', mobileUniqueId: '', galleryImage: '' }
+                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -1023,7 +1023,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                 inputProps={{ maxLength: 120 }} />
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
-                                <Button onClick={() => { setprogM(false); }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
+                                <Button onClick={() => { setprogM(false); }} disabled={loading}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
                                 {prev && (<Button startIcon={loadingReject ? <CircularProgress /> : <ArrowBack />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
                                     Reject to {prev.replace(/_/g, " ")}</Button>)}
                                 {next && (<Button endIcon={loadingApprove ? <CircularProgress /> : <ArrowForward />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>

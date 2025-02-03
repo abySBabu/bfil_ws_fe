@@ -137,7 +137,7 @@ export const Workplan: React.FC = () => {
         });
     const planListP = planListF.slice(page * rPP, page * rPP + rPP);
 
-    const addCheck = loading || !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityId || !planObj.planlandType || !planObj.watershedId || !planObj.value || !planObj.unitofMeasurement || finTotal <= 0
+    const addCheck = loading || !planObj.planningYear || !planObj.interventionType_Components || !planObj.activityId || !planObj.planlandType || !planObj.watershedId || !planObj.value || finTotal <= 0
 
     React.useEffect(() => { fetchData() }, [])
 
@@ -406,7 +406,7 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })}>
                     {finOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '' })}>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '', unitofMeasurement: '' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={15} md={5}>
@@ -421,7 +421,7 @@ export const Workplan: React.FC = () => {
                                 setplanObj({
                                     ...planObj,
                                     activityId: selectedActivity.activityId,
-                                    unitofMeasurement: selectedActivity.uom,
+                                    unitofMeasurement: selectedActivity.uom || '',
                                 });
                             }
                         }}
