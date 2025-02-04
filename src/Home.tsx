@@ -165,7 +165,7 @@ export const Home: React.FC = () => {
       if (tokenExpired) {
         try {
           const resp = await TokenRefresh();
-          if (resp) {
+          if (resp.message === 'Success') {
             console.log("Tokens refreshed");
             setTokenExpired(false);
             monitorTokenExpiry();
