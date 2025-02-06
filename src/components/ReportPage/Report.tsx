@@ -70,9 +70,9 @@ function Report() {
             },
           }}
         >
-          <Tab label="WatershedReport" {...a11yProps(0)} />
-          <Tab label="DonerReport" {...a11yProps(1)} />
-          <Tab label="ActivityReport" {...a11yProps(2)} />
+          <Tab label="Watershed Report" {...a11yProps(0)} />
+          <Tab label="Donor Report" {...a11yProps(1)} />
+          <Tab label="Activity Report" {...a11yProps(2)} />
           <Tab label="Map Location" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
