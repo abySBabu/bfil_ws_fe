@@ -229,15 +229,14 @@ export const Home: React.FC = () => {
   const logOut = async () => {
     try {
       let logoutresp = await logoutService();
-      // handleLanguageToggle('en');
       if (logoutresp) {
         logout();
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('userRole');
-        localStorage.clear();
-        localStorage.clear();
-        navigate('/');
       }
+      sessionStorage.clear();
+      localStorage.clear();
+      navigate('/');
 
     } catch (error: any) {
       console.log('error', error);

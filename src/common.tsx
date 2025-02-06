@@ -109,6 +109,8 @@ export const ServerDownDialog = () => {
 
     const handleClose = () => {
         logout();
+        sessionStorage.clear();
+        localStorage.clear();
         navigate('/');
     };
 
