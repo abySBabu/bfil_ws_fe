@@ -146,6 +146,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         return land ? land.parameterName : code || "";
     };
 
+    const FarmerName = (code: any) => {
+        if (!code) return "";
+        const fmr = fmrOps.find(x => x.wsfarmerId == code);
+        return fmr ? `${fmr.wsfarmerName} ${fmr.relationalIdentifiers} ${fmr.identifierName} (${fmr.mobileNumber})` : code || "";
+    };
+
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
         const {
             target: { value },
@@ -679,11 +685,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
-                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
+                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === CRP && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
-                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',')); setrmk(''); setprogM(true); }}>
+                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); }}>
                                                         <PlayArrow />
                                                     </IconButton>
                                                 ) : null}
@@ -955,7 +961,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Name")}:</b> {bList}</Grid>
+                    <Grid item xs={12}>{actObj.workActivity.farmerId.split(',').map(x => FarmerName(x)).join(', ')}</Grid>
                 </>}
 
                 <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_History_Header")}</Divider></Grid>
