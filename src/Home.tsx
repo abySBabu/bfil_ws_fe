@@ -248,9 +248,11 @@ export const Home: React.FC = () => {
     navigate('/profile');
   }
 
-  const helpUs = async () => {
-    navigate('/helpUs');
-  }
+  const openHelpUs = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();  
+    setavatarAnchor(null);
+    window.open("/bfilreactdev/helpUs", "_blank", "noopener,noreferrer");
+  };
 
   React.useEffect(() => {
     if (!localStorage.getItem('isLoggedIn')) return;
@@ -626,7 +628,7 @@ export const Home: React.FC = () => {
       </Toolbar>
       <Divider/>
       <Box sx={{ padding: '8px 16px' }}>
-      <Link href="#" underline="always"  onClick={helpUs}
+      <Link href="#" underline="always"  onClick={openHelpUs}
       > {'Help Us'}</Link></Box>
       <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>

@@ -52,7 +52,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                                 <Route path="/report" element={<Report />} />
                             </Route>
                             <Route path="/profile" element={<PrivateRoute><MyProfile /></PrivateRoute>} />
-                            <Route path="/helpUs" element={<PrivateRoute><HelpUs /></PrivateRoute>} />
+                            <Route path="/helpUs" element={<HelpUs />} />
                             <Route path="/forgotpassword" element={<ForgotPass />} />
                             <Route path="*" element={<Navigate to="/" />} />
                         </Routes>
