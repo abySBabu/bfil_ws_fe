@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper, Box, List, ListItem, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, FormControlLabel, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card, Switch } from '@mui/material';
+import { Paper, Box, List, ListItem,Link, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, FormControlLabel, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card, Switch } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -27,7 +27,7 @@ import axios, { AxiosError } from 'axios';
 import { TokenRefresh } from './Services/loginService';
 import { useAuth } from './context/AuthContext';
 import { styled } from "@mui/system";
-
+import HelpUs from './HelpUs';
 interface SideItem {
   screenName: string;
 }
@@ -40,6 +40,7 @@ interface Section {
 
 export const Home: React.FC = () => {
   const { logout } = useAuth();
+  const [showHelpUs, setShowHelpUs] = useState(false);
   const location = useLocation();
   const [loadingResponse, setLoadingResponse] = React.useState(true);
   const [expiryDialog, setexpiryDialog] = useState(false);
@@ -618,35 +619,23 @@ export const Home: React.FC = () => {
           }
           labelPlacement="end"
         />
-        {/* <Box display="flex" alignItems="center">
-          <Typography>{language === "en" ? "English" : "ಕನ್ನಡ"}</Typography>
-          <Switch
-            checked={language === "ka"}
-            onChange={handleLanguageToggle}
-          />
-        </Box> */}
       </Toolbar>
-      {/* <Accordion sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
-        <AccordionSummary
-          expandIcon={<ArrowDropDownIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <Typography>{t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Text')}</Typography>
-        </AccordionSummary>
-        <Divider />
-        <AccordionDetails>
-          <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> {t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Submenu.English')}</MenuItem>
-          <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> {t('ss_Avatar_Icon_Link.Avatar_Menu.Language_Submenu.Kannada')}</MenuItem>
-        </AccordionDetails>
-        <Divider />
-      </Accordion> */}
-      {/* <MenuItem onClick={handleLanguageClick}>Language</MenuItem> */}
+      <Divider/>
+      <Box sx={{ padding: '8px 16px' }}>
+      <Link href="#" underline="always"  onClick={(e) => {
+          e.preventDefault();
+          setShowHelpUs(true);
+        }}
+      > {'Help Us'}</Link></Box>
       <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
+          <Dialog open={showHelpUs} maxWidth={'xs'}>
+      <DialogContent sx={{ mt: 2 }}>
+      <HelpUs />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={ ()=>setShowHelpUs(false)}>Close</Button>
+      </DialogActions>
+    </Dialog>
     </Menu>
-    {/* <Menu anchorEl={languageAnchor} open={Boolean(languageAnchor)} onClose={() => setLanguageAnchor(null)}>
-                <MenuItem onClick={() => handleLanguageChange('en')}><ListItemIcon>{i18n.language === 'en' && <Check />}</ListItemIcon> English</MenuItem>
-                <MenuItem onClick={() => handleLanguageChange('ka')}><ListItemIcon>{i18n.language === 'ka' && <Check />}</ListItemIcon> Kannada</MenuItem>
-        </Menu> */}
   </>)
 }
