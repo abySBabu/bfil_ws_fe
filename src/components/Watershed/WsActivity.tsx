@@ -122,6 +122,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const [next, setnext] = React.useState('');
     const [prev, setprev] = React.useState('');
     const [vList, setvList] = React.useState<any[]>([]);
+    const [bList, setbList] = React.useState<any[]>([]);
     const [imgM, setimgM] = React.useState('');
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
@@ -143,6 +144,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         if (!code) return "";
         const land = landOps.find(x => x.parameterId == code);
         return land ? land.parameterName : code || "";
+    };
+
+    const FarmerName = (code: any) => {
+        if (!code) return "";
+        const fmr = fmrOps.find(x => x.wsfarmerId == code);
+        return fmr ? `${fmr.wsfarmerName} ${fmr.relationalIdentifiers} ${fmr.identifierName} (${fmr.mobileNumber})` : code || "";
     };
 
     const handleChange = (event: SelectChangeEvent<typeof vList>) => {
@@ -210,8 +217,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         });
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
 
-    const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
-    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.farmerId || !actObj.workActivity.total
+    const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
+    const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
     const addCheck = actObj.workActivity.activityCode === 13 ? eventCheck
@@ -401,10 +408,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await addAct({
                 ...actObj.workActivity,
-                village: vList,
+                village: vList || [actObj.workActivity.habitationsCovered],
+                farmerId: bList?.join(',') || '',
                 createdUser: localStorage.getItem("userName"),
                 updatedUser: '',
-                roleId: localStorage.getItem("userRoleId")
+                roleId: parseInt(localStorage.getItem("userRoleId") as string)
             })
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
@@ -430,6 +438,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             const resp1 = await editAct({
                 ...actObj.workActivity,
                 village: vList || [actObj.workActivity.habitationsCovered],
+                farmerId: bList?.join(',') || '',
                 remarks: rmk,
                 updatedUser: localStorage.getItem("userName")
             }, id)
@@ -577,6 +586,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                         setactObj(actDef);
                                         setfmrObj(fmrDef);
                                         setvList([]);
+                                        setbList([]);
                                         setvilOps2([]);
                                         setaddM(true);
                                     }}
@@ -675,11 +685,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
-                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
+                                                {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === CRP && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
                                                     || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) ? (
-                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',') || []); setrmk(''); setprogM(true); }}>
+                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); }}>
                                                         <PlayArrow />
                                                     </IconButton>
                                                 ) : null}
@@ -847,17 +857,32 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><TextField type='number' inputProps={{ min: 0 }} label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Community")} value={actObj.workActivity.community} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, community: parseInt(e.target.value) } })} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} /></Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12} sm={6}><TextField required select label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Name")} value={actObj.workActivity.farmerId} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, farmerId: e.target.value } })}>
-                        {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>
-                            <Box display="flex" gap={1} alignItems="center">
-                                <span>{o.wsfarmerName},</span>
-                                <span style={{ fontWeight: 300 }}>{o.relationalIdentifiers}</span>
-                                <span>{o.identifierName}</span>
-                            </Box>
-                        </MenuItem>))}
-                    </TextField></Grid>
-                    <Grid item xs={12} sm={3}><TextField required disabled label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Mobile_Number")} value={fmrObj.mobileNumber} /></Grid>
-                    {/* <Grid item xs={12} sm={6}><TextField required disabled label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Relation")} value={`${fmrObj.relationalIdentifiers} ${fmrObj.identifierName}`} /></Grid> */}
+                    <Grid item xs={12}><FormControl fullWidth>
+                        <Select multiple value={bList} onChange={(e) => setbList(e.target.value as any[])}
+                            renderValue={(selected) =>
+                                (selected as string[])
+                                    .map((id) => {
+                                        const selectedItem = fmrOps.find((o) => o.wsfarmerId === id);
+                                        return selectedItem
+                                            ? `${selectedItem.wsfarmerName} ${selectedItem.relationalIdentifiers} ${selectedItem.identifierName} (${selectedItem.mobileNumber})`
+                                            : null;
+                                    })
+                                    .filter(Boolean)
+                                    .join(", ")
+                            }
+                            sx={{ height: '48px' }}
+                        >
+                            {fmrOps?.map((o, i) => (<MenuItem key={i} value={o.wsfarmerId}>
+                                <Checkbox checked={bList.includes(o.wsfarmerId)} />
+                                <Box display="flex" gap={1} alignItems="center">
+                                    <span>{o.wsfarmerName}</span>
+                                    <span>{o.relationalIdentifiers}</span>
+                                    <span>{o.identifierName}</span>
+                                    <span>({o.mobileNumber})</span>
+                                </Box>
+                            </MenuItem>))}
+                        </Select>
+                    </FormControl></Grid>
                 </>}
             </Grid></DialogContent>
 
@@ -936,9 +961,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Name")}:</b> {fmrObj.wsfarmerName}, {fmrObj.relationalIdentifiers} {fmrObj.identifierName}</Grid>
-                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Mobile_Number")}:</b> {fmrObj.mobileNumber}</Grid>
-                    {/* <Grid item xs={12} sm={3}><b>{fmrObj.relationalIdentifiers}</b> {fmrObj.identifierName}</Grid> */}
+                    <Grid item xs={12}>{actObj.workActivity.farmerId.split(',').map(x => FarmerName(x)).join(', ')}</Grid>
                 </>}
 
                 <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_History_Header")}</Divider></Grid>
