@@ -7,7 +7,8 @@
     },
     "p_Home": {
         "Pragat_Watershed_Header": "Bharat Pragat Watershed",
-        "Pragat_Watershed_Footer": "Copyright - 2024. Bharat Pragat Watershed, All Rights Reserved.",
+        "Pragat_Watershed_Footer1": "Copyright ",
+        "Pragat_Watershed_Footer2": " 2025. Bharat Pragat Watershed, All Rights Reserved.",
         "SM_BE_Dashboard_Link": "Dashboard",
         "SM_BE_User_Management_Link": "User Management",
         "SM_BE_Role_Management_Link": "Role Management",

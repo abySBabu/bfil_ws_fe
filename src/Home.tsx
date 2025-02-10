@@ -584,7 +584,7 @@ export const Home: React.FC = () => {
           </Tooltip>
 
           <Typography variant='body2' sx={{ color: sd('--page-foot-txtcolor') }}>
-            {t("p_Home.Pragat_Watershed_Footer")}
+             {t("p_Home.Pragat_Watershed_Footer1")}&#169;{t("p_Home.Pragat_Watershed_Footer2")}
           </Typography>
         </Box>
       </Box>}
