@@ -4,7 +4,7 @@ const HelpUs: React.FC = () => {
   const [htmlContent, setHtmlContent] = useState<string>("");
 
   useEffect(() => {
-    fetch(`${window.location.origin}/bfilreactdev/helpus.html`)
+    fetch(`${window.location.origin}/bfilreactdev/Pragat_Watershed_Documentation.htm`)
     .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to load HelpUs page");

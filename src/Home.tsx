@@ -248,6 +248,10 @@ export const Home: React.FC = () => {
     navigate('/profile');
   }
 
+  const helpUs = async () => {
+    navigate('/helpUs');
+  }
+
   React.useEffect(() => {
     if (!localStorage.getItem('isLoggedIn')) return;
     const fetchLoc = async () => {
@@ -622,20 +626,9 @@ export const Home: React.FC = () => {
       </Toolbar>
       <Divider/>
       <Box sx={{ padding: '8px 16px' }}>
-      <Link href="#" underline="always"  onClick={(e) => {
-          e.preventDefault();
-          setShowHelpUs(true);
-        }}
+      <Link href="#" underline="always"  onClick={helpUs}
       > {'Help Us'}</Link></Box>
       <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
-          <Dialog open={showHelpUs} maxWidth={'xs'}>
-      <DialogContent sx={{ mt: 2 }}>
-      <HelpUs />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={ ()=>setShowHelpUs(false)}>Close</Button>
-      </DialogActions>
-    </Dialog>
     </Menu>
   </>)
 }
