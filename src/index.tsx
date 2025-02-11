@@ -20,7 +20,6 @@ import { Dashboard } from './components/Dashboard/Dashboard';
 import UserList from './components/UserPage/UserList';
 import RoleList from './components/RolePage/RoleList';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import HelpUs from './HelpUs';
 
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -52,7 +51,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                                 <Route path="/report" element={<Report />} />
                             </Route>
                             <Route path="/profile" element={<PrivateRoute><MyProfile /></PrivateRoute>} />
-                            <Route path="/helpUs" element={<HelpUs />} />
                             <Route path="/forgotpassword" element={<ForgotPass />} />
                             <Route path="*" element={<Navigate to="/" />} />
                         </Routes>
