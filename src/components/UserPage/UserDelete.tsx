@@ -83,9 +83,14 @@ export default function UserDelete(props: userTypeProps) {
             <Dialog open={modalShow} maxWidth={'xs'}>
                 <DialogTitle>{t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Delete_User_Label")}</DialogTitle>
                 {allowDelete ?
-                    <DialogContent sx={{ mt: 2 }}>
-                        This user cannot be deleted since one or more activities are assigned to them
-                    </DialogContent>
+                    <>
+                        <DialogContent sx={{ mt: 2 }}>
+                            This user cannot be deleted since one or more activities are assigned to them
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} disabled={loading}> {t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_User_Popup.Cancel_Button")}</Button>
+                        </DialogActions>
+                    </>
                     :
                     <>
                         <DialogContent sx={{ mt: 2 }}>
