@@ -1,8 +1,0 @@
-{
-    "button":{
-        "bradius":{
-            "rounded": {"$value":"16px"},
-            "pill": {"$value":"24px"}
-        }
-    }
-}

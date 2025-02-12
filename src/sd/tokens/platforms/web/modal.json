@@ -1,8 +1,0 @@
-{
-    "modal":{
-        "bradius":{"$value":"15px"},
-        "padding":{"$value":"8px"},
-        "zindex":{"$value":"1000"},
-        "backdrop":{"$value":"blur(16px)"}
-    }
-}

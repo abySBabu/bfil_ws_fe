@@ -1,9 +1,0 @@
-{
-    "alert":{
-        "txtcolor":{"$value":"#000"},
-        "bgcolor":{"$value":"#fcf2e7"},
-        "border":{"$value":"1px solid #000"},
-        "bradius":{"$value":"15px"},
-        "zindex":{"$value":"1500"}
-    }
-}
