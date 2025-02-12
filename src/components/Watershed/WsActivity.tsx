@@ -961,7 +961,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
-                    <Grid item xs={12}>{actObj.workActivity.farmerId.split(',').map((f, i) => (<React.Fragment key={i}>{i + 1}. {FarmerName(f)} <br /></React.Fragment>))}</Grid>
+                    <Grid item xs={12}>{
+                        actObj.workActivity.farmerId.length > 0 ?
+                            actObj.workActivity.farmerId.split(',').map((f, i) => (<React.Fragment key={i}>{i + 1}. {FarmerName(f)} <br /></React.Fragment>))
+                            :
+                            'No beneficiary'
+                    }</Grid>
                 </>}
 
                 <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_History_Header")}</Divider></Grid>
