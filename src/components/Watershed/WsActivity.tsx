@@ -411,7 +411,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 village: vList || [actObj.workActivity.habitationsCovered],
                 farmerId: bList?.join(',') || '',
                 createdUser: localStorage.getItem("userName"),
-                updatedUser: '',
+                updatedUser: localStorage.getItem("userName"),
                 roleId: parseInt(localStorage.getItem("userRoleId") as string)
             })
             if (resp1.status === 'success') {
