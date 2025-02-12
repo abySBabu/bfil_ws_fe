@@ -465,12 +465,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                const nObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
-                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1}`);
+                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1.replace(/_/g, " ")}`);
                     setactCount(c => c - 1);
                 }
                 else {
@@ -497,12 +497,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList, activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
                     setalertClr(true);
-                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1}`);
+                    setalert(`Updated ${actObj.workActivity.activityName} activity status to ${resp1.replace(/_/g, " ")}`);
                     setactCount(c => c - 1);
                 }
                 else {
