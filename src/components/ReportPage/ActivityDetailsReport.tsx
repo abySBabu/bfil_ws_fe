@@ -53,7 +53,7 @@ const ActivityDetailsReport = () => {
               const resp3a = await ListSupply();
               const resp3b = await ListDemand();
               if (resp3a && resp3b) {
-                  const combinedOptions = [...resp3a.data, ...resp3b.data].filter(
+                  const combinedOptions = [{ activityId: 0, activityName: 'All' },...resp3a.data, ...resp3b.data].filter(
                       option => option.activityName !== "Members Capacitated"
                   );
                   setActivityOptions(combinedOptions);
@@ -83,11 +83,12 @@ useEffect(() => {
         if (userId !== null) {uId = parseInt(userId);}
         if (selectedYear && uId !== undefined && actId !== undefined)
         {const resp1 = await activityReport(selectedYear,uId,actId); 
-        setData(resp1[actId]); }
+            setData(resp1[actId]); 
+                }
       } 
     catch (error) {console.error('Error:', error);}
   };
-  if (selectedYear && actId) {
+  if (selectedYear && actId!== undefined) {
     fetchData();
   }
 }, [selectedYear,selectedActivity,actId]);
@@ -136,7 +137,7 @@ useEffect(() => {
   
       return {
         "S.No": index + 1,
-        "Activity Location": `Survey No: ${activity['Survey No']}, Village: ${VillageName(activity.Village)}, Taluk: ${TalukName(activity.Taluk)}, District: ${DistrictName(activity.District)}, State: ${StateName(activity.State)}`,
+        "Activity Location": `Survey No: ${activity['Survey No']}, Village: ${activity.Village?.split(',').map(id => VillageName(id)).join(', ')}, Taluk: ${TalukName(activity.Taluk)}, District: ${DistrictName(activity.District)}, State: ${StateName(activity.State)}`,
         "Latitude": latitude,
         "Longitude": longitude,
         "Altitude": altitude,
@@ -245,7 +246,7 @@ Amount Spent
                 <TableRow key={index}>
                     <TableCell sx={{textAlign: 'center',border: '1px solid #ccc'}}>
                         <p>Survey No: {`${activity['Survey No']}, `}</p>
-                        <p>Village Name: {`${VillageName(activity.Village)}, `}</p>
+                        <p>Village Name: {`${activity.Village?.split(',').map(id => VillageName(id)).join(', ')}, `}</p>
                         <p>Taluk: {`${TalukName(activity.Taluk)}, `}</p>
                         <p>District: {`${DistrictName(activity.District)}, `}</p>
                         <p>State :{`${StateName(activity.State)} `}</p>

@@ -39,11 +39,8 @@ const MapReport = () => {
                 setActivityStatus([allOption, ...response2]);
 
                 const resp3a = await ListSupply();
-                const resp3b = await ListDemand();
-                if (resp3a && resp3b) {
-                    const combinedOptions = [{ activityId: 0, activityName: 'All' }, ...resp3a.data, ...resp3b.data].filter(
-                        option => option.activityName !== "Members Capacitated"
-                    );
+                if (resp3a) {
+                    const combinedOptions = [{ activityId: 0, activityName: 'All' }, ...resp3a.data];
                     setActivityOptions(combinedOptions);
                 }
 
