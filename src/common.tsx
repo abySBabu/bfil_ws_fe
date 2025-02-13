@@ -13,14 +13,14 @@ export const setTimeoutsecs = 3000;
 export const CRP = 'Community Resource Person';
 export const setAutoHideDurationTimeoutsecs = 3000;
 //uat
-// export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "1" }
+export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "1" }
 //Server
 // export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
 
 // export const serverPath = { authserver: "http://localhost:8086/auth/", bfil: "http://localhost:8080/bfil/", workFlow: "http://localhost:8083/wf/", companyID: "137"  }
 //dev
-export const serverPath = { authserver: "https://pragatdevauth.abynet.xyz/auth/", bfil: "https://pragatdevbe.abynet.xyz/bfil/", workFlow: "https://pragatdevworkflow.abynet.xyz/wf/", companyID: "1" }
+// export const serverPath = { authserver: "https://pragatdevauth.abynet.xyz/auth/", bfil: "https://pragatdevbe.abynet.xyz/bfil/", workFlow: "https://pragatdevworkflow.abynet.xyz/wf/", companyID: "1" }
 export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {
     const permList = localStorage.getItem('permList');
