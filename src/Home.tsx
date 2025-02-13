@@ -628,7 +628,7 @@ export const Home: React.FC = () => {
       <Divider/>
       <Box sx={{ padding: '8px 16px' }}>
       <Link href="#" underline="always"  onClick={openHelpUs}
-      > {'Help Us'}</Link></Box>
+      > {'User Guide'}</Link></Box>
       <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>
   </>)
