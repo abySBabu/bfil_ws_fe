@@ -33,7 +33,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <AuthProvider>
-            <Router basename="/bfilreactdev">
+            <Router basename="/uat">
                 <ThemeProvider theme={bfilTheme}>
                     <Box sx={{ m: '-8px' }}>
                         <Routes>
