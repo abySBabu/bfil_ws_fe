@@ -13,8 +13,10 @@ export const setTimeoutsecs = 3000;
 export const CRP = 'Community Resource Person';
 export const Super_Admin = 'Super Admin BFIL';
 export const setAutoHideDurationTimeoutsecs = 3000;
+//Production
+export const serverPath = { authserver: "https://pragatauth.abynet.xyz/auth/", bfil: "https://pragatwatershed.abynet.xyz/bfil/", workFlow: "https://pragatwflow.abynet.xyz/wf/", companyID: "1" }
 //uat
-export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "10" }
+//export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "10" }
 //Server
 // export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
