@@ -23,7 +23,7 @@ import { Password } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios, { AxiosError } from 'axios';
-
+import { Super_Admin } from '../../common';
 
 type Order = 'asc' | 'desc';
 export default function UserList() {
@@ -331,7 +331,7 @@ export default function UserList() {
                                                 <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Delete_Tooltip.Delete_Tooltip_Text")}>
                                                     <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setShowDeleteModal(true) }}><DeleteIcon /></IconButton>
                                                 </Tooltip>}
-                                            {userRole === 'Chief Manager Head Office' && row.userBlockedFlag === 'N' &&
+                                            {userRole === Super_Admin && row.userBlockedFlag === 'N' &&
                                                 <Tooltip title={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_Tooltip_Text")}>
                                                     <IconButton onClick={(e) => { e.stopPropagation(); setSelectedRow(row); setshowPassModal(true) }}><Password /></IconButton>
                                                 </Tooltip>}
