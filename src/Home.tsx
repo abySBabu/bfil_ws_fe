@@ -612,17 +612,8 @@ export const Home: React.FC = () => {
       <Divider />
       <Toolbar>
         <FormControlLabel
-          control={
-            <MaterialUISwitch
-              checked={language === "ka"}
-              onChange={handleLanguageToggle}
-              size='small'
-            />
-          }
-          label={
-            <Typography>
-              {language === "en" ? "English" : "ಕನ್ನಡ"}            </Typography>
-          }
+          control={<MaterialUISwitch checked={language === "ka"} onChange={handleLanguageToggle} size='small' />}
+          label={<Typography>{language === "en" ? "English" : "ಕನ್ನಡ"}</Typography>}
           labelPlacement="end"
         />
       </Toolbar>
