@@ -51,7 +51,7 @@ export async function logout() {
     try {
         const response = await axios(configuration); if (response) {
             localStorage.clear();
-            localStorage.clear();
+            sessionStorage.clear();
             return response.data;
         }
     }

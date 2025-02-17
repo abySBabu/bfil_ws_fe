@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Toolbar, Paper, Button, IconButton, TextField } from '@mui/material';
 import { ArrowBack, Password } from '@mui/icons-material';
 import { sd } from '../../common';
 import { useTranslation } from 'react-i18next';
-import { PassReset } from 'src/Services/loginService';
+import { PassReset, logout } from 'src/Services/loginService';
 import { SnackAlert } from '../../common';
 
 export const MyProfile: React.FC = () => {
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState(false);
     const [passObj, setpassObj] = React.useState('');
@@ -29,6 +31,10 @@ export const MyProfile: React.FC = () => {
             if (resp1) {
                 setalertClr(true);
                 setalert("Password changed successfully");
+                const resp2 = await logout();
+                if (resp2) {
+                    navigate('/');
+                }
             }
         }
         catch (error: any) {
