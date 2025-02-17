@@ -49,7 +49,13 @@ export const MyProfile: React.FC = () => {
         <Paper elevation={8} sx={{ height: '90%', mx: '8px', overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: '12px' }}>{
             passEdit ? <>
                 <TextField type='password' required label={t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.New_Password')} value={passObj} onChange={(e) => setpassObj(e.target.value)} sx={{ width: '30%' }}
-                    helperText={passObj.length > 0 && passObj?.length < 8 && 'Password must be at least 8 characters long'} />
+                    helperText={
+                        passObj.length > 0 &&
+                        (!/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(passObj)
+                            ? 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character'
+                            : '')
+                    }
+                />
                 <TextField type='password' required label='Confirm Password' value={conPass} onChange={(e) => setconPass(e.target.value)} sx={{ width: '30%' }}
                     helperText={conPass.length > 0 && conPass !== passObj && "Passwords do not match"} disabled={passObj.length < 4} />
                 <Box>
