@@ -15,7 +15,8 @@ export const MyProfile: React.FC = () => {
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
 
-    const passCheck = loading || passObj?.length < 8 || conPass?.length < 8 || passObj !== conPass
+    const passwordValid = /^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(passObj);
+    const passCheck = loading || !passwordValid || passObj !== conPass;
 
     const ResetPass = async () => {
         setLoading(true);
