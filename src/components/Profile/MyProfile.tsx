@@ -82,7 +82,7 @@ export const MyProfile: React.FC = () => {
 
         <footer style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '4%' }}>
             <Typography variant='body2' sx={{ color: '#fff' }}>
-                {t("p_Home.Pragat_Watershed_Footer")}
+                {t("p_Home.Pragat_Watershed_Footer2")}
             </Typography>
         </footer>
     </Box>)
