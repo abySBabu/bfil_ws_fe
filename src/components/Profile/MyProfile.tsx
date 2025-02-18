@@ -67,20 +67,19 @@ export const MyProfile: React.FC = () => {
                     }
                 />
                 <TextField type='password' required label='Confirm Password' value={conPass} onChange={(e) => setconPass(e.target.value)} sx={{ width: '30%' }}
-                    helperText={conPass.length > 0 && conPass !== passObj && "Passwords do not match"} disabled={passObj.length < 4} />
+                    helperText={conPass.length > 0 && conPass !== passObj && "Passwords do not match"} disabled={!passwordValid} />
                 <Box>
                     <Button sx={{ mr: '4px' }} onClick={() => setpassEdit(false)} disabled={loading}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Cancel')}</Button>
                     <Button sx={{ ml: '4px' }} onClick={ResetPass} disabled={passCheck}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.Update_Link_Text')}</Button>
                 </Box>
+            </> : <>
+                <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Name')}: </b>{localStorage.getItem("userName")}</Typography>
+                <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Mobile_Number')}: </b>{localStorage.getItem("userNumber")}</Typography>
+                <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Role')}: </b>{localStorage.getItem("userRole")}</Typography>
+                <Box>
+                    <Button startIcon={<Password fontSize='inherit' />} onClick={() => { setpassObj(''); setconPass(''); setpassEdit(true); }}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ResetPassword_Link_Text')}</Button>
+                </Box>
             </>
-                : <>
-                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Name')}: </b>{localStorage.getItem("userName")}</Typography>
-                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Mobile_Number')}: </b>{localStorage.getItem("userNumber")}</Typography>
-                    <Typography variant='h6'><b>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.Role')}: </b>{localStorage.getItem("userRole")}</Typography>
-                    <Box>
-                        <Button startIcon={<Password fontSize='inherit' />} onClick={() => { setpassObj(''); setconPass(''); setpassEdit(true); }}>{t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ResetPassword_Link_Text')}</Button>
-                    </Box>
-                </>
         }</Paper>
 
         <footer style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '4%' }}>

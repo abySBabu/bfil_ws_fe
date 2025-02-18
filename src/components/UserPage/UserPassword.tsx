@@ -4,7 +4,7 @@ import {
     DialogContent, DialogTitle, CircularProgress
 } from '@mui/material';
 import { PassReset } from 'src/Services/loginService';
-import { allUserType, allRoles, selectOptions } from "./UserManagementType";
+import { allUserType } from "./UserManagementType";
 import { setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +23,8 @@ export default function UserPassword(props: userTypeProps) {
     const [newPass, setnewPass] = useState('');
     const [conPass, setconPass] = useState('');
 
-    const addCheck = loading || newPass?.length < 4 || conPass?.length < 4 || newPass !== conPass
+    const passwordValid = /^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(newPass);
+    const addCheck = loading || !passwordValid || newPass !== conPass
 
     const EditPass = async () => {
         setLoading(true);
@@ -66,13 +67,18 @@ export default function UserPassword(props: userTypeProps) {
                     autoFocus
                     value={newPass}
                     onChange={(e) => setnewPass(e.target.value)}
-                    helperText={newPass.length > 0 && newPass.length < 4 && "Password must be at least 4 characters long"}
+                    helperText={
+                        newPass.length > 0 &&
+                        (!/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(newPass)
+                            ? 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character'
+                            : '')
+                    }
                 /></Grid>
                 <Grid item xs={12}><TextField
                     type='password'
                     required
                     label={t("p_User_Management.ss_UserList.Action.Action_Tooltip.Password_Tooltip.Password_User_Popup.Confirm_Password")}
-                    disabled={newPass.length < 4}
+                    disabled={!passwordValid}
                     value={conPass}
                     onChange={(e) => setconPass(e.target.value)}
                     helperText={conPass.length > 0 && conPass !== newPass && "Passwords do not match"}
