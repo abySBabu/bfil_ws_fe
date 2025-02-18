@@ -4,11 +4,13 @@ import { Box, Typography, Toolbar, Paper, Button, IconButton, TextField } from '
 import { ArrowBack, Password } from '@mui/icons-material';
 import { sd } from '../../common';
 import { useTranslation } from 'react-i18next';
-import { PassReset, logout } from 'src/Services/loginService';
+import { PassReset, logout as logoutService } from 'src/Services/loginService';
 import { SnackAlert } from '../../common';
+import { useAuth } from 'src/context/AuthContext';
 
 export const MyProfile: React.FC = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState(false);
     const [passObj, setpassObj] = React.useState('');
@@ -31,8 +33,9 @@ export const MyProfile: React.FC = () => {
             if (resp1) {
                 setalertClr(true);
                 setalert("Password changed successfully");
-                const resp2 = await logout();
+                const resp2 = await logoutService();
                 if (resp2) {
+                    logout();
                     navigate('/');
                 }
             }
