@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Toolbar, Paper, Button, IconButton, TextField } from '@mui/material';
 import { ArrowBack, Password } from '@mui/icons-material';
 import { sd } from '../../common';
 import { useTranslation } from 'react-i18next';
-import { PassReset } from 'src/Services/loginService';
+import { PassReset, logout } from 'src/Services/loginService';
 import { SnackAlert } from '../../common';
 
 export const MyProfile: React.FC = () => {
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState(false);
     const [passObj, setpassObj] = React.useState('');
@@ -15,7 +17,8 @@ export const MyProfile: React.FC = () => {
     const [alert, setalert] = React.useState('');
     const [alertClr, setalertClr] = React.useState(false);
 
-    const passCheck = loading || passObj?.length < 4 || conPass?.length < 4 || passObj !== conPass
+    const passwordValid = /^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(passObj);
+    const passCheck = loading || !passwordValid || passObj !== conPass;
 
     const ResetPass = async () => {
         setLoading(true);
@@ -28,6 +31,10 @@ export const MyProfile: React.FC = () => {
             if (resp1) {
                 setalertClr(true);
                 setalert("Password changed successfully");
+                const resp2 = await logout();
+                if (resp2) {
+                    navigate('/');
+                }
             }
         }
         catch (error: any) {
@@ -49,7 +56,13 @@ export const MyProfile: React.FC = () => {
         <Paper elevation={8} sx={{ height: '90%', mx: '8px', overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: '12px' }}>{
             passEdit ? <>
                 <TextField type='password' required label={t('ss_Avatar_Icon_Link.Avatar_Menu.p_MyProfile.ss_ResetPassword.New_Password')} value={passObj} onChange={(e) => setpassObj(e.target.value)} sx={{ width: '30%' }}
-                    helperText={passObj.length > 0 && passObj?.length < 4 && 'Password must be at least 4 characters long'} />
+                    helperText={
+                        passObj.length > 0 &&
+                        (!/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}.*$/.test(passObj)
+                            ? 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character'
+                            : '')
+                    }
+                />
                 <TextField type='password' required label='Confirm Password' value={conPass} onChange={(e) => setconPass(e.target.value)} sx={{ width: '30%' }}
                     helperText={conPass.length > 0 && conPass !== passObj && "Passwords do not match"} disabled={passObj.length < 4} />
                 <Box>

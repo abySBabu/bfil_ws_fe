@@ -251,7 +251,7 @@ export const Home: React.FC = () => {
   const openHelpUs = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     setavatarAnchor(null);
-    window.open("/bfilreactdev/guide", "_blank", "noopener,noreferrer");
+    window.open("/pragat/guide", "_blank", "noopener,noreferrer");
   };
 
   React.useEffect(() => {
