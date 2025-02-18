@@ -256,18 +256,13 @@ export const Dashboard: React.FC = () => {
                         </DialogTitle>
 
                         <DialogContent sx={{ gap: '8px', p: 1 }}>
-                            <Box sx={{ overflow: 'auto' }}>{
-                                Object.entries(barChartData[graphIndicator]).length > 0 ?
+                            <Box sx={{ overflow: 'auto' }}>{(Object.entries(barChartData[graphIndicator]).length > 0 && Object.entries(pieChartData[graphIndicator]).length > 0) ?
+                                <>
                                     <BarChart
                                         height={chartHeight}
                                         series={[{ data: Object.values(barChartData[graphIndicator]) }]}
                                         xAxis={[{ data: (Object.keys(barChartData[graphIndicator])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
                                     />
-                                    :
-                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
-                            }</Box>
-                            <Box sx={{ overflow: 'auto' }}>{
-                                Object.entries(pieChartData[graphIndicator]).length > 0 ?
                                     <PieChart
                                         height={chartHeight}
                                         series={[{
@@ -278,8 +273,9 @@ export const Dashboard: React.FC = () => {
                                             }))
                                         }]}
                                     />
-                                    :
-                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
+                                </>
+                                :
+                                <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data (Graph data is shown for past months, not current month)</Typography>
                             }</Box>
                         </DialogContent>
                     </Dialog>
@@ -287,4 +283,3 @@ export const Dashboard: React.FC = () => {
         }
     </>)
 }
-

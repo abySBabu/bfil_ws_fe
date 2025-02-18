@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Paper, Box, List, ListItem,Link, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, FormControlLabel, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card, Switch } from '@mui/material';
+import { Paper, Box, List, ListItem, Link, ListItemButton, ListItemText, Accordion, AccordionSummary, AccordionDetails, Typography, Button, Divider, FormControlLabel, ListItemIcon, Toolbar, Avatar, Menu, MenuItem, Badge, Dialog, DialogActions, DialogContent, Tooltip, AppBar, IconButton, Drawer, Card, Switch } from '@mui/material';
 import { sd, PerChk, setTimeoutsecs, setAutoHideDurationTimeoutsecs, ServerDownDialog } from './common';
 import { WsActivity } from './components/Watershed/WsActivity';
 import { WsMaster } from './components/Watershed/WsMaster';
@@ -21,6 +21,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuIcon from '@mui/icons-material/Menu';
+import { OpenInNew, Logout, AccountBox } from '@mui/icons-material';
 import DonerReport from './components/ReportPage/DonerReport';
 import Report from './components/ReportPage/Report';
 import axios, { AxiosError } from 'axios';
@@ -589,7 +590,7 @@ export const Home: React.FC = () => {
           </Tooltip>
 
           <Typography variant='body2' sx={{ color: sd('--page-foot-txtcolor') }}>
-             {t("p_Home.Pragat_Watershed_Footer1")}&#169;{t("p_Home.Pragat_Watershed_Footer2")}
+            {t("p_Home.Pragat_Watershed_Footer1")}&#169;{t("p_Home.Pragat_Watershed_Footer2")}
           </Typography>
         </Box>
       </Box>}
@@ -609,27 +610,18 @@ export const Home: React.FC = () => {
         <Typography variant='body2'>{uRole}</Typography>
       </Box>
       <Divider />
-      <MenuItem onClick={myProfile}>{t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
       <Toolbar>
         <FormControlLabel
-          control={
-            <MaterialUISwitch
-              checked={language === "ka"}
-              onChange={handleLanguageToggle}
-            />
-          }
-          label={
-            <Typography>
-              {language === "en" ? "English" : "ಕನ್ನಡ"}            </Typography>
-          }
+          control={<MaterialUISwitch checked={language === "ka"} onChange={handleLanguageToggle} size='small' />}
+          label={<Typography>{language === "en" ? "English" : "ಕನ್ನಡ"}</Typography>}
           labelPlacement="end"
         />
       </Toolbar>
-      <Divider/>
-      <Box sx={{ padding: '8px 16px' }}>
-      <Link href="#" underline="always"  onClick={openHelpUs}
-      > {'User Guide'}</Link></Box>
-      <MenuItem onClick={logOut}>{t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
+      <MenuItem onClick={myProfile}><AccountBox /> {t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
+      <MenuItem component={Link} href="#" onClick={openHelpUs} sx={{ color: '#3ea6e5' }}>
+        <OpenInNew fontSize='small' /> User Guide
+      </MenuItem>
+      <MenuItem onClick={logOut}><Logout fontSize='small' /> {t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>
   </>)
 }
