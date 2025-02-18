@@ -254,6 +254,12 @@ export const Home: React.FC = () => {
     window.open("/bfilreactdev/guide", "_blank", "noopener,noreferrer");
   };
 
+  const openFeedback = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setavatarAnchor(null);
+    window.open("https://forms.gle/ppr1kDv3ZprNMh64A", "_blank", "noopener,noreferrer");
+  };
+
   React.useEffect(() => {
     if (!localStorage.getItem('isLoggedIn')) return;
     const fetchLoc = async () => {
@@ -617,9 +623,12 @@ export const Home: React.FC = () => {
           labelPlacement="end"
         />
       </Toolbar>
-      <MenuItem onClick={myProfile}><AccountBox /> {t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
+      <MenuItem onClick={myProfile}><AccountBox fontSize='small' /> {t('ss_Avatar_Icon_Link.Avatar_Menu.My_Profile_Text')}</MenuItem>
       <MenuItem component={Link} href="#" onClick={openHelpUs} sx={{ color: '#3ea6e5' }}>
         <OpenInNew fontSize='small' /> User Guide
+      </MenuItem>
+      <MenuItem component={Link} href="#" onClick={openFeedback} sx={{ color: '#3ea6e5' }}>
+        <OpenInNew fontSize='small' /> Report an issue
       </MenuItem>
       <MenuItem onClick={logOut}><Logout fontSize='small' /> {t('ss_Avatar_Icon_Link.Avatar_Menu.Logout_Text')}</MenuItem>
     </Menu>
