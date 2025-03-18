@@ -497,7 +497,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
-                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: 'UnSynced_Images', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                //const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: 'UnSynced_Images', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
