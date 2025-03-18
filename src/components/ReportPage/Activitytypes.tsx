@@ -1,21 +1,31 @@
 
 export interface Activity {
-  activityWorkflowStatus: string;
+  ActivityWorkflowStatus: string;
   "Activity-Date Time": string;
   ActivityName: string;
   ActivityCode: number;
+  ActivityDescription:string,
   Village: string;
-  "Survey No": string;
+  Total:string,
+  WaterConserved:string,
+  SurveyNo: string;
   Grampanchayat: number;
   State: number;
-  "Area Treated": number;
-  Watershed: number;
+  AreaTreated: string;
+  LandType:number,
+  BfilAmount:number,
+  OtherGovScheme:number,
+  Mgnrega:number,
+  Other:number,
+  Community:number,
+  Ibl:number,
+  WatershedId: number;
   Taluk: number;
-  "Amount Spend": number;
-  Farmer: number;
+  AmountSpend: number;
+  FarmerId: string;
   District: number;
   InterventionType: number;
-  Location: string; 
+  GeoCoordinates: string; 
 }
 
 export interface ActivityData {
