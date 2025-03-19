@@ -2,6 +2,7 @@
 export interface Activity {
   ActivityWorkflowStatus: string;
   "Activity-Date Time": string;
+  CreatedTime:string,
   ActivityName: string;
   ActivityCode: number;
   ActivityDescription:string,
@@ -26,6 +27,15 @@ export interface Activity {
   District: number;
   InterventionType: number;
   GeoCoordinates: string; 
+  history:{
+    ActivityWorkflowStatus: string;
+    UpdatedTime:string;
+    ActivityImage: string;
+    CreatedTime: string;
+    Remarks: string;
+    CreatedUser: string;
+    Status: string;
+  }[];
 }
 
 export interface ActivityData {

@@ -5,7 +5,7 @@ import { Activity, fmrDef } from './Activitytypes';
 import { listFinYear } from 'src/Services/workplanService';
 import { ListDemand, ListInter, ListLand, ListSupply } from 'src/Services/dashboardService';
 import { listState, listVillage } from 'src/Services/locationService';
-import { DistrictName, PanName, StateName, TalukName, VillageName, WsName } from 'src/LocName';
+import { DateTime, DistrictName, PanName, StateName, TalukName, VillageName, WsName } from 'src/LocName';
 import { listFarmer } from 'src/Services/farmerService';
 import { CheckBox } from '@mui/icons-material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -28,6 +28,7 @@ const ActivityDetailsReport = () => {
   const [intOps, setintOps] = React.useState<any[]>([]);
   const [showPhysical, setShowPhysical] = useState(false);
   const [showFinancial, setShowFinancial] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [isInitialFetchDone, setIsInitialFetchDone] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Activity Report' });
@@ -174,7 +175,13 @@ const ActivityDetailsReport = () => {
 
       const farmerDetails = getFarmerDetails(activity.FarmerId)
         .map(farmer => `Name: ${farmer.name}, Relation: ${farmer.relation}, Mobile: ${farmer.mobile}`)
-        .join(" | ");
+        .join("\n");
+
+      const historyDetails = activity.history && activity.history.length > 0
+        ? activity.history.map(historydata =>
+          `Status: ${historydata.ActivityWorkflowStatus ? historydata.ActivityWorkflowStatus.replace('_', ' ') : 'N/A'}\nRemarks: ${historydata.Remarks}\nCreated User: ${historydata.CreatedUser}\nCreated Date & Time: ${DateTime(historydata.CreatedTime)}`
+        ).join("\n\n")
+        : "N/A";
 
       return {
         "S.No": index + 1,
@@ -189,6 +196,8 @@ const ActivityDetailsReport = () => {
         "Altitude": altitude,
         "Accuracy": accuracy,
         "Beneficiary": farmerDetails,
+        "Created Date & Time": DateTime(activity.CreatedTime) || 'N/A',
+        ...(showHistory && { "History": historyDetails }),
         ...(showPhysical && {
           "Total": activity.Total || 'N/A',
           "Area Treated": activity.AreaTreated || 'N/A',
@@ -206,8 +215,15 @@ const ActivityDetailsReport = () => {
       };
     });
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
-    const columnWidths = [{ wch: 5 }, { wch: 60 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 50 },];
-    worksheet["!cols"] = columnWidths;
+    const numCols = Object.keys(formattedData[0]).length;
+    worksheet["!cols"] = Array(numCols).fill({ wch: 20 });
+
+    // Enable text wrapping for cells with line breaks
+    Object.keys(worksheet).forEach((cell) => {
+      if (worksheet[cell] && worksheet[cell].v && typeof worksheet[cell].v === 'string' && worksheet[cell].v.includes("\n")) {
+        worksheet[cell].s = { alignment: { wrapText: true } };
+      }
+    });
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Activity Report");
     const fileName = `Activity_Report_${selectedYear || "Year"}.xlsx`;
@@ -229,7 +245,9 @@ const ActivityDetailsReport = () => {
 
   return (
     <div>
-      <h1>Activity Report</h1>
+      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+        Activity Report
+      </Typography>
       <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
         <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
           <InputLabel id="select-year-label">Select Year</InputLabel>
@@ -256,7 +274,6 @@ const ActivityDetailsReport = () => {
           <Checkbox
             checked={showPhysical}
             onChange={(e) => {
-              console.log("Checkbox state:", e.target.checked);
               setShowPhysical(e.target.checked);
             }}
           />{' '}
@@ -265,10 +282,16 @@ const ActivityDetailsReport = () => {
             checked={showFinancial}
             onChange={(e) => {
               setShowFinancial(e.target.checked);
-              console.log("Amount Spent Checkbox:", e.target.checked);
             }}
           />{' '}
           Financial Deatils
+          <Checkbox
+            checked={showHistory}
+            onChange={(e) => {
+              setShowHistory(e.target.checked);
+            }}
+          />{' '}
+          History
         </Box>
         <Box display="flex" sx={{ marginLeft: 'auto', marginRight: { md: '20px' }, flexDirection: { sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
           <FileDownloadIcon onClick={exportToExcel} sx={{ cursor: 'pointer', mr: { xs: 0, sm: 1 } }} />
@@ -281,6 +304,7 @@ const ActivityDetailsReport = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell sx={{ lineHeight: '1', maxWidth: '40px', border: '1px solid #ccc' }} rowSpan={2} align="center">Sl.No.</TableCell>
                 <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Intervention Type</TableCell>
                 <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Activity Type</TableCell>
                 <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Activity Name</TableCell>
@@ -291,6 +315,7 @@ const ActivityDetailsReport = () => {
                 </TableCell>
                 <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Activity Location Coordinates</TableCell>
                 <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Activity Beneficiary</TableCell>
+                <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>Created Date & Time</TableCell>
 
                 {showPhysical && (
                   <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} colSpan={4}>
@@ -300,6 +325,11 @@ const ActivityDetailsReport = () => {
                 {showFinancial && (
                   <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} colSpan={6}>
                     Financial Details
+                  </TableCell>
+                )}
+                {showHistory && (
+                  <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} rowSpan={2}>
+                    History
                   </TableCell>
                 )}
               </TableRow>
@@ -335,6 +365,9 @@ const ActivityDetailsReport = () => {
 
                 return (
                   <TableRow key={index}>
+                    <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                      {index + 1}
+                    </TableCell>
                     <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
                       {IntTypeName(activity.InterventionType) || 'N/A'}
                     </TableCell><TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
@@ -396,7 +429,9 @@ const ActivityDetailsReport = () => {
                           </div>
                         ))}
                     </TableCell>
-
+                    <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                      {DateTime(activity.CreatedTime) || 'N/A'}
+                    </TableCell>
                     {showPhysical && (<>
                       <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
                         {activity.Total || 'N/A'}
@@ -429,6 +464,19 @@ const ActivityDetailsReport = () => {
                       </TableCell>
                       <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
                         {activity.Community || 'N/A'}
+                      </TableCell>
+                    </>)}
+                    {showHistory && (<>
+                      <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                        {(activity.history ? activity.history.map((historydata, index) =>
+                          <div key={index}>
+                            <p>Status: {historydata.ActivityWorkflowStatus ? historydata.ActivityWorkflowStatus.replace('_', ' ') : 'N/A'}</p>
+                            <p>Remarks: {historydata.Remarks}</p>
+                            <p>Created User: {historydata.CreatedUser}</p>
+                            <p>Created Date & Time: {DateTime(historydata.CreatedTime)}</p>
+                            {index !== activity.history.length - 1 && <Divider sx={{ my: 1 }} />}
+                          </div>
+                        ) : "N/A")}
                       </TableCell>
                     </>)}
                   </TableRow>);
