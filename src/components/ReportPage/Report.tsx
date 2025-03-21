@@ -9,6 +9,8 @@ import WatershedReport from './WatershedReport';
 import DonerReport from './DonerReport';
 import ActivityDetailsReport from './ActivityDetailsReport';
 import MapReport from './MapReport';
+import PlannedReport from './PlannedReport';
+import OtherActivitiesReport from './OtherActivitiesReport';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,14 +47,14 @@ function a11yProps(index: number) {
 
 function Report() {
   const theme = useTheme();
-  const [value, setValue] = React.useState(0); 
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ bgcolor: 'background.paper', maxwidth: '100%', maxheight: '100%' }}>
+    <Box sx={{ bgcolor: 'background.paper', maxWidth: '100%', maxHeight: '100%' }}>
       <AppBar position="static">
         <Tabs
           // value={value >= 0 ? value : false} 
@@ -60,8 +62,10 @@ function Report() {
           onChange={handleChange}
           indicatorColor="primary"
           textColor="inherit"
-          variant="fullWidth"
-          aria-label="full width tabs example"
+          variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
+          aria-label="scrollable force tabs example"
           sx={{
             backgroundColor: '#bb4d53',
             color: 'white',
@@ -74,6 +78,8 @@ function Report() {
           <Tab label="Donor Report" {...a11yProps(1)} />
           <Tab label="Activity Report" {...a11yProps(2)} />
           <Tab label="Map Location" {...a11yProps(3)} />
+          <Tab label="Plan Report" {...a11yProps(4)} />
+          <Tab label="Non Watershed Report" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -86,7 +92,7 @@ function Report() {
           <DonerReport />
         </TabPanel>
       )}
-         {value === 2 && (
+      {value === 2 && (
         <TabPanel value={value} index={2} dir={theme.direction}>
           <ActivityDetailsReport />
         </TabPanel>
@@ -94,6 +100,16 @@ function Report() {
       {value === 3 && (
         <TabPanel value={value} index={3} dir={theme.direction}>
           <MapReport />
+        </TabPanel>
+      )}
+      {value === 4 && (
+        <TabPanel value={value} index={4} dir={theme.direction}>
+          <PlannedReport />
+        </TabPanel>
+      )}
+      {value === 5 && (
+        <TabPanel value={value} index={5} dir={theme.direction}>
+          <OtherActivitiesReport />
         </TabPanel>
       )}
     </Box>

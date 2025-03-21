@@ -54,13 +54,13 @@ const ActivityDetailsReport = () => {
   };
 
   let uId: any;
-  const handleYearChange = (event: SelectChangeEvent<string>) => { setSelectedYear(event.target.value); };
+  const handleYearChange = (event: SelectChangeEvent<string>) => { setSelectedYear(event.target.value); setSelectedActivity(''); setShowHistory(false); setShowFinancial(false); setShowPhysical(false) };
 
   const handleActivityChange = (event: SelectChangeEvent<string>) => {
     const selectedActivityName = event.target.value;
     setSelectedActivity(selectedActivityName);
     const selectedActivity = activityOptions.find(activity => activity.activityName === selectedActivityName);
-    if (selectedActivity) { setActId(selectedActivity.activityId); }
+    if (selectedActivity) { setActId(selectedActivity.activityId); setShowHistory(false); setShowFinancial(false); setShowPhysical(false) }
     else { setActId(undefined); }
   };
   useEffect(() => {
@@ -110,6 +110,7 @@ const ActivityDetailsReport = () => {
         if (selectedYear && uId !== undefined && actId !== undefined) {
           const resp1 = await activityReport(selectedYear, uId, actId);
           setData(resp1[actId]);
+          console.log("setdata", resp1[actId])
         }
       }
       catch (error) { console.error('Error:', error); }
@@ -245,7 +246,7 @@ const ActivityDetailsReport = () => {
 
   return (
     <div>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+      <Typography variant="h5" align='center' sx={{ mb: 2 }}>
         Activity Report
       </Typography>
       <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
@@ -260,7 +261,7 @@ const ActivityDetailsReport = () => {
             ))}
           </Select>
         </FormControl>
-        <FormControl sx={{ width: 230, marginBottom: '15px', mr: 3 }}>
+        <FormControl disabled={!selectedYear} sx={{ width: 230, marginBottom: '15px', mr: 3 }}>
           <InputLabel id="select-year-label">Select Activity</InputLabel>
           <Select labelId="select-year-label" value={selectedActivity} onChange={handleActivityChange} label="Select Activity">
             <MenuItem value="">Select Activity</MenuItem>
@@ -270,22 +271,22 @@ const ActivityDetailsReport = () => {
               </MenuItem>))}
           </Select>
         </FormControl>
-        <Box sx={{ mr: 3 }}>
-          <Checkbox
+        <Box sx={{ mr: 3 }} >
+          <Checkbox disabled={!(selectedYear && selectedActivity) || (data ? data.length === 0 : true)}
             checked={showPhysical}
             onChange={(e) => {
               setShowPhysical(e.target.checked);
             }}
           />{' '}
           Physical Details
-          <Checkbox
+          <Checkbox disabled={!(selectedYear && selectedActivity) || (data ? data.length === 0 : true)}
             checked={showFinancial}
             onChange={(e) => {
               setShowFinancial(e.target.checked);
             }}
           />{' '}
           Financial Deatils
-          <Checkbox
+          <Checkbox disabled={!(selectedYear && selectedActivity) || (data ? data.length === 0 : true)}
             checked={showHistory}
             onChange={(e) => {
               setShowHistory(e.target.checked);

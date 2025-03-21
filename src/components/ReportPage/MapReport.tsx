@@ -8,10 +8,11 @@ import { DistrictName, StateName, TalukName, VillageName } from 'src/LocName';
 import { listFarmer } from 'src/Services/farmerService';
 import * as XLSX from 'xlsx';
 import EsriMap from '../Map';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const MapReport = () => {
-
+    const [loadingResponse, setLoadingResponse] = React.useState(false);
     const [data, setData] = useState<any>();
     const [activityStatus, setActivityStatus] = useState<any[]>([]);
     const [selectedActivityStatus, setSelectedActivityStatus] = useState<string>('');
@@ -21,14 +22,14 @@ const MapReport = () => {
     const userId = localStorage.getItem("userId");
 
     let uId: any;
-    const handleActivityStatus = (event: SelectChangeEvent<string>) => { setData(''); setSelectedActivityStatus(event.target.value); };
+    const handleActivityStatus = (event: SelectChangeEvent<string>) => { setData(''); setSelectedActivityStatus(event.target.value); setSelectedActivity(''); };
 
     const handleActivityChange = (event: SelectChangeEvent<string>) => {
         setData('');
         const selectedActivityName = event.target.value;
         setSelectedActivity(selectedActivityName);
         const selectedActivity = activityOptions.find(activity => activity.activityName === selectedActivityName);
-        if (selectedActivity) { setActId(selectedActivity.activityId); }
+        if (selectedActivity) { setActId(selectedActivity.activityId); setLoadingResponse(true); }
         else { setActId(undefined); }
     };
     useEffect(() => {
@@ -57,7 +58,7 @@ const MapReport = () => {
 
             try {
 
-                if (selectedActivityStatus && actId !== undefined) {
+                if (selectedActivityStatus && selectedActivity && actId !== undefined) {
                     try {
                         let data = {
                             userId: userId,
@@ -76,6 +77,7 @@ const MapReport = () => {
                             console.error('Unexpected error:', error);
                         }
                     }
+                    setLoadingResponse(false);
                 }
             }
             catch (error) { console.error('Error:', error); }
@@ -88,7 +90,7 @@ const MapReport = () => {
 
     return (
         <div>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <Typography variant="h5" align='center' sx={{ mb: 2 }}>
                 Map Location
             </Typography>
 
@@ -104,7 +106,7 @@ const MapReport = () => {
                             ))}
                     </Select>
                 </FormControl>
-                <FormControl sx={{ width: 230, marginBottom: '15px', mr: 3 }}>
+                <FormControl disabled={!selectedActivityStatus} sx={{ width: 230, marginBottom: '15px', mr: 3 }}>
                     <InputLabel id="select-year-label">Select Activity</InputLabel>
                     <Select labelId="select-year-label" value={selectedActivity} onChange={handleActivityChange} label="Select Activity">
                         {activityOptions?.map((activity, index) => (
@@ -114,9 +116,19 @@ const MapReport = () => {
                     </Select>
                 </FormControl>
             </Box>
-            {data ? <>
-                <EsriMap />
-            </> : `No map found for the ${selectedActivityStatus.replace(/_/g, " ")} status and ${selectedActivity} activity`}
+            {loadingResponse ?
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%', // Ensure it takes up the full height
+                    }}
+                >
+                    <CircularProgress size={50} />
+                </Box> : data ? <>
+                    <EsriMap />
+                </> : `No map found for the ${selectedActivityStatus.replace(/_/g, " ")} status and ${selectedActivity} activity`}
         </div>
     );
 };

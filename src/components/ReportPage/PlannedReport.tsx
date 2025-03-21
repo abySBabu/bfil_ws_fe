@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Box, Typography, FormControl, Select, MenuItem, InputLabel, SelectChangeEvent } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, Checkbox, TableCell, TableBody, Paper, Box, Typography, FormControl, Select, MenuItem, InputLabel, SelectChangeEvent } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
@@ -9,16 +9,19 @@ import { watershedReport } from 'src/Services/reportService';
 import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan } from './DonerReportTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const WatershedReport: React.FC = () => {
+const PlannedReport: React.FC = () => {
   const [loadingResponse, setLoadingResponse] = React.useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [reportData, setReportData] = useState<Activity[]>([]);
   const [watershedNames, setWatershedNames] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [yearOptions, setYearOptions] = useState<any[]>([]);
+  const [showPlanWs, setShowPlanWs] = useState(false);
+  const [showPlanNWs, setShowPlanNWs] = useState(false);
+
   const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
   let uId: any;
-  const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Watershed Report' });
+  const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Planned Report' });
   const exportToPDF = () => { handlePrint(); };
 
   const handleYearChange = (event: SelectChangeEvent<string>) => {
@@ -87,7 +90,7 @@ const WatershedReport: React.FC = () => {
     const worksheetData = [];
     const headerRow1 = ['Sl. No.', 'Activity Name', 'UOM', 'Land Type', 'Process Type', ...watershedNames.flatMap((name) => [name, '']), 'Total'];
     worksheetData.push(headerRow1);
-    const headerRow2 = ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan', 'Progress'])];
+    const headerRow2 = ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan'])];
     worksheetData.push(headerRow2);
 
     const merges = [{ s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
@@ -105,9 +108,9 @@ const WatershedReport: React.FC = () => {
       const publicPhysicalRow = [activityIndex + 1, activity.activityName, activity.uom, 'Public', 'Physical', ...watershedNames.flatMap((watershedName) => {
         const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
         const publicPhysicalPlan = watershed?.physical?.plan ?? 0;
-        const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
-        totalPublicPhysical += publicPhysicalPlan + publicPhysicalProgress;
-        return [publicPhysicalPlan, publicPhysicalProgress].map(formatNumber);
+        //   const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
+        totalPublicPhysical += publicPhysicalPlan;
+        return [publicPhysicalPlan].map(formatNumber);
       }),
       formatNumber(totalPublicPhysical)
       ];
@@ -116,9 +119,9 @@ const WatershedReport: React.FC = () => {
       const publicFinancialRow = ['', '', '', 'Public', 'Financial', ...watershedNames.flatMap((watershedName) => {
         const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
         const publicFinancialPlan = watershed?.financial?.plan ?? 0;
-        const publicFinancialProgress = watershed?.financial?.progress ?? 0;
-        totalPublicFinancial += publicFinancialPlan + publicFinancialProgress;
-        return [publicFinancialPlan, publicFinancialProgress].map(formatNumber);
+        //   const publicFinancialProgress = watershed?.financial?.progress ?? 0;
+        totalPublicFinancial += publicFinancialPlan;
+        return [publicFinancialPlan].map(formatNumber);
       }),
         formatNumber(totalPublicFinancial)
       ];
@@ -127,9 +130,9 @@ const WatershedReport: React.FC = () => {
       const privatePhysicalRow = ['', '', '', 'Private', 'Physical', ...watershedNames.flatMap((watershedName) => {
         const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
         const privatePhysicalPlan = watershed?.physical?.plan ?? 0;
-        const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
-        totalPrivatePhysical += privatePhysicalPlan + privatePhysicalProgress;
-        return [privatePhysicalPlan, privatePhysicalProgress].map(formatNumber);
+        //   const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
+        totalPrivatePhysical += privatePhysicalPlan;
+        return [privatePhysicalPlan].map(formatNumber);
       }),
         formatNumber(totalPrivatePhysical)
       ];
@@ -138,9 +141,9 @@ const WatershedReport: React.FC = () => {
       const privateFinancialRow = ['', '', '', 'Private', 'Financial', ...watershedNames.flatMap((watershedName) => {
         const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
         const privateFinancialPlan = watershed?.financial?.plan ?? 0;
-        const privateFinancialProgress = watershed?.financial?.progress ?? 0;
-        totalPrivateFinancial += privateFinancialPlan + privateFinancialProgress;
-        return [privateFinancialPlan, privateFinancialProgress].map(formatNumber);
+        //   const privateFinancialProgress = watershed?.financial?.progress ?? 0;
+        totalPrivateFinancial += privateFinancialPlan;
+        return [privateFinancialPlan].map(formatNumber);
       }),
         formatNumber(totalPrivateFinancial)
       ];
@@ -152,14 +155,14 @@ const WatershedReport: React.FC = () => {
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
     worksheet['!cols'] = [{ wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 }, ...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]), { wpx: 100 }];
     worksheet['!merges'] = merges;
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Watershed Report');
-    XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Planned Report');
+    XLSX.writeFile(workbook, 'Planned_Report.xlsx');
   };
 
   return (
     <div>
       <Typography variant="h5" align='center' sx={{ mb: 2 }}>
-        Watershed Wise Works undertaken {selectedYear}
+        Plan Report  {selectedYear}
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
         <FormControl disabled={loadingResponse} sx={{ width: 200, marginBottom: '15px' }}>
@@ -173,22 +176,38 @@ const WatershedReport: React.FC = () => {
             ))}
           </Select>
         </FormControl>
+        {/* <Box sx={{ mr: 3 }}>
+          <Checkbox
+            checked={showPlanWs}
+            onChange={(e) => {
+              setShowPlanWs(e.target.checked);
+            }}
+          />{' '}
+          Physical Details
+          <Checkbox
+            checked={showPlanNWs}
+            onChange={(e) => {
+              setShowPlanNWs(e.target.checked);
+            }}
+          />{' '}
+          Financial Deatils
+        </Box> */}
         <Box display="flex" alignItems="end" justifyContent="flex-end" sx={{ marginRight: { md: '30px' }, mb: 3, flexDirection: { sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
-          <FileDownloadIcon onClick={!loadingResponse ? exportToExcel : undefined} sx={{
+          <FileDownloadIcon onClick={exportToExcel} sx={{
             cursor: loadingResponse ? 'not-allowed' : 'pointer',
             opacity: loadingResponse ? 0.5 : 1,
             color: loadingResponse ? 'gray' : 'inherit', mr: { xs: 0, sm: 1 }
           }} />
-          <PictureAsPdfIcon onClick={!loadingResponse ? exportToPDF : undefined} sx={{
+          <PictureAsPdfIcon onClick={exportToPDF} sx={{
             cursor: loadingResponse ? 'not-allowed' : 'pointer',
             opacity: loadingResponse ? 0.5 : 1,
-            color: loadingResponse ? 'gray' : 'inherit'
+            color: loadingResponse ? 'gray' : 'inherit',
           }} />
         </Box>
       </Box>
 
       <div ref={contentRef}>
-        <Typography className="pdf-title">Watershed Wise Works undertaken {selectedYear}.</Typography>
+        <Typography className="pdf-title">Planned Report - {selectedYear}.</Typography>
         <> {loadingResponse ?
           <Box
             sx={{
@@ -210,7 +229,7 @@ const WatershedReport: React.FC = () => {
                   <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={2}>LandType</TableCell>
                   <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} rowSpan={2}>Process Type</TableCell>
                   {watershedNames.map((watershedName, idx) => (
-                    <TableCell key={idx} colSpan={2} sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center">
+                    <TableCell key={idx} colSpan={1} sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center">
                       {watershedName}
                     </TableCell>
                   ))}
@@ -220,7 +239,7 @@ const WatershedReport: React.FC = () => {
                   {watershedNames.map((watershedName, idx) => (
                     <React.Fragment key={watershedName + idx}>
                       <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Plan</TableCell>
-                      <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+                      {/* <TableCell sx={{ border: '1px solid #ccc',lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell> */}
 
                     </React.Fragment>
                   ))}
@@ -253,16 +272,16 @@ const WatershedReport: React.FC = () => {
                           {watershedNames.map((watershedName) => {
                             const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
                             const publicphysicalplan = watershed?.physical?.plan ?? 0;
-                            const publicphysicalprogress = watershed?.physical?.progress ?? 0;
-                            totalPublicPhysical += publicphysicalplan + publicphysicalprogress;
+                            // const publicphysicalprogress = watershed?.physical?.progress ?? 0;
+                            totalPublicPhysical += publicphysicalplan;
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
                                   {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicphysicalplan)}
                                 </TableCell>
-                                <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
-                                  {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicphysicalprogress)}
-                                </TableCell>
+                                {/* <TableCell sx={{ lineHeight: '1',border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicphysicalprogress)}
+                            </TableCell> */}
 
 
                               </React.Fragment>
@@ -279,16 +298,16 @@ const WatershedReport: React.FC = () => {
                           {watershedNames.map((watershedName) => {
                             const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
                             const publicFinacialplan = watershed?.financial?.plan ?? 0;
-                            const publicFinacialprogress = watershed?.financial?.progress ?? 0;
-                            totalPublicFinancial += publicFinacialplan + publicFinacialprogress;
+                            //   const publicFinacialprogress = watershed?.financial?.progress ?? 0;
+                            totalPublicFinancial += publicFinacialplan;
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
                                   {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicFinacialplan)}
                                 </TableCell>
-                                <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
-                                  {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicFinacialprogress)}
-                                </TableCell>
+                                {/* <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(publicFinacialprogress)}
+                          </TableCell> */}
                               </React.Fragment>
                             );
                           })}
@@ -304,16 +323,16 @@ const WatershedReport: React.FC = () => {
                           {watershedNames.map((watershedName) => {
                             const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
                             const privatePhysicalplan = watershed?.physical?.plan ?? 0;
-                            const privateFinancialprogress = watershed?.physical?.progress ?? 0;
-                            totalPrivatePhysical += privatePhysicalplan + privateFinancialprogress;
+                            // const privateFinancialprogress = watershed?.physical?.progress ?? 0;
+                            totalPrivatePhysical += privatePhysicalplan;
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
                                   {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privatePhysicalplan)}
                                 </TableCell>
-                                <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
-                                  {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinancialprogress)}
-                                </TableCell>
+                                {/* <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinancialprogress)}
+                            </TableCell> */}
 
 
                               </React.Fragment>
@@ -328,16 +347,16 @@ const WatershedReport: React.FC = () => {
                           {watershedNames.map((watershedName) => {
                             const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
                             const privateFinacialplan = watershed?.financial?.plan ?? 0;
-                            const privateFinacialprogress = watershed?.financial?.progress ?? 0;
-                            totalPrivateFinancial += privateFinacialplan + privateFinacialprogress;
+                            //   const privateFinacialprogress = watershed?.financial?.progress ?? 0;
+                            totalPrivateFinancial += privateFinacialplan;
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
                                   {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinacialplan)}
                                 </TableCell>
-                                <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
-                                  {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinacialprogress)}
-                                </TableCell>
+                                {/* <TableCell sx={{lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
+                            {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(privateFinacialprogress)}
+                          </TableCell> */}
                               </React.Fragment>
                             );
                           })}
@@ -380,6 +399,6 @@ const WatershedReport: React.FC = () => {
   );
 };
 
-export default WatershedReport;
+export default PlannedReport;
 
 
