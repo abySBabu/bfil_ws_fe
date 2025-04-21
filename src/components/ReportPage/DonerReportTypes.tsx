@@ -47,6 +47,19 @@ landTypeMap: {
 };
 }
 
+export interface ActivitySystem {
+  typeOfWork: string;
+  uom: string | null;
+  physical: {
+    progress: string;
+    plan: string;
+  };
+  financial: {
+    progress: string;
+    plan: string;
+  };
+  }
+
 export type WatershedActivities = Activity[];
 export interface WorkPlan {
     planningYear: string;

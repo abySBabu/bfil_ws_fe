@@ -15,7 +15,7 @@ export async function donerReport(financialYear: any) {
 
 export async function watershedReport(financialYear:any,userId:number) {
     const configs = {
-        url: serverPath.bfil + `reports/getWatershedReport/${financialYear}/${userId}`,
+        url: serverPath.bfil + `reports/getWatershedReport/${financialYear}/${userId}/${localStorage.getItem("userRole")}`,
         method: 'GET',
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
