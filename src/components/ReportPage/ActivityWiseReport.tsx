@@ -86,6 +86,11 @@ const ActivityWiseReport: React.FC = () => {
     const exportToExcel = () => {
         const wb = XLSX.utils.book_new();
         const wsData: (string | number)[][] = [];
+        const sortedReportSystemData = [...reportSystemData].sort((a, b) =>
+            (a.sno ?? '').localeCompare(b.sno ?? '')
+        );
+        const sortedReportData = [...reportData].sort((a, b) => Number(a.sno ?? 0) - Number(b.sno ?? 0));
+
 
         // Project details
         wsData.push(['PROJECT NAME : PRAGAT WATERSHED DEVELOPMENT PROGRAM']);
@@ -108,7 +113,7 @@ const ActivityWiseReport: React.FC = () => {
         const reportSystemStartRow = wsData.length;
 
         // Add reportSystemData rows
-        reportSystemData.forEach((activity) => {
+        sortedReportSystemData.forEach((activity) => {
             const rowPublic = showPlan
                 ? [
                     activity.sno,
@@ -119,7 +124,7 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ]
                 : [
                     activity.sno,
@@ -128,7 +133,7 @@ const ActivityWiseReport: React.FC = () => {
                     '-',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ];
 
             wsData.push(rowPublic);
@@ -137,7 +142,7 @@ const ActivityWiseReport: React.FC = () => {
         const reportSystemEndRow = wsData.length;
 
         // Add reportData rows
-        reportData.forEach((activity) => {
+        sortedReportData.forEach((activity) => {
             const rowPublic = showPlan
                 ? [
                     activity.sno,
@@ -148,7 +153,7 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ]
                 : [
                     activity.sno,
@@ -157,7 +162,7 @@ const ActivityWiseReport: React.FC = () => {
                     'Public',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ];
             wsData.push(rowPublic);
 
@@ -168,13 +173,13 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.privatePlanFinancial ?? 0,
                     activity?.privatePhysical ?? 0,
                     activity?.privateFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ]
                 : [
                     '', '', '', 'Private',
                     activity?.privatePhysical ?? 0,
                     activity?.privateFinancial ?? 0,
-                    activity?.firstFinSource ?? ''
+                    activity?.remark ?? ''
                 ];
 
             wsData.push(rowPrivate);
@@ -360,6 +365,7 @@ const ActivityWiseReport: React.FC = () => {
                                         )}
 
                                         <TableCell colSpan={2} sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+                                        <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }} rowSpan={2}>Remarks</TableCell>
 
                                     </React.Fragment>
                                 </TableRow>
@@ -378,10 +384,12 @@ const ActivityWiseReport: React.FC = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {reportData && reportData.length > 0 ?
-                                    reportData.map((row) => {
-                                        return (
-                                            <React.Fragment >
+                                {reportData && reportData.length > 0 ? (
+                                    [...reportData] // Create a shallow copy to avoid mutating original
+                                        .sort((a, b) => Number(a.sno) - Number(b.sno))
+                                        // Sort by `sno` in ascending order
+                                        .map((row) => (
+                                            <React.Fragment key={row.sno}>
                                                 {/* Public Row */}
                                                 <TableRow>
                                                     <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '40px' }} align="center">
@@ -396,40 +404,41 @@ const ActivityWiseReport: React.FC = () => {
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
                                                         Public
                                                     </TableCell>
-                                                    <React.Fragment >
-                                                        {showPlan && (<>
+                                                    {showPlan && (
+                                                        <>
                                                             <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPlanPhysical}</TableCell>
                                                             <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPlanFinancial}</TableCell>
                                                         </>
-                                                        )}
-                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPhysical}</TableCell>
-                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicFinancial}</TableCell>
-                                                    </React.Fragment>
+                                                    )}
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPhysical}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicFinancial}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.remark}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc' }} align="center">
                                                         Private
                                                     </TableCell>
-                                                    <React.Fragment>
-                                                        {showPlan && (<>
+                                                    {showPlan && (
+                                                        <>
                                                             <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePlanPhysical}</TableCell>
                                                             <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePlanFinancial}</TableCell>
                                                         </>
-                                                        )}
-                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePhysical}</TableCell>
-                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateFinancial}</TableCell>
-                                                    </React.Fragment>
+                                                    )}
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePhysical}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateFinancial}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.remark}</TableCell>
                                                 </TableRow>
                                             </React.Fragment>
-                                        );
-                                    }) :
-                                    (<TableRow>
+                                        ))
+                                ) : (
+                                    <TableRow>
                                         <TableCell colSpan={8} sx={{ textAlign: 'center', fontWeight: 'bold' }}>
                                             No records
                                         </TableCell>
-                                    </TableRow>)
-                                }
+                                    </TableRow>
+                                )}
                             </TableBody>
+
 
                         </Table>
                     </TableContainer>

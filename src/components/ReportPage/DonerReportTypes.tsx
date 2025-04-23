@@ -74,6 +74,7 @@ export interface ActivityData {
   field2: string | null;
   field3: string | null;
   field4: string | null;
+  remark: string | null;
   sno: string;
 }
 
