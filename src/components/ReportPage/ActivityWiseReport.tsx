@@ -124,7 +124,7 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.publicRemark ?? ''
                 ]
                 : [
                     activity.sno,
@@ -133,7 +133,7 @@ const ActivityWiseReport: React.FC = () => {
                     '-',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.publicRemark ?? ''
                 ];
 
             wsData.push(rowPublic);
@@ -153,7 +153,7 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.publicRemark ?? ''
                 ]
                 : [
                     activity.sno,
@@ -162,7 +162,7 @@ const ActivityWiseReport: React.FC = () => {
                     'Public',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.publicRemark ?? ''
                 ];
             wsData.push(rowPublic);
 
@@ -173,13 +173,13 @@ const ActivityWiseReport: React.FC = () => {
                     activity?.privatePlanFinancial ?? 0,
                     activity?.privatePhysical ?? 0,
                     activity?.privateFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.privateRemark ?? ''
                 ]
                 : [
                     '', '', '', 'Private',
                     activity?.privatePhysical ?? 0,
                     activity?.privateFinancial ?? 0,
-                    activity?.remark ?? ''
+                    activity?.privateRemark ?? ''
                 ];
 
             wsData.push(rowPrivate);
@@ -412,7 +412,7 @@ const ActivityWiseReport: React.FC = () => {
                                                     )}
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPhysical}</TableCell>
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicFinancial}</TableCell>
-                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.remark}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicRemark}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc' }} align="center">
@@ -426,7 +426,7 @@ const ActivityWiseReport: React.FC = () => {
                                                     )}
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePhysical}</TableCell>
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateFinancial}</TableCell>
-                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.remark}</TableCell>
+                                                    <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateRemark}</TableCell>
                                                 </TableRow>
                                             </React.Fragment>
                                         ))
