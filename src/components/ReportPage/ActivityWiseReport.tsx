@@ -1,22 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Box, Typography, FormControl, Select, MenuItem, InputLabel, SelectChangeEvent } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, IconButton, TableCell, Checkbox, TableBody, Paper, Box, Typography, FormControl, Select, MenuItem, InputLabel, SelectChangeEvent } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx';
+import * as XLSX from 'sheetjs-style';
 import { listWP, listFinYear } from 'src/Services/workplanService';
-import { watershedReport } from 'src/Services/reportService';
-import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan, ActivitySystem } from './DonerReportTypes';
+import { ActivityReport } from 'src/Services/reportService';
+import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan, ActivitySystem, ActivityData } from './DonerReportTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const ActivityWiseReport: React.FC = () => {
     const [loadingResponse, setLoadingResponse] = React.useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
-    const [reportData, setReportData] = useState<Activity[]>([]);
-    const [reportSystemData, setReportSystemData] = useState<ActivitySystem[]>([]);
+    const [reportData, setReportData] = useState<ActivityData[]>([]);
+    const [reportSystemData, setReportSystemData] = useState<ActivityData[]>([]);
     const [watershedNames, setWatershedNames] = useState<string[]>([]);
     const [selectedYear, setSelectedYear] = useState<string>('');
     const [yearOptions, setYearOptions] = useState<any[]>([]);
+    const [showPlan, setShowPlan] = useState(false);
     const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
     let uId: any;
     const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Yearly Activity Report' });
@@ -24,6 +26,7 @@ const ActivityWiseReport: React.FC = () => {
 
     const handleYearChange = (event: SelectChangeEvent<string>) => {
         setLoadingResponse(true);
+        setShowPlan(false);
         setSelectedYear(event.target.value);
     };
     useEffect(() => {
@@ -51,13 +54,9 @@ const ActivityWiseReport: React.FC = () => {
         if (!selectedYear) return;
 
         try {
-            const userId = localStorage.getItem("userId");
-            if (userId !== null) {
-                uId = parseInt(userId);
-            }
-            const reportData1 = await watershedReport(selectedYear, uId);
-            setReportData(reportData1.activitiesWithWatershedIdList);
-            setReportSystemData(reportData1.overallDetails);
+            const reportData1 = await ActivityReport(selectedYear);
+            setReportData(reportData1.progressData);
+            setReportSystemData(reportData1.overallActivity);
             //console.log("Report data:", reportData);
             const uniqueWatershedNames = new Set<string>();
             reportData1.activitiesWithWatershedIdList.forEach((activity: Activity) => {
@@ -84,125 +83,208 @@ const ActivityWiseReport: React.FC = () => {
         fetchReport();
     }, [selectedYear]);
 
-
     const exportToExcel = () => {
         const wb = XLSX.utils.book_new();
         const wsData: (string | number)[][] = [];
 
+        // Project details
         wsData.push(['PROJECT NAME : PRAGAT WATERSHED DEVELOPMENT PROGRAM']);
         wsData.push(['DONOR NAME : BHARAT FINANCIAL INCLUSION LIMITED (BFIL)']);
         wsData.push(['CORE SUPPORT- ZIILLA PANCHAYAT KALABURGI']);
         wsData.push(['PARTNER NAME : MYRADA']);
         wsData.push([`REPORTING PERIOD : ${selectedYear}`]);
-        wsData.push([]);
-    
+
         // Header rows
-        const headerRow1 = ['Sl. No.', 'Activity Name', 'UOM', 'LandType'];
-        watershedNames.forEach(name => {
-            headerRow1.push(`${name} - Plan`, '', `${name} - Progress`, '');
-        });
+        const headerRow1 = showPlan
+            ? ['Sl. No.', 'Activity Name', 'UOM', 'LandType', 'Plan', '', 'Progress', '', 'Remarks']
+            : ['Sl. No.', 'Activity Name', 'UOM', 'LandType', 'Progress', '', 'Remarks'];
+
+        const headerRow2 = showPlan
+            ? ['', '', '', '', 'Physical', 'Financial', 'Physical', 'Financial', '']
+            : ['', '', '', '', 'Physical', 'Financial', ''];
         wsData.push(headerRow1);
-    
-        const headerRow2 = ['', '', '', ''];
-        watershedNames.forEach(() => {
-            headerRow2.push('Physical', 'Financial', 'Physical', 'Financial');
-        });
         wsData.push(headerRow2);
 
-        reportSystemData.forEach((activity, activityIndex) => {
-            const alphabet = String.fromCharCode(65 + activityIndex);
-            const rowPublic: (string | number)[] = [
-                alphabet,
-                activity.typeOfWork,
-                activity.uom ?? '', 
-                '-',
-            ];
-                rowPublic.push(
-                    activity?.physical.plan ?? 0,
-                    activity?.financial?.plan ?? 0,
-                    activity?.physical?.progress ?? 0,
-                    activity?.financial?.progress ?? 0
-                );
-    
-            wsData.push(rowPublic);
+        const reportSystemStartRow = wsData.length;
 
+        // Add reportSystemData rows
+        reportSystemData.forEach((activity) => {
+            const rowPublic = showPlan
+                ? [
+                    activity.sno,
+                    activity.activityName,
+                    activity.uom ?? '',
+                    '-',
+                    activity?.publicPlanPhysical ?? 0,
+                    activity?.publicPlanFinancial ?? 0,
+                    activity?.publicPhysical ?? 0,
+                    activity?.publicFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ]
+                : [
+                    activity.sno,
+                    activity.activityName,
+                    activity.uom ?? '',
+                    '-',
+                    activity?.publicPhysical ?? 0,
+                    activity?.publicFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ];
+
+            wsData.push(rowPublic);
         });
-        wsData.push([]);
 
-        // Data rows
-        reportData.forEach((activity, activityIndex) => {
-            const rowPublic: (string | number)[] = [
-                activityIndex + 1,
-                activity.activityName,
-                activity.uom ?? '',
-                'Public',
-            ];
-    
-            watershedNames.forEach(name => {
-                const watershed = Object.values(activity.landTypeMap.Public).find(
-                    w => w.watershedName === name
-                );
-                rowPublic.push(
-                    watershed?.physical?.plan ?? 0,
-                    watershed?.financial?.plan ?? 0,
-                    watershed?.physical?.progress ?? 0,
-                    watershed?.financial?.progress ?? 0
-                );
-            });
-    
+        const reportSystemEndRow = wsData.length;
+
+        // Add reportData rows
+        reportData.forEach((activity) => {
+            const rowPublic = showPlan
+                ? [
+                    activity.sno,
+                    activity.activityName,
+                    activity.uom ?? '',
+                    'Public',
+                    activity?.publicPlanPhysical ?? 0,
+                    activity?.publicPlanFinancial ?? 0,
+                    activity?.publicPhysical ?? 0,
+                    activity?.publicFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ]
+                : [
+                    activity.sno,
+                    activity.activityName,
+                    activity.uom ?? '',
+                    'Public',
+                    activity?.publicPhysical ?? 0,
+                    activity?.publicFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ];
             wsData.push(rowPublic);
-    
-            const rowPrivate: (string | number)[] = ['', '', '', 'Private'];
-            watershedNames.forEach(name => {
-                const watershed = Object.values(activity.landTypeMap.Private).find(
-                    w => w.watershedName === name
-                );
-                rowPrivate.push(
-                    watershed?.physical?.plan ?? 0,
-                    watershed?.financial?.plan ?? 0,
-                    watershed?.physical?.progress ?? 0,
-                    watershed?.financial?.progress ?? 0
-                );
-            });
-    
+
+            const rowPrivate = showPlan
+                ? [
+                    '', '', '', 'Private',
+                    activity?.privatePlanPhysical ?? 0,
+                    activity?.privatePlanFinancial ?? 0,
+                    activity?.privatePhysical ?? 0,
+                    activity?.privateFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ]
+                : [
+                    '', '', '', 'Private',
+                    activity?.privatePhysical ?? 0,
+                    activity?.privateFinancial ?? 0,
+                    activity?.firstFinSource ?? ''
+                ];
+
             wsData.push(rowPrivate);
         });
-    
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        const lastCol = headerRow1.length - 1;
 
-        // Add merges for the top 5 rows
-        ws['!merges'] = [
-          { s: { r: 0, c: 0 }, e: { r: 0, c: lastCol } }, // A1:DZ1 (example)
-          { s: { r: 1, c: 0 }, e: { r: 1, c: lastCol } },
-          { s: { r: 2, c: 0 }, e: { r: 2, c: lastCol } },
-          { s: { r: 3, c: 0 }, e: { r: 3, c: lastCol } },
-          { s: { r: 4, c: 0 }, e: { r: 4, c: lastCol } },
-        ];
-      
-        // Center align the merged cells (optional style – works only with certain libs like `xlsx-style`)
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        const lastCol = wsData[6].length - 1;
+
+        const borderAll = {
+            top: { style: 'thin', color: { rgb: '000000' } },
+            bottom: { style: 'thin', color: { rgb: '000000' } },
+            left: { style: 'thin', color: { rgb: '000000' } },
+            right: { style: 'thin', color: { rgb: '000000' } }
+        };
+
+        const pinkTitleStyle = {
+            font: { bold: true },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: borderAll
+        };
+
+        const headerStyle = {
+            font: { bold: true },
+            fill: { fgColor: { rgb: 'C2D6D6' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: borderAll
+        };
+
+        const reportSystemRowStyle = {
+            font: { bold: true },
+            fill: { fgColor: { rgb: 'DDEEFF' } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: borderAll
+        };
+
+        // Merge project title rows
+        ws['!merges'] = [];
         for (let i = 0; i <= 4; i++) {
-          const cellRef = XLSX.utils.encode_cell({ r: i, c: 0 }); // A1, A2, etc.
-          if (ws[cellRef]) {
-            ws[cellRef].s = {
-              alignment: { horizontal: 'center' },
-              font: { bold: true },
-            };
-          }
+            ws['!merges'].push({ s: { r: i, c: 0 }, e: { r: i, c: lastCol } });
+            for (let c = 0; c <= lastCol; c++) {
+                const cellRef = XLSX.utils.encode_cell({ r: i, c });
+                if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' };
+                ws[cellRef].s = pinkTitleStyle;
+            }
         }
-      
+        if (showPlan) {
+            ws['!merges'].push(
+                { s: { r: 5, c: 0 }, e: { r: 6, c: 0 } }, // Sl. No.
+                { s: { r: 5, c: 1 }, e: { r: 6, c: 1 } }, // Activity Name
+                { s: { r: 5, c: 2 }, e: { r: 6, c: 2 } }, // UOM
+                { s: { r: 5, c: 3 }, e: { r: 6, c: 3 } }, // LandType
+                { s: { r: 5, c: 4 }, e: { r: 5, c: 5 } }, // Plan
+                { s: { r: 5, c: 6 }, e: { r: 5, c: 7 } }, // Progress
+                { s: { r: 5, c: 8 }, e: { r: 6, c: 8 } }  // Remarks
+            );
+        } else {
+            ws['!merges'].push(
+                { s: { r: 5, c: 0 }, e: { r: 6, c: 0 } },
+                { s: { r: 5, c: 1 }, e: { r: 6, c: 1 } },
+                { s: { r: 5, c: 2 }, e: { r: 6, c: 2 } },
+                { s: { r: 5, c: 3 }, e: { r: 6, c: 3 } },
+                { s: { r: 5, c: 4 }, e: { r: 5, c: 5 } },
+                { s: { r: 5, c: 6 }, e: { r: 6, c: 6 } }
+            );
+        }
+
+        // Apply header styles
+        [5, 6].forEach(rowIndex => {
+            for (let col = 0; col <= lastCol; col++) {
+                const cellRef = XLSX.utils.encode_cell({ r: rowIndex, c: col });
+                if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' };
+                ws[cellRef].s = headerStyle;
+            }
+        });
+
+        // Apply reportSystemData style
+        for (let r = reportSystemStartRow; r < reportSystemEndRow; r++) {
+            for (let c = 0; c <= lastCol; c++) {
+                const cellRef = XLSX.utils.encode_cell({ r, c });
+                if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' };
+                ws[cellRef].s = reportSystemRowStyle;
+            }
+        }
+
+        // Apply general cell styling (border + alignment)
+        for (let r = 7; r < wsData.length; r++) {
+            for (let c = 0; c <= lastCol; c++) {
+                const cellRef = XLSX.utils.encode_cell({ r, c });
+                if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' };
+                ws[cellRef].s = ws[cellRef].s || {}; // Ensure style object exists
+                ws[cellRef].s.border = borderAll;
+                ws[cellRef].s.alignment = { horizontal: 'center', vertical: 'center' };
+            }
+        }
+
         XLSX.utils.book_append_sheet(wb, ws, `Yearly Activity Report-${selectedYear}`);
         XLSX.writeFile(wb, `Yearly Activity Report-${selectedYear}.xlsx`);
     };
-    
+
+
+
+
 
     return (
         <div>
             <Typography variant="h5" align='center' sx={{ mb: 2 }}>
-                Watershed Wise Works undertaken {selectedYear}
+                Activity Wise Works undertaken {selectedYear}
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
-                <FormControl disabled={loadingResponse} sx={{ width: 200, marginBottom: '15px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
+                <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
                     <InputLabel id="select-year-label">Select Year</InputLabel>
                     <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
                         <MenuItem value="">Select Year</MenuItem>
@@ -213,18 +295,40 @@ const ActivityWiseReport: React.FC = () => {
                         ))}
                     </Select>
                 </FormControl>
-                <Box display="flex" alignItems="end" justifyContent="flex-end" sx={{ marginRight: { md: '30px' }, mb: 3, flexDirection: { sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
-                    <FileDownloadIcon onClick={!loadingResponse ? exportToExcel : undefined} sx={{
-                        cursor: loadingResponse ? 'not-allowed' : 'pointer',
-                        opacity: loadingResponse ? 0.5 : 1,
-                        color: loadingResponse ? 'gray' : 'inherit', mr: { xs: 0, sm: 1 }
-                    }} />
-                    <PictureAsPdfIcon onClick={!loadingResponse ? exportToPDF : undefined} sx={{
-                        cursor: loadingResponse ? 'not-allowed' : 'pointer',
-                        opacity: loadingResponse ? 0.5 : 1,
-                        color: loadingResponse ? 'gray' : 'inherit'
-                    }} />
+                <Box >
+                    <Checkbox disabled={!(selectedYear) || (reportData ? reportData.length === 0 : true)}
+                        checked={showPlan}
+                        onChange={(e) => {
+                            setShowPlan(e.target.checked);
+                        }}
+                    />{' '}
+                    Plan
                 </Box>
+                <Box
+                    display="flex"
+                    sx={{
+                        marginLeft: 'auto',
+                        marginRight: { md: '20px' },
+                        flexDirection: { sm: 'row' },
+                        gap: { xs: 1, sm: 3 }
+                    }}
+                >
+                    <IconButton
+                        onClick={exportToExcel}
+                        disabled={!(selectedYear) || (reportData ? reportData.length === 0 : true)}
+                        sx={{ mr: { xs: 0, sm: 1 } }}
+                    >
+                        <FileDownloadIcon />
+                    </IconButton>
+
+                    <IconButton
+                        onClick={exportToPDF}
+                        disabled={!(selectedYear) || (reportData ? reportData.length === 0 : true)}
+                    >
+                        <PictureAsPdfIcon />
+                    </IconButton>
+                </Box>
+
             </Box>
 
             <div ref={contentRef}>
@@ -248,101 +352,83 @@ const ActivityWiseReport: React.FC = () => {
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>Activity Name</TableCell>
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>UOM</TableCell>
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>LandType</TableCell>
-
-                                    {watershedNames.map((watershedName, idx) => (
-                                        <TableCell key={idx} colSpan={4} sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center">
-                                            {watershedName}
-                                        </TableCell>
-                                    ))}
                                 </TableRow>
                                 <TableRow>
-                                    {watershedNames.map((watershedName, idx) => (
-                                        <React.Fragment key={watershedName + idx}>
+                                    <React.Fragment>
+                                        {showPlan && (
                                             <TableCell colSpan={2} sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Plan</TableCell>
-                                            <TableCell colSpan={2} sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+                                        )}
 
-                                        </React.Fragment>
-                                    ))}
+                                        <TableCell colSpan={2} sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+
+                                    </React.Fragment>
                                 </TableRow>
                                 <TableRow>
-                                    {watershedNames.map((watershedName, idx) => (
-                                        <React.Fragment key={watershedName + idx}>
-                                            <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Physical</TableCell>
-                                            <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Financial</TableCell>
-                                            <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Physical</TableCell>
-                                            <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Financial</TableCell>
+                                    <React.Fragment>
+                                        {showPlan && (
+                                            <>
+                                                <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Physical</TableCell>
+                                                <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Financial</TableCell>
+                                            </>)}
 
-                                        </React.Fragment>
-                                    ))}
+                                        <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Physical</TableCell>
+                                        <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Financial</TableCell>
+
+                                    </React.Fragment>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {watershedNames.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={5 + watershedNames.length * 4 + 1} sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                                            No records
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    reportData.map((activity, activityIndex) => {
+                                {reportData && reportData.length > 0 ?
+                                    reportData.map((row) => {
                                         return (
-                                            <React.Fragment key={activityIndex}>
+                                            <React.Fragment >
                                                 {/* Public Row */}
                                                 <TableRow>
                                                     <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '40px' }} align="center">
-                                                        {activityIndex + 1}
+                                                        {row.sno}
                                                     </TableCell>
                                                     <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
-                                                        {activity.activityName}
+                                                        {row.activityName}
                                                     </TableCell>
                                                     <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
-                                                        {activity.uom}
+                                                        {row.uom}
                                                     </TableCell>
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
                                                         Public
                                                     </TableCell>
-                                                    {watershedNames.map((watershedName, i) => {
-                                                        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
-                                                        const publicphysicalplan = watershed?.physical?.plan ?? 0;
-                                                        const publicphysicalprogress = watershed?.physical?.progress ?? 0;
-                                                        const publicfinancialplan = watershed?.financial?.plan ?? 0;
-                                                        const publicfinancialprogress = watershed?.financial?.progress ?? 0;
-                                                        return (
-                                                            <React.Fragment key={`private-${i}`}>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{publicphysicalplan}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{publicfinancialplan}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{publicphysicalprogress}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{publicfinancialprogress}</TableCell>
-                                                            </React.Fragment>
-                                                        );
-                                                    })}
+                                                    <React.Fragment >
+                                                        {showPlan && (<>
+                                                            <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPlanPhysical}</TableCell>
+                                                            <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPlanFinancial}</TableCell>
+                                                        </>
+                                                        )}
+                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPhysical}</TableCell>
+                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicFinancial}</TableCell>
+                                                    </React.Fragment>
                                                 </TableRow>
-
                                                 <TableRow>
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc' }} align="center">
                                                         Private
                                                     </TableCell>
-                                                    {watershedNames.map((watershedName, i) => {
-                                                        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
-                                                        const privatephysicalplan = watershed?.physical?.plan ?? 0;
-                                                        const privatephysicalprogress = watershed?.physical?.progress ?? 0;
-                                                        const privatefinancialplan = watershed?.financial?.plan ?? 0;
-                                                        const privatefinancialprogress = watershed?.financial?.progress ?? 0;
-                                                        return (
-                                                            <React.Fragment key={`private-${i}`}>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{privatephysicalplan}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{privatefinancialplan}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{privatephysicalprogress}</TableCell>
-                                                                <TableCell sx={{ border: '1px solid #ccc' }} align="center">{privatefinancialprogress}</TableCell>
-                                                            </React.Fragment>
-                                                        );
-                                                    })}
-
+                                                    <React.Fragment>
+                                                        {showPlan && (<>
+                                                            <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePlanPhysical}</TableCell>
+                                                            <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePlanFinancial}</TableCell>
+                                                        </>
+                                                        )}
+                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePhysical}</TableCell>
+                                                        <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateFinancial}</TableCell>
+                                                    </React.Fragment>
                                                 </TableRow>
                                             </React.Fragment>
                                         );
-                                    })
-                                )}
+                                    }) :
+                                    (<TableRow>
+                                        <TableCell colSpan={8} sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                            No records
+                                        </TableCell>
+                                    </TableRow>)
+                                }
                             </TableBody>
 
                         </Table>

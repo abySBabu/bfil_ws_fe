@@ -15,37 +15,68 @@ export type Activities = {
 export interface ComponentData {
   components: string;
   activities: Activities;
-  
+
 }
 
 export interface FinancialData {
-progress: number;
-plan: number;
+  progress: number;
+  plan: number;
 }
 
 export interface PhysicalData {
-progress: number;
-plan: number;
+  progress: number;
+  plan: number;
 }
 
 export interface Watershed {
-watershedName: string;
-physical: PhysicalData;
-financial: FinancialData;
+  watershedName: string;
+  physical: PhysicalData;
+  financial: FinancialData;
 }
 
 export interface LandType {
-[watershedId: string]: Watershed;
+  [watershedId: string]: Watershed;
 }
 
 export interface Activity {
-activityName: string;
-uom: string | null;
-landTypeMap: {
-  Private: LandType;
-  Public: LandType;
-};
+  activityName: string;
+  uom: string | null;
+  landTypeMap: {
+    Private: LandType;
+    Public: LandType;
+  };
 }
+
+export interface ActivityData {
+  id: number;
+  district: string;
+  watershed: string | null;
+  finYear: string;
+  startDate: string;
+  endDate: string;
+  activityName: string;
+  landType: string;
+  uom: string;
+  publicPlanPhysical: number;
+  publicPlanFinancial: number;
+  privatePlanPhysical: number;
+  privatePlanFinancial: number;
+  publicPhysical: number;
+  publicFinancial: number;
+  privatePhysical: number;
+  privateFinancial: number;
+  firstFinSource: string | null;
+  secondFinSource: string | null;
+  thirdFinSource: string | null;
+  createdDate: number;
+  updatedDate: number;
+  field1: string | null;
+  field2: string | null;
+  field3: string | null;
+  field4: string | null;
+  sno: string;
+}
+
 
 export interface ActivitySystem {
   typeOfWork: string;
@@ -58,12 +89,12 @@ export interface ActivitySystem {
     progress: string;
     plan: string;
   };
-  }
+}
 
 export type WatershedActivities = Activity[];
 export interface WorkPlan {
-    planningYear: string;
-    activityId?: number; 
-    activityName?: string; 
-    }
+  planningYear: string;
+  activityId?: number;
+  activityName?: string;
+}
 
