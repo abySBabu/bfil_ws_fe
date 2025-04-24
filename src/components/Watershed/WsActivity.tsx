@@ -221,7 +221,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total
     const eventCheck = loading || !actObj.workActivity.capacitynameEvent || !actObj.workActivity.capacitytypeEvent || !actObj.workActivity.eventDate || !actObj.workActivity.participantsType || !actObj.workActivity.habitationsCovered || totalP <= 0 || !actObj.workActivity.trainerFacilitator || !actObj.workActivity.mobilizer
 
-    const addCheck = actObj.workActivity.activityCode === 13 ? eventCheck
+    const addCheck = actObj.workActivity.activityCode === 32 ? eventCheck
         : actObj.workActivity.interventionType === 23 ? demandCheck
             : supplyCheck
 
@@ -329,7 +329,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     }
 
     const WsSet = async (id: any) => {
-        if (actObj.workActivity.activityCode !== 13) {
+        if (actObj.workActivity.activityCode !== 32) {
             try {
                 const resp1 = JSON.parse(localStorage.getItem("WsList") as string)
                 if (resp1) {
@@ -751,7 +751,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 </Grid>
                 <Grid item xs={12} sm={6}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Activity")} value={actObj.workActivity.activityName} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityName: e.target.value } })} /></Grid>
                 <Grid item xs={12}><TextField label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Description")} value={actObj.workActivity.activityDescription} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, activityDescription: e.target.value } })} inputProps={{ maxLength: 120 }} /></Grid>
-                {actObj.workActivity.activityCode === 13 ? <>
+                {actObj.workActivity.activityCode === 32 ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Name")} value={actObj.workActivity.capacitynameEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitynameEvent: e.target.value } })} /></Grid>
                     <Grid item xs={12} sm={3}><TextField required label={t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Event_Type")} value={actObj.workActivity.capacitytypeEvent} onChange={(e) => setactObj({ ...actObj, workActivity: { ...actObj.workActivity, capacitytypeEvent: e.target.value } })} /></Grid>
@@ -913,7 +913,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 <Grid item xs={12} sm={3}><b>Altitude: </b>{geoData.altitude || 'N/A'}</Grid>
                 <Grid item xs={12} sm={3}><b>Accuracy: </b>{geoData.accuracy || 'N/A'}</Grid>
 
-                {actObj.workActivity.activityCode === 13 ? <>
+                {actObj.workActivity.activityCode === 32 ? <>
                     <Grid item xs={12}><Divider /></Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Name")}:</b> {actObj.workActivity.capacitynameEvent}</Grid>
                     <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Event_Type")}:</b> {actObj.workActivity.capacitytypeEvent}</Grid>

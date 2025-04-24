@@ -80,7 +80,7 @@ const ActivityDetailsReport = () => {
         }
         if (resp3a && resp3b) {
           const combinedOptions = [{ activityId: 0, activityName: 'All' }, ...resp3a.data, ...resp3b.data].filter(
-            option => option.activityName !== "Members Capacitated"
+            option => option.activityId !== 32
           );
           setActivityOptions(combinedOptions);
         }
