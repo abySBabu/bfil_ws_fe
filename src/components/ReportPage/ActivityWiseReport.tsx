@@ -101,12 +101,12 @@ const ActivityWiseReport: React.FC = () => {
 
         // Header rows
         const headerRow1 = showPlan
-            ? ['Sl. No.', 'Activity Name', 'UOM', 'LandType', 'Plan', '', 'Progress', '', 'Remarks']
-            : ['Sl. No.', 'Activity Name', 'UOM', 'LandType', 'Progress', '', 'Remarks'];
+            ? ['Sl. No.', 'Activity Name', 'UOM', 'Plan', '', 'Progress', '', 'Remarks']
+            : ['Sl. No.', 'Activity Name', 'UOM','Progress', '', 'Remarks'];
 
         const headerRow2 = showPlan
-            ? ['', '', '', '', 'Physical', 'Financial', 'Physical', 'Financial', '']
-            : ['', '', '', '', 'Physical', 'Financial', ''];
+            ? ['', '', '', 'Physical', 'Financial', 'Physical', 'Financial', '']
+            : ['', '', '', 'Physical', 'Financial', ''];
         wsData.push(headerRow1);
         wsData.push(headerRow2);
 
@@ -119,7 +119,6 @@ const ActivityWiseReport: React.FC = () => {
                     activity.sno,
                     activity.activityName,
                     activity.uom ?? '',
-                    '-',
                     activity?.publicPlanPhysical ?? 0,
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
@@ -130,7 +129,6 @@ const ActivityWiseReport: React.FC = () => {
                     activity.sno,
                     activity.activityName,
                     activity.uom ?? '',
-                    '-',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
                     activity?.publicRemark ?? ''
@@ -148,7 +146,6 @@ const ActivityWiseReport: React.FC = () => {
                     activity.sno,
                     activity.activityName,
                     activity.uom ?? '',
-                    'Public',
                     activity?.publicPlanPhysical ?? 0,
                     activity?.publicPlanFinancial ?? 0,
                     activity?.publicPhysical ?? 0,
@@ -159,30 +156,11 @@ const ActivityWiseReport: React.FC = () => {
                     activity.sno,
                     activity.activityName,
                     activity.uom ?? '',
-                    'Public',
                     activity?.publicPhysical ?? 0,
                     activity?.publicFinancial ?? 0,
                     activity?.publicRemark ?? ''
                 ];
             wsData.push(rowPublic);
-
-            const rowPrivate = showPlan
-                ? [
-                    '', '', '', 'Private',
-                    activity?.privatePlanPhysical ?? 0,
-                    activity?.privatePlanFinancial ?? 0,
-                    activity?.privatePhysical ?? 0,
-                    activity?.privateFinancial ?? 0,
-                    activity?.privateRemark ?? ''
-                ]
-                : [
-                    '', '', '', 'Private',
-                    activity?.privatePhysical ?? 0,
-                    activity?.privateFinancial ?? 0,
-                    activity?.privateRemark ?? ''
-                ];
-
-            wsData.push(rowPrivate);
         });
 
         const ws = XLSX.utils.aoa_to_sheet(wsData);
@@ -230,19 +208,17 @@ const ActivityWiseReport: React.FC = () => {
                 { s: { r: 5, c: 0 }, e: { r: 6, c: 0 } }, // Sl. No.
                 { s: { r: 5, c: 1 }, e: { r: 6, c: 1 } }, // Activity Name
                 { s: { r: 5, c: 2 }, e: { r: 6, c: 2 } }, // UOM
-                { s: { r: 5, c: 3 }, e: { r: 6, c: 3 } }, // LandType
-                { s: { r: 5, c: 4 }, e: { r: 5, c: 5 } }, // Plan
-                { s: { r: 5, c: 6 }, e: { r: 5, c: 7 } }, // Progress
-                { s: { r: 5, c: 8 }, e: { r: 6, c: 8 } }  // Remarks
+                { s: { r: 5, c: 3 }, e: { r: 5, c: 4 } }, // Plan
+                { s: { r: 5, c: 5 }, e: { r: 5, c: 6 } }, // Progress
+                { s: { r: 5, c: 7 }, e: { r: 6, c: 7 } }  // Remarks
             );
         } else {
             ws['!merges'].push(
-                { s: { r: 5, c: 0 }, e: { r: 6, c: 0 } },
-                { s: { r: 5, c: 1 }, e: { r: 6, c: 1 } },
-                { s: { r: 5, c: 2 }, e: { r: 6, c: 2 } },
-                { s: { r: 5, c: 3 }, e: { r: 6, c: 3 } },
-                { s: { r: 5, c: 4 }, e: { r: 5, c: 5 } },
-                { s: { r: 5, c: 6 }, e: { r: 6, c: 6 } }
+                { s: { r: 5, c: 0 }, e: { r: 6, c: 0 } }, // Sl. No.
+                { s: { r: 5, c: 1 }, e: { r: 6, c: 1 } }, // Activity Name
+                { s: { r: 5, c: 2 }, e: { r: 6, c: 2 } }, // UOM
+                { s: { r: 5, c: 3 }, e: { r: 5, c: 4 } }, // Progress (Physical & Financial)
+                { s: { r: 5, c: 5 }, e: { r: 6, c: 5 } }  // Remarks
             );
         }
 
@@ -356,7 +332,7 @@ const ActivityWiseReport: React.FC = () => {
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '40px', border: '1px solid #ccc' }} rowSpan={4} align="center">Sl. No.</TableCell>
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>Activity Name</TableCell>
                                     <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>UOM</TableCell>
-                                    <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>LandType</TableCell>
+                                    {/* <TableCell sx={{ lineHeight: '1', maxWidth: '200px', border: '1px solid #ccc' }} align="center" rowSpan={4}>LandType</TableCell> */}
                                 </TableRow>
                                 <TableRow>
                                     <React.Fragment>
@@ -392,18 +368,22 @@ const ActivityWiseReport: React.FC = () => {
                                             <React.Fragment key={row.sno}>
                                                 {/* Public Row */}
                                                 <TableRow>
-                                                    <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '40px' }} align="center">
+                                                    <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '40px' }} align="center">
                                                         {row.sno}
                                                     </TableCell>
-                                                    <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
+                                                    <TableCell sx={{
+                                                        lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px', whiteSpace: 'normal',
+                                                        overflowWrap: 'break-word',
+                                                        wordBreak: 'break-word',
+                                                    }} align="center">
                                                         {row.activityName}
                                                     </TableCell>
-                                                    <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
+                                                    <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
                                                         {row.uom}
                                                     </TableCell>
-                                                    <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
+                                                    {/* <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '200px' }} align="center">
                                                         Public
-                                                    </TableCell>
+                                                    </TableCell> */}
                                                     {showPlan && (
                                                         <>
                                                             <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicPlanPhysical}</TableCell>
@@ -414,7 +394,7 @@ const ActivityWiseReport: React.FC = () => {
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicFinancial}</TableCell>
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.publicRemark}</TableCell>
                                                 </TableRow>
-                                                <TableRow>
+                                                {/* <TableRow>
                                                     <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc' }} align="center">
                                                         Private
                                                     </TableCell>
@@ -427,7 +407,7 @@ const ActivityWiseReport: React.FC = () => {
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privatePhysical}</TableCell>
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateFinancial}</TableCell>
                                                     <TableCell sx={{ border: '1px solid #ccc' }} align="center">{row.privateRemark}</TableCell>
-                                                </TableRow>
+                                                </TableRow> */}
                                             </React.Fragment>
                                         ))
                                 ) : (
