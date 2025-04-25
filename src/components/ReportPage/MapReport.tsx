@@ -36,7 +36,7 @@ const MapReport = () => {
         const fetchReport = async () => {
             try {
                 const response2 = await ListActivityStatus();
-                const allOption = { id: 0, status: 'All', status_text: 'All' };
+                const allOption = { id: 0, status: 'All', statusText: 'All' };
                 setActivityStatus([allOption, ...response2]);
 
                 const resp3a = await ListSupply();
@@ -101,7 +101,7 @@ const MapReport = () => {
                         {Array.isArray(activityStatus) &&
                             activityStatus.map((status) => (
                                 <MenuItem key={status.id} value={status.status}>
-                                    {status.status_text}
+                                    {status.statusText}
                                 </MenuItem>
                             ))}
                     </Select>
