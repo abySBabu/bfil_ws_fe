@@ -11,6 +11,18 @@ export async function ListPara(para: any) {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function watershedReport() {
+    const configs = {
+        url: serverPath.bfil + `activity/dashboard/getParameter`,
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+           }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function generateKML(data: any) {
     const formData = new FormData();
     for (const key in data) {

@@ -1,14 +1,49 @@
 import React from 'react';
 import { Box, Card, CardContent, CardMedia, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
-import { BarChart, PieChart } from '@mui/x-charts';
 import { Square, Water, Agriculture, CurrencyRupee, Close } from '@mui/icons-material';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import { sd, ServerDownDialog } from '../../common';
+import { PieChart } from '@mui/x-charts/PieChart';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import { BarChart } from '@mui/x-charts/BarChart';
 import { DashKey, DashSupply, DashDemand, DashGraph } from '../../Services/activityService';
 import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ListDemand, ListSupply } from 'src/Services/dashboardService';
+import { ListDemand, ListSupply, watershedReport } from 'src/Services/dashboardService';
+import { ActivityData } from '../ReportPage/DonerReportTypes';
+
+const componentMap: Record<string, React.ElementType> = {
+    Square,
+    Water,
+    Agriculture,
+    CurrencyRupee,
+};
+
+const colorMap: Record<string, string> = {
+    Square: '#96c22f',
+    Water: '#3b77b9',
+    Agriculture: '#f58e1d',
+    CurrencyRupee: '#bfab55',
+};
+
+type ProgressEntry = {
+    activityName: string,
+    physicalValue: number,
+    financialValue: number,
+    uom: string,
+    field2: string,
+    field3: string,
+};
+
+type YearWiseEntry = {
+    finYear: string;
+    activityId: string;
+    activityName: string;
+    physicalValue: number;
+    financialValue: number;
+    uom: string;
+};
+
 
 export const Dashboard: React.FC = () => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
@@ -19,48 +54,215 @@ export const Dashboard: React.FC = () => {
     const [serverDown, setserverDown] = React.useState(false);
     const { t } = useTranslation();
     const [graphM, setgraphM] = React.useState("");
-    const [keyList, setkeyList] = React.useState<{ [key: string]: string }>({});
-    const [supplyList, setsupplyList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
-    const [demandList, setdemandList] = React.useState<{ [key: string]: { [unit: string]: number } }>({});
-    const [expectedSupplyActivities, setExpectedSupplyActivities] = React.useState<string[]>([]);
-    const [expectedDemandActivities, setExpectedDemandActivities] = React.useState<string[]>([]);
+    const [keyList, setkeyList] = React.useState<ProgressEntry[]>([]);
+    const [supplyList, setsupplyList] = React.useState<ProgressEntry[]>([]);
+    const [demandList, setdemandList] = React.useState<ProgressEntry[]>([]);
+    const [yearlyList, setyearlyList] = React.useState<YearWiseEntry[]>([]);
     const [allAct, setallAct] = React.useState<any[]>([]);
-    const [graphData, setgraphData] = React.useState<any>({});
+    const [selectedRow, setSelectedRow] = React.useState<any>();
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     React.useEffect(() => {
         const fetchData = async () => {
             setLoadingResponse(true);
             try {
+                const DashboardResp = await watershedReport();
+                let allData = DashboardResp;
+                const Demandcategory = "DEMAND_SIDE_INTERVENTIONS";
+                const Supplycategory = "SUPPLY_SIDE_INTERVENTIONS";
+                const KeyImpact = "KEY_IMPACT_INDICATORS";
                 const Supplyresp = await ListSupply();
-                if (Supplyresp) {
-                    const activities = Supplyresp.data.map((item: any) => item.activityId);
-                    setExpectedSupplyActivities(activities);
+                const yearWiseEntries: YearWiseEntry[] = [];
+
+                for (const entry of allData) {
+                    const items = entry.overallActivity?.[KeyImpact] || [];
+
+                    for (const item of items) {
+                        if (!item?.field2) continue;
+
+                        yearWiseEntries.push({
+                            finYear: item.finYear,
+                            activityId: item.field2,
+                            activityName: item.activityName || "",
+                            physicalValue: item.publicPhysical || 0,
+                            financialValue: item.publicFinancial || 0,
+                            uom: item.uom || "",
+                        });
+                    }
                 }
-                const Demandresp = await ListDemand();
-                if (Demandresp) {
-                    const activities = Demandresp.data.map((item: any) => item.activityId);
-                    setExpectedDemandActivities(activities);
+                setyearlyList(Array.from(yearWiseEntries.values()));
+
+
+                const demandEntriesMap = new Map<string, ProgressEntry>();
+
+                for (const entry of allData) {
+                    const items = entry.progressData?.[Demandcategory] || [];
+                    for (const item of items) {
+                        if (!item?.field2) continue;
+                        const key = item.field2;
+
+                        if (!demandEntriesMap.has(key)) {
+                            demandEntriesMap.set(key, {
+                                activityName: item.activityName || "",
+                                physicalValue: item.publicPhysical || 0,
+                                financialValue: item.publicFinancial || 0,
+                                uom: item.uom || "",
+                                field2: key,
+                                field3: item.field3,
+                            });
+                        } else {
+                            const existing = demandEntriesMap.get(key)!;
+                            existing.physicalValue += item.publicPhysical || 0;
+                            existing.financialValue += item.publicFinancial || 0;
+                        }
+                    }
                 }
-                if (Supplyresp && Demandresp)
-                    setallAct([...Supplyresp.data, ...Demandresp.data])
-                const resp1 = await DashKey();
-                if (resp1) {
-                    setkeyList(resp1);
+
+                setdemandList(Array.from(demandEntriesMap.values()));
+
+                const SupplyEntriesMap = new Map<string, ProgressEntry>();
+
+                for (const entry of allData) {
+                    const items = entry.progressData?.[Supplycategory] || [];
+                    for (const item of items) {
+                        if (!item?.field2) continue;
+                        const key = item.field2;
+
+                        if (!SupplyEntriesMap.has(key)) {
+                            SupplyEntriesMap.set(key, {
+                                activityName: item.activityName || "",
+                                physicalValue: item.publicPhysical || 0,
+                                financialValue: item.publicFinancial || 0,
+                                uom: item.uom || "",
+                                field2: key,
+                                field3: item.field3,
+                            });
+                        } else {
+                            const existing = SupplyEntriesMap.get(key)!;
+                            existing.physicalValue += item.publicPhysical || 0;
+                            existing.financialValue += item.publicFinancial || 0;
+                        }
+                    }
                 }
-                const resp2 = await DashSupply();
-                if (resp2.status === 'success') {
-                    //Edited by lakshmi- fetch resp.data
-                    setsupplyList(resp2.data)
+
+                setsupplyList(Array.from(SupplyEntriesMap.values()));
+
+                const KeyImpactEntriesMap = new Map<string, ProgressEntry>();
+
+                for (const entry of allData) {
+                    const items = entry.overallActivity?.[KeyImpact] || [];
+                    for (const item of items) {
+                        if (!item?.field2) continue;
+                        const key = item.field2;
+
+                        if (!KeyImpactEntriesMap.has(key)) {
+                            KeyImpactEntriesMap.set(key, {
+                                activityName: item.activityName || "",
+                                physicalValue: item.publicPhysical || 0,
+                                financialValue: item.publicFinancial || 0,
+                                uom: item.uom || "",
+                                field2: key,
+                                field3: item.field3,
+                            });
+                        } else {
+                            const existing = KeyImpactEntriesMap.get(key)!;
+                            existing.physicalValue += item.publicPhysical || 0;
+                            existing.financialValue += item.publicFinancial || 0;
+                        }
+                    }
                 }
-                const resp3 = await DashDemand();
-                if (resp3.status === 'success') {
-                    //Edited by lakshmi- fetch resp.data
-                    setdemandList(resp3.data)
-                }
-                const resp4 = await DashGraph();
-                if (resp4) {
-                    setgraphData(resp4)
-                }
+
+                setkeyList(Array.from(KeyImpactEntriesMap.values()));
+
+                // const demandEntries: ProgressEntry[] = [];
+                // const DemandmaxSubIndex = Math.max(
+                //     ...allData.map((entry: any) => entry.progressData?.[Demandcategory]?.length || 0)
+                // );
+
+                // for (let i = 0; i < DemandmaxSubIndex; i++) {
+                //     let sum = 0;
+                //     let activityName = "";
+                //     let financialValue = 0;
+                //     let uom = "";
+                //     for (const entry of allData) {
+                //         const item = entry.progressData?.[Demandcategory]?.[i];
+                //         if (item) {
+                //             sum += item.publicPhysical || 0;
+                //             financialValue += item.publicFinancial || 0;
+                //             if (activityName === "") activityName = item.activityName || "";
+                //             if (uom === "") uom = item.uom || "";
+                //         }
+                //     }
+                //     if (activityName) {
+                //         demandEntries.push({
+                //             activityName,
+                //             physicalValue: sum,
+                //             financialValue,
+                //             uom,
+                //         });
+                //     }
+                // }
+                // setdemandList(demandEntries);
+                // const supplyEntries: ProgressEntry[] = [];
+                // const SupplymaxSubIndex = Math.max(
+                //     ...allData.map((entry: any) => entry.progressData?.[Supplycategory]?.length || 0)
+                // );
+
+                // for (let i = 0; i < SupplymaxSubIndex; i++) {
+                //     let sum = 0;
+                //     let activityName = "";
+                //     let financialValue = 0;
+                //     let uom = "";
+                //     for (const entry of allData) {
+                //         const item = entry.progressData?.[Supplycategory]?.[i];
+                //         if (item) {
+                //             sum += item.publicPhysical || 0;
+                //             financialValue += item.publicFinancial || 0;
+                //             if (activityName === "") activityName = item.activityName || "";
+                //             if (uom === "") uom = item.uom || "";
+                //         }
+                //     }
+                //     if (activityName) {
+                //         supplyEntries.push({
+                //             activityName,
+                //             physicalValue: sum,
+                //             financialValue,
+                //             uom,
+                //         });
+                //     }
+                // }
+                // setsupplyList(supplyEntries);
+
+                // const KeyImpactEntries: ProgressEntry[] = [];
+                // const KeyImpactmaxSubIndex = Math.max(
+                //     ...allData.map((entry: any) => entry.overallActivity?.[KeyImpact]?.length || 0)
+                // );
+
+                // for (let i = 0; i < KeyImpactmaxSubIndex; i++) {
+                //     let sum = 0;
+                //     let activityName = "";
+                //     let financialValue = 0;
+                //     let uom = "";
+                //     for (const entry of allData) {
+                //         const item = entry.overallActivity?.[KeyImpact]?.[i];
+                //         if (item) {
+                //             sum += item.publicPhysical || 0;
+                //             financialValue += item.publicFinancial || 0;
+                //             if (activityName === "") activityName = item.activityName || "";
+                //             if (uom === "") uom = item.uom || "";
+                //         }
+                //     }
+                //     if (activityName) {
+                //         KeyImpactEntries.push({
+                //             activityName,
+                //             physicalValue: sum,
+                //             financialValue,
+                //             uom,
+                //         });
+                //     }
+                // }
+                // setkeyList(KeyImpactEntries);
+
                 setserverDown(false)
             }
             catch (error: any) {
@@ -70,6 +272,16 @@ export const Dashboard: React.FC = () => {
             setLoadingResponse(false);
         }; fetchData();
     }, [])
+
+    const handleChartClick = (row: ProgressEntry) => {
+        setSelectedRow(row);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setSelectedRow('');
+    };
 
     const ActTypeName = (code: number | string | undefined) => {
         const act = allAct.find(x => x.activityId == code);
@@ -82,100 +294,13 @@ export const Dashboard: React.FC = () => {
         <Grid item xs={6} lg={3}>
             <Card sx={{ height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }}>
                 <CardContent sx={{ textAlign: 'center' }}>
-                    <Typography variant='body1' fontWeight='bold'>{ActTypeName(activity)}</Typography>
-                    <Typography variant='body2'>{value} {unit}</Typography>
+                    <Typography sx={{ fontSize: '100%' }} >{ActTypeName(activity)}</Typography>
+                    <Typography variant='body1' fontWeight='bold'>{value} {unit}</Typography>
                 </CardContent>
             </Card>
         </Grid>
     )
 
-    type IndicatorValues = {
-        [key: string]: number;
-    };
-
-    type Activity = {
-        "farmer impacted"?: { [key: string]: number };
-        "WaterConserved"?: { [key: string]: number };
-        "totalArea"?: { [key: string]: number };
-        "Goverment Amount"?: { [key: string]: number };
-    };
-
-    type RawData = {
-        [activityId: string]: Activity;
-    };
-
-    type Totals = {
-        "farmer impacted": IndicatorValues;
-        "WaterConserved": IndicatorValues;
-        "totalArea": IndicatorValues;
-        "Goverment Amount": IndicatorValues;
-    };
-
-    const [graphIndicator, setGraphIndicator] = React.useState<keyof Totals>("farmer impacted");
-
-    const isEmptyObject = (obj: any): boolean => {
-        return obj && typeof obj === 'object' && Object.getOwnPropertyNames(obj).length === 0;
-    };
-
-    const processByMonth = (data: RawData): Totals => {
-        const totals: Totals = {
-            "farmer impacted": {},
-            "WaterConserved": {},
-            "totalArea": {},
-            "Goverment Amount": {},
-        };
-
-        // Check if data is null or undefined, and ensure it's an object
-        if (!data || typeof data !== 'object' || isEmptyObject(data)) {
-            return totals; // Return totals (empty object) if data is null, undefined, or empty
-        }
-
-        Object.values(data).forEach((activity) => {
-            Object.entries(activity).forEach(([indicator, values]) => {
-                if (totals[indicator as keyof Totals] && values) {
-                    Object.entries(values as IndicatorValues).forEach(([month, value]) => {
-                        if (value != null) {
-                            totals[indicator as keyof Totals][month] =
-                                (totals[indicator as keyof Totals][month] || 0) + value;
-                        }
-                    });
-                }
-            });
-        });
-
-        return totals;
-    };
-
-    const processByActivityId = (data: RawData): Totals => {
-        const totals: Totals = {
-            "farmer impacted": {},
-            "WaterConserved": {},
-            "totalArea": {},
-            "Goverment Amount": {},
-        };
-
-        // Check if data is null or undefined, and ensure it's an object
-        if (!data || typeof data !== 'object' || isEmptyObject(data)) {
-            return totals; // Return totals (empty object) if data is null, undefined, or empty
-        }
-
-        Object.entries(data).forEach(([activityId, activity]) => {
-            Object.entries(activity).forEach(([indicator, values]) => {
-                if (values) {
-                    const totalForActivity = Object.values(values as { [key: string]: number }).reduce(
-                        (sum, value) => sum + (value || 0), // Handle undefined/null values safely in the sum
-                        0
-                    );
-                    totals[indicator as keyof Totals][activityId] = totalForActivity;
-                }
-            });
-        });
-
-        return totals;
-    };
-
-    const barChartData = processByMonth(graphData);
-    const pieChartData = processByActivityId(graphData);
 
     return (<>
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress size={80} /></Box >
@@ -183,23 +308,45 @@ export const Dashboard: React.FC = () => {
                 : <>
                     <Grid container spacing={1}>
                         <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Subheader_Text")}</Typography>
-                                <CardMedia component={Square} sx={{ fontSize: '250%', color: '#96c22f' }} />
+                        <Grid item xs={12}>
+                            <Box sx={{ columnCount: 4, columnGap: 1 }}>
+                                {[...keyList]
+                                    .sort((a, b) => a.field2.localeCompare(b.field2))
+                                    .map((row, index) => {
+                                        const ComponentToRender = componentMap[row.field3] || Box; // fallback to Box if unknown
+                                        const iconColor = colorMap[row.field3] || '#000';
+                                        return (
+                                            <Card key={index} sx={{ ...keyCard, breakInside: 'avoid', mb: 2 }}>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <Typography sx={{ fontSize: '125%' }}>
+                                                        {row.activityName}
+                                                    </Typography>
+                                                    <CardMedia
+                                                        component={ComponentToRender}
+                                                        sx={{ fontSize: '250%', color: iconColor }}
+                                                    />
+                                                </Box>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <Typography variant='h5'>
+                                                        {row.field2 === "D" ? <b>{row.uom} {Number(row.financialValue).toLocaleString('en-IN')}</b> : <b>{Number(row.physicalValue).toLocaleString('en-IN')} {row.uom}</b>}
+                                                    </Typography>
+                                                    <IconButton onClick={() => handleChartClick(row)}>
+                                                        <BarChartIcon />
+                                                    </IconButton>
+                                                </Box>
+                                            </Card>
+                                        );
+                                    })}
                             </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h5'><b>{keyList?.totalAreaTreated ? keyList?.totalAreaTreated : "N/A"}</b></Typography>
-                                <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WatershedAreaTreated_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("totalArea"); }}><BarChartIcon /></IconButton>
-                            </Box>
-                        </Card></Grid>
-                        <Grid item xs={12} md={3}><Card sx={keyCard}>
+                        </Grid>
+
+                        {/* <Grid item xs={12} md={3}><Card sx={keyCard}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography sx={{ fontSize: '125%' }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WaterConserved_Subheader_Text")}</Typography>
                                 <CardMedia component={Water} sx={{ fontSize: '250%', color: '#3b77b9' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h5'><b>{keyList?.totalWaterConserved ? keyList?.totalWaterConserved : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>N/A</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.WaterConserved_Subheader.WatershedAreaTreated_Piechart.Piechart_Header")); setGraphIndicator("WaterConserved"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -209,7 +356,7 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={Agriculture} sx={{ fontSize: '250%', color: '#f58e1d' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h5'><b>{keyList?.beneficiary ? keyList?.beneficiary : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>N/A</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.FarmersImpacted_Subheader.FarmersImpacted_Piechart.Piechart_Header")); setGraphIndicator("farmer impacted"); }}><BarChartIcon /></IconButton>
                             </Box>
                         </Card></Grid>
@@ -219,27 +366,23 @@ export const Dashboard: React.FC = () => {
                                 <CardMedia component={CurrencyRupee} sx={{ fontSize: '250%', color: '#bfab55' }} />
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography variant='h5'><b>{keyList?.totalAmountSpent ? keyList?.totalAmountSpent : "N/A"}</b></Typography>
+                                <Typography variant='h5'><b>N/A</b></Typography>
                                 <IconButton onClick={() => { setgraphM(t("p_Dashboard.ss_KeyImpactIndicators_Header.GovernmentAmountLeveraged_Subheader.GovernmentAmountLeveraged_Piechart.Piechart_Header")); setGraphIndicator("Goverment Amount") }}><BarChartIcon /></IconButton>
                             </Box>
-                        </Card></Grid>
+                        </Card></Grid> */}
 
                         <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_SupplySideInterventions_Header_Text")}</Typography> </Grid>
                         <Grid item xs={12} md={8}>
                             <Grid container spacing={1}>
-                                {expectedSupplyActivities.map((activity, i) => {
-                                    const data = supplyList[activity];
-                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                {supplyList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} unit={activity.uom} />
                                     );
                                 })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
-                                {expectedDemandActivities.map((activity, i) => {
-                                    const data = demandList[activity];
-                                    const [unit, value] = data ? Object.entries(data)[0] : ["N/A", ""];
+                                {demandList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity} value={value} unit={unit} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} unit={activity.uom} />
                                     );
                                 })}
                             </Grid>
@@ -249,34 +392,61 @@ export const Dashboard: React.FC = () => {
                         </Grid>
                     </Grid >
 
-                    <Dialog open={Boolean(graphM)} onClose={() => setgraphM('')}>
+                    <Dialog open={openDialog} onClose={handleCloseDialog} >
                         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            {graphM}
-                            <IconButton onClick={() => setgraphM('')}><Close /></IconButton>
+                            {selectedRow?.activityName}
+                            <IconButton onClick={handleCloseDialog}><Close /></IconButton>
                         </DialogTitle>
 
                         <DialogContent sx={{ gap: '8px', p: 1 }}>
-                            <Box sx={{ overflow: 'auto' }}>{(Object.entries(barChartData[graphIndicator]).length > 0 && Object.entries(pieChartData[graphIndicator]).length > 0) ?
+                            {selectedRow && yearlyList.length > 0 ? (() => {
+                                const filtered = yearlyList
+                                    .filter((d) => d.activityId === selectedRow.field2)
+                                    .sort((a, b) => a.finYear.localeCompare(b.finYear)); // sort by year
+
+                                const limited = filtered.length > 8 ? filtered.slice(-8) : filtered;
+
+                                return (
+                                    <>
+                                        <BarChart
+                                            height={350}
+                                            margin={{ top: 50, bottom: 50, left: 80, right: 20 }}
+                                            xAxis={[
+                                                {
+                                                    scaleType: 'band',
+                                                    data: limited.map((d) => d.finYear),
+                                                },
+                                            ]}
+                                            series={[
+                                                {
+                                                    data: limited.map((d) =>
+                                                        selectedRow.field2 === "D" ? d.financialValue ?? 0 : d.physicalValue ?? 0
+                                                    ),
+                                                    label: selectedRow.field2 === "D" ? 'Financial Value' : 'Physical Value',
+                                                },
+                                            ]}
+                                        />
+                                        <PieChart
+                                            height={300}
+                                            series={[
+                                                {
+                                                    data: limited.map((d) => ({
+                                                        id: d.finYear,
+                                                        value:
+                                                            selectedRow.field2 === 'D'
+                                                                ? d.financialValue ?? 0
+                                                                : d.physicalValue ?? 0,
+                                                        label: d.finYear,
+                                                    })),
+                                                },
+                                            ]}
+                                        />
+                                    </>
+                                );
+                            })() :
                                 <>
-                                    <BarChart
-                                        height={chartHeight}
-                                        series={[{ data: Object.values(barChartData[graphIndicator]) }]}
-                                        xAxis={[{ data: (Object.keys(barChartData[graphIndicator])).map(month => month.substring(0, 3)), scaleType: 'band' }]}
-                                    />
-                                    <PieChart
-                                        height={chartHeight}
-                                        series={[{
-                                            data: Object.entries(pieChartData[graphIndicator]).map(([key, value], index) => ({
-                                                id: index,
-                                                value,
-                                                label: ActTypeName(key)
-                                            }))
-                                        }]}
-                                    />
-                                </>
-                                :
-                                <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data (Graph data is shown for past months, not current month)</Typography>
-                            }</Box>
+                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
+                                </>}
                         </DialogContent>
                     </Dialog>
                 </>
