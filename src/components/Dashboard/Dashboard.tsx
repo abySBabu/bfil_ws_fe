@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Tooltip, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { Square, Water, Agriculture, CurrencyRupee, Close } from '@mui/icons-material';
 import { sd, ServerDownDialog } from '../../common';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -46,6 +46,7 @@ type YearWiseEntry = {
 
 
 export const Dashboard: React.FC = () => {
+    const [flipped, setFlipped] = React.useState(false);
     const isSmallScreen = useMediaQuery('(max-width:600px)');
     const isMidScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
     const chartHeight = isSmallScreen ? 150 : isMidScreen ? 180 : 200;
@@ -290,16 +291,120 @@ export const Dashboard: React.FC = () => {
 
     const keyCard = { height: '120px', overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', /* position: 'relative', */ color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor'), p: '8px' }
 
-    const ActCard: React.FC<{ activity: string, value: number | string, unit: string }> = ({ activity, value, unit }) => (
-        <Grid item xs={6} lg={3}>
-            <Card sx={{ height: '85px', overflow: 'auto', borderRadius: sd('--card-bradius'), color: sd('--text-color-special'), bgcolor: sd('--card-bgcolor') }}>
-                <CardContent sx={{ textAlign: 'center' }}>
-                    <Typography sx={{ fontSize: '100%' }} >{ActTypeName(activity)}</Typography>
-                    <Typography variant='body1' fontWeight='bold'>{value} {unit}</Typography>
-                </CardContent>
-            </Card>
-        </Grid>
-    )
+    const ActCard: React.FC<{ activity: string; value: number | string; fvalue: number | string; unit: string }> = ({ activity, value, fvalue, unit }) => {
+        const [flipped, setFlipped] = React.useState(false);
+
+        return (
+            <Grid item xs={6} lg={3}>
+                <Tooltip title={ActTypeName(activity)}>
+                    <Box
+                        onClick={() => setFlipped(!flipped)}
+                        sx={{
+                            perspective: '1000px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                position: 'relative',
+                                width: '100%',
+                                height: '85px',
+                                transformStyle: 'preserve-3d',
+                                transition: 'transform 0.6s',
+                                transform: flipped ? 'rotateY(180deg)' : 'none',
+                            }}
+                        >
+                            {/* Front */}
+                            <Card
+                                sx={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%',
+                                    backfaceVisibility: 'hidden',
+                                    borderRadius: sd('--card-bradius'),
+                                    color: sd('--text-color-special'),
+                                    bgcolor: sd('--card-bgcolor'),
+                                }}
+                            >
+                                <CardContent sx={{ textAlign: 'center', padding: '8px !important' }}>
+                                    <Typography
+                                        sx={{
+                                            fontSize: '100%',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        {ActTypeName(activity)}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        fontWeight="bold"
+                                        sx={{
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            width: '100%',
+                                            marginTop: '6px',
+                                        }}
+                                    >
+                                        {Number(value).toLocaleString('en-IN')} {unit}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+
+                            {/* Back */}
+                            <Card
+                                sx={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%',
+                                    backfaceVisibility: 'hidden',
+                                    transform: 'rotateY(180deg)',
+                                    borderRadius: sd('--card-bradius'),
+                                    color: sd('--card-bgcolor'),
+                                    bgcolor: '#bb4d53',
+                                }}
+                            >
+                                <CardContent sx={{ textAlign: 'center', padding: '8px !important' }}>
+                                    <Typography
+                                        sx={{
+                                            fontSize: '100%',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        {ActTypeName(activity)}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        fontWeight="bold"
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            width: '100%',
+                                            marginTop: '6px',
+                                        }}
+                                    >
+                                        <CurrencyRupee sx={{ fontSize: '1.5rem', mr: 0.5, color: sd('--card-bgcolor') }} />
+                                        {Number(fvalue).toLocaleString('en-IN')}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    </Box>
+                </Tooltip>
+            </Grid>
+        );
+    };
+
 
 
     return (<>
@@ -376,13 +481,13 @@ export const Dashboard: React.FC = () => {
                             <Grid container spacing={1}>
                                 {supplyList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} unit={activity.uom} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
                                     );
                                 })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
                                 {demandList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} unit={activity.uom} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
                                     );
                                 })}
                             </Grid>
