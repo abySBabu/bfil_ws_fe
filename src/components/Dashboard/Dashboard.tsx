@@ -433,7 +433,7 @@ export const Dashboard: React.FC = () => {
                                                 </Box>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography variant='h5'>
-                                                        {row.field2 === "D" ? <b>{row.uom} {Number(row.financialValue).toLocaleString('en-IN')}</b> : <b>{Number(row.physicalValue).toLocaleString('en-IN')} {row.uom}</b>}
+                                                        {row.field2 === "D" ? <b>{row.uom} {Math.round(Number(row.financialValue)).toLocaleString('en-IN')}</b> : <b>{Math.round(Number(row.physicalValue)).toLocaleString('en-IN')} {row.uom}</b>}
                                                     </Typography>
                                                     <IconButton onClick={() => handleChartClick(row)}>
                                                         <BarChartIcon />
