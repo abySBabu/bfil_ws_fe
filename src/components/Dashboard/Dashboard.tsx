@@ -349,7 +349,7 @@ export const Dashboard: React.FC = () => {
                                             marginTop: '6px',
                                         }}
                                     >
-                                        {Number(value).toLocaleString('en-IN')} {unit}
+                                        {Math.round(Number(value)).toLocaleString('en-IN')} {unit}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -394,7 +394,7 @@ export const Dashboard: React.FC = () => {
                                         }}
                                     >
                                         <CurrencyRupee sx={{ fontSize: '1.5rem', mr: 0.5, color: sd('--card-bgcolor') }} />
-                                        {Number(fvalue).toLocaleString('en-IN')}
+                                        {Math.round(Number(fvalue)).toLocaleString('en-IN')}
                                     </Typography>
                                 </CardContent>
                             </Card>
