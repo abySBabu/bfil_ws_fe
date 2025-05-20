@@ -69,7 +69,8 @@ export default function (props: mapTypeProps) {
                 }
                 let resp = await listWS();
                 if (resp.status === 'success') {
-                    setWsList(resp.data);
+                    const cleaned = resp.data.filter((item: any) => item.watershedId !== 15);
+                    setWsList(cleaned);
                 }
                 let userResp = await usersList(companyId);
                 let temp: allUserType[] = userResp;

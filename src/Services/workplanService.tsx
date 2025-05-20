@@ -11,6 +11,16 @@ export async function listWP() {
     catch (error) { console.error(error); throw error; }
 }
 
+export async function listWPById() {
+    const configs = {
+        url: serverPath.bfil + `workplan/getAllWorkplan/${localStorage.getItem("userId")}`,
+        method: 'get',
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+
 export async function addWP(data: any) {
     const configs = {
         url: serverPath.bfil + "workplan/addworkplan",

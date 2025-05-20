@@ -67,7 +67,7 @@ const PlannedReport: React.FC = () => {
           const landTypeData = landTypeMap[landType as keyof typeof landTypeMap];
           if (landTypeData) {
             Object.values(landTypeData).forEach((watershed: Watershed) => {
-              uniqueWatershedNames.add(watershed.watershedName);
+              uniqueWatershedNames.add(watershed.watershedDesc);
             });
           }
         });
@@ -106,7 +106,7 @@ const PlannedReport: React.FC = () => {
       let totalPrivateFinancial = 0;
       const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(num);
       const publicPhysicalRow = [activityIndex + 1, activity.activityName, activity.uom, 'Public', 'Physical', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
         const publicPhysicalPlan = watershed?.physical?.plan ?? 0;
         //   const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
         totalPublicPhysical += publicPhysicalPlan;
@@ -117,7 +117,7 @@ const PlannedReport: React.FC = () => {
       worksheetData.push(publicPhysicalRow);
 
       const publicFinancialRow = ['', '', '', 'Public', 'Financial', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
         const publicFinancialPlan = watershed?.financial?.plan ?? 0;
         //   const publicFinancialProgress = watershed?.financial?.progress ?? 0;
         totalPublicFinancial += publicFinancialPlan;
@@ -128,7 +128,7 @@ const PlannedReport: React.FC = () => {
       worksheetData.push(publicFinancialRow);
 
       const privatePhysicalRow = ['', '', '', 'Private', 'Physical', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
         const privatePhysicalPlan = watershed?.physical?.plan ?? 0;
         //   const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
         totalPrivatePhysical += privatePhysicalPlan;
@@ -139,7 +139,7 @@ const PlannedReport: React.FC = () => {
       worksheetData.push(privatePhysicalRow);
 
       const privateFinancialRow = ['', '', '', 'Private', 'Financial', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
         const privateFinancialPlan = watershed?.financial?.plan ?? 0;
         //   const privateFinancialProgress = watershed?.financial?.progress ?? 0;
         totalPrivateFinancial += privateFinancialPlan;
@@ -270,7 +270,7 @@ const PlannedReport: React.FC = () => {
                           <TableCell align="center" rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc' }}>Public</TableCell>
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px' }} align="center">Physical</TableCell>
                           {watershedNames.map((watershedName) => {
-                            const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+                            const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
                             const publicphysicalplan = watershed?.physical?.plan ?? 0;
                             // const publicphysicalprogress = watershed?.physical?.progress ?? 0;
                             totalPublicPhysical += publicphysicalplan;
@@ -296,7 +296,7 @@ const PlannedReport: React.FC = () => {
 
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="center">Financial</TableCell>
                           {watershedNames.map((watershedName) => {
-                            const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedName === watershedName);
+                            const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
                             const publicFinacialplan = watershed?.financial?.plan ?? 0;
                             //   const publicFinacialprogress = watershed?.financial?.progress ?? 0;
                             totalPublicFinancial += publicFinacialplan;
@@ -321,7 +321,7 @@ const PlannedReport: React.FC = () => {
                           <TableCell rowSpan={2} sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="center">Private</TableCell>
                           <TableCell sx={{ border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="center">Physical</TableCell>
                           {watershedNames.map((watershedName) => {
-                            const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+                            const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
                             const privatePhysicalplan = watershed?.physical?.plan ?? 0;
                             // const privateFinancialprogress = watershed?.physical?.progress ?? 0;
                             totalPrivatePhysical += privatePhysicalplan;
@@ -345,7 +345,7 @@ const PlannedReport: React.FC = () => {
                         <TableRow>
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="center">Financial</TableCell>
                           {watershedNames.map((watershedName) => {
-                            const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedName === watershedName);
+                            const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
                             const privateFinacialplan = watershed?.financial?.plan ?? 0;
                             //   const privateFinacialprogress = watershed?.financial?.progress ?? 0;
                             totalPrivateFinancial += privateFinacialplan;

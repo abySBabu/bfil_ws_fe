@@ -10,31 +10,6 @@ export type mapDataType = {
 	roleId: number
 };
 
-districtId
-:
-1
-districtName
-:
-"Kalaburagi"
-gramPanchayatId
-:
-1
-gramPanchayatName
-:
-"ALGOOD"
-stateId
-:
-1
-stateName
-:
-"Karnataka"
-talukId
-:
-1
-talukName
-:
-"Kalaburagi"
-
 export type wsData = {
 	watershedId: number,
 	wsName: string,
@@ -48,6 +23,21 @@ export type wsData = {
 	gramPanchayatId: number;
 	gramPanchayatName: string;
 	villages: [],
+}
+
+export type wpData = {
+	wsId: string,
+	wsName: string,
+	wsDescription: string,
+	state: StateType;
+	district: DistrictType;
+	taluk: TalukType;
+	gramPanchayat: GramPanchayatType;
+	villages: string,
+	villageIds:string,
+	 mapLink: string,
+    createdAt: string,
+    updatedAt:string,
 }
 
 export type StateType = {

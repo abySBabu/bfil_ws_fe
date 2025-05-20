@@ -49,7 +49,18 @@ export default function MappingList() {
     const fetchMapData = async () => {
         try {
             let resp = await listWSMap();
-            setmapData(resp.data.reverse());
+            const cleanedData = resp.data.map((item: mapDataType) => {
+                const updatedWatershedId = item.watershedId
+                    .split(',')
+                    .filter(id => id.trim() !== '15')
+                    .join(',');
+
+                return {
+                    ...item,
+                    watershedId: updatedWatershedId
+                };
+            });
+            setmapData(cleanedData.reverse());
             let userData = await usersList(companyId);
             setUserList(userData);
             const wsDatalist = await listWS();

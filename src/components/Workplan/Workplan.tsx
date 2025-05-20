@@ -6,27 +6,29 @@ import {
 } from "@mui/material";
 import { Edit, PersonAddAlt1, Search } from '@mui/icons-material';
 import { TPA, PerChk, SnackAlert, ServerDownDialog } from '../../common';
-import { wsDef } from '../Watershed/WsMaster';
+import { wpData } from '../WatersheMapping/WatershedMappingMgmtType';
 import { StateName, DistrictName, TalukName, PanName, WsName } from '../../LocName';
-import { listWP, addWP, editWP, listFinYear } from '../../Services/workplanService';
+import { listWPById, addWP, editWP, listFinYear } from '../../Services/workplanService';
 import { ListLand, ListInter, ListDonor, ListPara } from '../../Services/dashboardService';
-import { listWS } from '../../Services/wsService';
+import { listWSbyUserId } from '../../Services/wsService';
 import { useTranslation } from 'react-i18next';
 
 export const Workplan: React.FC = () => {
     const { t } = useTranslation();
+    const uRole = localStorage.getItem("userRole");
+    const userId = localStorage.getItem("userId");
 
     const wpDef = {
         planningId: "",
         planningYear: "",
-        watershedId: "",
+        watershedId: (uRole == 'Technical Officer' || uRole == 'Project Manager') ? "" : "15",
         interventionType_Components: "",
         activityId: "",
         activityName: "",
         planlandType: "",
         planRemarks: "",
-        createdUser: "",
-        updatedUser: "",
+        createdUser: userId,
+        updatedUser: userId,
         unitofMeasurement: "",
         plan: "",
         value: 0,
@@ -70,8 +72,7 @@ export const Workplan: React.FC = () => {
     const [rPP, setrPP] = React.useState(10);
     const [planList, setplanList] = React.useState<typeof wpDef[]>([]);
     const [planObj, setplanObj] = React.useState(wpDef);
-    const [wsObj, setwsObj] = React.useState(wsDef);
-    const [wsOps, setwsOps] = React.useState<typeof wsDef[]>([]);
+    const [wsOps, setwsOps] = React.useState<wpData[]>([]);
     const [landOps, setlandOps] = React.useState<any[]>([]);
     const [intOps, setintOps] = React.useState<any[]>([]);
     const [actOps, setactOps] = React.useState<any[]>([]);
@@ -144,7 +145,6 @@ export const Workplan: React.FC = () => {
 
     React.useEffect(() => { fetchData() }, [])
 
-    React.useEffect(() => { WsSet(planObj.watershedId) }, [planObj.watershedId])
 
     React.useEffect(() => { ActSet() }, [planObj.interventionType_Components])
 
@@ -158,11 +158,11 @@ export const Workplan: React.FC = () => {
     const fetchData = async () => {
         setloadingResponse(true);
         try {
-            const resp1 = await listWP(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); }
+            const resp1 = await listWPById(); if (resp1.status === 'success') { setplanList(resp1.data.reverse()); }
             const resp2 = await ListInter(); const resp3 = await ListDonor();
             if (resp2.status === 'success' && resp3.status === 'success') { setintOps([...resp2.data, ...resp3.data]) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
-            const resp5 = await listWS(); if (resp5.status === 'success') { setwsOps(resp5.data) }
+            const resp5 = await listWSbyUserId(); if (resp5.status === 'success') { setwsOps(resp5.data) }
             const resp6 = await listFinYear(); if (resp6.status === 'success') { setfinOps(resp6.data) }
             setserverDown(false);
         }
@@ -172,8 +172,6 @@ export const Workplan: React.FC = () => {
         }
         setloadingResponse(false);
     }
-
-    const WsSet = async (id: any) => { setwsObj(wsOps.find((x: typeof wsDef) => x.watershedId === id) || wsDef) }
 
     const ActSet = async () => {
         try {
@@ -202,8 +200,13 @@ export const Workplan: React.FC = () => {
 
     const PlanAdd = async () => {
         setloading(true);
+        const updatedPlan = {
+            ...planObj,
+            createdUser: userId,
+            updatedUser: userId,
+        };
         try {
-            const resp1 = await addWP(planObj)
+            const resp1 = await addWP(updatedPlan)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_WorkPlan.Add_WorkPlan_Link.Add_Success_Message"));
@@ -224,8 +227,13 @@ export const Workplan: React.FC = () => {
 
     const PlanEdit = async (id: any) => {
         setloading(true);
+        const updatedPlan = {
+            ...planObj,
+            createdUser: userId,
+            updatedUser: userId,
+        };
         try {
-            const resp1 = await editWP(planObj, id)
+            const resp1 = await editWP(updatedPlan, id)
             if (resp1.status === 'success') {
                 fetchData(); setalertClr(true);
                 setalert(t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_Success_Message"));
@@ -382,9 +390,10 @@ export const Workplan: React.FC = () => {
                                         <TableCell>{w.value} {w.unitofMeasurement}</TableCell>
                                         <TableCell align='right'>₹{w.financialDetails?.reduce((sum, detail) => { return sum + detail.wfsValue }, 0) || ''}</TableCell>
                                         {PerChk('EDIT_Work Plan') && <TableCell>
-                                            <Tooltip title={t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
-                                                <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton></Tooltip>
-                                        </TableCell>}
+                                            {(userId === w.createdUser) && <>
+                                                <Tooltip title={t("p_WorkPlan.ss_WorkplanList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")}>
+                                                    <IconButton onClick={() => { setplanObj(w); seteditM(true); }}><Edit /></IconButton></Tooltip>
+                                            </>} </TableCell>}
                                     </TableRow>
                                 ))}</TableBody>
 
@@ -409,7 +418,7 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Financial_Year")} value={planObj.planningYear} onChange={(e) => setplanObj({ ...planObj, planningYear: e.target.value })}>
                     {finOps?.map((o, i) => (<MenuItem key={i} value={o.parameterName}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '', unitofMeasurement: '' })}>
+                <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Intervention")} value={planObj.interventionType_Components} onChange={(e) => setplanObj({ ...planObj, interventionType_Components: e.target.value, activityId: '', unitofMeasurement: '', watershedId: (uRole == 'Technical Officer' || uRole == 'Project Manager') ? '' : '15' })}>
                     {intOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
                 <Grid item xs={15} md={5}>
@@ -440,16 +449,72 @@ export const Workplan: React.FC = () => {
                 <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Land_Type")} value={planObj.planlandType} onChange={(e) => setplanObj({ ...planObj, planlandType: e.target.value })}>
                     {landOps?.map((o, i) => (<MenuItem key={i} value={o.parameterId}>{o.parameterName}</MenuItem>))}
                 </TextField></Grid>
-                {!(planObj.interventionType_Components == '31') && !(planObj.interventionType_Components == '32') && <>
-                    <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed_Details")}</Divider></Grid>
-                    <Grid item xs={15} md={5}><TextField required select label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed")} value={planObj.watershedId} onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}>
-                        {wsOps.map((o, i) => (<MenuItem key={i} value={o.watershedId}>{o.wsName}</MenuItem>))}
-                    </TextField></Grid>
-                    <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.State")} value={StateName(1)} disabled /></Grid>
-                    <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.District")} value={DistrictName(wsObj.districtId)} disabled /></Grid>
-                    <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Taluka")} value={TalukName(wsObj.talukId)} disabled /></Grid>
-                    <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Grampanchayat")} value={PanName(wsObj.gramPanchayatId)} disabled /></Grid>
-                </>}
+                {!(planObj.interventionType_Components == '31') && !(planObj.interventionType_Components == '32') && (uRole == 'Technical Officer' || uRole == 'Project Manager') &&
+                    <>
+                        <Grid item xs={15}>
+                            <Divider>
+                                {t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed_Details")}
+                            </Divider>
+                        </Grid>
+
+                        <Grid item xs={12} md={5}>
+                            <TextField
+                                required
+                                select
+                                label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Watershed")}
+                                value={planObj.watershedId}
+                                onChange={(e) => setplanObj({ ...planObj, watershedId: e.target.value })}
+                            >
+                                {wsOps.map((o, i) => (
+                                    <MenuItem key={i} value={o.wsId}>
+                                        {o.wsName}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+
+                        {(() => {
+                            const selectedWS = wsOps.find(ws => ws.wsId === planObj.watershedId);
+                            return (
+                                <>
+                                    <Grid item xs={12} md={5}>
+                                        <TextField
+                                            required
+                                            label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.State")}
+                                            value={StateName(selectedWS?.state.stateId)}
+                                            disabled
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={5}>
+                                        <TextField
+                                            required
+                                            label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.District")}
+                                            value={DistrictName(selectedWS?.district.districtId)}
+                                            disabled
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={5}>
+                                        <TextField
+                                            required
+                                            label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Taluka")}
+                                            value={TalukName(selectedWS?.taluk.talukId)}
+                                            disabled
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={5}>
+                                        <TextField
+                                            required
+                                            label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Grampanchayat")}
+                                            value={PanName(selectedWS?.gramPanchayat.panchayatId)}
+                                            disabled
+                                        />
+                                    </Grid>
+                                </>
+                            );
+                        })()}
+                    </>
+                }
+
                 <Grid item xs={15}><Divider>{t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Physical_Plan")}</Divider></Grid>
                 <Grid item xs={15} md={5}><TextField required label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Value")} value={planObj.value} onChange={(e) => setplanObj({ ...planObj, value: parseInt(e.target.value) })} type='number' inputProps={{ min: 0 }} /></Grid>
                 <Grid item xs={15} md={5}><TextField label={t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.UOM")} value={planObj.unitofMeasurement} disabled /></Grid>
