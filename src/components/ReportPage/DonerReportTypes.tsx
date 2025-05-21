@@ -29,6 +29,7 @@ export interface PhysicalData {
 }
 
 export interface Watershed {
+  watershedId:number;
   watershedDesc: string;
   watershedName: string;
   physical: PhysicalData;

@@ -55,10 +55,34 @@ const WatershedReport: React.FC = () => {
         uId = parseInt(userId);
       }
       const reportData1 = await watershedReport(selectedYear, uId);
-      setReportData(reportData1.activitiesWithWatershedIdList);
+      const filteredActivities = reportData1.activitiesWithWatershedIdList.map((activity: Activity) => {
+        const newLandTypeMap: any = {};
+
+        ['Private', 'Public'].forEach((landType) => {
+          const landTypeData = activity.landTypeMap[landType as keyof typeof activity.landTypeMap];
+          if (landTypeData) {
+            const filteredLandTypeData: any = {};
+
+            Object.entries(landTypeData).forEach(([key, watershed]: [string, Watershed]) => {
+              if (watershed.watershedId !== 15) {
+                filteredLandTypeData[key] = watershed;
+              }
+            });
+
+            newLandTypeMap[landType] = filteredLandTypeData;
+          }
+        });
+
+        return {
+          ...activity,
+          landTypeMap: newLandTypeMap,
+        };
+      });
+
+      setReportData(filteredActivities);
       //console.log("Report data:", reportData);
       const uniqueWatershedNames = new Set<string>();
-      reportData1.activitiesWithWatershedIdList.forEach((activity: Activity) => {
+      filteredActivities.forEach((activity: Activity) => {
         const { landTypeMap } = activity;
         ['Private', 'Public'].forEach((landType) => {
           const landTypeData = landTypeMap[landType as keyof typeof landTypeMap];
