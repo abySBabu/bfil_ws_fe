@@ -9,6 +9,8 @@ import { watershedReport } from 'src/Services/reportService';
 import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan } from './DonerReportTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 
+type LandKey = 'Private' | 'Public';
+
 const PlannedReport: React.FC = () => {
   const [loadingResponse, setLoadingResponse] = React.useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -54,22 +56,68 @@ const PlannedReport: React.FC = () => {
 
     try {
       const userId = localStorage.getItem("userId");
+      let uId = 0;
       if (userId !== null) {
         uId = parseInt(userId);
       }
+
       const reportData1 = await watershedReport(selectedYear, uId);
-      setReportData(reportData1.activitiesWithWatershedIdList);
-      //console.log("Report data:", reportData);
+
+      const updatedActivities: Activity[] = reportData1.activitiesWithWatershedIdList.map((activity: Activity) => {
+        const updatedLandTypeMap = { Private: {}, Public: {} } as {
+          Private: LandType;
+          Public: LandType;
+        };
+
+        (['Private', 'Public'] as LandKey[]).forEach((landKey) => {
+          const originalWatersheds = activity.landTypeMap[landKey];
+
+          let totalPhysicalProgress = 0;
+          let totalFinancialProgress = 0;
+
+          Object.entries(originalWatersheds).forEach(([code, watershed]) => {
+            if (watershed.watershedId !== 15) {
+              totalPhysicalProgress += watershed.physical?.progress || 0;
+              totalFinancialProgress += watershed.financial?.progress || 0;
+            }
+          });
+
+          const newLandTypeData: LandType = {};
+          Object.entries(originalWatersheds).forEach(([code, watershed]) => {
+            if (watershed.watershedId === 15) {
+              newLandTypeData[code] = {
+                ...watershed,
+                physical: {
+                  ...watershed.physical,
+                  progress: totalPhysicalProgress
+                },
+                financial: {
+                  ...watershed.financial,
+                  progress: totalFinancialProgress
+                }
+              };
+            } else {
+              newLandTypeData[code] = watershed;
+            }
+          });
+
+          updatedLandTypeMap[landKey] = newLandTypeData;
+        });
+
+        return {
+          ...activity,
+          landTypeMap: updatedLandTypeMap
+        };
+      });
+
+      setReportData(updatedActivities);
+
       const uniqueWatershedNames = new Set<string>();
-      reportData1.activitiesWithWatershedIdList.forEach((activity: Activity) => {
-        const { landTypeMap } = activity;
-        ['Private', 'Public'].forEach((landType) => {
-          const landTypeData = landTypeMap[landType as keyof typeof landTypeMap];
-          if (landTypeData) {
-            Object.values(landTypeData).forEach((watershed: Watershed) => {
-              uniqueWatershedNames.add(watershed.watershedDesc);
-            });
-          }
+      updatedActivities.forEach((activity) => {
+        ['Private', 'Public'].forEach((landKey) => {
+          Object.values(activity.landTypeMap[landKey as LandKey]).forEach((watershed) => {
+            uniqueWatershedNames.add(watershed.watershedDesc);
+          });
         });
       });
 
@@ -77,9 +125,9 @@ const PlannedReport: React.FC = () => {
     } catch (error) {
       console.error('Error fetching report:', error);
     }
+
     setLoadingResponse(false);
   };
-
 
   useEffect(() => {
     fetchReport();
@@ -88,111 +136,156 @@ const PlannedReport: React.FC = () => {
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
     const worksheetData = [];
+
     const headerRow1 = ['Sl. No.', 'Activity Name', 'UOM', 'Land Type', 'Process Type',
       ...watershedNames.flatMap((name) => showProgressWs ? [name, ''] : [name]),
-      'Total'
-    ];
+      ...(showProgressWs ? ['Total', ''] : ['Total'])];
+
     worksheetData.push(headerRow1);
-    const headerRow2 = showProgressWs ? ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan', 'Progress'])] : ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan'])];
+
+    const headerRow2 = showProgressWs
+      ? ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan', 'Progress']), 'Plan', 'Progress']
+      : ['', '', '', '', '', ...watershedNames.flatMap(() => ['Plan']), 'Plan'];
+
     worksheetData.push(headerRow2);
 
-    const merges = [{ s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } },
-    ...(showProgressWs
-      ? watershedNames.map((_, i) => ({
-        s: { r: 0, c: 5 + i * 2 },
-        e: { r: 0, c: 6 + i * 2 }
-      }))
-      : watershedNames.map((_, i) => ({
-        s: { r: 0, c: 5 + i },
-        e: { r: 1, c: 5 + i }
-      }))
-    ),
-    {
-      s: {
-        r: 0,
-        c: showProgressWs ? 5 + watershedNames.length * 2 : 5 + watershedNames.length
-      },
-      e: {
-        r: 1,
-        c: showProgressWs ? 5 + watershedNames.length * 2 : 5 + watershedNames.length
-      }
-    }
+    const merges = [
+      { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // Sl. No.
+      { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, // Activity Name
+      { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // UOM
+      { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // Land Type
+      { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // Process Type
+
+      ...(showProgressWs
+        ? watershedNames.map((_, i) => ({
+          s: { r: 0, c: 5 + i * 2 },
+          e: { r: 0, c: 6 + i * 2 }
+        }))
+        : watershedNames.map((_, i) => ({
+          s: { r: 0, c: 5 + i },
+          e: { r: 1, c: 5 + i }
+        }))
+      ),
+
+      ...(showProgressWs
+        ? [{
+          s: { r: 0, c: 5 + watershedNames.length * 2 },
+          e: { r: 0, c: 6 + watershedNames.length * 2 }
+        }]
+        : [{
+          s: { r: 0, c: 5 + watershedNames.length },
+          e: { r: 1, c: 5 + watershedNames.length }
+        }]
+      )
     ];
 
     let currentRow = 2;
+
     reportData.forEach((activity, activityIndex) => {
       let totalPublicPhysical = 0;
+      let totalPublicPhysicalProgress = 0;
       let totalPublicFinancial = 0;
+      let totalPublicFinancialProgress = 0;
       let totalPrivatePhysical = 0;
+      let totalPrivatePhysicalProgress = 0;
       let totalPrivateFinancial = 0;
+      let totalPrivateFinancialProgress = 0;
+
       const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(num);
-      const publicPhysicalRow = [activityIndex + 1, activity.activityName, activity.uom, 'Public', 'Physical', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
-        const publicPhysicalPlan = watershed?.physical?.plan ?? 0;
-        const publicPhysicalProgress = watershed?.physical?.progress ?? 0;
-        if (showProgressWs) {
-          totalPublicPhysical += publicPhysicalPlan + publicPhysicalProgress;
-          return [publicPhysicalPlan, publicPhysicalProgress].map(formatNumber);
-        } else {
-          totalPublicPhysical += publicPhysicalPlan;
-          return [publicPhysicalPlan].map(formatNumber);
-        }
-      }),
-      formatNumber(totalPublicPhysical)
+
+      // Public - Physical
+      const publicPhysicalRow = [
+        activityIndex + 1,
+        activity.activityName,
+        activity.uom,
+        'Public',
+        'Physical',
+        ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.physical?.plan ?? 0;
+          const progress = watershed?.physical?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPublicPhysical += plan;
+            totalPublicPhysicalProgress += progress;
+          }
+          return showProgressWs ? [plan, progress].map(formatNumber) : [plan].map(formatNumber);
+        }),
+        ...(showProgressWs
+          ? [formatNumber(totalPublicPhysical), formatNumber(totalPublicPhysicalProgress)]
+          : [formatNumber(totalPublicPhysical)]
+        )
       ];
       worksheetData.push(publicPhysicalRow);
 
-      const publicFinancialRow = ['', '', '', 'Public', 'Financial', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
-        const publicFinancialPlan = watershed?.financial?.plan ?? 0;
-        const publicFinancialProgress = watershed?.financial?.progress ?? 0;
-        if (showProgressWs) {
-          totalPublicFinancial += publicFinancialPlan + publicFinancialProgress;
-          return [publicFinancialPlan, publicFinancialProgress].map(formatNumber);
-        } else {
-          totalPublicFinancial += publicFinancialPlan;
-          return [publicFinancialPlan].map(formatNumber);
-        }
-      }),
-        formatNumber(totalPublicFinancial)
+      // Public - Financial
+      const publicFinancialRow = [
+        '', '', '', 'Public', 'Financial',
+        ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.financial?.plan ?? 0;
+          const progress = watershed?.financial?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPublicFinancial += plan;
+            totalPublicFinancialProgress += progress;
+          }
+          return showProgressWs ? [plan, progress].map(formatNumber) : [plan].map(formatNumber);
+        }),
+        ...(showProgressWs
+          ? [formatNumber(totalPublicFinancial), formatNumber(totalPublicFinancialProgress)]
+          : [formatNumber(totalPublicFinancial)]
+        )
       ];
       worksheetData.push(publicFinancialRow);
 
-      const privatePhysicalRow = ['', '', '', 'Private', 'Physical', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
-        const privatePhysicalPlan = watershed?.physical?.plan ?? 0;
-        const privatePhysicalProgress = watershed?.physical?.progress ?? 0;
-        if (showProgressWs) {
-          totalPrivatePhysical += privatePhysicalPlan + privatePhysicalProgress;
-          return [privatePhysicalPlan, privatePhysicalProgress].map(formatNumber);
-        } else {
-          totalPrivatePhysical += privatePhysicalPlan;
-          return [privatePhysicalPlan].map(formatNumber);
-        }
-      }),
-        formatNumber(totalPrivatePhysical)
+      // Private - Physical
+      const privatePhysicalRow = [
+        '', '', '', 'Private', 'Physical',
+        ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.physical?.plan ?? 0;
+          const progress = watershed?.physical?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPrivatePhysical += plan;
+            totalPrivatePhysicalProgress += progress;
+          }
+          return showProgressWs ? [plan, progress].map(formatNumber) : [plan].map(formatNumber);
+        }),
+        ...(showProgressWs
+          ? [formatNumber(totalPrivatePhysical), formatNumber(totalPrivatePhysicalProgress)]
+          : [formatNumber(totalPrivatePhysical)]
+        )
       ];
       worksheetData.push(privatePhysicalRow);
 
-      const privateFinancialRow = ['', '', '', 'Private', 'Financial', ...watershedNames.flatMap((watershedName) => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
-        const privateFinancialPlan = watershed?.financial?.plan ?? 0;
-        const privateFinancialProgress = watershed?.financial?.progress ?? 0;
-        if (showProgressWs) {
-          totalPrivateFinancial += privateFinancialPlan + privateFinancialProgress;
-          return [privateFinancialPlan, privateFinancialProgress].map(formatNumber);
-        } else {
-          totalPrivateFinancial += privateFinancialPlan;
-          return [privateFinancialPlan].map(formatNumber);
-        }
-      }),
-        formatNumber(totalPrivateFinancial)
+      // Private - Financial
+      const privateFinancialRow = [
+        '', '', '', 'Private', 'Financial',
+        ...watershedNames.flatMap((watershedName) => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.financial?.plan ?? 0;
+          const progress = watershed?.financial?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPrivateFinancial += plan;
+            totalPrivateFinancialProgress += progress;
+          }
+          return showProgressWs ? [plan, progress].map(formatNumber) : [plan].map(formatNumber);
+        }),
+        ...(showProgressWs
+          ? [formatNumber(totalPrivateFinancial), formatNumber(totalPrivateFinancialProgress)]
+          : [formatNumber(totalPrivateFinancial)]
+        )
       ];
       worksheetData.push(privateFinancialRow);
-      merges.push({ s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } }, { s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } }, { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }
+
+      // Merge headers (activity rows)
+      merges.push(
+        { s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } },
+        { s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } },
+        { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }
       );
       currentRow += 4;
     });
+
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
     worksheet['!cols'] = [
       { wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 },
@@ -279,7 +372,7 @@ const PlannedReport: React.FC = () => {
                       {watershedName}
                     </TableCell>
                   ))}
-                  <TableCell sx={{ lineHeight: '1', maxWidth: '40px', border: '1px solid #ccc' }} rowSpan={2} align="center">Total</TableCell>
+                  <TableCell sx={{ lineHeight: '1', maxWidth: '40px', border: '1px solid #ccc' }} colSpan={showProgressWs ? 2 : 1} align="center">Total</TableCell>
                 </TableRow>
                 <TableRow>
                   {watershedNames.map((watershedName, idx) => (
@@ -290,6 +383,12 @@ const PlannedReport: React.FC = () => {
                       }
                     </React.Fragment>
                   ))}
+                  <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Plan</TableCell>
+                  {showProgressWs &&
+                    <TableCell sx={{ border: '1px solid #ccc', lineHeight: '1', textAlign: 'center', maxWidth: '70px', width: '70px' }}>Progress</TableCell>
+                  }
+                </TableRow>
+                <TableRow>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -305,6 +404,10 @@ const PlannedReport: React.FC = () => {
                     let totalPublicFinancial = 0;
                     let totalPrivatePhysical = 0;
                     let totalPrivateFinancial = 0;
+                    let totalPublicPhysicalProgress = 0;
+                    let totalPublicFinancialProgress = 0;
+                    let totalPrivatePhysicalProgress = 0;
+                    let totalPrivateFinancialProgress = 0;
                     return (
                       <React.Fragment key={activityIndex}>
                         <TableRow>
@@ -320,7 +423,10 @@ const PlannedReport: React.FC = () => {
                             const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
                             const publicphysicalplan = watershed?.physical?.plan ?? 0;
                             const publicphysicalprogress = watershed?.physical?.progress ?? 0;
-                            totalPublicPhysical += publicphysicalplan;
+                            if (watershed?.watershedId !== 15) {
+                              totalPublicPhysical += publicphysicalplan;
+                              totalPublicPhysicalProgress += publicphysicalprogress;
+                            }
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
@@ -335,6 +441,10 @@ const PlannedReport: React.FC = () => {
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold' }}>
                             {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicPhysical)}
                           </TableCell>
+                          {showProgressWs &&
+                            <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold' }}>
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicPhysicalProgress)}
+                            </TableCell>}
                         </TableRow>
 
                         <TableRow>
@@ -344,7 +454,10 @@ const PlannedReport: React.FC = () => {
                             const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
                             const publicFinacialplan = watershed?.financial?.plan ?? 0;
                             const publicFinacialprogress = watershed?.financial?.progress ?? 0;
-                            totalPublicFinancial += publicFinacialplan;
+                            if (watershed?.watershedId !== 15) {
+                              totalPublicFinancial += publicFinacialplan;
+                              totalPublicFinancialProgress += publicFinacialprogress;
+                            }
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
@@ -359,6 +472,10 @@ const PlannedReport: React.FC = () => {
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', width: '100px', fontWeight: 'bold' }}>
                             {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicFinancial)}
                           </TableCell>
+                          {showProgressWs &&
+                            <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', width: '100px', fontWeight: 'bold' }}>
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPublicFinancialProgress)}
+                            </TableCell>}
                         </TableRow>
 
 
@@ -369,7 +486,10 @@ const PlannedReport: React.FC = () => {
                             const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
                             const privatePhysicalplan = watershed?.physical?.plan ?? 0;
                             const privateFinancialprogress = watershed?.physical?.progress ?? 0;
-                            totalPrivatePhysical += privatePhysicalplan;
+                            if (watershed?.watershedId !== 15) {
+                              totalPrivatePhysical += privatePhysicalplan;
+                              totalPrivatePhysicalProgress += privateFinancialprogress;
+                            }
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
@@ -386,6 +506,10 @@ const PlannedReport: React.FC = () => {
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold' }}>
                             {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivatePhysical)}
                           </TableCell>
+                          {showProgressWs &&
+                            <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold' }}>
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivatePhysicalProgress)}
+                            </TableCell>}
                         </TableRow>
                         <TableRow>
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="center">Financial</TableCell>
@@ -393,7 +517,10 @@ const PlannedReport: React.FC = () => {
                             const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
                             const privateFinacialplan = watershed?.financial?.plan ?? 0;
                             const privateFinacialprogress = watershed?.financial?.progress ?? 0;
-                            totalPrivateFinancial += privateFinacialplan;
+                            if (watershed?.watershedId !== 15) {
+                              totalPrivateFinancial += privateFinacialplan;
+                              totalPrivateFinancialProgress += privateFinacialprogress;
+                            }
                             return (
                               <React.Fragment key={watershedName}>
                                 <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', maxWidth: '100px', width: '100px' }} align="right">
@@ -408,6 +535,10 @@ const PlannedReport: React.FC = () => {
                           <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold', width: '100px' }}>
                             {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivateFinancial)}
                           </TableCell>
+                          {showProgressWs &&
+                            <TableCell sx={{ lineHeight: '1', border: '1px solid #ccc', textAlign: 'right', maxWidth: '100px', fontWeight: 'bold', width: '100px' }}>
+                              {new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(totalPrivateFinancialProgress)}
+                            </TableCell>}
                         </TableRow>
                       </React.Fragment>
                     );
