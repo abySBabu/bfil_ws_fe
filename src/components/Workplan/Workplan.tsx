@@ -184,11 +184,11 @@ export const Workplan: React.FC = () => {
                 if (resp1) { setactOps(resp1.data) }
             }
             else if (planObj.interventionType_Components == '31') {
-                const resp1 = await ListPara('Administration Cost');
+                const resp1 = await ListPara('Project Management, Administration Cost and NGO Over heads etc');
                 if (resp1) { setactOps(resp1.data) }
             }
             else if (planObj.interventionType_Components == '32') {
-                const resp1 = await ListPara('Post Watershed Management');
+                const resp1 = await ListPara('Capacity Building, Institutional strengthening and Post watershed management');
                 if (resp1) { setactOps(resp1.data) }
             }
             else {
