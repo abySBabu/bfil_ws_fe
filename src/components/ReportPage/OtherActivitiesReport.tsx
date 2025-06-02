@@ -153,7 +153,7 @@ const OtherActivitiesReport: React.FC = () => {
         worksheet['!cols'] = [{ wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 }, ...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]), { wpx: 100 }];
         worksheet['!merges'] = merges;
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Non Watershed Report');
-        XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
+        XLSX.writeFile(workbook, 'Non_Watershed_Report.xlsx');
     };
 
     return (
