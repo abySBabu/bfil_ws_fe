@@ -189,7 +189,7 @@ const DonerReport: React.FC = () => {
 
 
     const calculateColumnTotals = () => {
-        const totals: ActivitySources = { IBL: 0, BFIL: 0, "Other Gov Scheme": 0, MGNREGA: 0, Community: 0, Other: 0, };
+        const totals: ActivitySources = { IBL: 0, BFIL: 0, "Gov Schemes": 0, MGNREGA: 0, Community: 0, Other: 0, };
         data.forEach(item => {
             Object.values(item.activities).forEach(activitySources => {
                 Object.keys(totals).forEach(source => {

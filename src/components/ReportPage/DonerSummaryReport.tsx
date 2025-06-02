@@ -26,12 +26,12 @@ const groupDataByComponent = () => {
         } = {};
 
         const columnTotals: ActivitySources = {
-            IBL: 0,BFIL: 0,"Other Gov Scheme": 0,MGNREGA: 0,Community: 0,Other: 0,
+            IBL: 0,BFIL: 0,"Gov Schemes": 0,MGNREGA: 0,Community: 0,Other: 0,
         };
 
         formattedData.forEach((item: ComponentData) => {
             if (!groupedData[item.components]) {
-                groupedData[item.components] = {sources: {IBL: 0,BFIL: 0,"Other Gov Scheme": 0, MGNREGA: 0, Community: 0,Other: 0,},
+                groupedData[item.components] = {sources: {IBL: 0,BFIL: 0,"Gov Schemes": 0, MGNREGA: 0, Community: 0,Other: 0,},
                     activities: {},
                     rowTotal: 0,  
                 };

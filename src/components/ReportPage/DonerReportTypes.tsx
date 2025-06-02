@@ -2,7 +2,7 @@ export type ActivitySources = {
   [key: string]: number;
   IBL: number;
   BFIL: number;
-  "Other Gov Scheme": number;
+  "Gov Schemes": number;
   MGNREGA: number;
   Community: number;
   Other: number;
@@ -29,7 +29,7 @@ export interface PhysicalData {
 }
 
 export interface Watershed {
-  watershedId:number;
+  watershedId: number;
   watershedDesc: string;
   watershedName: string;
   physical: PhysicalData;
