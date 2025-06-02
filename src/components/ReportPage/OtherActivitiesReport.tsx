@@ -18,7 +18,7 @@ const OtherActivitiesReport: React.FC = () => {
     const [yearOptions, setYearOptions] = useState<any[]>([]);
     const [uniquePlanningYears, setUniquePlanningYears] = useState<string[]>([]);
     let uId: any;
-    const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Watershed Report' });
+    const handlePrint = useReactToPrint({ contentRef, documentTitle: 'Non Watershed Report' });
     const exportToPDF = () => { handlePrint(); };
 
     const handleYearChange = (event: SelectChangeEvent<string>) => {
@@ -152,7 +152,7 @@ const OtherActivitiesReport: React.FC = () => {
         const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
         worksheet['!cols'] = [{ wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 }, ...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]), { wpx: 100 }];
         worksheet['!merges'] = merges;
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Watershed Report');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Non Watershed Report');
         XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
     };
 
