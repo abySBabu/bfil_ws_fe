@@ -418,8 +418,8 @@ export const Dashboard: React.FC = () => {
                                 {[...keyList]
                                     .sort((a, b) => a.field2.localeCompare(b.field2))
                                     .map((row, index) => {
-                                        const ComponentToRender = componentMap[row.field3] || Box; // fallback to Box if unknown
-                                        const iconColor = colorMap[row.field3] || '#000';
+                                        const getComponent = (name: string): React.ElementType => componentMap[name] ?? Box;
+                                        const getColor = (name: string): string => colorMap[name] ?? '#000';
                                         return (
                                             <Card key={index} sx={{ ...keyCard, breakInside: 'avoid', mb: 2 }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -427,8 +427,8 @@ export const Dashboard: React.FC = () => {
                                                         {row.activityName}
                                                     </Typography>
                                                     <CardMedia
-                                                        component={ComponentToRender}
-                                                        sx={{ fontSize: '250%', color: iconColor }}
+                                                        component={getComponent(row.field3)}
+                                                        sx={{ fontSize: '250%', color: getColor(row.field3) }}
                                                     />
                                                 </Box>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
