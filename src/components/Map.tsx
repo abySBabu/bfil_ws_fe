@@ -38,7 +38,7 @@ const EsriMap: React.FC = () => {
 
             const rasterLayer = new TileLayer({
                 source: new ImageTile({
-                    url: 'https://kgis.ksrsac.in/kgismaps2/rest/services/CadastralData_Admin/Cached_CadastralData_Admin/MapServer/tile/{z}/{y}/{x}',
+                    url: process.env.REACT_APP_MAP_URL,
                 }),
             });
 
