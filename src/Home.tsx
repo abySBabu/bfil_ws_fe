@@ -249,15 +249,18 @@ export const Home: React.FC = () => {
   }
 
   const openHelpUs = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    let userGuideUrl = process.env.REACT_APP_USER_GUIDE
     event.preventDefault();
     setavatarAnchor(null);
-    window.open("/bfilreactdev/guide", "_blank", "noopener,noreferrer");
+    window.open(userGuideUrl, "_blank", "noopener,noreferrer");
   };
 
   const openFeedback = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    let googleFormUrl = process.env.REACT_APP_GOOGLE_FORM
     event.preventDefault();
     setavatarAnchor(null);
-    window.open("https://forms.gle/ppr1kDv3ZprNMh64A", "_blank", "noopener,noreferrer");
+    window.open(googleFormUrl, "_blank", "noopener,noreferrer");
+
   };
 
   React.useEffect(() => {
