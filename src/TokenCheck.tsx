@@ -7,7 +7,7 @@ interface DecodedToken {
 const checkTknExpiry = (onExpireCallback: (expired: boolean) => void, delay = 1000) => {
     const token = localStorage.getItem('token');
 //    if ((token) && !(token == null)) 
-    if (token) {
+    if ((token) && (token !== "null")) {
         const decodedToken: DecodedToken = jwtDecode(token);
 
         if (decodedToken.exp) {
