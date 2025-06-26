@@ -131,7 +131,7 @@ export const Dashboard: React.FC = () => {
 
                         if (!SupplyEntriesMap.has(key)) {
                             SupplyEntriesMap.set(key, {
-                                activityName: item.field4 || "",
+                                activityName: item.activityName || "",
                                 physicalValue: item.publicPhysical || 0,
                                 financialValue: item.publicFinancial || 0,
                                 uom: item.uom || "",
