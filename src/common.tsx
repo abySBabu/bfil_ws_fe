@@ -12,6 +12,7 @@ import { useAuth } from './context/AuthContext';
 export const setTimeoutsecs = 3000;
 export const CRP = 'Community Resource Person';
 export const Super_Admin = 'Super Admin BFIL';
+export const System_Admin = 'System Admin';
 export const setAutoHideDurationTimeoutsecs = 3000;
 //uat
 // export const serverPath = { authserver: "https://pragatbfiluatauth.abynet.xyz/auth/", bfil: "https://pragatbfiluat.abynet.xyz/bfil/", workFlow: "https://pragatbfiluatwflow.abynet.xyz/wf/", companyID: "1" }

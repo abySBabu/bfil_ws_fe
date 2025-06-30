@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Close } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin, System_Admin } from '../../common';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
@@ -697,7 +697,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId.length > 0 ? a.workActivity.farmerId?.split(',').map(Number) : []); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === CRP && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
-                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag) ? (
+                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag)? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus) }}>
                                                         <PlayArrow />
                                                     </IconButton>
