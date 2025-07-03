@@ -73,7 +73,9 @@ export const actDef = {
         community: 0,
         geoCoordinates: '',
         status: '',
-        roleAssignmentOkFlag:'',
+        roleAssignmentOkFlag: '',
+        missingStatus: '',
+        rejectFlag: false
     },
     history: [
         {
@@ -470,10 +472,13 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const ActFlowNext = async (status: any, id: any) => {
         setloadingApprove(true);
+        const defaultRemark = `Approved by ${uRole?.replace('_', ' ')} (as '${status}')`;
+        // const defaultRemark = `No role is mapped to the status '${status}'; proceeding with action as ${uRole?.replace('_', ' ')}.`;
+        const finalRemark = `${defaultRemark} ${rmk ? ' - ' + rmk : ''}`;
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                const nObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, rejectFlag: false, remarks: (uRole === System_Admin || uRole === Super_Admin) ? finalRemark : rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -502,11 +507,16 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const ActFlowPrev = async (status: any, id: any) => {
         setloadingReject(true);
+        const defaultRemark = `Rejected by ${uRole?.replace('_', ' ')} (as '${status}')`;
+        // const defaultRemark = `No role is mapped to the status '${status}'; proceeding with action as ${uRole?.replace('_', ' ')}.`;
+        const finalRemark = `${defaultRemark} ${rmk ? ' - ' + rmk : ''}`;
+
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
                 //const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: 'UnSynced_Images', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
-                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+
+                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, rejectFlag: true, remarks: (uRole === System_Admin || uRole === Super_Admin) ? finalRemark : rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -697,7 +707,9 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId.length > 0 ? a.workActivity.farmerId?.split(',').map(Number) : []); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
                                                 {(uRole === CRP && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
                                                     || (a.workActivity.activityWorkflowStatus === uStatus)
-                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag)? (
+                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
+                                                        && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && !a.workActivity.roleAssignmentOkFlag && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
+                                                    ) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus) }}>
                                                         <PlayArrow />
                                                     </IconButton>
