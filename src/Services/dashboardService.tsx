@@ -11,13 +11,13 @@ export async function ListPara(para: any) {
     catch (error) { console.error(error); throw error; }
 }
 
-export async function watershedReport() {
+export async function YearReport(finYear: any) {
     const configs = {
-        url: serverPath.bfil + `activity/dashboard/getParameter`,
+        url: serverPath.bfil + `activity/dashboard/getParameter/${finYear}`,
         method: 'GET',
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-           }
+        }
     }
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }

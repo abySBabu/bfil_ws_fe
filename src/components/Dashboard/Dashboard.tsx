@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardContent, CardMedia, Tooltip, Typography, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Tooltip, Typography, FormControl, InputLabel, SelectChangeEvent, MenuItem, Select, Grid, IconButton, useMediaQuery, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { Square, Water, Agriculture, CurrencyRupee, Close } from '@mui/icons-material';
 import { sd, ServerDownDialog } from '../../common';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -9,8 +9,9 @@ import { DashKey, DashSupply, DashDemand, DashGraph } from '../../Services/activ
 import { useTranslation } from 'react-i18next';
 import EsriMap from '../Map';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ListDemand, ListSupply, watershedReport } from 'src/Services/dashboardService';
+import { ListDemand, ListSupply, YearReport } from 'src/Services/dashboardService';
 import { ActivityData } from '../ReportPage/DonerReportTypes';
+import { listFinYear } from 'src/Services/workplanService';
 
 const componentMap: Record<string, React.ElementType> = {
     Square,
@@ -62,217 +63,153 @@ export const Dashboard: React.FC = () => {
     const [allAct, setallAct] = React.useState<any[]>([]);
     const [selectedRow, setSelectedRow] = React.useState<any>();
     const [openDialog, setOpenDialog] = React.useState(false);
+    const currentYear = new Date().getFullYear();
+    const defaultYear = `${currentYear}-${(currentYear + 1).toString().slice(2)}`;
+    const [selectedYear, setSelectedYear] = React.useState<string>(defaultYear);
+    const [yearOptions, setYearOptions] = React.useState<any[]>([]);
+
+    const handleYearChange = (event: SelectChangeEvent<string>) => {
+        setLoadingResponse(true);
+        setSelectedYear(event.target.value);
+    };
 
     React.useEffect(() => {
-        const fetchData = async () => {
-            setLoadingResponse(true);
+        fetchData();
+    }, [selectedYear]);
+
+    React.useEffect(() => {
+        const fetchYearData = async () => {
             try {
-                const DashboardResp = await watershedReport();
-                let allData = DashboardResp;
-                const Demandcategory = "DEMAND_SIDE_INTERVENTIONS";
-                const Supplycategory = "SUPPLY_SIDE_INTERVENTIONS";
-                const KeyImpact = "KEY_IMPACT_INDICATORS";
-                const Supplyresp = await ListSupply();
-                const yearWiseEntries: YearWiseEntry[] = [];
+                const response2 = await listFinYear();
+                if (response2.status === 'success') { setYearOptions(response2.data) }
+            } catch (error) {
+                console.log('Error fetching workplan:', error);
+            }
+        };
+        fetchYearData();
+    }, []);
 
-                for (const entry of allData) {
-                    const items = entry.overallActivity?.[KeyImpact] || [];
+    const fetchData = async () => {
+        if (!selectedYear) return;
 
-                    for (const item of items) {
-                        if (!item?.field2) continue;
+        // setLoadingResponse(true);
+        try {
+            const DashboardResp = await YearReport(selectedYear);
+            let allData = DashboardResp;
+            const Demandcategory = "DEMAND_SIDE_INTERVENTIONS";
+            const Supplycategory = "SUPPLY_SIDE_INTERVENTIONS";
+            const KeyImpact = "KEY_IMPACT_INDICATORS";
+            const Supplyresp = await ListSupply();
+            const yearWiseEntries: YearWiseEntry[] = [];
 
-                        yearWiseEntries.push({
-                            finYear: item.finYear,
-                            activityId: item.field2,
+            for (const entry of allData) {
+                const items = entry.overallActivity?.[KeyImpact] || [];
+
+                for (const item of items) {
+                    if (!item?.field2) continue;
+
+                    yearWiseEntries.push({
+                        finYear: item.finYear,
+                        activityId: item.field2,
+                        activityName: item.activityName || "",
+                        physicalValue: item.publicPhysical || 0,
+                        financialValue: item.publicFinancial || 0,
+                        uom: item.uom || "",
+                    });
+                }
+            }
+            setyearlyList(Array.from(yearWiseEntries.values()));
+
+
+            const demandEntriesMap = new Map<string, ProgressEntry>();
+
+            for (const entry of allData) {
+                const items = entry.progressData?.[Demandcategory] || [];
+                for (const item of items) {
+                    if (!item?.field2) continue;
+                    const key = item.field2;
+
+                    if (!demandEntriesMap.has(key)) {
+                        demandEntriesMap.set(key, {
                             activityName: item.activityName || "",
                             physicalValue: item.publicPhysical || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
+                            field2: key,
+                            field3: item.field3,
                         });
+                    } else {
+                        const existing = demandEntriesMap.get(key)!;
+                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.financialValue += item.publicFinancial || 0;
                     }
                 }
-                setyearlyList(Array.from(yearWiseEntries.values()));
-
-
-                const demandEntriesMap = new Map<string, ProgressEntry>();
-
-                for (const entry of allData) {
-                    const items = entry.progressData?.[Demandcategory] || [];
-                    for (const item of items) {
-                        if (!item?.field2) continue;
-                        const key = item.field2;
-
-                        if (!demandEntriesMap.has(key)) {
-                            demandEntriesMap.set(key, {
-                                activityName: item.activityName || "",
-                                physicalValue: item.publicPhysical || 0,
-                                financialValue: item.publicFinancial || 0,
-                                uom: item.uom || "",
-                                field2: key,
-                                field3: item.field3,
-                            });
-                        } else {
-                            const existing = demandEntriesMap.get(key)!;
-                            existing.physicalValue += item.publicPhysical || 0;
-                            existing.financialValue += item.publicFinancial || 0;
-                        }
-                    }
-                }
-
-                setdemandList(Array.from(demandEntriesMap.values()));
-
-                const SupplyEntriesMap = new Map<string, ProgressEntry>();
-
-                for (const entry of allData) {
-                    const items = entry.progressData?.[Supplycategory] || [];
-                    for (const item of items) {
-                        if (!item?.field2) continue;
-                        const key = item.field2;
-
-                        if (!SupplyEntriesMap.has(key)) {
-                            SupplyEntriesMap.set(key, {
-                                activityName: item.activityName || "",
-                                physicalValue: item.publicPhysical || 0,
-                                financialValue: item.publicFinancial || 0,
-                                uom: item.uom || "",
-                                field2: key,
-                                field3: item.field3,
-                            });
-                        } else {
-                            const existing = SupplyEntriesMap.get(key)!;
-                            existing.physicalValue += item.publicPhysical || 0;
-                            existing.financialValue += item.publicFinancial || 0;
-                        }
-                    }
-                }
-
-                setsupplyList(Array.from(SupplyEntriesMap.values()));
-
-                const KeyImpactEntriesMap = new Map<string, ProgressEntry>();
-
-                for (const entry of allData) {
-                    const items = entry.overallActivity?.[KeyImpact] || [];
-                    for (const item of items) {
-                        if (!item?.field2) continue;
-                        const key = item.field2;
-
-                        if (!KeyImpactEntriesMap.has(key)) {
-                            KeyImpactEntriesMap.set(key, {
-                                activityName: item.activityName || "",
-                                physicalValue: item.publicPhysical || 0,
-                                financialValue: item.publicFinancial || 0,
-                                uom: item.uom || "",
-                                field2: key,
-                                field3: item.field3,
-                            });
-                        } else {
-                            const existing = KeyImpactEntriesMap.get(key)!;
-                            existing.physicalValue += item.publicPhysical || 0;
-                            existing.financialValue += item.publicFinancial || 0;
-                        }
-                    }
-                }
-
-                setkeyList(Array.from(KeyImpactEntriesMap.values()));
-
-                // const demandEntries: ProgressEntry[] = [];
-                // const DemandmaxSubIndex = Math.max(
-                //     ...allData.map((entry: any) => entry.progressData?.[Demandcategory]?.length || 0)
-                // );
-
-                // for (let i = 0; i < DemandmaxSubIndex; i++) {
-                //     let sum = 0;
-                //     let activityName = "";
-                //     let financialValue = 0;
-                //     let uom = "";
-                //     for (const entry of allData) {
-                //         const item = entry.progressData?.[Demandcategory]?.[i];
-                //         if (item) {
-                //             sum += item.publicPhysical || 0;
-                //             financialValue += item.publicFinancial || 0;
-                //             if (activityName === "") activityName = item.activityName || "";
-                //             if (uom === "") uom = item.uom || "";
-                //         }
-                //     }
-                //     if (activityName) {
-                //         demandEntries.push({
-                //             activityName,
-                //             physicalValue: sum,
-                //             financialValue,
-                //             uom,
-                //         });
-                //     }
-                // }
-                // setdemandList(demandEntries);
-                // const supplyEntries: ProgressEntry[] = [];
-                // const SupplymaxSubIndex = Math.max(
-                //     ...allData.map((entry: any) => entry.progressData?.[Supplycategory]?.length || 0)
-                // );
-
-                // for (let i = 0; i < SupplymaxSubIndex; i++) {
-                //     let sum = 0;
-                //     let activityName = "";
-                //     let financialValue = 0;
-                //     let uom = "";
-                //     for (const entry of allData) {
-                //         const item = entry.progressData?.[Supplycategory]?.[i];
-                //         if (item) {
-                //             sum += item.publicPhysical || 0;
-                //             financialValue += item.publicFinancial || 0;
-                //             if (activityName === "") activityName = item.activityName || "";
-                //             if (uom === "") uom = item.uom || "";
-                //         }
-                //     }
-                //     if (activityName) {
-                //         supplyEntries.push({
-                //             activityName,
-                //             physicalValue: sum,
-                //             financialValue,
-                //             uom,
-                //         });
-                //     }
-                // }
-                // setsupplyList(supplyEntries);
-
-                // const KeyImpactEntries: ProgressEntry[] = [];
-                // const KeyImpactmaxSubIndex = Math.max(
-                //     ...allData.map((entry: any) => entry.overallActivity?.[KeyImpact]?.length || 0)
-                // );
-
-                // for (let i = 0; i < KeyImpactmaxSubIndex; i++) {
-                //     let sum = 0;
-                //     let activityName = "";
-                //     let financialValue = 0;
-                //     let uom = "";
-                //     for (const entry of allData) {
-                //         const item = entry.overallActivity?.[KeyImpact]?.[i];
-                //         if (item) {
-                //             sum += item.publicPhysical || 0;
-                //             financialValue += item.publicFinancial || 0;
-                //             if (activityName === "") activityName = item.activityName || "";
-                //             if (uom === "") uom = item.uom || "";
-                //         }
-                //     }
-                //     if (activityName) {
-                //         KeyImpactEntries.push({
-                //             activityName,
-                //             physicalValue: sum,
-                //             financialValue,
-                //             uom,
-                //         });
-                //     }
-                // }
-                // setkeyList(KeyImpactEntries);
-
-                setserverDown(false)
             }
-            catch (error: any) {
-                if (error.response?.status >= 500) setserverDown(true);
-                else console.log(error);
+
+            setdemandList(Array.from(demandEntriesMap.values()));
+
+            const SupplyEntriesMap = new Map<string, ProgressEntry>();
+
+            for (const entry of allData) {
+                const items = entry.progressData?.[Supplycategory] || [];
+                for (const item of items) {
+                    if (!item?.field2) continue;
+                    const key = item.field2;
+
+                    if (!SupplyEntriesMap.has(key)) {
+                        SupplyEntriesMap.set(key, {
+                            activityName: item.activityName || "",
+                            physicalValue: item.publicPhysical || 0,
+                            financialValue: item.publicFinancial || 0,
+                            uom: item.uom || "",
+                            field2: key,
+                            field3: item.field3,
+                        });
+                    } else {
+                        const existing = SupplyEntriesMap.get(key)!;
+                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.financialValue += item.publicFinancial || 0;
+                    }
+                }
             }
-            setLoadingResponse(false);
-        }; fetchData();
-    }, [])
+
+            setsupplyList(Array.from(SupplyEntriesMap.values()));
+
+            const KeyImpactEntriesMap = new Map<string, ProgressEntry>();
+
+            for (const entry of allData) {
+                const items = entry.overallActivity?.[KeyImpact] || [];
+                for (const item of items) {
+                    if (!item?.field2) continue;
+                    const key = item.field2;
+
+                    if (!KeyImpactEntriesMap.has(key)) {
+                        KeyImpactEntriesMap.set(key, {
+                            activityName: item.activityName || "",
+                            physicalValue: item.publicPhysical || 0,
+                            financialValue: item.publicFinancial || 0,
+                            uom: item.uom || "",
+                            field2: key,
+                            field3: item.field3,
+                        });
+                    } else {
+                        const existing = KeyImpactEntriesMap.get(key)!;
+                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.financialValue += item.publicFinancial || 0;
+                    }
+                }
+            }
+
+            setkeyList(Array.from(KeyImpactEntriesMap.values()));
+
+            setserverDown(false)
+        }
+        catch (error: any) {
+            if (error.response?.status >= 500) setserverDown(true);
+            else console.log(error);
+        }
+        setLoadingResponse(false);
+    }
 
     const handleChartClick = (row: ProgressEntry) => {
         setSelectedRow(row);
@@ -412,7 +349,20 @@ export const Dashboard: React.FC = () => {
             : serverDown ? <ServerDownDialog />
                 : <>
                     <Grid container spacing={1}>
-                        <Grid item xs={12}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
+                        <Grid item xs={8}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_KeyImpactIndicators_Header.KeyImpactIndicators_Header_Text")}</Typography></Grid>
+                        <Grid item xs={4} display="flex" justifyContent="flex-end">
+                            <FormControl disabled={loadingResponse} >
+                                <InputLabel id="select-year-label">Select Year</InputLabel>
+                                <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year" sx={{ height: 40, width: 120 }}>
+                                    <MenuItem value="" disabled>Select Year</MenuItem>
+                                    {yearOptions.map((year, index) => (
+                                        <MenuItem key={index} value={year.parameterName}>
+                                            {year.parameterName}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         <Grid item xs={12}>
                             <Box sx={{ columnCount: 4, columnGap: 1 }}>
                                 {[...keyList]
@@ -511,6 +461,22 @@ export const Dashboard: React.FC = () => {
 
                                 const limited = filtered.length > 8 ? filtered.slice(-8) : filtered;
 
+                                const isFinancial = selectedRow.field2 === "D";
+
+                                // Check if all values are null, undefined or 0
+                                const hasValidData = limited.some((d) => {
+                                    const value = isFinancial ? d.financialValue : d.physicalValue;
+                                    return value !== null && value !== undefined && value !== 0;
+                                });
+
+                                if (!hasValidData) {
+                                    return (
+                                        <Typography sx={{ textAlign: 'center', my: 4 }}>
+                                            No graph data
+                                        </Typography>
+                                    );
+                                }
+
                                 return (
                                     <>
                                         <BarChart
@@ -525,9 +491,9 @@ export const Dashboard: React.FC = () => {
                                             series={[
                                                 {
                                                     data: limited.map((d) =>
-                                                        selectedRow.field2 === "D" ? d.financialValue ?? 0 : d.physicalValue ?? 0
+                                                        isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0
                                                     ),
-                                                    label: selectedRow.field2 === "D" ? 'Financial Value' : 'Physical Value',
+                                                    label: isFinancial ? 'Financial Value' : 'Physical Value',
                                                 },
                                             ]}
                                         />
@@ -537,10 +503,9 @@ export const Dashboard: React.FC = () => {
                                                 {
                                                     data: limited.map((d) => ({
                                                         id: d.finYear,
-                                                        value:
-                                                            selectedRow.field2 === 'D'
-                                                                ? d.financialValue ?? 0
-                                                                : d.physicalValue ?? 0,
+                                                        value: isFinancial
+                                                            ? d.financialValue ?? 0
+                                                            : d.physicalValue ?? 0,
                                                         label: d.finYear,
                                                     })),
                                                 },
@@ -548,11 +513,13 @@ export const Dashboard: React.FC = () => {
                                         />
                                     </>
                                 );
-                            })() :
-                                <>
-                                    <Typography sx={{ textAlign: 'center', my: 4 }}>No graph data</Typography>
-                                </>}
+                            })() : (
+                                <Typography sx={{ textAlign: 'center', my: 4 }}>
+                                    No graph data
+                                </Typography>
+                            )}
                         </DialogContent>
+
                     </Dialog>
                 </>
         }
