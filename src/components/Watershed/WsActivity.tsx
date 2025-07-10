@@ -2,11 +2,11 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography, OutlinedInput,
-    MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText
+    MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText, Switch, FormControlLabel
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Close } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin, System_Admin, sd } from '../../common';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
 import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
@@ -73,7 +73,9 @@ export const actDef = {
         community: 0,
         geoCoordinates: '',
         status: '',
-        roleAssignmentOkFlag:'',
+        roleAssignmentOkFlag: '',
+        missingStatus: '',
+        rejectFlag: false
     },
     history: [
         {
@@ -89,6 +91,7 @@ export const actDef = {
 
 export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAction<number>> }> = ({ setactCount }) => {
     const { t } = useTranslation();
+    const [checked, setChecked] = React.useState(false);
     const [loadingResponse, setLoadingResponse] = React.useState(true);
     const [serverDown, setserverDown] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -128,6 +131,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
     const uName = localStorage.getItem("userName")
+    const checkedRef = React.useRef(checked);
+
+    React.useEffect(() => {
+        fetchData();
+    }, [checked]);
+
 
     const ActTypeName = (code: any) => {
         if (!code) return "";
@@ -158,6 +167,11 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             target: { value },
         } = event;
         setvList(typeof value === 'string' ? value?.split(',') : value);
+    };
+
+    const handleswitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+        // fetchData();
     };
 
     const totalP = (actObj.workActivity.participantsFemale || 0) + (actObj.workActivity.participantsMale || 0)
@@ -275,7 +289,16 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const fetchData = async () => {
         setLoadingResponse(true);
         try {
-            const resp1 = await listAct(); if (resp1.status === 'success') { setactList(resp1.data) }
+            const resp1 = await listAct(); if (resp1.status === 'success') {
+                setactList(
+                    checked
+                        ? resp1.data.filter((item: typeof actDef) => item.workActivity.rejectFlag === true)
+                        : resp1.data
+                );
+
+                // setactList(resp1.data) 
+
+            }
             const resp2 = await listFarmerByUser(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -470,10 +493,13 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const ActFlowNext = async (status: any, id: any) => {
         setloadingApprove(true);
+        const defaultRemark = `Approved by ${uRole?.replace('_', ' ')} (as '${status}')`;
+        // const defaultRemark = `No role is mapped to the status '${status}'; proceeding with action as ${uRole?.replace('_', ' ')}.`;
+        const finalRemark = `${defaultRemark} ${rmk ? ' - ' + rmk : ''}`;
         try {
             const resp1 = await actFlowNext(actFlowRole, status)
             if (resp1) {
-                const nObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+                const nObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, rejectFlag: false, remarks: (uRole === System_Admin || uRole === Super_Admin) ? finalRemark : rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(nObj, id);
                 if (resp2) {
                     fetchData();
@@ -502,11 +528,16 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const ActFlowPrev = async (status: any, id: any) => {
         setloadingReject(true);
+        const defaultRemark = `Rejected by ${uRole?.replace('_', ' ')} (as '${status}')`;
+        // const defaultRemark = `No role is mapped to the status '${status}'; proceeding with action as ${uRole?.replace('_', ' ')}.`;
+        const finalRemark = `${defaultRemark} ${rmk ? ' - ' + rmk : ''}`;
+
         try {
             const resp1 = await actFlowPrev(actFlowRole, status)
             if (resp1) {
                 //const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: 'UnSynced_Images', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
-                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, remarks: rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
+
+                const pObj = { ...actObj.workActivity, village: vList || [], activityWorkflowStatus: resp1, rejectFlag: true, remarks: (uRole === System_Admin || uRole === Super_Admin) ? finalRemark : rmk, status: '', updatedUser: localStorage.getItem("userName") as string, activityImage: '', mobileImageUrl: '', galleryImage: '' }
                 const resp2 = await editAct(pObj, id);
                 if (resp2) {
                     fetchData();
@@ -575,6 +606,21 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                             alignItems: 'center',
                             gap: { xs: 1, sm: 2 },
                         }}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={checked}
+                                        onChange={handleswitchChange}
+                                        color='default'
+                                        sx={{
+                                            '& .MuiSwitch-thumb': {
+                                                backgroundColor: checked ? sd('--table-bgcolor-head') : undefined,
+                                            },
+                                        }}
+                                    />
+                                }
+                                label="Show Rejected Activities"
+                            />
                             <TextField
                                 label={t("p_Watershed_Activity.ss_Search_Label")}
                                 fullWidth={false}
@@ -695,9 +741,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId.length > 0 ? a.workActivity.farmerId?.split(',').map(Number) : []); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(uRole === CRP && (a.workActivity.activityWorkflowStatus === 'New' || a.workActivity.activityWorkflowStatus === 'In_Progress'))
-                                                    || (a.workActivity.activityWorkflowStatus === uStatus)
-                                                    || (a.workActivity.activityWorkflowStatus === 'New' && a.workActivity.createdUser === uName) || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && !a.workActivity.roleAssignmentOkFlag) ? (
+                                                {(a.workActivity.activityWorkflowStatus === uStatus)
+                                                    || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
+                                                        && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && !a.workActivity.roleAssignmentOkFlag && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
+                                                    ) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus) }}>
                                                         <PlayArrow />
                                                     </IconButton>
