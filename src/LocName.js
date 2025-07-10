@@ -77,3 +77,15 @@ export const DateTimeWT = (dt) => new Date(dt).toLocaleString('en-IN', { day: '2
 export const DateString = (dt) => new Date(dt).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 export const TimeString = (dt) => new Date(dt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit' })
+
+export const getCurrentFinancialYear = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; 
+
+    if (month >= 4) {
+        return `${year}-${(year + 1).toString().slice(-2)}`;
+    } else {
+        return `${year - 1}-${year.toString().slice(-2)}`;
+    }
+};

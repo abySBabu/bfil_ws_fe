@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { ListDemand, ListSupply, YearReport } from 'src/Services/dashboardService';
 import { ActivityData } from '../ReportPage/DonerReportTypes';
 import { listFinYear } from 'src/Services/workplanService';
+import { getCurrentFinancialYear } from 'src/LocName';
 
 const componentMap: Record<string, React.ElementType> = {
     Square,
@@ -81,7 +82,17 @@ export const Dashboard: React.FC = () => {
         const fetchYearData = async () => {
             try {
                 const response2 = await listFinYear();
-                if (response2.status === 'success') { setYearOptions(response2.data) }
+                // if (response2.status === 'success') { setYearOptions(response2.data) }
+
+                if (response2.status === 'success') {
+                    const currentFinYear = getCurrentFinancialYear();
+                    const allowedYears = response2.data.filter((year: any) => 
+                         year.parameterName <= currentFinYear
+                    ).sort((a:any, b:any) => {
+                    return b.parameterName.localeCompare(a.parameterName);
+                })
+                    setYearOptions(allowedYears);
+                }
             } catch (error) {
                 console.log('Error fetching workplan:', error);
             }
@@ -353,7 +364,13 @@ export const Dashboard: React.FC = () => {
                         <Grid item xs={4} display="flex" justifyContent="flex-end">
                             <FormControl disabled={loadingResponse} >
                                 <InputLabel id="select-year-label">Select Year</InputLabel>
-                                <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year" sx={{ height: 40, width: 120 }}>
+                                <Select
+                                    labelId="select-year-label"
+                                    value={selectedYear}
+                                    onChange={handleYearChange}
+                                    label="Select Year"
+                                    sx={{ height: 40, width: 120 }}
+                                >
                                     <MenuItem value="" disabled>Select Year</MenuItem>
                                     {yearOptions.map((year, index) => (
                                         <MenuItem key={index} value={year.parameterName}>

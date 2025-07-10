@@ -127,7 +127,7 @@ export const bfilTheme = createTheme({
                 }
             }
         },
-        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word' } } },
+        MuiTableCell: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'pre-wrap', wordWrap: 'break-word' } } },
         MuiTableRow: { styleOverrides: { root: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word' } } },
         MuiDialog: {
             styleOverrides: {
