@@ -533,7 +533,6 @@ export const Dashboard: React.FC = () => {
                                             ? JSON.parse(selected.firstFinSource)
                                             : null;
 
-                                        // If parsed value is not an array or empty, treat as invalid
                                         if (!Array.isArray(sourceData) || sourceData.length === 0) {
                                             return (
                                                 <Typography sx={{ textAlign: 'center', my: 4 }}>
@@ -561,17 +560,6 @@ export const Dashboard: React.FC = () => {
                                         isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0
                                     );
 
-                                // const pieData = isLeveraged
-                                //     ? sourceData.map((d: any) => ({
-                                //         id: d.source,
-                                //         value: d.amount,
-                                //         label: d.source,
-                                //     }))
-                                //     : sourceData.map((d: any) => ({
-                                //         id: d.finYear,
-                                //         value: isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0,
-                                //         label: d.finYear,
-                                //     }));
 
                                 const pieData = isLeveraged
                                     ? sourceData.map((d: any, index: number) => ({
@@ -596,22 +584,6 @@ export const Dashboard: React.FC = () => {
 
                                 return (
                                     <>
-                                        {/* <BarChart
-                                            height={350}
-                                            margin={{ top: 50, bottom: 50, left: 80, right: 20 }}
-                                            xAxis={[
-                                                {
-                                                    scaleType: 'band',
-                                                    data: xAxisLabels,
-                                                },
-                                            ]}
-                                            series={[
-                                                {
-                                                    data: dataValues,
-                                                    label: barLabel,
-                                                },
-                                            ]}
-                                        /> */}
                                         <BarChart
                                             height={350}
                                             margin={{ top: 50, bottom: 50, left: 80, right: 20 }}
