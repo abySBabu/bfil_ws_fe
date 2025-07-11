@@ -123,8 +123,6 @@ export const Dashboard: React.FC = () => {
         // setLoadingResponse(true);
         try {
             const DashboardResp = await YearReport(selectedYear);
-            console.log("DashboardResp", DashboardResp);
-
             let allData = DashboardResp;
             const Demandcategory = "DEMAND_SIDE_INTERVENTIONS";
             const Supplycategory = "SUPPLY_SIDE_INTERVENTIONS";
