@@ -19,9 +19,9 @@ export const setAutoHideDurationTimeoutsecs = 3000;
 //Server
 // export const serverPath = { authserver: "https://auth1.abynet.xyz/auth/", bfil: "https://bfilbe.abynet.xyz/bfil/", workFlow: "https://workflow1.abynet.xyz/wf/",companyID:"151" }
 //Testport
-//  export const serverPath = { authserver: "http://192.168.1.142:8086/auth/", bfil: "http://192.168.1.142:8080/bfil/", workFlow: "http://localhost:8083/wf/", companyID: "1"  }
+ export const serverPath = { authserver: "http://192.168.1.13:8086/auth/", bfil: "http://192.168.1.13:8080/bfil/", workFlow: "http://localhost:8083/wf/", companyID: "1"  }
 //dev
- export const serverPath = { authserver: "https://pragatdevauth.abynet.xyz/auth/", bfil: "https://pragatdevbe.abynet.xyz/bfil/", workFlow: "https://pragatdevworkflow.abynet.xyz/wf/", companyID: process.env.REACT_APP_COMPANY_ID }
+//  export const serverPath = { authserver: "https://pragatdevauth.abynet.xyz/auth/", bfil: "https://pragatdevbe.abynet.xyz/bfil/", workFlow: "https://pragatdevworkflow.abynet.xyz/wf/", companyID: process.env.REACT_APP_COMPANY_ID }
 
  export const sd = (css: string) => getComputedStyle(document.documentElement).getPropertyValue(css).trim()
 export const PerChk = (per: string): boolean => {

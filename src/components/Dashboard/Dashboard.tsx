@@ -28,6 +28,8 @@ const colorMap: Record<string, string> = {
     CurrencyRupee: '#bfab55',
 };
 
+const colorPalette = ['#4caf50', '#2196f3', '#ff9800', '#e91e63', '#9c27b0', '#795548'];
+
 type ProgressEntry = {
     activityName: string,
     physicalValue: number,
@@ -35,6 +37,7 @@ type ProgressEntry = {
     uom: string,
     field2: string,
     field3: string,
+    firstFinSource?: string;
 };
 
 type YearWiseEntry = {
@@ -44,6 +47,7 @@ type YearWiseEntry = {
     physicalValue: number;
     financialValue: number;
     uom: string;
+    firstFinSource: string;
 };
 
 
@@ -86,13 +90,26 @@ export const Dashboard: React.FC = () => {
 
                 if (response2.status === 'success') {
                     const currentFinYear = getCurrentFinancialYear();
-                    const allowedYears = response2.data.filter((year: any) => 
-                         year.parameterName <= currentFinYear
-                    ).sort((a:any, b:any) => {
-                    return b.parameterName.localeCompare(a.parameterName);
-                })
+                    const allYears = response2.data;
+
+                    const overallOption = allYears.find((year: any) => year.parameterName === 'Overall');
+
+                    const allowedYears = allYears
+                        .filter((year: any) =>
+                            year.parameterName !== 'Overall' &&
+                            year.parameterName <= currentFinYear
+                        )
+                        .sort((a: any, b: any) =>
+                            b.parameterName.localeCompare(a.parameterName)
+                        );
+
+                    if (overallOption) {
+                        allowedYears.unshift(overallOption);
+                    }
+
                     setYearOptions(allowedYears);
                 }
+
             } catch (error) {
                 console.log('Error fetching workplan:', error);
             }
@@ -106,6 +123,8 @@ export const Dashboard: React.FC = () => {
         // setLoadingResponse(true);
         try {
             const DashboardResp = await YearReport(selectedYear);
+            console.log("DashboardResp", DashboardResp);
+
             let allData = DashboardResp;
             const Demandcategory = "DEMAND_SIDE_INTERVENTIONS";
             const Supplycategory = "SUPPLY_SIDE_INTERVENTIONS";
@@ -126,6 +145,7 @@ export const Dashboard: React.FC = () => {
                         physicalValue: item.publicPhysical || 0,
                         financialValue: item.publicFinancial || 0,
                         uom: item.uom || "",
+                        firstFinSource: item.firstFinSource
                     });
                 }
             }
@@ -202,6 +222,7 @@ export const Dashboard: React.FC = () => {
                             uom: item.uom || "",
                             field2: key,
                             field3: item.field3,
+                            firstFinSource: item.firstFinSource
                         });
                     } else {
                         const existing = KeyImpactEntriesMap.get(key)!;
@@ -474,17 +495,28 @@ export const Dashboard: React.FC = () => {
                             {selectedRow && yearlyList.length > 0 ? (() => {
                                 const filtered = yearlyList
                                     .filter((d) => d.activityId === selectedRow.field2)
-                                    .sort((a, b) => a.finYear.localeCompare(b.finYear)); // sort by year
+                                    .sort((a, b) => a.finYear.localeCompare(b.finYear));
 
                                 const limited = filtered.length > 8 ? filtered.slice(-8) : filtered;
 
-                                const isFinancial = selectedRow.field2 === "D";
+                                if (limited.length === 0) {
+                                    return (
+                                        <Typography sx={{ textAlign: 'center', my: 4 }}>
+                                            No graph data
+                                        </Typography>
+                                    );
+                                }
 
-                                // Check if all values are null, undefined or 0
-                                const hasValidData = limited.some((d) => {
-                                    const value = isFinancial ? d.financialValue : d.physicalValue;
-                                    return value !== null && value !== undefined && value !== 0;
-                                });
+                                const selected = limited[0];
+                                const isLeveraged = selected.activityName === 'AMOUNT LEVERAGED';
+                                const isFinancial = selectedRow.field2 === 'D';
+
+                                const hasValidData = isLeveraged
+                                    ? true
+                                    : limited.some((d) => {
+                                        const value = isFinancial ? d.financialValue : d.physicalValue;
+                                        return value !== null && value !== undefined && value !== 0;
+                                    });
 
                                 if (!hasValidData) {
                                     return (
@@ -494,37 +526,89 @@ export const Dashboard: React.FC = () => {
                                     );
                                 }
 
+                                const sourceData = isLeveraged ? JSON.parse(selected.firstFinSource) : limited;
+
+                                const xAxisLabels = isLeveraged
+                                    ? sourceData.map((d: any) => d.source)
+                                    : sourceData.map((d: any) => d.finYear);
+
+                                const dataValues = isLeveraged
+                                    ? sourceData.map((d: any) => d.amount)
+                                    : sourceData.map((d: any) =>
+                                        isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0
+                                    );
+
+                                // const pieData = isLeveraged
+                                //     ? sourceData.map((d: any) => ({
+                                //         id: d.source,
+                                //         value: d.amount,
+                                //         label: d.source,
+                                //     }))
+                                //     : sourceData.map((d: any) => ({
+                                //         id: d.finYear,
+                                //         value: isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0,
+                                //         label: d.finYear,
+                                //     }));
+
+                                const pieData = isLeveraged
+                                    ? sourceData.map((d: any, index: number) => ({
+                                        id: d.source,
+                                        value: d.amount,
+                                        label: d.source,
+                                        color: colorPalette[index],
+                                    }))
+                                    : sourceData.map((d: any, index: number) => ({
+                                        id: d.finYear,
+                                        value: isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0,
+                                        label: d.finYear,
+                                        color: colorPalette[index],
+                                    }));
+
+
+                                const barLabel = isLeveraged
+                                    ? 'Amount Leveraged'
+                                    : isFinancial
+                                        ? 'Financial Value'
+                                        : 'Physical Value';
+
                                 return (
                                     <>
+                                        {/* <BarChart
+                                            height={350}
+                                            margin={{ top: 50, bottom: 50, left: 80, right: 20 }}
+                                            xAxis={[
+                                                {
+                                                    scaleType: 'band',
+                                                    data: xAxisLabels,
+                                                },
+                                            ]}
+                                            series={[
+                                                {
+                                                    data: dataValues,
+                                                    label: barLabel,
+                                                },
+                                            ]}
+                                        /> */}
                                         <BarChart
                                             height={350}
                                             margin={{ top: 50, bottom: 50, left: 80, right: 20 }}
                                             xAxis={[
                                                 {
                                                     scaleType: 'band',
-                                                    data: limited.map((d) => d.finYear),
+                                                    data: xAxisLabels,
                                                 },
                                             ]}
-                                            series={[
-                                                {
-                                                    data: limited.map((d) =>
-                                                        isFinancial ? d.financialValue ?? 0 : d.physicalValue ?? 0
-                                                    ),
-                                                    label: isFinancial ? 'Financial Value' : 'Physical Value',
-                                                },
-                                            ]}
+                                            series={xAxisLabels.map((label: any, index: any) => ({
+                                                label,
+                                                data: xAxisLabels.map((_: any, i: any) => (i === index ? dataValues[index] : null)),
+                                                color: colorPalette[index],
+                                            }))}
                                         />
                                         <PieChart
                                             height={300}
                                             series={[
                                                 {
-                                                    data: limited.map((d) => ({
-                                                        id: d.finYear,
-                                                        value: isFinancial
-                                                            ? d.financialValue ?? 0
-                                                            : d.physicalValue ?? 0,
-                                                        label: d.finYear,
-                                                    })),
+                                                    data: pieData,
                                                 },
                                             ]}
                                         />
@@ -535,6 +619,7 @@ export const Dashboard: React.FC = () => {
                                     No graph data
                                 </Typography>
                             )}
+
                         </DialogContent>
 
                     </Dialog>
