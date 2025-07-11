@@ -524,7 +524,32 @@ export const Dashboard: React.FC = () => {
                                     );
                                 }
 
-                                const sourceData = isLeveraged ? JSON.parse(selected.firstFinSource) : limited;
+                                // const sourceData = isLeveraged ? JSON.parse(selected.firstFinSource) : limited;
+                                let sourceData = limited;
+
+                                if (isLeveraged) {
+                                    try {
+                                        sourceData = selected.firstFinSource
+                                            ? JSON.parse(selected.firstFinSource)
+                                            : null;
+
+                                        // If parsed value is not an array or empty, treat as invalid
+                                        if (!Array.isArray(sourceData) || sourceData.length === 0) {
+                                            return (
+                                                <Typography sx={{ textAlign: 'center', my: 4 }}>
+                                                    No graph data
+                                                </Typography>
+                                            );
+                                        }
+                                    } catch (error) {
+                                        console.error("Invalid firstFinSource JSON:", error);
+                                        return (
+                                            <Typography sx={{ textAlign: 'center', my: 4 }}>
+                                                No graph data
+                                            </Typography>
+                                        );
+                                    }
+                                }
 
                                 const xAxisLabels = isLeveraged
                                     ? sourceData.map((d: any) => d.source)
