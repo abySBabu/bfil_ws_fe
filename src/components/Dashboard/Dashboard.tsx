@@ -593,12 +593,14 @@ export const Dashboard: React.FC = () => {
                                                     data: xAxisLabels,
                                                 },
                                             ]}
-                                            series={xAxisLabels.map((label: any, index: any) => ({
+                                            series={xAxisLabels.map((label: string, index: number) => ({
                                                 label,
-                                                data: xAxisLabels.map((_: any, i: any) => (i === index ? dataValues[index] : null)),
-                                                color: colorPalette[index],
+                                                data: xAxisLabels.map((_, i) => (i === index ? dataValues[index] : null)),
+                                                color: colorPalette[index % colorPalette.length],
+                                                stack: 'singleBar',
                                             }))}
                                         />
+
                                         <PieChart
                                             height={300}
                                             series={[
