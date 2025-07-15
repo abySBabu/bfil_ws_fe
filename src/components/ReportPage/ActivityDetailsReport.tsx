@@ -5,7 +5,7 @@ import { Activity, fmrDef } from './Activitytypes';
 import { listFinYear } from 'src/Services/workplanService';
 import { ListDemand, ListInter, ListLand, ListSupply } from 'src/Services/dashboardService';
 import { listState, listVillage } from 'src/Services/locationService';
-import { DateTime, DistrictName, PanName, StateName, TalukName, VillageName, WsName } from 'src/LocName';
+import { DateTime, DistrictName, getCurrentFinancialYear, PanName, StateName, TalukName, VillageName, WsName } from 'src/LocName';
 import { listFarmer } from 'src/Services/farmerService';
 import { CheckBox } from '@mui/icons-material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -67,8 +67,14 @@ const ActivityDetailsReport = () => {
     const fetchReport = async () => {
       try {
         const response2 = await listFinYear();
-        if (response2?.status === 'success') {
-          setYearOptions(response2.data);
+        if (response2.status === 'success') {
+          const currentFinYear = getCurrentFinancialYear();
+          const allowedYears = response2.data.filter((year: any) =>
+            year.parameterName <= currentFinYear
+          ).sort((a: any, b: any) => {
+            return b.parameterName.localeCompare(a.parameterName);
+          })
+          setYearOptions(allowedYears);
         }
         const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
         const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -253,7 +259,7 @@ const ActivityDetailsReport = () => {
         <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
           <InputLabel id="select-year-label">Select Year</InputLabel>
           <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
-            <MenuItem value="">Select Year</MenuItem>
+            {/* <MenuItem value="">Select Year</MenuItem> */}
             {yearOptions?.map((year, index) => (
               <MenuItem key={index} value={year.parameterName}>
                 {year.parameterName}

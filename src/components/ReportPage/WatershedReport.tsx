@@ -8,6 +8,7 @@ import { listWP, listFinYear } from 'src/Services/workplanService';
 import { watershedReport } from 'src/Services/reportService';
 import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan } from './DonerReportTypes';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getCurrentFinancialYear } from 'src/LocName';
 
 const WatershedReport: React.FC = () => {
   const [loadingResponse, setLoadingResponse] = React.useState(false);
@@ -38,7 +39,15 @@ const WatershedReport: React.FC = () => {
           console.error('Error: Response data is not an array');
         }
         const response2 = await listFinYear();
-        if (response2.status === 'success') { setYearOptions(response2.data) }
+        if (response2.status === 'success') {
+          const currentFinYear = getCurrentFinancialYear();
+          const allowedYears = response2.data.filter((year: any) =>
+            year.parameterName <= currentFinYear
+          ).sort((a: any, b: any) => {
+            return b.parameterName.localeCompare(a.parameterName);
+          })
+          setYearOptions(allowedYears);
+        }
       } catch (error) {
         console.log('Error fetching workplan:', error);
       }
@@ -106,148 +115,148 @@ const WatershedReport: React.FC = () => {
     fetchReport();
   }, [selectedYear]);
 
-const exportToExcel = () => {
-  const workbook = XLSX.utils.book_new();
-  const worksheetData = [];
+  const exportToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheetData = [];
 
-  const headerRow1 = [
-    'Sl. No.', 'Activity Name', 'UOM', 'Land Type', 'Process Type',
-    ...watershedNames.flatMap(name => [name, '']),
-    'Total', ''
-  ];
-  worksheetData.push(headerRow1);
-
-  const headerRow2 = [
-    '', '', '', '', '',
-    ...watershedNames.flatMap(() => ['Plan', 'Progress']),
-    'Plan', 'Progress'
-  ];
-  worksheetData.push(headerRow2);
-
-  const merges = [
-    { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // Sl. No.
-    { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, // Activity Name
-    { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // UOM
-    { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // Land Type
-    { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // Process Type
-    ...watershedNames.map((_, i) => ({
-      s: { r: 0, c: 5 + i * 2 },
-      e: { r: 0, c: 6 + i * 2 }
-    })),
-    {
-      s: { r: 0, c: 5 + watershedNames.length * 2 },
-      e: { r: 0, c: 6 + watershedNames.length * 2 }
-    }
-  ];
-
-  let currentRow = 2;
-
-  reportData.forEach((activity, activityIndex) => {
-    let totalPublicPhysical = 0;
-    let totalPublicPhysicalProgress = 0;
-    let totalPublicFinancial = 0;
-    let totalPublicFinancialProgress = 0;
-    let totalPrivatePhysical = 0;
-    let totalPrivatePhysicalProgress = 0;
-    let totalPrivateFinancial = 0;
-    let totalPrivateFinancialProgress = 0;
-
-    const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(num);
-
-    // Public - Physical
-    const publicPhysicalRow = [
-      activityIndex + 1,
-      activity.activityName,
-      activity.uom,
-      'Public',
-      'Physical',
-      ...watershedNames.flatMap(watershedName => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
-        const plan = watershed?.physical?.plan ?? 0;
-        const progress = watershed?.physical?.progress ?? 0;
-        if (watershed?.watershedId !== 15) {
-          totalPublicPhysical += plan;
-          totalPublicPhysicalProgress += progress;
-        }
-        return [plan, progress].map(formatNumber);
-      }),
-      formatNumber(totalPublicPhysical),
-      formatNumber(totalPublicPhysicalProgress)
+    const headerRow1 = [
+      'Sl. No.', 'Activity Name', 'UOM', 'Land Type', 'Process Type',
+      ...watershedNames.flatMap(name => [name, '']),
+      'Total', ''
     ];
-    worksheetData.push(publicPhysicalRow);
+    worksheetData.push(headerRow1);
 
-    // Public - Financial
-    const publicFinancialRow = [
-      '', '', '', 'Public', 'Financial',
-      ...watershedNames.flatMap(watershedName => {
-        const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
-        const plan = watershed?.financial?.plan ?? 0;
-        const progress = watershed?.financial?.progress ?? 0;
-        if (watershed?.watershedId !== 15) {
-          totalPublicFinancial += plan;
-          totalPublicFinancialProgress += progress;
-        }
-        return [plan, progress].map(formatNumber);
-      }),
-      formatNumber(totalPublicFinancial),
-      formatNumber(totalPublicFinancialProgress)
+    const headerRow2 = [
+      '', '', '', '', '',
+      ...watershedNames.flatMap(() => ['Plan', 'Progress']),
+      'Plan', 'Progress'
     ];
-    worksheetData.push(publicFinancialRow);
+    worksheetData.push(headerRow2);
 
-    // Private - Physical
-    const privatePhysicalRow = [
-      '', '', '', 'Private', 'Physical',
-      ...watershedNames.flatMap(watershedName => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
-        const plan = watershed?.physical?.plan ?? 0;
-        const progress = watershed?.physical?.progress ?? 0;
-        if (watershed?.watershedId !== 15) {
-          totalPrivatePhysical += plan;
-          totalPrivatePhysicalProgress += progress;
-        }
-        return [plan, progress].map(formatNumber);
-      }),
-      formatNumber(totalPrivatePhysical),
-      formatNumber(totalPrivatePhysicalProgress)
+    const merges = [
+      { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // Sl. No.
+      { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } }, // Activity Name
+      { s: { r: 0, c: 2 }, e: { r: 1, c: 2 } }, // UOM
+      { s: { r: 0, c: 3 }, e: { r: 1, c: 3 } }, // Land Type
+      { s: { r: 0, c: 4 }, e: { r: 1, c: 4 } }, // Process Type
+      ...watershedNames.map((_, i) => ({
+        s: { r: 0, c: 5 + i * 2 },
+        e: { r: 0, c: 6 + i * 2 }
+      })),
+      {
+        s: { r: 0, c: 5 + watershedNames.length * 2 },
+        e: { r: 0, c: 6 + watershedNames.length * 2 }
+      }
     ];
-    worksheetData.push(privatePhysicalRow);
 
-    // Private - Financial
-    const privateFinancialRow = [
-      '', '', '', 'Private', 'Financial',
-      ...watershedNames.flatMap(watershedName => {
-        const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
-        const plan = watershed?.financial?.plan ?? 0;
-        const progress = watershed?.financial?.progress ?? 0;
-        if (watershed?.watershedId !== 15) {
-          totalPrivateFinancial += plan;
-          totalPrivateFinancialProgress += progress;
-        }
-        return [plan, progress].map(formatNumber);
-      }),
-      formatNumber(totalPrivateFinancial),
-      formatNumber(totalPrivateFinancialProgress)
+    let currentRow = 2;
+
+    reportData.forEach((activity, activityIndex) => {
+      let totalPublicPhysical = 0;
+      let totalPublicPhysicalProgress = 0;
+      let totalPublicFinancial = 0;
+      let totalPublicFinancialProgress = 0;
+      let totalPrivatePhysical = 0;
+      let totalPrivatePhysicalProgress = 0;
+      let totalPrivateFinancial = 0;
+      let totalPrivateFinancialProgress = 0;
+
+      const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 }).format(num);
+
+      // Public - Physical
+      const publicPhysicalRow = [
+        activityIndex + 1,
+        activity.activityName,
+        activity.uom,
+        'Public',
+        'Physical',
+        ...watershedNames.flatMap(watershedName => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.physical?.plan ?? 0;
+          const progress = watershed?.physical?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPublicPhysical += plan;
+            totalPublicPhysicalProgress += progress;
+          }
+          return [plan, progress].map(formatNumber);
+        }),
+        formatNumber(totalPublicPhysical),
+        formatNumber(totalPublicPhysicalProgress)
+      ];
+      worksheetData.push(publicPhysicalRow);
+
+      // Public - Financial
+      const publicFinancialRow = [
+        '', '', '', 'Public', 'Financial',
+        ...watershedNames.flatMap(watershedName => {
+          const watershed = Object.values(activity.landTypeMap.Public).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.financial?.plan ?? 0;
+          const progress = watershed?.financial?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPublicFinancial += plan;
+            totalPublicFinancialProgress += progress;
+          }
+          return [plan, progress].map(formatNumber);
+        }),
+        formatNumber(totalPublicFinancial),
+        formatNumber(totalPublicFinancialProgress)
+      ];
+      worksheetData.push(publicFinancialRow);
+
+      // Private - Physical
+      const privatePhysicalRow = [
+        '', '', '', 'Private', 'Physical',
+        ...watershedNames.flatMap(watershedName => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.physical?.plan ?? 0;
+          const progress = watershed?.physical?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPrivatePhysical += plan;
+            totalPrivatePhysicalProgress += progress;
+          }
+          return [plan, progress].map(formatNumber);
+        }),
+        formatNumber(totalPrivatePhysical),
+        formatNumber(totalPrivatePhysicalProgress)
+      ];
+      worksheetData.push(privatePhysicalRow);
+
+      // Private - Financial
+      const privateFinancialRow = [
+        '', '', '', 'Private', 'Financial',
+        ...watershedNames.flatMap(watershedName => {
+          const watershed = Object.values(activity.landTypeMap.Private).find(w => w.watershedDesc === watershedName);
+          const plan = watershed?.financial?.plan ?? 0;
+          const progress = watershed?.financial?.progress ?? 0;
+          if (watershed?.watershedId !== 15) {
+            totalPrivateFinancial += plan;
+            totalPrivateFinancialProgress += progress;
+          }
+          return [plan, progress].map(formatNumber);
+        }),
+        formatNumber(totalPrivateFinancial),
+        formatNumber(totalPrivateFinancialProgress)
+      ];
+      worksheetData.push(privateFinancialRow);
+
+      merges.push(
+        { s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } },
+        { s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } },
+        { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }
+      );
+      currentRow += 4;
+    });
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    worksheet['!cols'] = [
+      { wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 },
+      ...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]),
+      { wpx: 100 }, { wpx: 100 }
     ];
-    worksheetData.push(privateFinancialRow);
-
-    merges.push(
-      { s: { r: currentRow, c: 0 }, e: { r: currentRow + 3, c: 0 } },
-      { s: { r: currentRow, c: 1 }, e: { r: currentRow + 3, c: 1 } },
-      { s: { r: currentRow, c: 2 }, e: { r: currentRow + 3, c: 2 } }
-    );
-    currentRow += 4;
-  });
-
-  const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-  worksheet['!cols'] = [
-    { wpx: 40 }, { wpx: 200 }, { wpx: 100 }, { wpx: 100 }, { wpx: 120 },
-    ...watershedNames.flatMap(() => [{ wpx: 70 }, { wpx: 70 }]),
-    { wpx: 100 }, { wpx: 100 }
-  ];
-  worksheet['!merges'] = merges;
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Watershed Report');
-  XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
-};
+    worksheet['!merges'] = merges;
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Watershed Report');
+    XLSX.writeFile(workbook, 'Watershed_Report.xlsx');
+  };
 
 
   return (
@@ -259,7 +268,7 @@ const exportToExcel = () => {
         <FormControl disabled={loadingResponse} sx={{ width: 200, marginBottom: '15px' }}>
           <InputLabel id="select-year-label">Select Year</InputLabel>
           <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
-            <MenuItem value="">Select Year</MenuItem>
+            {/* <MenuItem value="">Select Year</MenuItem> */}
             {yearOptions.map((year, index) => (
               <MenuItem key={index} value={year.parameterName}>
                 {year.parameterName}

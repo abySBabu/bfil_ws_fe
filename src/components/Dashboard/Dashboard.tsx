@@ -390,7 +390,7 @@ export const Dashboard: React.FC = () => {
                                     label="Select Year"
                                     sx={{ height: 40, width: 120 }}
                                 >
-                                    <MenuItem value="" disabled>Select Year</MenuItem>
+                                    {/* <MenuItem value="" disabled>Select Year</MenuItem> */}
                                     {yearOptions.map((year, index) => (
                                         <MenuItem key={index} value={year.parameterName}>
                                             {year.parameterName}

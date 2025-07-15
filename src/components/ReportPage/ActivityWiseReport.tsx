@@ -9,6 +9,7 @@ import { listWP, listFinYear } from 'src/Services/workplanService';
 import { ActivityReport } from 'src/Services/reportService';
 import { PhysicalData, FinancialData, WatershedActivities, Watershed, Activity, LandType, WorkPlan, ActivitySystem, ActivityData } from './DonerReportTypes';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getCurrentFinancialYear } from 'src/LocName';
 
 const ActivityWiseReport: React.FC = () => {
     const [loadingResponse, setLoadingResponse] = React.useState(false);
@@ -42,7 +43,15 @@ const ActivityWiseReport: React.FC = () => {
                     console.error('Error: Response data is not an array');
                 }
                 const response2 = await listFinYear();
-                if (response2.status === 'success') { setYearOptions(response2.data) }
+                 if (response2.status === 'success') {
+                    const currentFinYear = getCurrentFinancialYear();
+                    const allowedYears = response2.data.filter((year: any) => 
+                         year.parameterName <= currentFinYear
+                    ).sort((a:any, b:any) => {
+                    return b.parameterName.localeCompare(a.parameterName);
+                })
+                    setYearOptions(allowedYears);
+                }
             } catch (error) {
                 console.log('Error fetching workplan:', error);
             }
@@ -268,7 +277,7 @@ const ActivityWiseReport: React.FC = () => {
                 <FormControl sx={{ width: 200, marginBottom: '15px', mr: 3 }}>
                     <InputLabel id="select-year-label">Select Year</InputLabel>
                     <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
-                        <MenuItem value="">Select Year</MenuItem>
+                        {/* <MenuItem value="">Select Year</MenuItem> */}
                         {yearOptions.map((year, index) => (
                             <MenuItem key={index} value={year.parameterName}>
                                 {year.parameterName}

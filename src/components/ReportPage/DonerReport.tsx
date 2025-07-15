@@ -10,6 +10,7 @@ import DonerSummaryReport from './DonerSummaryReport';
 import { listWP, listFinYear } from 'src/Services/workplanService';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getCurrentFinancialYear } from 'src/LocName';
 
 interface WorkPlan {
     planningYear: string;
@@ -61,7 +62,15 @@ const DonerReport: React.FC = () => {
                     console.error('Error: Response data is not an array');
                 }
                 const response2 = await listFinYear();
-                if (response2.status === 'success') { setYearOptions(response2.data) }
+                if (response2.status === 'success') {
+                    const currentFinYear = getCurrentFinancialYear();
+                    const allowedYears = response2.data.filter((year: any) => 
+                         year.parameterName <= currentFinYear
+                    ).sort((a:any, b:any) => {
+                    return b.parameterName.localeCompare(a.parameterName);
+                })
+                    setYearOptions(allowedYears);
+                }
             }
 
             catch (error) {
@@ -209,10 +218,10 @@ const DonerReport: React.FC = () => {
             </Typography>
             {/* <Button sx={{mb:3,ml:3}} onClick={handleBackClick}>Back</Button> */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', mb: 2, flexDirection: { xs: 'column', sm: 'row' } }} >
-                <FormControl disabled={loadingResponse} sx={{ width: 200, marginBottom: '20px'}}>
+                <FormControl disabled={loadingResponse} sx={{ width: 200, marginBottom: '20px' }}>
                     <InputLabel id="select-year-label">Select Year</InputLabel>
                     <Select labelId="select-year-label" value={selectedYear} onChange={handleYearChange} label="Select Year">
-                        <MenuItem value="">Select Year</MenuItem>
+                        {/* <MenuItem value="">Select Year</MenuItem> */}
                         {yearOptions.map((year, index) => (
                             <MenuItem key={index} value={year.parameterName}>
                                 {year.parameterName}
