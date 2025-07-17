@@ -35,32 +35,32 @@ export const Workplan: React.FC = () => {
         financialDetails: [
             {
                 wfsId: 101,
-                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Bfil"),
-                wfsValue: 0,
-            },
-            {
-                wfsId: 102,
-                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Gov_Schemes"),
-                wfsValue: 0,
-            },
-            {
-                wfsId: 103,
-                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Other"),
-                wfsValue: 0,
-            },
-            {
-                wfsId: 104,
-                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.MGNREGA"),
-                wfsValue: 0,
-            },
-            {
-                wfsId: 105,
                 wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.IBL"),
                 wfsValue: 0,
             },
             {
-                wfsId: 106,
+                wfsId: 102,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Bfil"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 103,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.MGNREGA"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 104,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Gov_Schemes"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 105,
                 wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Community"),
+                wfsValue: 0,
+            },
+            {
+                wfsId: 106,
+                wfsName: t("p_WorkPlan.Add_WorkPlan_Link.Add_WorkPlan_Popup.Other"),
                 wfsValue: 0,
             }
         ]

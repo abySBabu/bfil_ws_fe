@@ -291,7 +291,7 @@ const ActivityDetailsReport = () => {
               setShowFinancial(e.target.checked);
             }}
           />{' '}
-          Financial Deatils
+          Financial Contribution
           <Checkbox disabled={!(selectedYear && selectedActivity) || (data ? data.length === 0 : true)}
             checked={showHistory}
             onChange={(e) => {
@@ -331,7 +331,7 @@ const ActivityDetailsReport = () => {
                 )}
                 {showFinancial && (
                   <TableCell sx={{ textAlign: 'center', border: '1px solid #ccc' }} colSpan={6}>
-                    Financial Details
+                    Financial Contribution
                   </TableCell>
                 )}
                 {showHistory && (
