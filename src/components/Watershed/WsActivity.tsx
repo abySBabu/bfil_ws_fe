@@ -197,7 +197,20 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 a.workActivity.surveyNo?.toString().toLowerCase().includes(searchTerm) ||
                 ActTypeName(a.workActivity?.activityCode)?.toString().toLowerCase().includes(searchTerm) ||
                 WsName(a.workActivity.watershedId)?.toString().toLowerCase().includes(searchTerm) ||
-                a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ')?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ').toString().toLowerCase().includes(searchTerm) ||
+                (
+                    a.workActivity.gramPanchayat
+                        ? (Array.isArray(a.workActivity.gramPanchayat)
+                            ? a.workActivity.gramPanchayat
+                            : a.workActivity.gramPanchayat.toString().split(',')
+                        )
+                            .map(id => PanName(id))
+                            .join(', ')
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchTerm)
+                        : false
+                ) ||
                 a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
                 a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm)
             );
@@ -231,6 +244,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             return 0;
         });
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
+    console.log("actListP", actListP);
 
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total
@@ -704,6 +718,15 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                         </TableCell>
                                         <TableCell sx={{ width: '10%' }}>
                                             <TableSortLabel
+                                                active={sortBy === 'gramPanchayat'}
+                                                direction={sortBy === 'gramPanchayat' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('gramPanchayat')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Grampanchayat")}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell sx={{ width: '10%' }}>
+                                            <TableSortLabel
                                                 active={sortBy === 'activityWorkflowStatus'}
                                                 direction={sortBy === 'activityWorkflowStatus' ? sortOrder : 'asc'}
                                                 onClick={() => handleSort('activityWorkflowStatus')}
@@ -734,6 +757,16 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             <TableCell>{ActTypeName(a.workActivity.activityCode)}</TableCell>
                                             <TableCell>{WsName(a.workActivity.watershedId)}</TableCell>
                                             <TableCell>{a.workActivity.village?.split(',').map(id => VillageName(id)).join(', ') || VillageName(a.workActivity.habitationsCovered)}</TableCell>
+                                            <TableCell>
+                                                {a.workActivity.gramPanchayat
+                                                    ? (Array.isArray(a.workActivity.gramPanchayat)
+                                                        ? a.workActivity.gramPanchayat
+                                                        : a.workActivity.gramPanchayat.toString().split(',')
+                                                    )
+                                                        .map(id => PanName(id))
+                                                        .join(', ')
+                                                    : PanName(a.workActivity.habitationsCovered)}
+                                            </TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
@@ -1008,13 +1041,13 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.WaterConserved")}:</b> {actObj.workActivity.waterConserved}</Grid>
                     </>}
 
-                        <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Financial_Details")}</Divider></Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.IBL")}: </b>₹{actObj.workActivity.ibl}</Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Bfil")}: </b>₹{actObj.workActivity.bfilAmount} </Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.MGNREGA")}: </b>₹{actObj.workActivity.mgnrega}</Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Gov_Schemes")}: </b>₹{actObj.workActivity.otherGovScheme}</Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
-                        <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Other")}: </b>₹{actObj.workActivity.other}</Grid>
+                    <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Activity_Financial_Details")}</Divider></Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.IBL")}: </b>₹{actObj.workActivity.ibl}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Bfil")}: </b>₹{actObj.workActivity.bfilAmount} </Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.MGNREGA")}: </b>₹{actObj.workActivity.mgnrega}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Gov_Schemes")}: </b>₹{actObj.workActivity.otherGovScheme}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Community")}: </b>₹{actObj.workActivity.community}</Grid>
+                    <Grid item xs={12} sm={3}><b>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Other")}: </b>₹{actObj.workActivity.other}</Grid>
 
                     <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Beneficiary_Details")}</Divider></Grid>
                     <Grid item xs={12}>{

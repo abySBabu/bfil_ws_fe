@@ -28,6 +28,8 @@ import axios, { AxiosError } from 'axios';
 import { TokenRefresh } from './Services/loginService';
 import { useAuth } from './context/AuthContext';
 import { styled } from "@mui/system";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
 interface SideItem {
   screenName: string;
 }
@@ -469,6 +471,17 @@ export const Home: React.FC = () => {
                 alignItems: 'center',
               }}
             >
+              <IconButton
+  edge="start"
+  color="default"
+  aria-label="notifications"
+  onClick={() => console.log('Notification clicked')}
+  sx={{ mr: 2 }}
+>
+  <Badge badgeContent={2} color="error">
+    <NotificationsIcon sx={{ fontSize: 30, color: 'white' }} />
+  </Badge>
+</IconButton>
               <Box
                 sx={{
                   display: { xs: 'none', md: 'none', lg: 'block' },
@@ -477,6 +490,7 @@ export const Home: React.FC = () => {
                   gap: '8px'
                 }}
               >
+
                 <img
                   src={`${process.env.PUBLIC_URL}/images/ktgov.png`}
                   alt="Karnataka Gov"
@@ -487,6 +501,8 @@ export const Home: React.FC = () => {
                   alt="MGNREGA"
                   style={{ height: '100%' }}
                 />
+
+
               </Box>
 
               <Avatar

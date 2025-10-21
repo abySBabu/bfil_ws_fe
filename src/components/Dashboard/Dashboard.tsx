@@ -38,6 +38,7 @@ type ProgressEntry = {
     field2: string,
     field3: string,
     firstFinSource?: string;
+    field5: string;
 };
 
 type YearWiseEntry = {
@@ -48,6 +49,7 @@ type YearWiseEntry = {
     financialValue: number;
     uom: string;
     firstFinSource: string;
+    field5:string;
 };
 
 
@@ -140,9 +142,10 @@ export const Dashboard: React.FC = () => {
                         finYear: item.finYear,
                         activityId: item.field2,
                         activityName: item.activityName || "",
-                        physicalValue: item.publicPhysical || 0,
+                        physicalValue: item.activityCount || 0,
                         financialValue: item.publicFinancial || 0,
                         uom: item.uom || "",
+                        field5: item.field5,
                         firstFinSource: item.firstFinSource
                     });
                 }
@@ -161,15 +164,16 @@ export const Dashboard: React.FC = () => {
                     if (!demandEntriesMap.has(key)) {
                         demandEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.publicPhysical || 0,
+                            physicalValue: item.activityCount || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
+                             field5:item.field5,
                             field3: item.field3,
                         });
                     } else {
                         const existing = demandEntriesMap.get(key)!;
-                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.physicalValue += item.activityCount || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
@@ -188,15 +192,16 @@ export const Dashboard: React.FC = () => {
                     if (!SupplyEntriesMap.has(key)) {
                         SupplyEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.publicPhysical || 0,
+                            physicalValue: item.activityCount || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
+                             field5:item.field5,
                             field3: item.field3,
                         });
                     } else {
                         const existing = SupplyEntriesMap.get(key)!;
-                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.physicalValue += item.activityCount || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
@@ -215,16 +220,17 @@ export const Dashboard: React.FC = () => {
                     if (!KeyImpactEntriesMap.has(key)) {
                         KeyImpactEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.publicPhysical || 0,
+                            physicalValue: item.activityCount || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
                             field3: item.field3,
+                            field5:item.field5,
                             firstFinSource: item.firstFinSource
                         });
                     } else {
                         const existing = KeyImpactEntriesMap.get(key)!;
-                        existing.physicalValue += item.publicPhysical || 0;
+                        existing.physicalValue += item.activityCount || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
@@ -419,7 +425,7 @@ export const Dashboard: React.FC = () => {
                                                 </Box>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography variant='h5'>
-                                                        {row.field2 === "D" ? <b>{row.uom} {Math.round(Number(row.financialValue)).toLocaleString('en-IN')}</b> : <b>{Math.round(Number(row.physicalValue)).toLocaleString('en-IN')} {row.uom}</b>}
+                                                        {row.field2 === "D" ? <b>{row.field5} {Math.round(Number(row.financialValue)).toLocaleString('en-IN')}</b> : <b>{Math.round(Number(row.physicalValue)).toLocaleString('en-IN')} {row.field5}</b>}
                                                     </Typography>
                                                     <IconButton onClick={() => handleChartClick(row)}>
                                                         <BarChartIcon />
@@ -467,13 +473,13 @@ export const Dashboard: React.FC = () => {
                             <Grid container spacing={1}>
                                 {supplyList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.field5} />
                                     );
                                 })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
                                 {demandList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.field5} />
                                     );
                                 })}
                             </Grid>
