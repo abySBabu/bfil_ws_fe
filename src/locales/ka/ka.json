@@ -566,8 +566,11 @@
                                 "Status": "ಸ್ಥಿತಿ",
                                 "Update_By": "ಮೂಲಕ ನವೀಕರಿಸಿ",
                                 "Update_On": "ಅಪ್‌ಡೇಟ್ ಆನ್",
+                                "Created_By": "ರಚಿಸಿದವರು",
+                                "Created_Time": "ಸೃಷ್ಟಿ ಸಮಯ",
                                 "Images": "ಚಿತ್ರಗಳು"
-                            }
+                            },
+                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್"
                         }
                     },
                     "Progress_Tooltip": {
@@ -622,8 +625,11 @@
                                 "Status": "ಸ್ಥಿತಿ",
                                 "Update_By": "ಮೂಲಕ ನವೀಕರಿಸಿ",
                                 "Update_On": "ಅಪ್‌ಡೇಟ್ ಆನ್",
+                                "Created_By": "ರಚಿಸಿದವರು",
+                                "Created_Time": "ಸೃಷ್ಟಿ ಸಮಯ",
                                 "Images": "ಚಿತ್ರಗಳು"
-                            }
+                            },
+                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್"
                         }
                     }
                 }

@@ -49,6 +49,29 @@ export const fmrDef = {
   "relationalIdentifiers": '',
   "identifierName": '',
   "remarks": "",
+   "state": '1',
+    "district": '',
+    "taluk": '',
+    "gramPanchayat": '',
+    "village": '',
 };
 
+export interface FarmerReport  {
+  updatedTime: string;
+  taluk: string;
+  mobileNumber: string;
+  relationalIdentifiers: string;
+  updatedUser: string | null;
+  gramPanchayat: string;
+  identifierName: string;
+  isDeleted: boolean;
+  createTime: string;
+  wsfarmerId: number;
+  district: string;
+  wsfarmerName: string;
+  state: string;
+  village: string;
+  createdUser: string | null;
+  remarks: string | null;
+};
 

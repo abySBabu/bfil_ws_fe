@@ -2,14 +2,14 @@ import React from 'react';
 import {
     Box, TableContainer, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableFooter, TableSortLabel,
     DialogTitle, DialogContent, DialogActions, Dialog, Button, Grid, TextField, Divider, Paper, Typography, OutlinedInput,
-    MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText, Switch, FormControlLabel
+    MenuItem, IconButton, InputAdornment, CircularProgress, FormControl, Select, InputLabel, Checkbox, ListItemText, Switch, FormControlLabel, Snackbar, Alert
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Edit, Search, Add, Visibility, PlayArrow, ArrowBack, ArrowForward, Close } from '@mui/icons-material';
-import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin, System_Admin, sd } from '../../common';
+import { TPA, PerChk, SnackAlert, ServerDownDialog, CRP, Super_Admin, System_Admin, sd, setAutoHideDurationTimeoutsecs, setTimeoutsecs } from '../../common';
 import { fmrDef } from '../Farmer/FarmerMaster';
 import { wsDef } from './WsMaster';
-import { listAct, addAct, editAct, actFlowNext, actFlowPrev } from '../../Services/activityService';
+import { listAct, addAct, editAct, actFlowNext, actFlowPrev, uploadSelectedFile } from '../../Services/activityService';
 import { listFarmer, listFarmerByUser } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
@@ -17,6 +17,10 @@ import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName, DateTime, DateString } from '../../LocName';
 import { useTranslation } from 'react-i18next';
 import { getRolesByRole } from 'src/Services/roleService';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import DeleteIcon from '@mui/icons-material/Delete';
+import File from '@mui/icons-material/FileOpen';
+import DownloadIcon from "@mui/icons-material/Download";
 
 export const actDef = {
     workActivity: {
@@ -128,11 +132,16 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
     const [vList, setvList] = React.useState<any[]>([]);
     const [bList, setbList] = React.useState<any[]>([]);
     const [imgM, setimgM] = React.useState('');
+    const [workActivityId, setWorkActivityId] = React.useState('')
     const uRole = localStorage.getItem("userRole");
     const uStatus = localStorage.getItem("userStatus");
-    const uName = localStorage.getItem("userName")
+    const uName = localStorage.getItem("userName");
     const checkedRef = React.useRef(checked);
-
+    const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+    const [uploadedFiles, setUploadedFiles] = React.useState<{ name: string; url: string, createdBy?: string, createdOn?: string }[]>([]);
+    const [message, setMessage] = React.useState('');
+    const [severityColor, setSeverityColor] = React.useState<any>(undefined);
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
     React.useEffect(() => {
         fetchData();
     }, [checked]);
@@ -304,14 +313,12 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         setLoadingResponse(true);
         try {
             const resp1 = await listAct(); if (resp1.status === 'success') {
+
                 setactList(
                     checked
                         ? resp1.data.filter((item: typeof actDef) => item.workActivity.rejectFlag === true)
                         : resp1.data
                 );
-
-                // setactList(resp1.data) 
-
             }
             const resp2 = await listFarmerByUser(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
@@ -591,6 +598,84 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const geoData = parseGeoCoordinates(actObj.workActivity.geoCoordinates);
 
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const files = Array.from(e.target.files);
+            setSelectedFiles(files);
+            // setUploadedFiles([]);
+        }
+    };
+
+    const handleDeleteFile = (index: number) => {
+        setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleUploadAllFiles = async () => {
+        try {
+            const uploaded: { name: string; url: string }[] = [];
+
+            for (const file of selectedFiles) {
+                const formData = new FormData();
+                formData.append("image", file);
+
+
+                const response = await uploadSelectedFile(file, workActivityId);
+
+                if (response.status === "SUCCESS") {
+                    uploaded.push({
+                        name: file.name,
+                        url: response.imageURL,
+                    });
+                }
+            }
+
+            setUploadedFiles((prev) => [...prev, ...uploaded]);
+            setSelectedFiles([]);
+            setSeverityColor("success");
+            setMessage('File uploaded successfully')
+            setprogM(false)
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                setOpenSnackbar(false);
+                setLoading(false);
+            }, setTimeoutsecs);
+            fetchData();
+        } catch (error: any) {
+            console.error("Upload error:", error);
+            setSeverityColor("error");
+            setMessage(error.response.data.message);
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                setOpenSnackbar(false);
+                setLoading(false);
+            }, setAutoHideDurationTimeoutsecs);
+        }
+    };
+
+    const handleDownloadFile = async (url: string) => {
+        try {
+            const response = await fetch(url, { mode: "cors" });
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = url.split("/").pop() || "downloaded_file";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error("Download failed:", error);
+        }
+    };
+
+    // const filesToShow = uploadedFiles.length > 0 ? uploadedFiles : selectedFiles;
+    const filesToShow = [...uploadedFiles, ...selectedFiles];
+    console.log("filesToShow------>>",filesToShow);
+    
+
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
         {loadingResponse ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}><CircularProgress size={80} /></Box>
@@ -770,7 +855,18 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>
-                                                <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { setactObj(a); setviewM(true); }}>
+                                                <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { 
+                                                    const historyFiles =
+                                                                a.history.filter((h: any) => h.activityFile && h.activityFile.startsWith("http"))
+                                                                    .map((h: any) => ({
+                                                                        name: h.activityFile.split("/").pop() || "unknown_file",
+                                                                        url: h.activityFile,
+                                                                        createdBy: h.createdUser,
+                                                                        createdOn: h.createdTime
+                                                                    }));
+
+                                                            setUploadedFiles(historyFiles);
+                                                    setactObj(a); setviewM(true); }}>
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId.length > 0 ? a.workActivity.farmerId?.split(',').map(Number) : []); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
@@ -778,7 +874,19 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                     || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
                                                         && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && !a.workActivity.roleAssignmentOkFlag && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
                                                     ) ? (
-                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")} onClick={() => { ActFlowSet(a.workActivity.activityWorkflowStatus); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus) }}>
+                                                    <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")}
+                                                        onClick={() => {
+                                                            const historyFiles =
+                                                                a.history.filter((h: any) => h.activityFile && h.activityFile.startsWith("http"))
+                                                                    .map((h: any) => ({
+                                                                        name: h.activityFile.split("/").pop() || "unknown_file",
+                                                                        url: h.activityFile,
+                                                                        createdBy: h.createdUser,
+                                                                        createdOn: h.createdTime
+                                                                    }));
+
+                                                            setUploadedFiles(historyFiles); ActFlowSet(a.workActivity.activityWorkflowStatus); setWorkActivityId(a.workActivity.activityId); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus)
+                                                        }}>
                                                         <PlayArrow />
                                                     </IconButton>
                                                 ) : null}
@@ -1059,7 +1167,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 </>}
 
                 <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Update_History_Header")}</Divider></Grid>
-                <Grid item xs={12}>{
+                <Grid item xs={12}>
+                    {
                     actObj.history?.length > 0 ?
                         <TableContainer component={Paper} sx={{ maxHeight: '100%' }}><Table>
                             <TableHead>
@@ -1112,10 +1221,113 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
                             </TableRow>)
                             )}</TableBody>
+                           
                         </Table></TableContainer>
                         :
                         <Typography>No history to show</Typography>
                 }</Grid>
+                    <Grid item xs={12}></Grid>
+                    <Grid xs={12}>
+                     {filesToShow.length > 0 && (
+                    <>
+                        <Grid item xs={12}>
+                            <Divider>
+                                {t(
+                                    "p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Uploaded_File"
+                                )}
+                            </Divider>
+                        </Grid>
+
+                        <TableContainer component={Paper} sx={{ mt: 2 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ borderRight: "1px solid black", width: "90%" }}>
+                                            File Name
+                                        </TableCell>
+                                        <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_By")}</TableCell>
+                                        <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_Time")}</TableCell>
+
+                                        <TableCell sx={{ width: "10%" }}>Action</TableCell>
+
+                                    </TableRow>
+
+                                </TableHead>
+
+                                <TableBody>
+                                    {filesToShow.map((file, index) => {
+                                        const isUploaded = (file as any).url;
+                                        return (
+                                            <TableRow key={index}>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>
+                                                    {file.name}
+                                                </TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>
+                                                    {"createdBy" in file ? file.createdBy : ""}
+                                                </TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>
+                                                    {"createdOn" in file ? file.createdOn : ""}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {isUploaded ? (
+                                                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
+                                                            <IconButton
+                                                                title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")}
+                                                                onClick={() => {
+                                                                    setimgM((file as any).url);
+                                                                }}
+                                                            >
+                                                                <Visibility />
+                                                            </IconButton>
+
+                                                            <IconButton
+                                                                color="primary"
+                                                                onClick={() => handleDownloadFile((file as any).url)}
+                                                            >
+                                                                <DownloadIcon />
+                                                            </IconButton>
+                                                        </Box>
+                                                    ) : (
+                                                        <IconButton
+                                                            color="error"
+                                                            onClick={() => handleDeleteFile(index - uploadedFiles.length)}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                                {selectedFiles.length > 0 && (
+                                    <TableFooter sx={{ backgroundColor: 'whitesmoke' }}>
+                                        <TableRow>
+                                            <TableCell colSpan={4}
+                                                align="right"
+                                                sx={{
+                                                    backgroundColor: 'white',
+                                                    borderTop: '1px solid #ddd',
+                                                }}
+                                            >
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    startIcon={<UploadFileIcon />}
+                                                    onClick={handleUploadAllFiles}
+                                                >
+                                                    Upload Selected Files
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableFooter>
+                                )}
+                            </Table>
+                        </TableContainer>
+                    </>
+                )}
+                </Grid>
+
             </Grid></DialogContent>
             {viewM ?
                 <DialogActions>
@@ -1126,36 +1338,174 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         <Box
                             sx={{
                                 display: 'flex',
-                                flexDirection: { xs: 'column', sm: 'row' },
+                                alignItems: 'center',
                                 justifyContent: 'space-between',
-                                alignItems: 'flex-start',
+                                flexWrap: 'wrap',
                                 width: '100%',
-                            }}>
-                            <TextField
-                                label={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Remarks")}
-                                value={rmk}
-                                onChange={(e) => setrmk(e.target.value)}
-                                fullWidth={false}
-                                sx={{ width: { xs: '100%', sm: '50%' }, mb: { xs: 1, sm: 0 }, }}
-                                inputProps={{ maxLength: 120 }} />
+                                gap: 2,
+                            }}
+                        >
+                            {/* Remarks + Upload + File name */}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flex: 1,
+                                    gap: 1.5,
+                                    flexWrap: 'wrap',
+                                    minWidth: 0,
+                                }}
+                            >
+                                <TextField
+                                    label={t(
+                                        'p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Remarks'
+                                    )}
+                                    value={rmk}
+                                    onChange={(e) => setrmk(e.target.value)}
+                                    sx={{ flex: 1, minWidth: { xs: '100%', sm: '280px' } }}
+                                    inputProps={{ maxLength: 120 }}
+                                />
+                                <Button
+                                    variant="outlined"
+                                    component="label"
+                                    sx={{
+                                        color: 'whitesmoke',
+                                        borderColor: 'green',
+                                        textTransform: 'none',
+                                        mx: 1,
+                                    }}
+                                    startIcon={<File />}
+                                >
+                                    Select File
+                                    <input
+                                        type="file"
+                                        hidden
+                                        multiple
+                                        accept=".pdf,.jpg,.png,.doc,.docx"
+                                        onChange={handleFileSelect}
+                                    />
+                                </Button>
+                            </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: { xs: 'row', sm: 'row' }, mt: { sm: 4, md: 0 } }}>
-                                <Button onClick={() => { setprogM(false); }} disabled={loading}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button")}</Button>
-                                {prev && (<Button startIcon={loadingReject ? <CircularProgress /> : <ArrowBack />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowPrev(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)} >
-                                    Reject to {prev.replace(/_/g, " ")}</Button>)}
-                                {next && (<Button endIcon={loadingApprove ? <CircularProgress /> : <ArrowForward />} disabled={!rmk || loadingReject || loadingApprove} sx={{ mx: '2px' }} onClick={() => ActFlowNext(actObj.workActivity.activityWorkflowStatus, actObj.workActivity.activityId)}>
-                                    Send to {next.replace(/_/g, " ")}</Button>)}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    flexShrink: 0,
+                                }}
+                            >
+                                <Button onClick={() => setprogM(false)} disabled={loading}>
+                                    {t(
+                                        'p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Cancel_Button'
+                                    )}
+                                </Button>
+
+                                {prev && (
+                                    <Button
+                                        startIcon={loadingReject ? <CircularProgress size={16} /> : <ArrowBack />}
+                                        disabled={!rmk || loadingReject || loadingApprove}
+                                        sx={{ mx: 1 }}
+                                        onClick={() =>
+                                            ActFlowPrev(
+                                                actObj.workActivity.activityWorkflowStatus,
+                                                actObj.workActivity.activityId
+                                            )
+                                        }
+                                    >
+                                        Reject to {prev.replace(/_/g, ' ')}
+                                    </Button>
+                                )}
+
+                                {next && (
+                                    <Button
+                                        endIcon={loadingApprove ? <CircularProgress size={16} /> : <ArrowForward />}
+                                        disabled={!rmk || loadingReject || loadingApprove}
+                                        sx={{ mx: 1 }}
+                                        onClick={() =>
+                                            ActFlowNext(
+                                                actObj.workActivity.activityWorkflowStatus,
+                                                actObj.workActivity.activityId
+                                            )
+                                        }
+                                    >
+                                        Send to {next.replace(/_/g, ' ')}
+                                    </Button>
+                                )}
                             </Box>
                         </Box>
                     </DialogActions>
+
                     :
                     <DialogActions />
             }
         </Dialog>
 
-        <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
+        {/* <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
             <IconButton sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }} onClick={() => setimgM('')}><Close /></IconButton>
             <img src={imgM} style={{ objectFit: 'contain', height: '80vh', width: 'auto' }} />
+        </Dialog> */}
+        <Dialog open={Boolean(imgM)} onClose={() => setimgM('')}>
+            <IconButton
+                sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
+                onClick={() => setimgM('')}
+            >
+                <Close />
+            </IconButton>
+
+            {imgM && (() => {
+                const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(imgM);
+                const isPDF = /\.pdf$/i.test(imgM);
+                const isDoc =
+                    /\.(doc|docx|xls|xlsx|ppt|pptx|txt|csv)$/i.test(imgM);
+
+                if (isImage) {
+                    // 🖼 Show image directly
+                    return (
+                        <img
+                            src={imgM}
+                            alt="Preview"
+                            style={{
+                                objectFit: 'contain',
+                                height: '80vh',
+                                width: 'auto',
+                                display: 'block',
+                                margin: '0 auto',
+                            }}
+                        />
+                    );
+                } else if (isPDF || isDoc) {
+                    // 📄 Use Google Docs Viewer for all document types
+                    const viewerURL = `https://docs.google.com/gview?url=${encodeURIComponent(
+                        imgM
+                    )}&embedded=true`;
+                    return (
+                        <iframe
+                            src={viewerURL}
+                            style={{
+                                width: '85vw',
+                                height: '80vh',
+                                border: 'none',
+                                display: 'block',
+                                margin: '0 auto',
+                                backgroundColor: 'white',
+                            }}
+                        />
+                    );
+                } else {
+                    // ⚠️ Fallback message
+                    return (
+                        <Typography sx={{ p: 4, textAlign: 'center' }}>
+                            File preview not supported. Please download to view.
+                        </Typography>
+                    );
+                }
+            })()}
         </Dialog>
+        <Snackbar open={openSnackbar} autoHideDuration={setAutoHideDurationTimeoutsecs} onClose={() => setOpenSnackbar(false)}>
+            <Alert onClose={() => setOpenSnackbar(false)} severity={severityColor}>
+                {message}
+            </Alert>
+        </Snackbar>
     </>)
 }

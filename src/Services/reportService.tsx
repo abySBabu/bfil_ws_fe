@@ -49,3 +49,15 @@ export async function activityReport(financialYear:any,userId:number,activityId:
     catch (error) { console.error(error); throw error; }
 }
 
+export async function beneficiaryReport(param:string, id: number){
+    const configs ={
+        url: serverPath.bfil +`ws_farmers/getFarmerReport?${param}=${id}`,
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+           }
+    }
+    try { const response = await axios(configs); return response.data; }
+    catch (error) { console.error(error); throw error; }
+}
+

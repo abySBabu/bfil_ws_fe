@@ -119,3 +119,27 @@ export async function DashGraph() {
     try { const response = await axios(configs); return response.data; }
     catch (error) { console.error(error); throw error; }
 }
+
+export async function uploadSelectedFile(formData: any, workActivityId:any) {
+let uName = localStorage.getItem("userName");
+  const config = {
+    method: "post",
+    url: serverPath.bfil + `data_capture/uploadWebFile`,
+    data: {
+        workActivityId: Number(workActivityId),
+        createdUser: uName,
+        image: formData},
+    headers: { 
+      Authorization:  `Bearer ${localStorage.getItem("token")}`,   
+      "Content-Type": "multipart/form-data", 
+    },
+}
+
+  try {
+    const response = await axios(config);
+    return response.data;
+  } catch (err) {
+    console.error("Upload failed:", err);
+    throw err;
+  }
+}

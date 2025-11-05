@@ -271,7 +271,7 @@ export const Home: React.FC = () => {
       try {
         const resp = await ListStatus();
         if (resp) {
-          const uStatus: any = resp.data.find((x: any) => x.roleName === uRole)
+          const uStatus: any = resp.data.find((x: any) => x.roleName === uRole)        
           if (uStatus) {
             localStorage.setItem("userStatus", uStatus.workflowstatusName);
             try {

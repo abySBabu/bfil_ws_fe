@@ -565,9 +565,12 @@
                                 "Remark": "Remark",
                                 "Status": "Status",
                                 "Update_By": "Upadate By",
+                                "Created_By": "Created By",
+                                "Created_Time": "Created On",
                                 "Update_On": "Update On",
                                 "Images": "Images"
-                            }
+                            },
+                            "Uploaded_File": "Uploaded File"
                         }
                     },
                     "Progress_Tooltip": {
@@ -621,9 +624,12 @@
                                 "Remark": "Remark",
                                 "Status": "Status",
                                 "Update_By": "Upadate By",
+                                "Created_By": "Created By",
+                                "Created_Time": "Created On",
                                 "Update_On": "Update On",
                                 "Images": "Images"
-                            }
+                            },
+                            "Uploaded_File": "Uploaded File"
                         }
                     }
                 }

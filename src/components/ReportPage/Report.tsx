@@ -12,7 +12,7 @@ import MapReport from './MapReport';
 import PlannedReport from './PlannedReport';
 import OtherActivitiesReport from './OtherActivitiesReport';
 import ActivityWiseReport from './ActivityWiseReport';
-
+import BeneficiaryReport from './BeneficiaryReport';
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -82,6 +82,7 @@ function Report() {
           <Tab label="Plan Report" {...a11yProps(4)} />
           <Tab label="Non Watershed Report" {...a11yProps(5)} />
           <Tab label="Activity Wise Progress Report" {...a11yProps(6)} />
+          <Tab label="Beneficiary Report" {...a11yProps(7)} />
         </Tabs>
       </AppBar>
       {value === 0 && (
@@ -117,6 +118,11 @@ function Report() {
        {value === 6 && (
         <TabPanel value={value} index={6} dir={theme.direction}>
           <ActivityWiseReport />
+        </TabPanel>
+      )}
+      {value === 7 && (
+        <TabPanel value={value} index={7} dir={theme.direction}>
+          <BeneficiaryReport />
         </TabPanel>
       )}
     </Box>

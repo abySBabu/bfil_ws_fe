@@ -220,7 +220,7 @@ export const Dashboard: React.FC = () => {
                     if (!KeyImpactEntriesMap.has(key)) {
                         KeyImpactEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.activityCount || 0,
+                            physicalValue: item.publicPhysical || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
@@ -230,7 +230,7 @@ export const Dashboard: React.FC = () => {
                         });
                     } else {
                         const existing = KeyImpactEntriesMap.get(key)!;
-                        existing.physicalValue += item.activityCount || 0;
+                        existing.physicalValue += item.publicPhysical || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
