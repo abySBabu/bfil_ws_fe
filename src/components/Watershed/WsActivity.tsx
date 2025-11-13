@@ -221,7 +221,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         : false
                 ) ||
                 a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
-                a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm)
+                a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm) ||
+                a.workActivity.updatedTime?.toString().toLowerCase().includes(searchTerm)
             );
         })
         .sort((a, b) => {
@@ -828,6 +829,15 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                 {t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_By")}
                                             </TableSortLabel>
                                         </TableCell>
+                                        <TableCell sx={{ width: '10%' }}>
+                                            <TableSortLabel
+                                                active={sortBy === 'updatedTime'}
+                                                direction={sortBy === 'updatedTime' ? sortOrder : 'asc'}
+                                                onClick={() => handleSort('updatedTime')}
+                                            >
+                                                {t("p_Watershed_Activity.ss_WatershedActivityList.Last_Updated_On")}
+                                            </TableSortLabel>
+                                        </TableCell>
                                         <TableCell sx={{ width: '5%' }}>
                                             {t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Text")}
                                         </TableCell>
@@ -854,6 +864,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             </TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
+                                            <TableCell>{a.workActivity.updatedTime || a.workActivity.createdTime}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { 
                                                     const historyFiles =
@@ -1345,7 +1356,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                 gap: 2,
                             }}
                         >
-                            {/* Remarks + Upload + File name */}
                             <Box
                                 sx={{
                                     display: 'flex',
