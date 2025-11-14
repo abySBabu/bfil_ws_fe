@@ -14,7 +14,7 @@ import { listFarmer, listFarmerByUser } from '../../Services/farmerService';
 import { ListDemand, ListSupply, ListInter, ListLand } from '../../Services/dashboardService';
 import { talukById, panchayatById, VillageById } from '../../Services/locationService';
 import { listWSbyUserId } from '../../Services/wsService';
-import { StateName, DistrictName, TalukName, PanName, VillageName, WsName, DateTime, DateString } from '../../LocName';
+import { StateName, DistrictName, TalukName, PanName, VillageName, WsName, DateTime, DateString, formatDateTime } from '../../LocName';
 import { useTranslation } from 'react-i18next';
 import { getRolesByRole } from 'src/Services/roleService';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -672,10 +672,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         }
     };
 
-    // const filesToShow = uploadedFiles.length > 0 ? uploadedFiles : selectedFiles;
     const filesToShow = [...uploadedFiles, ...selectedFiles];
-    console.log("filesToShow------>>",filesToShow);
-    
 
     return (<>
         <SnackAlert alert={alert} setalert={() => setalert('')} success={alertClr} />
@@ -864,7 +861,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             </TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
-                                            <TableCell>{a.workActivity.updatedTime || a.workActivity.createdTime}</TableCell>
+                                            <TableCell>{formatDateTime(a.workActivity.updatedTime || a.workActivity.createdTime)}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { 
                                                     const historyFiles =

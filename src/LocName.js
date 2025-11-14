@@ -76,6 +76,33 @@ export const DateTimeWT = (dt) => new Date(dt).toLocaleString('en-IN', { day: '2
 
 export const DateString = (dt) => new Date(dt).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
+export const formatDateTime = (input) => {
+  if (!input) return "";
+
+  let [datePart, timePart, ampm] = input.split(" ");
+
+  const [year, month, day] = datePart.split("-");
+  let [hour, min, sec] = timePart.split(":");
+
+  let hoursNum = parseInt(hour, 10);
+  if (ampm?.toUpperCase() === "PM" && hoursNum < 12) {
+    hoursNum += 12;
+  } else if (ampm?.toUpperCase() === "AM" && hoursNum === 12) {
+    hoursNum = 0;
+  }
+
+  const finalHour = String(hoursNum).padStart(2, "0");
+
+  const formattedDate = `${day}-${month}-${year}`;
+  const formattedTime = `${finalHour}:${min}`;
+
+  return `${formattedDate} ${formattedTime}`;
+};
+
+
+
+
+
 export const TimeString = (dt) => new Date(dt).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit' })
 
 export const getCurrentFinancialYear = () => {
