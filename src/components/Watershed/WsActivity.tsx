@@ -200,7 +200,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
 
     const actListF = actList
         .filter((a) => {
-            const searchTerm = search?.toLowerCase();
+            const searchTerm = search?.toLowerCase();            
             return (
                 a.workActivity.activityName?.toString().toLowerCase().includes(searchTerm) ||
                 a.workActivity.surveyNo?.toString().toLowerCase().includes(searchTerm) ||
@@ -222,7 +222,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                 ) ||
                 a.workActivity.activityWorkflowStatus?.toString().toLowerCase().includes(searchTerm) ||
                 a.workActivity.updatedUser?.toString().toLowerCase().includes(searchTerm) ||
-                a.workActivity.updatedTime?.toString().toLowerCase().includes(searchTerm)
+                formatDateTime(a.workActivity.updatedTime)?.includes(searchTerm) 
+                // formatDateTime(a.workActivity.createdTime)?.includes(searchTerm)
             );
         })
         .sort((a, b) => {
@@ -861,7 +862,7 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             </TableCell>
                                             <TableCell>{a.workActivity.activityWorkflowStatus?.replace(/_/g, " ")}</TableCell>
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
-                                            <TableCell>{formatDateTime(a.workActivity.updatedTime || a.workActivity.createdTime)}</TableCell>
+                                            <TableCell>{formatDateTime(a.workActivity.updatedTime )}</TableCell>
                                             <TableCell>
                                                 <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { 
                                                     const historyFiles =
