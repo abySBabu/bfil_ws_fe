@@ -142,7 +142,7 @@ export const Dashboard: React.FC = () => {
                         finYear: item.finYear,
                         activityId: item.field2,
                         activityName: item.activityName || "",
-                        physicalValue: item.activityCount || 0,
+                        physicalValue: item.publicPhysical || 0,
                         financialValue: item.publicFinancial || 0,
                         uom: item.uom || "",
                         field5: item.field5,
@@ -164,7 +164,7 @@ export const Dashboard: React.FC = () => {
                     if (!demandEntriesMap.has(key)) {
                         demandEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.activityCount || 0,
+                            physicalValue: item.publicPhysical || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
@@ -173,7 +173,7 @@ export const Dashboard: React.FC = () => {
                         });
                     } else {
                         const existing = demandEntriesMap.get(key)!;
-                        existing.physicalValue += item.activityCount || 0;
+                        existing.physicalValue += item.publicPhysical || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
@@ -192,7 +192,7 @@ export const Dashboard: React.FC = () => {
                     if (!SupplyEntriesMap.has(key)) {
                         SupplyEntriesMap.set(key, {
                             activityName: item.activityName || "",
-                            physicalValue: item.activityCount || 0,
+                            physicalValue: item.publicPhysical || 0,
                             financialValue: item.publicFinancial || 0,
                             uom: item.uom || "",
                             field2: key,
@@ -201,7 +201,7 @@ export const Dashboard: React.FC = () => {
                         });
                     } else {
                         const existing = SupplyEntriesMap.get(key)!;
-                        existing.physicalValue += item.activityCount || 0;
+                        existing.physicalValue += item.publicPhysical || 0;
                         existing.financialValue += item.publicFinancial || 0;
                     }
                 }
@@ -425,7 +425,7 @@ export const Dashboard: React.FC = () => {
                                                 </Box>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography variant='h5'>
-                                                        {row.field2 === "D" ? <b>{row.field5} {Math.round(Number(row.financialValue)).toLocaleString('en-IN')}</b> : <b>{Math.round(Number(row.physicalValue)).toLocaleString('en-IN')} {row.field5}</b>}
+                                                        {row.field2 === "D" ? <b>{row.uom} {Math.round(Number(row.financialValue)).toLocaleString('en-IN')}</b> : <b>{Math.round(Number(row.physicalValue)).toLocaleString('en-IN')} {row.uom}</b>}
                                                     </Typography>
                                                     <IconButton onClick={() => handleChartClick(row)}>
                                                         <BarChartIcon />
