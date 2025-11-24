@@ -473,13 +473,13 @@ export const Dashboard: React.FC = () => {
                             <Grid container spacing={1}>
                                 {supplyList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.field5} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
                                     );
                                 })}
                                 <Grid item xs={12} sx={{ mt: 1 }}><Typography variant='h6' fontWeight='bold' sx={{ ml: 1, color: sd('--text-color-special') }}>{t("p_Dashboard.ss_DemandSideInterventions_Header_Text")}</Typography></Grid>
                                 {demandList.map((activity, i) => {
                                     return (
-                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.field5} />
+                                        <ActCard key={i} activity={activity.activityName} value={activity.physicalValue} fvalue={activity.financialValue} unit={activity.uom} />
                                     );
                                 })}
                             </Grid>
