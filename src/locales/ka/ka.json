@@ -570,7 +570,9 @@
                                 "Created_Time": "ಸೃಷ್ಟಿ ಸಮಯ",
                                 "Images": "ಚಿತ್ರಗಳು"
                             },
-                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್"
+                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್",
+                            "Impact": "ಪರಿಣಾಮ"
+                            
                         }
                     },
                     "Progress_Tooltip": {
@@ -629,7 +631,8 @@
                                 "Created_Time": "ಸೃಷ್ಟಿ ಸಮಯ",
                                 "Images": "ಚಿತ್ರಗಳು"
                             },
-                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್"
+                            "Uploaded_File": "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್",
+                            "Impact": "ಪರಿಣಾಮ"
                         }
                     }
                 }

@@ -17,6 +17,7 @@ import { listWSbyUserId } from '../../Services/wsService';
 import { StateName, DistrictName, TalukName, PanName, VillageName, WsName, DateTime, DateString, formatDateTime } from '../../LocName';
 import { useTranslation } from 'react-i18next';
 import { getRolesByRole } from 'src/Services/roleService';
+import { beneficiaryRemarks } from '../../LocName';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DeleteIcon from '@mui/icons-material/Delete';
 import File from '@mui/icons-material/FileOpen';
@@ -345,11 +346,15 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
         try {
             const resp1 = await getRolesByRole(id);
             if (resp1) {
+                console.log("resp1",resp1);
+                
                 setactFlowRole(resp1.roleName)
                 const resp2 = await actFlowNext(resp1.roleName, status)
                 if (resp2) { setnext(resp2); } else { setnext('') }
+                console.log("resp2",resp2);
 
                 const resp3 = await actFlowPrev(resp1.roleName, status)
+                                console.log("resp3 ",resp3);
                 if (resp3) {
                     setprev(resp3);
                 }
@@ -864,8 +869,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                             <TableCell>{a.workActivity.updatedUser || a.workActivity.createdUser}</TableCell>
                                             <TableCell>{formatDateTime(a.workActivity.updatedTime )}</TableCell>
                                             <TableCell>
-                                                <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} onClick={() => { 
-                                                    const historyFiles =
+                                                <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Tooltip_Text")} 
+                                                onClick={() => 
+                                                    { 
+                                                  const historyFiles =
                                                                 a.history.filter((h: any) => h.activityFile && h.activityFile.startsWith("http"))
                                                                     .map((h: any) => ({
                                                                         name: h.activityFile.split("/").pop() || "unknown_file",
@@ -875,16 +882,17 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                                     }));
 
                                                             setUploadedFiles(historyFiles);
-                                                    setactObj(a); setviewM(true); }}>
+                                                    setactObj(a); setviewM(true); 
+                                                    }}>
                                                     <Visibility />
                                                 </IconButton>
                                                 {(PerChk('EDIT_Watershed Activity') && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.createdUser === uName) && (<IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Edit_Tooltip.Edit_Tooltip_Text")} onClick={() => { setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId.length > 0 ? a.workActivity.farmerId?.split(',').map(Number) : []); setrmk(''); seteditM(true); }}><Edit /></IconButton>)}
-                                                {(a.workActivity.activityWorkflowStatus === uStatus)
+                                                {(a.workActivity.activityWorkflowStatus === uStatus || a.workActivity.interventionType == 23 && a.workActivity.activityWorkflowStatus === "New")
                                                     || (uRole === Super_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
                                                         && !a.workActivity.roleAssignmentOkFlag) || (uRole === System_Admin && a.workActivity.activityWorkflowStatus !== 'Completed' && a.workActivity.activityWorkflowStatus !== 'New' && !a.workActivity.roleAssignmentOkFlag && a.workActivity.missingStatus?.split(',').map(s => s.trim()).includes(a.workActivity.activityWorkflowStatus)
                                                     ) ? (
                                                     <IconButton title={t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.Progress_Tooltip.Progress_Tooltip_Text")}
-                                                        onClick={() => {
+                                                         onClick={() => {
                                                             const historyFiles =
                                                                 a.history.filter((h: any) => h.activityFile && h.activityFile.startsWith("http"))
                                                                     .map((h: any) => ({
@@ -893,9 +901,9 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                                                         createdBy: h.createdUser,
                                                                         createdOn: h.createdTime
                                                                     }));
-
                                                             setUploadedFiles(historyFiles); ActFlowSet(a.workActivity.activityWorkflowStatus); setWorkActivityId(a.workActivity.activityId); setactObj(a); setvList(a.workActivity.village?.split(',')); setbList(a.workActivity.farmerId?.split(',').map(Number)); setrmk(''); setprogM(true); FlowRoleSet(a.workActivity.roleId, a.workActivity.activityWorkflowStatus)
-                                                        }}>
+                                                        }}
+                                                        >
                                                         <PlayArrow />
                                                     </IconButton>
                                                 ) : null}
@@ -1239,44 +1247,21 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     <Grid xs={12}>
                      {filesToShow.length > 0 && (
                     <>
-                        <Grid item xs={12}>
-                            <Divider>
-                                {t(
-                                    "p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Uploaded_File"
-                                )}
-                            </Divider>
-                        </Grid>
-
-                        <TableContainer component={Paper} sx={{ mt: 2 }}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell sx={{ borderRight: "1px solid black", width: "90%" }}>
-                                            File Name
-                                        </TableCell>
-                                        <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_By")}</TableCell>
-                                        <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_Time")}</TableCell>
-
-                                        <TableCell sx={{ width: "10%" }}>Action</TableCell>
-
-                                    </TableRow>
-
-                                </TableHead>
-
-                                <TableBody>
-                                    {filesToShow.map((file, index) => {
+                        <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Uploaded_File")}</Divider></Grid>
+                        <TableContainer component={Paper} sx={{ mt: 2 }}><Table>
+                        <TableHead>
+                            <TableRow>
+                            <TableCell sx={{ borderRight: "1px solid black", width: "90%" }}>File Name</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_By")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_Time")}</TableCell>
+                            <TableCell sx={{ width: "10%" }}>Action</TableCell></TableRow>
+                            </TableHead>
+                                <TableBody>{filesToShow.map((file, index) => {
                                         const isUploaded = (file as any).url;
                                         return (
-                                            <TableRow key={index}>
-                                                <TableCell sx={{ borderRight: "1px solid black" }}>
-                                                    {file.name}
-                                                </TableCell>
-                                                <TableCell sx={{ borderRight: "1px solid black" }}>
-                                                    {"createdBy" in file ? file.createdBy : ""}
-                                                </TableCell>
-                                                <TableCell sx={{ borderRight: "1px solid black" }}>
-                                                    {"createdOn" in file ? file.createdOn : ""}
-                                                </TableCell>
+                                            <TableRow key={index}><TableCell sx={{ borderRight: "1px solid black" }}>{file.name}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{"createdBy" in file ? file.createdBy : ""}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{"createdOn" in file ? file.createdOn : ""}</TableCell>
                                                 <TableCell>
                                                     {isUploaded ? (
                                                         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
@@ -1309,22 +1294,10 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                                         );
                                     })}
                                 </TableBody>
-                                {selectedFiles.length > 0 && (
-                                    <TableFooter sx={{ backgroundColor: 'whitesmoke' }}>
+                                {selectedFiles.length > 0 && (<TableFooter sx={{ backgroundColor: 'whitesmoke' }}>
                                         <TableRow>
-                                            <TableCell colSpan={4}
-                                                align="right"
-                                                sx={{
-                                                    backgroundColor: 'white',
-                                                    borderTop: '1px solid #ddd',
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    startIcon={<UploadFileIcon />}
-                                                    onClick={handleUploadAllFiles}
-                                                >
+                                            <TableCell colSpan={4} align="right" sx={{ backgroundColor: 'white',borderTop: '1px solid #ddd', }}>
+                                                <Button variant="contained" color="primary" startIcon={<UploadFileIcon />} onClick={handleUploadAllFiles}>
                                                     Upload Selected Files
                                                 </Button>
                                             </TableCell>
@@ -1336,6 +1309,26 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     </>
                 )}
                 </Grid>
+                <Grid item xs={12}></Grid>
+                <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Impact")}</Divider></Grid>
+                <TableContainer component={Paper} sx={{ mt: 2 }}><Table>
+                    <TableHead>
+                            <TableRow>
+                            <TableCell sx={{ borderRight: "1px solid black", width: "80%" }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Impact")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_By")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '20%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_Time")}</TableCell>
+                            </TableRow>
+                            </TableHead>
+                            <TableBody>{beneficiaryRemarks.map((report, index) => {
+                                        return (
+                                            <TableRow key={index}><TableCell sx={{ borderRight: "1px solid black" }} aria-multiline>{report.remarks}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.createdBy}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.createdTime}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                    </Table></TableContainer>
 
             </Grid></DialogContent>
             {viewM ?
@@ -1483,7 +1476,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         />
                     );
                 } else if (isPDF || isDoc) {
-                    // 📄 Use Google Docs Viewer for all document types
                     const viewerURL = `https://docs.google.com/gview?url=${encodeURIComponent(
                         imgM
                     )}&embedded=true`;
@@ -1501,7 +1493,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         />
                     );
                 } else {
-                    // ⚠️ Fallback message
                     return (
                         <Typography sx={{ p: 4, textAlign: 'center' }}>
                             File preview not supported. Please download to view.

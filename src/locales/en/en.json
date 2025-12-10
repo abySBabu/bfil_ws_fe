@@ -570,7 +570,8 @@
                                 "Update_On": "Update On",
                                 "Images": "Images"
                             },
-                            "Uploaded_File": "Uploaded File"
+                            "Uploaded_File": "Uploaded File",
+                            "Impact": "Impact"
                         }
                     },
                     "Progress_Tooltip": {
@@ -629,7 +630,8 @@
                                 "Update_On": "Update On",
                                 "Images": "Images"
                             },
-                            "Uploaded_File": "Uploaded File"
+                            "Uploaded_File": "Uploaded File",
+                            "Impact": "Impact"
                         }
                     }
                 }
