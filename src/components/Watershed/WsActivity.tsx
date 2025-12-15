@@ -91,7 +91,48 @@ export const actDef = {
             createdTime: '',
             syncStatus: ''
         }
-    ]
+    ],
+    impactHistoryData: [{
+impactId: 0,
+  activityId: '',
+
+  beneficiaryName: '',
+  impactFeedback: '',
+
+  periodFrom: '',   
+  periodTo: '',    
+
+  areaTreated: 0,
+  waterConserved: 0,
+  benefitedAmount: 0,
+
+  activityCode: 0,
+  watershedId: 0,
+  userId: 0,
+
+  status: '',
+  isDeleted: false,
+  version: 0,
+
+  createdTime: '',
+  createdUser: '',
+
+  updatedTime: '',
+  updatedUser: '',
+
+  lastSyncedAt: '',
+  lastPulledAt: '',
+  deletedAt: '',
+
+  mobileUniqueId: '',
+  mobileImpactUniqueId: '',
+
+  field1: '',
+  field2: '',
+  field3: '',
+  field4: '',
+    }
+    ],
 }
 
 export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAction<number>> }> = ({ setactCount }) => {
@@ -256,7 +297,6 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             return 0;
         });
     const actListP = actListF.slice(page * rPP, page * rPP + rPP);
-    console.log("actListP", actListP);
 
     const supplyCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total || !actObj.workActivity.landType || !actObj.workActivity.waterConserved
     const demandCheck = loading || !actObj.workActivity.interventionType || !actObj.workActivity.activityName || !actObj.workActivity.watershedId || !actObj.workActivity.surveyNo || !actObj.workActivity.total
@@ -323,6 +363,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                         : resp1.data
                 );
             }
+            // console.log("actList---------------->",resp1.map((item:any) => item.impactHistoryData));
+            
             const resp2 = await listFarmerByUser(); if (resp2.status === 'success') { setfmrOps(resp2.data) }
             const resp3 = await ListInter(); if (resp3.status === 'success') { setintOps(resp3.data) }
             const resp4 = await ListLand(); if (resp4.status === 'success') { setlandOps(resp4.data) }
@@ -334,6 +376,8 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
             setserverDown(false);
         }
         catch (error: any) {
+            console.log("Error-------->",error);
+            
             if (error.response?.status >= 500 || !error.response?.status) setserverDown(true);
             else console.log(error);
         }
@@ -1309,26 +1353,43 @@ export const WsActivity: React.FC<{ setactCount: React.Dispatch<React.SetStateAc
                     </>
                 )}
                 </Grid>
+                
+            
                 <Grid item xs={12}></Grid>
-                <Grid item xs={12}><Divider>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Impact")}</Divider></Grid>
+                <Grid item xs={12}><Divider>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Impact/Feedback")}</Divider></Grid>
+                <Grid item xs={12}>
+                {actObj.impactHistoryData.length > 0 ?
                 <TableContainer component={Paper} sx={{ mt: 2 }}><Table>
                     <TableHead>
                             <TableRow>
-                            <TableCell sx={{ borderRight: "1px solid black", width: "80%" }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Impact")}</TableCell>
-                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_By")}</TableCell>
-                            <TableCell sx={{ borderRight: '1px solid black', width: '20%' }}>{t("p_Watershed_Activity.ss_WatershedActivityList.Action.Action_Tooltip.View_Tooltip.View_Activity_Popup.Update_History_Table_List.Created_Time")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Name")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Beneficiter_Amount")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.WaterConserved")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Area_Treated")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '10%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Period_From")} - {t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Period_To")}</TableCell>
+                            <TableCell sx={{ borderRight: '1px solid black', width: '40%' }}>{t("p_Watershed_Activity.Add_Activity_Link.Add_Activity_Popup.Impact/Feedback")}</TableCell>
+
                             </TableRow>
                             </TableHead>
-                            <TableBody>{beneficiaryRemarks.map((report, index) => {
+                            <TableBody>{actObj.impactHistoryData.map((report, index) => {
                                         return (
-                                            <TableRow key={index}><TableCell sx={{ borderRight: "1px solid black" }} aria-multiline>{report.remarks}</TableCell>
-                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.createdBy}</TableCell>
-                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.createdTime}</TableCell>
+                                            <TableRow key={index}><TableCell sx={{ borderRight: "1px solid black" }} aria-multiline>{report.beneficiaryName}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.benefitedAmount ? report.benefitedAmount: '-'}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.waterConserved ? report.waterConserved : '-'}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.areaTreated ? report.areaTreated : '-'}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{DateString(report.periodFrom) + '-' + DateString(report.periodTo)}</TableCell>
+                                                <TableCell sx={{ borderRight: "1px solid black" }}>{report.impactFeedback}</TableCell>
+
                                             </TableRow>
                                         );
                                     })}
                                 </TableBody>
                     </Table></TableContainer>
+                     :
+                    <Typography>No Impacts/Feedbacks to show</Typography>
+                                }</Grid>
+                    
+                   
 
             </Grid></DialogContent>
             {viewM ?

@@ -445,8 +445,13 @@
                 "Male_Participants": "ಪುರುಷ ಭಾಗವಹಿಸುವವರು",
                 "Female_Participants": "ಮಹಿಳಾ ಭಾಗವಹಿಸುವವರು",
                 "Total_Participants": "ಒಟ್ಟು ಭಾಗವಹಿಸುವವರು",
+                "Beneficiter_Amount": "ಪ್ರಯೋಜನ ಪಡೆದ ಮೊತ್ತ",
+                "Period_From":"ಇಂದ",
+                "Period_To": "ತನಕ",
+                "Impact/Feedback": "ಪರಿಣಾಮ/ಪ್ರತಿಕ್ರಿಯೆ",
                 "Facilitator": "ಫೆಸಿಲಿಟೇಟರ್",
                 "Mobilizer": "ಮೊಬಿಲೈಸರ್",
+
                 "Cancel_Button": "ರದ್ದುಮಾಡಿ",
                 "Add_Button": "ಸೇರಿಸಿ"
             },

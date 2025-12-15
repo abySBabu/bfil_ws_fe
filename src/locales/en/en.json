@@ -447,6 +447,10 @@
                 "Total_Participants": "Total Participants",
                 "Facilitator": "Facilitator",
                 "Mobilizer": "Mobilizer",
+                "Beneficiter_Amount": "Benefited Amount",
+                "Period_From":"Period From",
+                "Period_To": "Period To",
+                "Impact/Feedback": "Impact/Feedback",
                 "Cancel_Button": "Cancel",
                 "Add_Button": "Add"
             },
