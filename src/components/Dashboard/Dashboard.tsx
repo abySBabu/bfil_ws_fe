@@ -72,7 +72,7 @@ export const Dashboard: React.FC = () => {
     const [openDialog, setOpenDialog] = React.useState(false);
     const currentYear = new Date().getFullYear();
     const defaultYear = `${currentYear}-${(currentYear + 1).toString().slice(2)}`;
-    const [selectedYear, setSelectedYear] = React.useState<string>(defaultYear);
+    const [selectedYear, setSelectedYear] = React.useState<string>(getCurrentFinancialYear());
     const [yearOptions, setYearOptions] = React.useState<any[]>([]);
 
     const handleYearChange = (event: SelectChangeEvent<string>) => {
