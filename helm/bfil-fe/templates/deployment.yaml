@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,6 +34,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
+        - name: bfil-fe
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
           securityContext:
@@ -76,7 +81,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        - name: bfil-fe
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          ports:
-          - containerPort: 80
