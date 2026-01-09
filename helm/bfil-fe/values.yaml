@@ -165,7 +165,7 @@ replicaCount: 1
 image:
   repository: sbabu116/bfil-fe
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: NodePort
